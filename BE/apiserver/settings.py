@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'accounts',
     
     'django_extensions',
-    'phonenumber_field',
     'corsheaders',
     'django_filters',
     'rest_framework',
