@@ -1,0 +1,58 @@
+[
+{
+    "model": "categorys.jobmaincategory",
+    "pk": "D",
+    "fields": {
+        "job_main_category": "소매"
+    }
+},
+{
+    "model": "categorys.jobmaincategory",
+    "pk": "F",
+    "fields": {
+        "job_main_category": "생활/서비스"
+    }
+},
+{
+    "model": "categorys.jobmaincategory",
+    "pk": "L",
+    "fields": {
+        "job_main_category": "부동산"
+    }
+},
+{
+    "model": "categorys.jobmaincategory",
+    "pk": "N",
+    "fields": {
+        "job_main_category": "관광/여가/오락"
+    }
+},
+{
+    "model": "categorys.jobmaincategory",
+    "pk": "O",
+    "fields": {
+        "job_main_category": "숙박"
+    }
+},
+{
+    "model": "categorys.jobmaincategory",
+    "pk": "P",
+    "fields": {
+        "job_main_category": "스포츠"
+    }
+},
+{
+    "model": "categorys.jobmaincategory",
+    "pk": "Q",
+    "fields": {
+        "job_main_category": "음식"
+    }
+},
+{
+    "model": "categorys.jobmaincategory",
+    "pk": "R",
+    "fields": {
+        "job_main_category": "학문/교육"
+    }
+}
+]

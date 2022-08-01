@@ -37,14 +37,19 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    # app 
     'accounts',
-    
+    'stores',
+    'categorys',
+    #3rd-party
     'django_extensions',
     'corsheaders',
     'django_filters',
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
+    
+    #default
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
