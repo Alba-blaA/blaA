@@ -19,10 +19,44 @@ const router = createRouter({
       name: "story",
       component: Story,
     },
+  
     {
       path: "/crew",
       name: "crew",
       component: Crew,
+      redirect: "/crew/board/list",
+      children: [
+        {
+          path: "board",
+          name: "board",
+          redirect: "/crew/board/list",
+          component: () => import ("@/components/crew/board/BoardView.vue"),
+          children: [
+            {
+              path: "list",
+              name: "boardlist",
+              component: () => import("@/components/crew/board/BoardList.vue"),
+            },
+            {
+              path: "regist",
+              name: "boardregist",
+              component: () => import("@/components/crew/board/BoardRegister.vue"),
+            },
+          ]
+        },
+        {
+          path: "schedule",
+          name: "schedule",
+          component: () => import("@/components/crew/schedule/ScheduleView.vue"),
+          // children: [
+          //   {
+          //     path: "calendar",
+          //     name: "calendar",
+          //     component: () => import("@/components/crew/schedule/ScheduleView.vue"),
+          //   },
+          // ]
+        },
+      ]
     },
     {
       path: "/review",
