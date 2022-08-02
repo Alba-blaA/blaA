@@ -5,7 +5,7 @@ from accounts.models import User
 from rest_framework.decorators import api_view
 from accounts.serializers import  (RegisterSerializer,LoginSerializer,
                                    UserSerializer,ChangePasswordSerializer)
-from rest_framework import response,status,permissions
+from rest_framework import status,permissions
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView
@@ -14,9 +14,11 @@ from django import http
 
 #user 확인 API 
 class AuthUserAPIView(GenericAPIView) :
+    # authentication_classes=[]
     #인증된 유저만 (토큰 필요 )
     permission_classes=(permissions.IsAuthenticated,)
     #요청한 유저를 가져와서, serializer에 넣음 
+    serializer_class = RegisterSerializer
     def get(self,request) :
         user = request.user
         serializers=RegisterSerializer(user)

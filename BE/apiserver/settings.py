@@ -37,14 +37,18 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    # app 
     'accounts',
-    
+    'categorys',
+    #3rd-party
     'django_extensions',
     'corsheaders',
     'django_filters',
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
+    
+    #default
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -112,6 +116,28 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS' :{
+        'Bearer':{
+            'type':'apiKey',
+            'name':'Authorization',
+            'in':'header'
+        }
+    }
+}
+# SWAGGER_SETTINGS = {
+#     'SECURITY_DEFINITIONS' :{
+#         'Bearer':{
+#             'type':'apiKey',
+#             'name':'Authorization',
+#             'in':'header'
+#         }
+#     }
+# }
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
