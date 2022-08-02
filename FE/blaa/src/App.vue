@@ -44,6 +44,10 @@ export default {
       router.go();
     };
 
+    const register = () => {
+      router.push({ name: "signup" });
+    };
+
     // const login = () => {
     //   router.push("/login");
     // };
@@ -58,6 +62,7 @@ export default {
       userInfo,
       login,
       logout,
+      register,
     };
   },
 };

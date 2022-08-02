@@ -2,7 +2,7 @@
   <div id="login">
     <br />
     <form>
-      <input id="login-id" v-model="user.email" placeholder="Enter ID" />
+      <input id="login-id" v-model="user.email" placeholder="Enter email" />
       <br />
       <input
         id="login-userpw"

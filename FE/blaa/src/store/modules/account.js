@@ -1,5 +1,7 @@
 // import jwt_decode from "jwt-decode";
 import { login, findByToken } from "@/hooks/user.js";
+import axios from "axios";
+import api from "@/api/api.js";
 
 const accountStore = {
   namespaced: true,
@@ -7,6 +9,34 @@ const accountStore = {
     isLogin: false,
     isLoginError: false,
     userInfo: null,
+    isAlba: true,
+    signupUser: null,
+    category: [],
+    si: [],
+    gu: [],
+    dong: [],
+  },
+  getters: {
+    category_list(state) {
+      let ret = state.category;
+      ret.unshift({ value: null, text: "업종 카테고리" });
+      return ret;
+    },
+    si_list(state) {
+      let ret = state.si;
+      ret.unshift({ value: null, text: "시/도" });
+      return ret;
+    },
+    gu_list(state) {
+      let ret = state.gu;
+      ret.unshift({ value: null, text: "구/군" });
+      return ret;
+    },
+    dong_list(state) {
+      let ret = state.dong;
+      ret.unshift({ value: null, text: "동/면/리" });
+      return ret;
+    },
   },
   mutations: {
     LOGIN: (state, isLogin) => {
@@ -18,6 +48,24 @@ const accountStore = {
     USER_INFO: (state, userInfo) => {
       state.isLogin = true;
       state.userInfo = userInfo;
+    },
+    ALBA: (state, isAlba) => {
+      state.isAlba = isAlba;
+    },
+    SIGNUP_USER: (state, signupUser) => {
+      state.signupUser = signupUser;
+    },
+    GET_CATEGORY_LIST: (state, payload) => {
+      state.category = payload;
+    },
+    GET_SI_LIST: (state, payload) => {
+      state.si = payload;
+    },
+    GET_GU_LIST: (state, payload) => {
+      state.gu = payload;
+    },
+    GET_DONG_LIST: (state, payload) => {
+      state.dong = payload;
     },
   },
   actions: {
@@ -61,6 +109,28 @@ const accountStore = {
           console.log("getUserInfo 에러", error);
         }
       );
+    },
+    getCategoryList(context) {
+      axios.get(api.categorys.job()).then(({ data }) => {
+        context.commit("GET_CATEGORY_LIST", data);
+      });
+    },
+    getSiList(context) {
+      axios.get(api.categorys.region()).then(({ data }) => {
+        context.commit("GET_SI_LIST", data);
+      });
+    },
+    getGuLIst(context, sido) {
+      axios.get(api.categorys.region() + sido + "/").then(({ data }) => {
+        context.commit("GET_GU_LIST", data);
+      });
+    },
+    getDongLIst(context, region) {
+      axios
+        .get(api.categorys.region() + region.sido + "/" + region.gugun + "/")
+        .then(({ data }) => {
+          context.commit("GET_DONG_LIST", data);
+        });
     },
   },
 };

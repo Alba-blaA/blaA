@@ -4,6 +4,7 @@ const HOST = "http://localhost:8000/api/v1/";
 // ===================================
 // 세부 url
 const ACCOUNTS = "accounts/";
+const CATEGORYS = "categorys/";
 // const STORY = 'story/'
 // const REVIEWS = 'reviews/'
 // const CREW = 'crew/'
@@ -18,6 +19,10 @@ export default {
     currentUserInfo: () => HOST + ACCOUNTS + "user/",
     // username으로 프로필 제공
     profile: (username) => HOST + ACCOUNTS + "profile/" + username,
+  },
+  categorys: {
+    job: () => HOST + CATEGORYS + "job/",
+    region: () => HOST + CATEGORYS + "region/",
   },
   // 예시
   // movies: {
