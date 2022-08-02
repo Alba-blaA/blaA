@@ -10,6 +10,7 @@ class SidoListAPIView(ListAPIView):
     #요청한 user_pk로 유저 조회 
     authentication_classes=[]
     queryset = Sido.objects.all()
+    serializer_class = SidoSerializer
     ## 시/도 조회 
     def list(self, request):
         #user_pk로 user 가져오기 
@@ -24,6 +25,7 @@ class GugunListAPIView(ListAPIView):
     ## 시/도 조회 
     # lookup_field = 'sido'
     queryset = Gugun.objects.all()
+    serializer_class = GugunSerializer
     def list(self, request,sido):
         #user_pk로 user 가져오기 
         #유저 정보 전달 
@@ -38,6 +40,7 @@ class DongListAPIView(ListAPIView):
     ## 시/도 조회 
     # lookup_field = 'sido'
     queryset = Dong.objects.all()
+    serializer_class = DongSerializer
     def list(self, request,sido,gugun):
         #user_pk로 user 가져오기 
         #유저 정보 전달 
@@ -51,6 +54,7 @@ class JobListAPIView(ListAPIView):
     authentication_classes=[]
     ## 시/도 조회 
     # lookup_field = 'sido'
+    serializer_class = JobSerializer
     queryset = JobCategory.objects.all()
     def list(self, request):
         queryset = self.get_queryset()

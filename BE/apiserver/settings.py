@@ -117,6 +117,28 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS' :{
+        'Bearer':{
+            'type':'apiKey',
+            'name':'Authorization',
+            'in':'header'
+        }
+    }
+}
+# SWAGGER_SETTINGS = {
+#     'SECURITY_DEFINITIONS' :{
+#         'Bearer':{
+#             'type':'apiKey',
+#             'name':'Authorization',
+#             'in':'header'
+#         }
+#     }
+# }
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'accounts.jwt.JWTAuthentications',

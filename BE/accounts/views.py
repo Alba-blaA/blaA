@@ -18,6 +18,7 @@ class AuthUserAPIView(GenericAPIView) :
     #인증된 유저만 (토큰 필요 )
     permission_classes=(permissions.IsAuthenticated,)
     #요청한 유저를 가져와서, serializer에 넣음 
+    serializer_class = RegisterSerializer
     def get(self,request) :
         user = request.user
         serializers=RegisterSerializer(user)
