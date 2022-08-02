@@ -1,5 +1,6 @@
 <template>
   <tr>
+    <td>{{articleno}}</td>
     <th>
       <!-- <router-link :to="{ name: 'BoardDetail' }">{{ article.subject }}</router-link> -->
       {{ subject }}
@@ -14,6 +15,7 @@
 <script>
 export default {
   props: {
+    articleno: Number,
     subject: String,
     date: String,
     contents: String,
