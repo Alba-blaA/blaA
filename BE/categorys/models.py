@@ -2,15 +2,12 @@ from django.db import models
 
 # Create your models here.
 
-class JobMainCategory(models.Model) :
+class JobCategory(models.Model) :
     job_main_code = models.CharField(primary_key=True,max_length=1)
     job_main_category = models.CharField(max_length=20)
     
-    
-class JobSubCategory(models.Model) :
-    job_sub_code = models.CharField(primary_key=True,max_length=4)
-    job_sub_category = models.CharField(max_length=20)
-    
+    def __str__(self) :
+        return self.job_main_category
 
 class Sido(models.Model) :
     sido_code = models.CharField(primary_key=True,max_length=10)

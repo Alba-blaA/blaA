@@ -6,29 +6,29 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "apiserver.settings")
 django.setup() 
 
-from categorys.models import JobMainCategory,JobSubCategory,Sido,Gugun,Dong
+from categorys.models import JobCategory,Sido,Gugun,Dong
 
-job_main = 'C:/Users/multicampus/Desktop/blaA/BE/csv_to_db/job_main_category.csv'
+job_main = 'C:/Users/multicampus/Desktop/blaA/BE/csv_to_db/job_category.csv'
 
 with open(job_main, newline='') as f_csv:
 		row_dics = csv.DictReader(f_csv)
 		for row in row_dics: 
 			print(row)
-			JobMainCategory.objects.create(
+			JobCategory.objects.create(
 				job_main_code = row['job_main_code'],
 				job_main_category = row['job_main_category'],
 			)
 
-job_sub = 'C:/Users/multicampus/Desktop/blaA/BE/csv_to_db/job_sub_category.csv'
+# job_sub = 'C:/Users/multicampus/Desktop/blaA/BE/csv_to_db/job_sub_category.csv'
 
-with open(job_sub, newline='') as f_csv:
-		row_dics = csv.DictReader(f_csv)
-		for row in row_dics: 
-			print(row)
-			JobSubCategory.objects.create(
-				job_sub_code = row['job_sub_code'],
-				job_sub_category = row['job_sub_category'],
-			)
+# with open(job_sub, newline='') as f_csv:
+# 		row_dics = csv.DictReader(f_csv)
+# 		for row in row_dics: 
+# 			print(row)
+# 			JobSubCategory.objects.create(
+# 				job_sub_code = row['job_sub_code'],
+# 				job_sub_category = row['job_sub_category'],
+# 			)
 
 
 sido = 'C:/Users/multicampus/Desktop/blaA/BE/csv_to_db/sido.csv'
