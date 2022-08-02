@@ -8,7 +8,7 @@ django.setup()
 
 from categorys.models import JobCategory,Sido,Gugun,Dong
 
-job_main = 'C:/Users/multicampus/Desktop/blaA/BE/csv_to_db/job_category.csv'
+job_main = './csv_to_db/job_category.csv'
 
 with open(job_main, newline='') as f_csv:
 		row_dics = csv.DictReader(f_csv)
@@ -31,7 +31,7 @@ with open(job_main, newline='') as f_csv:
 # 			)
 
 
-sido = 'C:/Users/multicampus/Desktop/blaA/BE/csv_to_db/sido.csv'
+sido = './csv_to_db/sido.csv'
 
 with open(sido, newline='') as f_csv:
 		row_dics = csv.DictReader(f_csv)
@@ -41,7 +41,7 @@ with open(sido, newline='') as f_csv:
 				sido_code = row['sido_code'],
 				sido_name = row['sido_name'],
 			)
-gugun = 'C:/Users/multicampus/Desktop/blaA/BE/csv_to_db/gugun.csv'
+gugun = './csv_to_db/gugun.csv'
 
 with open(gugun, newline='') as f_csv:
 		row_dics = csv.DictReader(f_csv)
@@ -51,7 +51,7 @@ with open(gugun, newline='') as f_csv:
 				gugun_code = row['gugun_code'],
 				gugun_name = row['gugun_name'],
 			)
-dong = 'C:/Users/multicampus/Desktop/blaA/BE/csv_to_db/dong.csv'
+dong = './csv_to_db/dong.csv'
 
 with open(dong, newline='') as f_csv:
 		row_dics = csv.DictReader(f_csv)
