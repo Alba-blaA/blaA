@@ -1,5 +1,5 @@
 // 기본 url
-const HOST = "http://localhost:3000/posts";
+const HOST = "http://localhost:8000/api/v1/";
 
 // ===================================
 // 세부 url
@@ -11,7 +11,7 @@ const ACCOUNTS = "accounts/";
 
 export default {
   accounts: {
-    login: () => HOST,
+    login: () => HOST + ACCOUNTS + "login/",
     logout: () => HOST + ACCOUNTS + "logout/",
     signup: () => HOST + ACCOUNTS + "signup/",
     // Token 으로 현재 user 판단
