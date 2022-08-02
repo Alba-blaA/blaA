@@ -39,7 +39,6 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     # app 
     'accounts',
-    'stores',
     'categorys',
     #3rd-party
     'django_extensions',
