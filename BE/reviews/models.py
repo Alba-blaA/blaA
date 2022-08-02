@@ -9,11 +9,14 @@ class Store(models.Model) :
     name = models.CharField(max_length=30)
     image = models.ImageField(upload_to='store/logo')
     region = models.TextField(null=True,blank=True)
+
     def __str__(self):
         return self.name
 
 class ButtonReview(models.Model) :
     type = models.CharField(max_length=10)
+    # models.ManyToManyField()
+    store = models.ManyToManyField(Store,related_name='button',blank=True)
     def __str__(self):
         return self.type
 
