@@ -1,5 +1,5 @@
 <template>
-<!-- 작성자와 좋아요 현황 추가해야 됨 -->
+<!-- 작성자프로필, 제목, 작성자와 좋아요 현황 추가해야 됨 -->
   <div
     class="grid-item"
     :style="{
@@ -9,8 +9,9 @@
       borderRadius: '10px'
     }"
   >
-    <div class="image">
+    <div class="image" @click="moveToDetail" style="cursor:pointer">
       <img :src="image.urls.small" class="image" :style="{ width: '100%' }" />
+      <span>{{ image.user.instagram_username }}</span>
     </div>
   </div>
 </template>
@@ -18,6 +19,7 @@
 <script>
 import { ref } from 'vue'
 import { round } from 'mathjs'
+import { useRouter} from 'vue-router'
 
 export default {
   props: {
@@ -27,17 +29,25 @@ export default {
     }
   },
   setup(props) {
+    const router = useRouter()
     const tH = ref(null)
     const gap = ref(null)
 
-    tH.value = round(props.image.height / (props.image.width / 300))
+    tH.value = round(props.image.height / (props.image.width / 200)) + 30
     gap.value = round(tH.value / 10)
     gap.value = `span ${gap.value}`
 
+    const moveToDetail = () => {
+      console.log(props.image)
+      router.push({
+        // name: storyDetail
+      })
+    }
 
     return {
         tH,
-        gap
+        gap,
+        moveToDetail
     }
   }
 }

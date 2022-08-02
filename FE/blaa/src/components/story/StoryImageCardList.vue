@@ -33,7 +33,7 @@ export default {
   column-gap: 10px;
   row-gap: 7px;
   /* 행 갯수와 크기 설정, 추후에 모바일 크기에 따라서 조정 or 반응형으로 설정하면 될듯 */
-  grid-template-columns: repeat(4, 300px);
+  grid-template-columns: repeat(2, 200px);
   justify-content: center;
   max-width: var(--card-container-width);
 }
