@@ -17,12 +17,20 @@ class StoreListCreateSerializer(serializers.ModelSerializer) :
         fields = '__all__'
 
 class ReviewListCreateSerializer(serializers.ModelSerializer) :
-
+    chosen_button = serializers.ListField(write_only=True)
 
     class Meta: 
         model = Review
         fields = '__all__'
-        read_only_fields = ('user','store','like_users')
+        read_only_fields = ('user','store','like_users','chosen_button')
+
+    def create(self,validated_data) :
+
+        chosen_button = validated_data.pop('chosen_button')
+        review = Review.objects.create(**validated_data)
+        # print(store)
+        return review
+
 
 class ReviewShortListSerializer(serializers.ModelSerializer) :
 
