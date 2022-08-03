@@ -1,11 +1,14 @@
+from unicodedata import category
 from django.shortcuts import get_list_or_404, get_object_or_404, render
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Story,Comment
+from .models import Hashtag, Story,Comment
+from accounts.models import User
 from .serializers.story import StorySerializer,StoryDetailSerializer
 from .serializers.comment import CommentSerializer
 from .serializers.hashtag import HashtagSerializer
+from django.db.models import Q
 # Create your views here.
 
 @api_view(['GET', 'POST'])
@@ -17,7 +20,9 @@ def story_list_or_create(request):
         return Response(serializer.data)
     
     def create_story():
+        print(request.data)
         serializer = StorySerializer(data=request.data)
+        
         if serializer.is_valid(raise_exception=True):
             serializer.save(user_pk = request.user, region = request.user.region, category = request.user.category)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -32,7 +37,7 @@ def story_detail_or_update_or_delete(request, story_pk):
     story = get_object_or_404(Story, story_pk=story_pk)
     def story_detail():
         print(request.user.user_pk)
-        serializer = StorySerializer(story)
+        serializer = StoryDetailSerializer(story)
         return Response(serializer.data)
     
     def story_update() :
@@ -117,15 +122,121 @@ def comment_update_or_delete(request, comment_pk):
             return comment_update()
     elif request.method == 'DELETE':
         if request.user.user_pk == comment.user_pk_id:
-            return comment_delete()    
+            return comment_delete()   
         
-@api_view(['POST'])        
-def hashtag_create(request, story_pk):
-    story = get_object_or_404(Story, story_pk = story_pk)
-    serializer = HashtagSerializer(data=request.data)
-    print(serializer)
-    if serializer.is_valid(raise_exception=True):
-        serializer.save(user_pk = request.user, story_pk = story)
-        return Response(serializer.data, status=status.HTTP_201_CREATED) 
+        
+@api_view(['GET', 'POST'])        
+def hashtag_list_or_create(request, story_pk):
     
+    def hashtag_list():
+        story = get_object_or_404(Story, story_pk = story_pk)
+        print(story)
+        hashtags = get_list_or_404(Hashtag,story_pk=story)
+        serializer = HashtagSerializer(hashtags, many= True)
+        return Response(serializer.data)
+    
+    def hashtag_create():
+        story = get_object_or_404(Story, story_pk = story_pk)
+        print(request.data)
+        tmp_query = request.data.copy()
+        print(request.data.__getitem__('hashtag_content'))
+        tmp = request.data.__getitem__('hashtag_content').split(' ')
+        print(tmp)
+        
+        print(len(tmp))
+        for hash in range(len(tmp)):
+            print(tmp[hash])
+            tmp_query.__setitem__('hashtag_content',tmp[hash])
+            print(tmp_query)
+            serializer = HashtagSerializer(data=tmp_query)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(user_pk = request.user, story_pk = story)
+        return Response(serializer.data, status=status.HTTP_201_CREATED) 
+        
+        
+    if request.method == 'GET':
+        return hashtag_list()
+    elif request.method == 'POST':
+        return hashtag_create()
+    
+# @api_view(['POST'])        
+# def hashtag_create(request, story_pk):
+#     story = get_object_or_404(Story, story_pk = story_pk)
+#     serializer = HashtagSerializer(data=request.data)
+#     print(serializer)
+#     if serializer.is_valid(raise_exception=True):
+#         serializer.save(user_pk = request.user, story_pk = story)
+#         return Response(serializer.data, status=status.HTTP_201_CREATED) 
+    
+@api_view(['PUT','DELETE'])  
+def hashtag_update_or_delete(request, hashtag_pk):
+    hashtag = get_object_or_404(Hashtag, hashtag_pk=hashtag_pk)
+    def hashtag_update() :
+        if request.user.user_pk == hashtag.user_pk_id:
+            serializer = HashtagSerializer(instance=hashtag, data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(user_pk = request.user)
+                return Response(serializer.data)
+            
+    def hashtag_delete() :
+        if request.user.user_pk == hashtag.user_pk_id:
+            hashtag.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        
+    if request.method == 'PUT':
+        if request.user.user_pk == hashtag.user_pk_id:
+            return hashtag_update()
+    elif request.method == 'DELETE':
+        if request.user.user_pk == hashtag.user_pk_id:
+            return hashtag_delete()   
+        
+@api_view(['GET'])        
+def follow_story_list(request):
+    print(request.user.user_pk)
+    tmp = request.user.followings.all()
+    print(tmp)
+    story = Story.objects.filter(user_pk=tmp[0])
+    for user in range(1,len(tmp)) :
+        story_res = story | Story.objects.filter(user_pk=tmp[user])
+        story=story_res
+    print(story)
+    serializer = StorySerializer(story, many=True)
+    return Response(serializer.data)
+   
+@api_view(['POST'])     
+def like_story(request, story_pk):
+    story = get_object_or_404(Story, story_pk=story_pk)
+    user = request.user
+    if story.like_user.filter(user_pk=user.pk).exists():
+        story.like_user.remove(user)
+        context = {
+                'result' : f'{request.user.nickname}님이 좋아요 취소'
+        }
+    else:
+        story.like_user.add(user)
+        context = {
+                    'result' : f'{request.user.nickname}님이 좋아요 누름'
+                }
+    return Response(context)
+
+@api_view(['GET'])   
+def story_region_filter(request):
+    story = Story.objects.filter(Q(region= request.user.region)&~Q(user_pk = request.user))
+    # story = get_list_or_404(Story, region= request.user.region, user_pk != request.user)
+    serializer = StorySerializer(story, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])   
+def story_category_filter(request):
+    story = Story.objects.filter(Q(category= request.user.category)&~Q(user_pk = request.user))
+    # story = get_list_or_404(Story, category= request.user.category)
+    serializer = StorySerializer(story, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])   
+def story_both_filter(request):
+    story = Story.objects.filter(Q(region= request.user.region)&Q(category= request.user.category)&~Q(user_pk = request.user))
+    # story = get_list_or_404(Story, category= request.user.category)
+    serializer = StorySerializer(story, many=True)
+    return Response(serializer.data)
     
