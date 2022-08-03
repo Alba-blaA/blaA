@@ -1,6 +1,8 @@
 <template>
   <tr>
-    <td>{{articleno}}</td>
+    <router-link :to="'/crew/'+articleno">
+      <td>{{ articleno }}</td>
+    </router-link>
     <th>
       <!-- <router-link :to="{ name: 'BoardDetail' }">{{ article.subject }}</router-link> -->
       {{ subject }}

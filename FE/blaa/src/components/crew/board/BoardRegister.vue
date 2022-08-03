@@ -3,10 +3,10 @@
     <div>
       <h3>글 작성하기</h3>
     </div>
-    <div class="regist">
-      <h1 class="underline">SSAFY 글 등록</h1>
-      <div class="regist_form">
-        <label for="userid">작성자</label>
+    <div>
+      <h1>글 등록</h1>
+      <div>
+        <label for="user">작성자</label>
         <input type="text" id="userName" name="userName" v-model="userName" ref="userName" /><br />
         <label for="subject">제목</label>
         <input type="text" id="subject" name="subject" v-model="subject" ref="subject" /><br />
@@ -66,7 +66,7 @@ export default {
         });
     },
     moveCrew() {
-      this.$router.push({ name: "crew" });
+      this.$router.push({ name: "boardlist" });
     },
   },
 };
