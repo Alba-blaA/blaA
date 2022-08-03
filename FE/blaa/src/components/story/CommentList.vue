@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { computed, onUpdated } from '@vue/runtime-core'
+import { computed } from '@vue/runtime-core'
 import { useStore } from 'vuex'
 
 export default {
@@ -21,11 +21,6 @@ export default {
 
     const comments = computed(() => {
       return store.state.story.comments
-    })
-
-    // 댓글을 입력하였을 때 업데이트 하는 함수
-    onUpdated(() => {
-      comments = store.state.story.comments
     })
 
     return {

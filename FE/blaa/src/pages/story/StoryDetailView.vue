@@ -27,7 +27,8 @@ import axios from 'axios'
 import { ref } from 'vue'
 import CommentList from '@/components/story/CommentList.vue'
 import CommentForm from '@/components/story/CommentForm.vue'
-// import api from '@/api/api'
+import api from '@/api/api'
+import { useRouter } from 'vue-router'
 
 export default {
   components: {
@@ -37,17 +38,20 @@ export default {
   setup() {
     const story = ref({})
     const isError = ref(false)
+    const router = useRouter()
 
     const start = async () => {
       isError.value = false
       try {
-        const res = await axios.get(api.story.detail())  
+        const res = await axios.get(api.story.detail(router.params.story_pk))  
         story.value = res.data
       } catch (error) {
         isError.value = true
         console.log(error)
       }      
     }
+    
+    start()
   }
 }
 </script>

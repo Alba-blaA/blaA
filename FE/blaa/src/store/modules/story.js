@@ -22,18 +22,16 @@ export default {
   },
   actions: {
     // Story 목록 조회
-    async getRandomImages({commit}, count) {
+    async getImages({commit}) {
       try {
         // 현재 백엔드에 데이터가 없으므로 더미 데이터를 사용 진행
         // 후에 교체 예정
-        const res = await axios.get('https://api.unsplash.com/photos/random', {
+        const res = await axios.get(api.story.story(), {
           headers: {
-            Authorization: 'Client-ID nztOvTSyGzNixUYxs366oiDID-D_T7Pu5v5_XYbpBU8'
-          },
-          params: {
-            count
+            Authorization: 'Baerer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNjY0NzAwMjkzfQ.Z4wpr2HSWfxtlowEa_Gx7ar9V912459jVogY_V72tk8'
           }
         })
+        console.log('받아온 데이터', res.data)
         commit('GET_IMAGES',res.data)
       } catch(error) {
         // 에러 발생시
