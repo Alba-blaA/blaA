@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'accounts',
     'categorys',
     'reviews',
-    #3rd-party
+    'stories',
     'django_extensions',
     'corsheaders',
     'django_filters',
