@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # app 
     'accounts',
     'categorys',
+    'reviews',
     #3rd-party
     'django_extensions',
     'corsheaders',
