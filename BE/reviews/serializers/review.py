@@ -40,3 +40,11 @@ class ReviewShortListSerializer(serializers.ModelSerializer) :
         model = Review
         fields = ('review_pk','user','oneline_review','created_at','like_users','like_user_count')
         
+class ReviewDetailtSerializer(serializers.ModelSerializer) :
+
+    user = UserSerializer()
+    like_user_count = serializers.IntegerField(source='like_users.count', read_only=True)
+    class Meta: 
+        model = Review
+        fields = ('review_pk','user','star','oneline_review','created_at','like_users','like_user_count')
+        
