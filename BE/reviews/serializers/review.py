@@ -38,4 +38,5 @@ class ReviewShortListSerializer(serializers.ModelSerializer) :
     like_user_count = serializers.IntegerField(source='like_users.count', read_only=True)
     class Meta: 
         model = Review
-        fields = ('user','oneline_review','created_at','like_user_count')
+        fields = ('review_pk','user','oneline_review','created_at','like_users','like_user_count')
+        
