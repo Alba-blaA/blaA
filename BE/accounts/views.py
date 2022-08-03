@@ -5,7 +5,7 @@ from accounts.models import User
 from rest_framework.decorators import api_view
 from accounts.serializers import  (RegisterSerializer,LoginSerializer,
                                    UserSerializer,ChangePasswordSerializer)
-from rest_framework import status,permissions
+from rest_framework import response,status,permissions
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView

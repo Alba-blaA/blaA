@@ -42,6 +42,7 @@ urlpatterns = [
     path('api/v1/accounts/',include('accounts.urls')),
     path('api/v1/categorys/',include('categorys.urls')),
     path('api/v1/reviews/',include('reviews.urls')),
+    path('api/v1/stories/',include('stories.urls')),
 
 
     #--------------------swagger--------------
