@@ -2,27 +2,44 @@ from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
 from stories.serializers.comment import CommentSerializer
-from ..models import Story,Comment
+from stories.serializers.hashtag import HashtagSerializer
+from ..models import Story,Comment,Hashtag
+from accounts.models import User
 
 
 class StorySerializer(serializers.ModelSerializer):
+    
+    class UserSerializer(serializers.ModelSerializer):
+        class Meta:
+            model =User
+            fields = ('user_pk', 'nickname','image')
+            
+    user_pk = UserSerializer(read_only=True)
+    
     class Meta:
         model = Story
         fields = '__all__'
-        read_only_fields = ('user_pk','region','category')
+        read_only_fields = ('user_pk','region','category','user_pk')
+
 
 class StoryDetailSerializer(serializers.ModelSerializer) :
+    
+    class HashtagSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Hashtag
+            fields = ('hashtag_pk','hashtag_content')
     
     class CommentSerializer(serializers.ModelSerializer):
         class Meta:
             model = Comment
-            fields = '__all__'
+            fields = ('user_pk','comment_pk','created_at','story_comment')
     
-    comment_set = CommentSerializer()
+    comment_set = CommentSerializer(read_only=True,many=True)
+    hashtag_set = HashtagSerializer(read_only=True,many=True)
     # comment = get_object_or_404(Comment)
             
     class Meta :
         model = Story
-        fields= ('story_pk','user_pk','story_title','story_picture','created_at','comment_set')
+        fields= ('story_pk','user_pk','story_title','story_picture','created_at','comment_set', 'hashtag_set')
         
 
