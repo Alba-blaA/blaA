@@ -61,7 +61,7 @@ class StoreReviewListCreateAPIView(ListCreateAPIView) :
         store = get_object_or_404(Store,store_pk=store_pk)
         cnt = store.review.count()
 
-        tmp = {'친사': 0,'개맷':0 ,'좋분':0,'교접':0,'칼가':0,'유제':0}
+        tmp = {'친절한 사장님': 0,'깨끗한 매장':0 ,'좋은 분위기':0,'교통 접근성':0,'칼퇴근 가능':0,'유니폼 제공':0}
         for button_review in store.storebuttonreview_set.all() :
             tmp[button_review.button.type] += 1 
 
@@ -142,7 +142,7 @@ class ReviewDetailDelteAPIView(RetrieveDestroyAPIView) :
         instance = self.get_object()
         review = Review.objects.get(review_pk=review_pk)
         btn_review = review.storebuttonreview_set.all()
-        tmp_button = {'친사': 0,'개맷':0 ,'좋분':0,'교접':0,'칼가':0,'유제':0}
+        tmp_button ={'친절한 사장님': 0,'깨끗한 매장':0 ,'좋은 분위기':0,'교통 접근성':0,'칼퇴근 가능':0,'유니폼 제공':0}
         for btn in btn_review :
             # tmp_btn  = get_object_or_404(ButtonReview, pk=btn.button.pk)
             # print(tmp_btn)
