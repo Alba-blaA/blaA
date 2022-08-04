@@ -136,6 +136,7 @@ def follow(request, user_pk):
 
 
 class EmailUniqueCheck(CreateAPIView):
+    authentication_classes=[]
     serializer_class = EmailUniqueCheckSerializer
 
     def post(self, request, format=None):
@@ -149,6 +150,7 @@ class EmailUniqueCheck(CreateAPIView):
             return Response(data=detail, status=status.HTTP_400_BAD_REQUEST)
         
 class NicknameUniqueCheck(CreateAPIView):
+    authentication_classes=[]
     serializer_class = NicknameUniqueCheckSerializer
 
     def post(self, request, format=None):
