@@ -33,10 +33,12 @@ class User(AbstractUser) :
     region = models.TextField(null=True,blank=True)
     category = models.CharField(max_length=100,null=True,blank=True)
     is_alba = models.BooleanField(default=0)
-    image = models.ImageField(upload_to='user/profile/',null=True,blank=True)
+    image = models.ImageField(upload_to='user/profile/',
+                default='media/user/profile/프로필기본.png',
+                null=True,blank=True)
     report = models.IntegerField(default=0)
     
-    followings = models.ManyToManyField('self', symmetrical=False, related_name='followers')
+    followings = models.ManyToManyField('self', symmetrical=False, related_name='followers',blank=True)
 #---------------email을 기본 필드로 생성 -------------------------------------
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['tel','name','nickname']

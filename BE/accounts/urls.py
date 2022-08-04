@@ -12,4 +12,5 @@ urlpatterns=[
     path('change_password/<int:user_pk>/', views.ChangePasswordView.as_view(), name='auth_change_password'),
     path('unique/email/', views.EmailUniqueCheck.as_view(), name='uniquecheck_email'),
     path('unique/nickname/', views.NicknameUniqueCheck.as_view(), name='uniquecheck_nickname'),
+    path('crew/', views.UserCrewAPIView.as_view(), name='uniquecheck_nickname'),
 ]

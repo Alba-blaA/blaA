@@ -3,7 +3,7 @@ from reviews.models import Review, Store
 from accounts.models import User
 
 
-class UserSerializer(serializers.ModelSerializer):
+class ReviewUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
@@ -34,7 +34,7 @@ class ReviewListCreateSerializer(serializers.ModelSerializer) :
 
 class ReviewShortListSerializer(serializers.ModelSerializer) :
 
-    user = UserSerializer()
+    user = ReviewUserSerializer()
     like_user_count = serializers.IntegerField(source='like_users.count', read_only=True)
     class Meta: 
         model = Review
@@ -42,7 +42,7 @@ class ReviewShortListSerializer(serializers.ModelSerializer) :
         
 class ReviewDetailtSerializer(serializers.ModelSerializer) :
 
-    user = UserSerializer()
+    user = ReviewUserSerializer()
     like_user_count = serializers.IntegerField(source='like_users.count', read_only=True)
     class Meta: 
         model = Review
