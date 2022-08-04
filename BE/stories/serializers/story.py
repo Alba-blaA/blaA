@@ -19,7 +19,7 @@ class StorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Story
         fields = '__all__'
-        read_only_fields = ('user_pk','region','category','user_pk')
+        read_only_fields = ('user_pk','region','category','user_pk','like_user')
 
 
 class StoryDetailSerializer(serializers.ModelSerializer) :

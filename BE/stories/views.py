@@ -20,13 +20,17 @@ def story_list_or_create(request):
         return Response(serializer.data)
     
     def create_story():
-        picture = request.FILES['file']
-        title = request.data['story_title']
-        print(picture, title)
+        story_picture = request.FILES.get('file')
+        story_title = request.data['story_title']
+        # print(story_picture)
+        # print(story_title)
+        # print(request.data)
+        # print(picture, title)
         data = {
-            'story_picture': picture,
-            'story_title' : title            
+            'story_picture': story_picture,
+            'story_title' : story_title            
         }
+        # data=request.data
         serializer = StorySerializer(data=data)
         
         if serializer.is_valid(raise_exception=True):
@@ -76,7 +80,7 @@ def comment_list_or_create(request, story_pk):
     def comment_list():
         story = get_object_or_404(Story, story_pk = story_pk)
         print(story)
-        comments = get_list_or_404(Comment,story_pk=story)
+        comments = Comment.objects.filter(story_pk=story)
         serializer = CommentSerializer(comments, many= True)
         return Response(serializer.data)
     
