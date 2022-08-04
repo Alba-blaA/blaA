@@ -1,5 +1,7 @@
+import json
 from django.http import JsonResponse
 from django.shortcuts import redirect, render,get_object_or_404
+from django.views import View
 from rest_framework.generics import GenericAPIView,UpdateAPIView
 from accounts.models import User
 from rest_framework.decorators import api_view
@@ -11,6 +13,7 @@ from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 # Create your views here.
 from django import http
+import requests
 
 #user 확인 API 
 class AuthUserAPIView(GenericAPIView) :
@@ -130,3 +133,50 @@ def follow(request, user_pk):
                 }
         return JsonResponse(context)
     return redirect('accounts:login')
+
+
+class KakaoSignInView(View):
+    def get(self, request):
+        client_id = "0f5982ee3aa76733f951e5add93878c1"
+        redirect_uri = "http://127.0.0.1:8000/account/sign-in/kakao/callback"
+        return redirect(
+            f"https://kauth.kakao.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
+        )
+        
+class KakaoSignInCallbackView(View):
+    def get(self, request):
+
+        try:
+            print(request.GET)
+            code = request.GET.get("code")                                       
+            client_id = "0f5982ee3aa76733f951e5add93878c1"
+            redirect_uri = "http://127.0.0.1:8000/account/sign-in/kakao/callback"
+            
+            # API_HOST = f'https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={client_id}&redirect_uri={redirect_uri}&code={code}'
+            
+            # response = requests.POST(API_HOST)
+            # text = json.loads(response.text)
+            # print(response.status_code)
+            # print(text)
+            
+            token_request = requests.post(                                        
+                f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={client_id}&redirect_uri={redirect_uri}&code={code}"
+            )
+
+            token_json = token_request.json()                                    
+            print(token_json)
+            error = token_json.get("error",None)
+
+            if error is not None :
+                return JsonResponse({"message": "INVALID_CODE"}, status = 400)
+
+            access_token = token_json.get("access_token")
+            print(access_token)                        
+
+        except KeyError:
+            return JsonResponse({"message" : "INVALID_TOKEN"}, status = 400)
+
+        except access_token.DoesNotExist:
+            return JsonResponse({"message" : "INVALID_TOKEN"}, status = 400)
+    
+        

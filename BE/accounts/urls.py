@@ -9,5 +9,8 @@ urlpatterns=[
     path('user/',views.AuthUserAPIView.as_view(),name='user'),
     path('follow/<int:user_pk>/',views.follow),
     path('<int:user_pk>/', views.UserRetrieveUpdateDeleteAPIView.as_view()),
-    path('change_password/<int:user_pk>/', views.ChangePasswordView.as_view(), name='auth_change_password')
+    path('change_password/<int:user_pk>/', views.ChangePasswordView.as_view(), name='auth_change_password'),
+    path('sign-in/kakao/', views.KakaoSignInView.as_view()),
+    path('sign-in/kakao/callback/', views.KakaoSignInCallbackView.as_view()),
+    
 ]

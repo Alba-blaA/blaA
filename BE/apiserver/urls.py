@@ -20,5 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/accounts/',include('accounts.urls')),
     path('api/v1/stories/',include('stories.urls')),
+    path('account/',include('accounts.urls')),
     
 ]
