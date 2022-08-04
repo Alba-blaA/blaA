@@ -149,6 +149,10 @@ export default {
             if (response.status === 201) {
               console.log("회원가입 성공");
               router.push({ name: "home" });
+              console.log(
+                "회원가입 후 vuex : ",
+                store.state.account.signupUser
+              );
             } else {
               console.log("회원가입 문제 발생");
               console.log("회원가입 문제 에러코드 : ", response.status);

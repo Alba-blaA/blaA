@@ -104,6 +104,10 @@ const accountStore = {
           }
         },
         (error) => {
+          console.log("error request status : ", error.request.status);
+          if (error.response.status === 401) {
+            alert("아이디 또는 비밀번호가 틀립니다.");
+          }
           console.log(error);
         }
       );

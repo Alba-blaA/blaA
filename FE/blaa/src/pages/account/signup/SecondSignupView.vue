@@ -31,6 +31,8 @@
         v-model="user.nickname"
         placeholder="Enter nickname"
       />
+      &nbsp;
+      <button @click="emailCheck">중복확인</button>
     </form>
     <br /><br />
     <div>
