@@ -9,33 +9,30 @@ const accountStore = {
     isLogin: false,
     isLoginError: false,
     userInfo: null,
-    isAlba: true,
-    signupUser: null,
+    signupUser: {
+      email: null,
+      password: null,
+      name: null,
+      nickname: null,
+      region: null,
+      category: null,
+      isAlba: false,
+      image: null,
+    },
     category: [],
     si: [],
     gu: [],
     dong: [],
   },
   getters: {
-    category_list(state) {
-      let ret = state.category;
-      ret.unshift({ value: null, text: "업종 카테고리" });
-      return ret;
-    },
-    si_list(state) {
-      let ret = state.si;
-      ret.unshift({ value: null, text: "시/도" });
-      return ret;
-    },
-    gu_list(state) {
-      let ret = state.gu;
-      ret.unshift({ value: null, text: "구/군" });
-      return ret;
-    },
     dong_list(state) {
-      let ret = state.dong;
-      ret.unshift({ value: null, text: "동/면/리" });
-      return ret;
+      let dong = state.dong;
+      dong.shift();
+      return dong;
+    },
+    signup_user(state) {
+      let signupUser = state.signupUser;
+      return signupUser;
     },
   },
   mutations: {
@@ -49,11 +46,32 @@ const accountStore = {
       state.isLogin = true;
       state.userInfo = userInfo;
     },
-    ALBA: (state, isAlba) => {
-      state.isAlba = isAlba;
+    SET_SIGNUP_EMAIL: (state, email) => {
+      state.signupUser.email = email;
     },
-    SIGNUP_USER: (state, signupUser) => {
-      state.signupUser = signupUser;
+    SET_SIGNUP_PASSWORD: (state, password) => {
+      state.signupUser.password = password;
+    },
+    SET_SIGNUP_NAME: (state, name) => {
+      state.signupUser.name = name;
+    },
+    SET_SIGNUP_NICKNAME: (state, nickname) => {
+      state.signupUser.nickname = nickname;
+    },
+    SET_SIGNUP_REGION: (state, region) => {
+      state.signupUser.region = region;
+    },
+    SET_SIGNUP_CATEGORY: (state, category) => {
+      state.signupUser.category = category;
+    },
+    SET_SIGNUP_ALBA: (state, isAlba) => {
+      state.signupUser.isAlba = isAlba;
+    },
+    SET_SIGNUP_IMAGE: (state, image) => {
+      state.signupUser.image = image;
+    },
+    GET_SIGNUP_USER: (state, user) => {
+      state.signupUser = user;
     },
     GET_CATEGORY_LIST: (state, payload) => {
       state.category = payload;
@@ -120,14 +138,17 @@ const accountStore = {
         context.commit("GET_SI_LIST", data);
       });
     },
-    getGuLIst(context, sido) {
-      axios.get(api.categorys.region() + sido + "/").then(({ data }) => {
+    getGuList(context, sido) {
+      const sido_substr = sido.substr(0, 2);
+      axios.get(api.categorys.region() + sido_substr + "/").then(({ data }) => {
         context.commit("GET_GU_LIST", data);
       });
     },
-    getDongLIst(context, region) {
+    getDongList(context, region) {
+      const sido_substr = region.sido.substr(0, 2);
+      const gugun_substr = region.gugun.substr(2, 2);
       axios
-        .get(api.categorys.region() + region.sido + "/" + region.gugun + "/")
+        .get(api.categorys.region() + sido_substr + "/" + gugun_substr + "/")
         .then(({ data }) => {
           context.commit("GET_DONG_LIST", data);
         });
