@@ -90,7 +90,7 @@ export default {
       // 사진과 제목 값이 모두 존재할 때 생성
       if (story_picture.value && story_title.value) {
         const form = new FormData()
-        form.append('file', story_picture.value)
+        form.append('story_picture', story_picture.value)
         form.append('story_title', story_title.value)
         // form.append("file", {
         //   story_picture: story_picture.value,
