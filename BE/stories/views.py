@@ -20,8 +20,14 @@ def story_list_or_create(request):
         return Response(serializer.data)
     
     def create_story():
-        print(request.data)
-        serializer = StorySerializer(data=request.data)
+        picture = request.FILES['file']
+        title = request.data['story_title']
+        print(picture, title)
+        data = {
+            'story_picture': picture,
+            'story_title' : title            
+        }
+        serializer = StorySerializer(data=data)
         
         if serializer.is_valid(raise_exception=True):
             serializer.save(user_pk = request.user, region = request.user.region, category = request.user.category)
