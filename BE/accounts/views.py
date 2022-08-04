@@ -1,10 +1,11 @@
 from django.http import JsonResponse
 from django.shortcuts import redirect, render,get_object_or_404
-from rest_framework.generics import GenericAPIView,UpdateAPIView
+from rest_framework.generics import GenericAPIView,CreateAPIView,UpdateAPIView
 from accounts.models import User
 from rest_framework.decorators import api_view
 from accounts.serializers import  (RegisterSerializer,LoginSerializer,
-                                   UserSerializer,ChangePasswordSerializer)
+                                   UserSerializer,ChangePasswordSerializer,
+                                   NicknameUniqueCheckSerializer,EmailUniqueCheckSerializer)
 from rest_framework import response,status,permissions
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
@@ -132,3 +133,29 @@ def follow(request, user_pk):
                 }
         return JsonResponse(context)
     return redirect('accounts:login')
+
+
+class EmailUniqueCheck(CreateAPIView):
+    serializer_class = EmailUniqueCheckSerializer
+
+    def post(self, request, format=None):
+        serializer = self.get_serializer(data=request.data, context={'request': request})
+
+        if serializer.is_valid():
+            return Response(data={'detail':['You can use this email']}, status=status.HTTP_200_OK)
+        else:
+            detail = dict()
+            detail['detail'] = serializer.errors['email']
+            return Response(data=detail, status=status.HTTP_400_BAD_REQUEST)
+        
+class NicknameUniqueCheck(CreateAPIView):
+    serializer_class = NicknameUniqueCheckSerializer
+
+    def post(self, request, format=None):
+        serializer = self.get_serializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            return Response(data={'detail':['You can use this nickname']}, status=status.HTTP_200_OK)
+        else:
+            detail = dict()
+            detail['detail'] = serializer.errors['nickname']
+            return Response(data=detail, status=status.HTTP_400_BAD_REQUEST)

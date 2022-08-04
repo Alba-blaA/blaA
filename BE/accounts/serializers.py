@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from accounts.models import User
 from django.contrib.auth.password_validation import validate_password
+from rest_framework.validators import UniqueValidator
 # 모델 시리어라이저를 상속받는 이유는 이미 모델이 있기 때문이다.
 class RegisterSerializer(serializers.ModelSerializer) :
     password = serializers.CharField(max_length=128,min_length=6,write_only=True)
@@ -57,3 +58,20 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+
+class EmailUniqueCheckSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
+
+    class Meta:
+        model = User
+        fields = ('email',)
+        
+ # 닉네임 중복 검사
+class NicknameUniqueCheckSerializer(serializers.ModelSerializer):
+    nickname = serializers.CharField(required=True, min_length=1, max_length=20, validators=[UniqueValidator(queryset=User.objects.all())])
+
+    class Meta:
+        model = User
+        fields = ('nickname',)

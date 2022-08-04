@@ -9,5 +9,7 @@ urlpatterns=[
     path('user/',views.AuthUserAPIView.as_view(),name='user'),
     path('follow/<int:user_pk>/',views.follow),
     path('<int:user_pk>/', views.UserRetrieveUpdateDeleteAPIView.as_view()),
-    path('change_password/<int:user_pk>/', views.ChangePasswordView.as_view(), name='auth_change_password')
+    path('change_password/<int:user_pk>/', views.ChangePasswordView.as_view(), name='auth_change_password'),
+    path('unique/email/', views.EmailUniqueCheck.as_view(), name='uniquecheck_email'),
+    path('unique/nickname/', views.NicknameUniqueCheck.as_view(), name='uniquecheck_nickname'),
 ]
