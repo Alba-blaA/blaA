@@ -16,3 +16,23 @@ class Crew(TrackingModel,models.Model) :
     crew_member = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='crews',blank=True)
 
     
+
+class CrewArticle(TrackingModel,models.Model) :
+    crew_article_pk = models.AutoField(primary_key=True)
+    crew = models.ForeignKey(Crew,on_delete=models.CASCADE) 
+    user =models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    crew_title = models.CharField(max_length=50)
+    crew_content = models.TextField()
+    crew_private = models.BooleanField(default=False)
+    crew_pin = models.BooleanField(default=False)
+
+
+class CrewArticleImage(models.Model) :
+    article_image_pk = models.AutoField(primary_key=True)
+    article =models.ForeignKey(CrewArticle,on_delete=models.CASCADE)
+    article_picture = models.ImageField(upload_to='crew_article/image')
+
+
+class CrewArticleComment(TrackingModel,models.Model) :
+    article =models.ForeignKey(CrewArticle,on_delete=models.CASCADE)
+    
