@@ -1,25 +1,35 @@
 <template>
-  <div>내 크루</div>
-  <div v-if="mycrews.length == 0">
-    <p>가입된 크루가 없습니다.</p>
-  </div>
-  <div v-else>
-    <table v-for="(mycrew, i) in mycrews" :key="i" v-bind="mycrew">
+  <hr/>
+  <table>
+    <thead>
       <tr>
-        <th>{{ mycrew.crew_pk }}</th>
-        <td>{{ mycrew.is_business }}</td>
-        <td>{{ mycrew.crew_name }}</td>
-        <td>{{ mycrew.crew_explain }}</td>
-        <td>{{ mycrew.crew_leader }}</td>
+        <th>순번</th>
+        <th>업무용/친목욕</th>
+        <th>크루명</th>
+        <th>크루설명</th>
+        <th>크루장</th>
       </tr>
-    </table>
-  </div>
+    </thead>
+    <tbody>
+      <template v-if="mycrews.length == 0">
+        <p>가입된 크루가 없습니다.</p>
+      </template>
+      <template v-else>
+        <tr v-for="(mycrew, i) in mycrews" :key="i" v-bind="mycrew">
+          <td>{{ mycrew.crew_pk }}</td>
+          <td>{{ mycrew.is_business }}</td>
+          <td>{{ mycrew.crew_name }}</td>
+          <td>{{ mycrew.crew_explain }}</td>
+          <td>{{ mycrew.crew_leader }}</td>
+        </tr>
+      </template>
+    </tbody>
+  </table>
 </template>
 
 <script>
 import axios from "axios";
-const url =
-  "https://63136029-bc5c-4b91-b1d9-202db7d1ad44.mock.pstmn.io/mycrewlist";
+const url = "https://63136029-bc5c-4b91-b1d9-202db7d1ad44.mock.pstmn.io/mycrewlist";
 export default {
   data() {
     return {
@@ -38,4 +48,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+</style>

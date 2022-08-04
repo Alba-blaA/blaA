@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import axios from "axios";
+const url = "https://63136029-bc5c-4b91-b1d9-202db7d1ad44.mock.pstmn.io/crewregist";
 export default {
 	data() {
 		return {
@@ -41,7 +43,38 @@ export default {
 		onInputImage() {
 			this.crew_img = this.$refs.crew_img.files;
 			console.log(this.crew_img);
-		}
+    },
+    checkValue() {
+      let error = true;
+      let msg = "";
+      console.log("크루명: " + this.crew_name);
+      !this.crew_name && ((msg = "크루명을 입력하세요."), (error = false), this.$refs.crew_name.focus());
+      error && !this.crew_explain && ((msg = "크루 설명을 입력하세요."), (error = false), this.$refs.crew_explain.focus());
+
+      if (!error) alert(msg);
+      else this.registCrew();
+    },
+    registCrew() {
+      axios.post(url, {
+        crew_name: this.crew_name,
+        crew_explain: this.crew_explain,
+        crew_img: this.crew_img,
+      }).then(({ data }) => {
+        console.log(data);
+        let msg = "등록 처리 시 문제가 발생했습니다.";
+        if (data.message == "success") {
+          msg = "등록이 완료되었습니다.";
+        }
+        alert(msg);
+        this.moveCrewBoard();
+      });
+    },
+    moveCrewBoard() {
+      this.$router.push({ name: 'article' });
+    },
+    moveList() {
+      this.$router.push({ name: 'crewlist' });
+    }
 	}
 };
 </script>

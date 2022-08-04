@@ -28,6 +28,8 @@
   </div>
 </template>
 
+
+
 <script>
 export default {
 	data() {
@@ -41,7 +43,10 @@ export default {
 		onInputImage() {
 			this.crew_img = this.$refs.crew_img.files;
 			console.log(this.crew_img);
-		}
+    },
+    moveList() {
+      this.$router.push({ name: 'crewlist' });
+    }
 	}
 };
 </script>

@@ -67,20 +67,25 @@ const router = createRouter({
           ]
         },
         {
-          path: "board",
-          name: "board",
-          redirect: "/crew/board/list",
-          component: () => import ("@/components/crew/board/BoardView.vue"),
+          path: "article",
+          name: "article",
+          redirect: "/crew/article/list",
+          component: () => import ("@/components/crew/article/BoardView.vue"),
           children: [
             {
               path: "list",
-              name: "boardlist",
-              component: () => import("@/components/crew/board/BoardList.vue"),
+              name: "articlelist",
+              component: () => import("@/components/crew/article/BoardList.vue"),
             },
             {
               path: "regist",
-              name: "boardregist",
-              component: () => import("@/components/crew/board/BoardRegister.vue"),
+              name: "articleregist",
+              component: () => import("@/components/crew/article/BoardRegister.vue"),
+            },
+            {
+              path: "detail/:crew_article_pk",
+              name: "articledetail",
+              component: () => import("@/components/crew/article/BoardDetail.vue"),
             },
           ]
         },

@@ -4,12 +4,12 @@
     <table>
       <board-item v-for="article in articles" :key="article.articleno" v-bind="article" />
     </table>
-    <button @click="moveRegist()">글쓰기</button>
+    <button @click="moveRegist">글쓰기</button>
   </div>
 </template>
 
 <script>
-import BoardItem from "@/components/crew/board/BoardItem.vue";
+import BoardItem from "@/components/crew/article/BoardItem.vue";
 import axios from "axios";
 const url = "https://63136029-bc5c-4b91-b1d9-202db7d1ad44.mock.pstmn.io/list";
 
@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     moveRegist() {
-      this.$router.push({ name: "boardregist" });
+      this.$router.push({ name: "articleregist" });
     },
   },
 };

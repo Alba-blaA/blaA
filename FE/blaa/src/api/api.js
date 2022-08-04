@@ -1,5 +1,5 @@
 // 기본 url
-const HOST = "http://localhost:3000/posts";
+const HOST = "http://localhost:8000/api/v1/";
 
 // ===================================
 // 세부 url
