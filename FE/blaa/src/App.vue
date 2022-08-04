@@ -14,17 +14,6 @@
 </template>
 
 <script>
-<<<<<<< HEAD
-//
-// import axios from 'axios'
-// import { useStore } from "vuex";
-
-export default {
-  setup() {
-    // vuex store 사용법 예제
-    // const store = useStore();
-
-=======
 // import axios from 'axios';
 import { useStore } from "vuex";
 import { computed } from "vue";
@@ -62,15 +51,12 @@ export default {
     // const login = () => {
     //   router.push("/login");
     // };
->>>>>>> develop_FE
     // // actions
     // store.dispatch("test/test");
     // // state
     // console.log(store.state.test.data);
     // // getters
     // console.log(store.getters["test/example"]);
-<<<<<<< HEAD
-=======
     return {
       isLogin,
       userInfo,
@@ -78,7 +64,6 @@ export default {
       logout,
       register,
     };
->>>>>>> develop_FE
   },
 };
 </script>
