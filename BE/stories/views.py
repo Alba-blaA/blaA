@@ -30,7 +30,7 @@ def story_list_or_create(request):
             'story_picture': story_picture,
             'story_title' : story_title            
         }
-        # data=request.data
+        data=request.data
         serializer = StorySerializer(data=data)
         
         if serializer.is_valid(raise_exception=True):

@@ -13,9 +13,9 @@ class StorySerializer(serializers.ModelSerializer):
         class Meta:
             model =User
             fields = ('user_pk', 'nickname','image')
-            
-    user_pk = UserSerializer(read_only=True)
     
+    user_pk = UserSerializer(read_only=True)
+    story_picture = serializers.ImageField()
     class Meta:
         model = Story
         fields = '__all__'
