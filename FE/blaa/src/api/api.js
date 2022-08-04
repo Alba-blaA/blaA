@@ -6,7 +6,8 @@ const HOST = "http://localhost:8000/api/v1/";
 const ACCOUNTS = "accounts/";
 const STORY = 'stories/'
 const COMMENT = 'comment/'
-const REVIEW = 'review/'
+const REVIEW = 'reviews/'
+const STORE = 'store/'
 // const CREW = 'crew/'
 // const CHAT = 'chat/'
 
@@ -21,14 +22,15 @@ export default {
     profile: (username) => HOST + ACCOUNTS + "profile/" + username,
   },
   story: {
+    host: () => HOST,
     story: () => HOST + STORY,
-    detail: (story_pk) => HOST + STORY + story_pk,
+    detail: (story_pk) => HOST + STORY + story_pk + '/',
     like: (story_pk) => HOST + STORY + 'like/' + story_pk,
-    comment:(story_pk) => HOST + STORY + COMMENT + story_pk,
+    comment:(story_pk) => HOST + STORY + COMMENT + story_pk +'/',
     commentChange: (comment_pk) => HOST + STORY + COMMENT + 'ud/' + comment_pk
   },
   review: {
-    review: () => HOST + REVIEW,
+    review: () => HOST + REVIEW + STORE,
     searchReview: (search_name) => HOST + REVIEW + search_name,
     storeDetail: (store_pk) => HOST + REVIEW + store_pk,
     addStore: () => HOST + 'store/',

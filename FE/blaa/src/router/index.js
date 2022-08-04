@@ -13,7 +13,7 @@ import Login from "@/pages/account/LoginView.vue";
 import Crew from "@/pages/crew/CrewView.vue";
 
 import ReviewMain from "@/pages/review/ReviewMain.vue";
-import Review from "@/pages/review/ReviewView.vue";
+import ReviewView from "@/pages/review/ReviewView.vue";
 import ReviewForm from "@/pages/review/ReviewForm.vue";
 import ReviewDetail from "@/pages/review/ReviewDetail.vue";
 import ReviewCommentDetail from "@/pages/review/ReviewCommentDetail.vue";
@@ -32,7 +32,7 @@ const router = createRouter({
       component: StoryMain,
       children: [
         {
-          path: 'main',
+          path: '',
           name: 'story',
           component: Story
         },
@@ -59,9 +59,9 @@ const router = createRouter({
       component: ReviewMain,
       children: [
         {
-          path: '/',
+          path: '',
           name: 'review',
-          component: Review
+          component: ReviewView
         },
         {
           path: 'create',

@@ -1,17 +1,26 @@
 <template>
 <!-- 뒤로, 하트 이모지 추가 -->
   <div v-if="!isError">
+    <PopUp v-if="popUpOpen" @close-modal="popUpOpen=false">
+        <div class="modal-content">
+          <p>정말 삭제하시겠습니까?</p>
+          <button class="btn btn-secondary" @click="popUpOpen=false">취소</button> 
+          <button class="btn btn=danger" @click="storyDelete">삭제</button>
+        </div>
+    </PopUp>
     <div>
-      <span>뒤로</span>
+      <router-link class="btn btn-primary" :to="{name: 'story'}">뒤로</router-link>
+      <button class="btn btn-danger ml-3" @click="popUpOpen=true">삭제</button>
     </div>
-    <div>
-      <span>{{ story.story_title }}</span>
-      <span>heart</span>
+    <div class="d-flex justify-content-between">
+      <h2>{{ story.story_title }}</h2>
+      <!-- 좋아요 기능 구현 -->
+      <span >♥</span>
     </div>
-    <div>
-      <img :src="story.story_picture" alt="">
-      <span>닉네임</span>
-      <span>{{ story.created_at }}</span>
+    <div class="story-content">
+      <img :src="host + story.story_picture" alt="이미지 영역입니다." style="width:100%">
+      <span>작성자 : {{ story.user_pk }} </span>
+      <span>작성일 :{{ story.created_at }}</span>
     </div>
     <CommentList/>
     <hr>
@@ -23,39 +32,60 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 import { ref } from 'vue'
 import CommentList from '@/components/story/CommentList.vue'
 import CommentForm from '@/components/story/CommentForm.vue'
-import api from '@/api/api'
-import { useRouter } from 'vue-router'
+import PopUp from '@/components/story/PopUp.vue'
+// import api from '@/api/api'
+import { useRouter, useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 
 export default {
   components: {
     CommentList,
-    CommentForm
+    CommentForm,
+    PopUp
   },
   setup() {
+    const host = "http://localhost:8000"
+    const store = useStore()
     const story = ref({})
     const isError = ref(false)
     const router = useRouter()
+    const route = useRoute()
+    const popUpOpen = ref(false)
 
+    // 데이터를 불러오는 함수
     const start = async () => {
       isError.value = false
-      try {
-        const res = await axios.get(api.story.detail(router.params.story_pk))  
-        story.value = res.data
-      } catch (error) {
+      await store.dispatch('story/getCurrentStory', route.params.story_pk).then(() => {
+        story.value = store.state.story.currentStory
+      }).catch((error) => {
+        console.error(error)
         isError.value = true
-        console.log(error)
-      }      
+      })  
     }
     
     start()
+
+    const storyDelete = async () => {
+      await store.dispatch('story/deleteCurrentStory', route.params.story_pk)
+      router.push({
+          name: 'story'
+        })
+    }
+
+    return {
+      host,
+      story,
+      popUpOpen,
+      isError,
+      storyDelete,
+    }
   }
 }
 </script>
 
-<style>
-
+<style scoped>
 </style>
