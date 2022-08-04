@@ -20,7 +20,7 @@ def story_list_or_create(request):
         return Response(serializer.data)
     
     def create_story():
-        story_picture = request.FILES.get('file')
+        story_picture = request.FILES.get('story_picture')
         story_title = request.data['story_title']
         # print(story_picture)
         # print(story_title)
