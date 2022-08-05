@@ -4,13 +4,13 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "local": "vue-cli-service serve --mode local",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "axios": "^0.27.2",
     "core-js": "^3.8.3",
-    "dotenv": "^16.0.1",
     "jquery": "^3.6.0",
     "mathjs": "^11.0.1",
     "vue": "^3.2.13",
