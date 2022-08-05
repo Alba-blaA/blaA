@@ -31,10 +31,14 @@ class CrewArticleSerializer(serializers.ModelSerializer) :
     def create(self,validated_data) :
         images_data = self.context['request'].FILES 
         print(images_data)
+        print(validated_data)
         article = CrewArticle.objects.create(**validated_data)
         for image_data in images_data.getlist('images'):
             CrewArticleImage.objects.create(article=article, article_picture=image_data)
         return article
+
+    # def update(self,instance,validated_data) :
+    #     instance.title = validated_data.get'
 
 class CrewArticleRUDSerializer(serializers.ModelSerializer) :
     # crew_pk = CrewSerializerForArticle()

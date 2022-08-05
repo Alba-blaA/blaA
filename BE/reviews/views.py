@@ -53,7 +53,7 @@ class StoreReviewListCreateAPIView(ListCreateAPIView) :
         store = get_object_or_404(Store,store_pk=store_pk)
         review = get_object_or_404(Review,review_pk=review_pk)
         for choice in chosen_button :
-            choice = int(choice)
+            # choice = int(choice)
             btn = get_object_or_404(ButtonReview,pk=choice)
             StoreButtonReview.objects.create(store=store,button=btn,review=review)
 
@@ -101,17 +101,25 @@ class StoreReviewListCreateAPIView(ListCreateAPIView) :
     def create(self,request,store_pk) : 
         # chosen_button = request.data.pop('chosen_button')
         # print(chosen_button)
+
+        reviews = Review.objects.filter(store=store_pk,user=self.request.user)
+        if reviews :
+           return Response({'message':"Sorry, You can only write a review for a store once per user."},status=status.HTTP_400_BAD_REQUEST)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer,store_pk)
         headers = self.get_success_headers(serializer.data)
         review_pk = serializer.data['review_pk']
         chosen_button = request.data.pop('chosen_button')
-        self.review_store(store_pk,review_pk,chosen_button)
-        # print(type(serializer.data))
-        update_data = {'chosen_button' : chosen_button}
-        update_data.update(serializer.data)
-        return Response(update_data, status=status.HTTP_201_CREATED, headers=headers)
+        try :
+            chosen_button = list(map(int,chosen_button))
+            self.review_store(store_pk,review_pk,chosen_button)
+            update_data = {'chosen_button' : list(chosen_button)}
+            update_data.update(serializer.data)
+            return Response(update_data, status=status.HTTP_201_CREATED, headers=headers)
+        except :
+            return Response({'message':"Sorry, Wrong button review."},status=status.HTTP_400_BAD_REQUEST)
+        # print(list(chosen_button))
 
     def perform_create(self, serializer,store_pk):
         return serializer.save(user=self.request.user,store=self.get_object(store_pk))
