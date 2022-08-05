@@ -1,6 +1,15 @@
 <template>
   <h3>회원가입 3단계</h3>
 
+  <input
+    id="signup-nickname"
+    v-model="user.nickname"
+    placeholder="Enter nickname"
+  />
+  &nbsp;
+  <button @click.prevent="nicknameCheck">중복확인</button>
+  <br />
+
   <select id="signup-category" v-model="user.category">
     <option value="null">업종 카테고리</option>
     <option
@@ -59,6 +68,7 @@ export default {
     const store = useStore();
 
     const user = ref({
+      nickname: null,
       category: null,
       sido: null,
       gugun: null,
@@ -67,6 +77,28 @@ export default {
 
     store.dispatch("account/getCategoryList");
     store.dispatch("account/getSiList");
+
+    const nicknameCheck = () => {
+      if (user.value.nickname == null) {
+        alert("먼저 닉네임을 입력해주세요.");
+      } else {
+        const sendNickname = { nickname: user.value.nickname };
+        axios
+          .post(api.accounts.nicknameCheck(), sendNickname)
+          .then((response) => {
+            console.log("response : ", response);
+            console.log("response status : ", response.status);
+            if (response.status === 200 || response.status === 201) {
+              alert("사용 가능한 닉네임입니다.");
+            }
+          })
+          .catch((error) => {
+            console.log("error : ", error);
+            alert("이미 사용중인 닉네임입니다.");
+            user.value.nickname = null;
+          });
+      }
+    };
 
     const category_list = computed(() => {
       return store.state.account.category;
@@ -111,6 +143,9 @@ export default {
       let err = true;
       let msg = "";
 
+      err &&
+        !user.value.nickname &&
+        ((msg = "닉네임을 입력해주세요"), (err = false));
       err &&
         !user.value.category &&
         ((msg = "카테고리를 선택해주세요"), (err = false));
@@ -163,6 +198,7 @@ export default {
 
     return {
       user,
+      nicknameCheck,
       category_list,
       si_list,
       gu_list,

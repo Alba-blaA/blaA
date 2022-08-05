@@ -14,6 +14,7 @@ const accountStore = {
       password: null,
       name: null,
       nickname: null,
+      tel: null,
       region: null,
       category: null,
       isAlba: false,
@@ -57,6 +58,9 @@ const accountStore = {
     },
     SET_SIGNUP_NICKNAME: (state, nickname) => {
       state.signupUser.nickname = nickname;
+    },
+    SET_SIGNUP_TEL: (state, tel) => {
+      state.signupUser.tel = tel;
     },
     SET_SIGNUP_REGION: (state, region) => {
       state.signupUser.region = region;

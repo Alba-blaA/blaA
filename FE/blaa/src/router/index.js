@@ -3,6 +3,7 @@ import Home from "@/App.vue";
 import Chat from "@/pages/chat/ChatView.vue";
 import Profile from "@/pages/profile/ProfileView.vue";
 import Login from "@/pages/account/LoginView.vue";
+import KakaoLogin from "@/pages/account/KakaoLoginView.vue";
 import Signup from "@/pages/account/signup/SignupView.vue";
 import SignupChoice from "@/pages/account/signup/FirstSignupView.vue";
 import SignupForm from "@/pages/account/signup/SecondSignupView.vue";
@@ -23,6 +24,11 @@ const router = createRouter({
       path: "/login",
       name: "login",
       component: Login,
+    },
+    {
+      path: "/kakao",
+      name: "kakao",
+      component: KakaoLogin,
     },
     {
       path: "/signup",
