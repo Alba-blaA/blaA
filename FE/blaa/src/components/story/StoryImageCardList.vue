@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
-    <div class="cards" v-if="images.length">
-      <StroyImageCard v-for="image in images" :key="image.id" :image="image" />
+    <div class="cards" v-if="images">
+      <StroyImageCard v-for="image in images" :key="image.story_pk" :image="image" />
     </div>
     <div class="cards-loading" v-else>Loading image....</div>
   </div>

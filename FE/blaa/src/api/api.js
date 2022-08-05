@@ -7,6 +7,10 @@ const ACCOUNTS = "accounts/";
 const CATEGORYS = "categorys/";
 // const STORY = 'story/'
 // const REVIEWS = 'reviews/'
+const STORY = 'stories/'
+const COMMENT = 'comment/'
+const REVIEW = 'reviews/'
+const STORE = 'store/'
 // const CREW = 'crew/'
 // const CHAT = 'chat/'
 
@@ -46,4 +50,20 @@ export default {
   //   comment: (articlePk, commentPk) =>
   //     HOST + ARTICLES + ${articlePk}/ + COMMENTS + ${commentPk}/,
   // },
+  story: {
+    host: () => HOST,
+    story: () => HOST + STORY,
+    detail: (story_pk) => HOST + STORY + story_pk + '/',
+    like: (story_pk) => HOST + STORY + 'like/' + story_pk,
+    comment:(story_pk) => HOST + STORY + COMMENT + story_pk +'/',
+    commentChange: (comment_pk) => HOST + STORY + COMMENT + 'ud/' + comment_pk
+  },
+  review: {
+    review: () => HOST + REVIEW + STORE,
+    searchReview: (search_name) => HOST + REVIEW + search_name,
+    storeDetail: (store_pk) => HOST + REVIEW + store_pk,
+    addStore: () => HOST + 'store/',
+    reviewDetail: (review_pk) => HOST + REVIEW + review_pk,
+    like: (review_pk) => HOST + REVIEW + 'like/' + review_pk
+  }
 };
