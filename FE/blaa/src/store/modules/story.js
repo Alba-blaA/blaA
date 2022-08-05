@@ -4,7 +4,7 @@ import api from '@/api/api'
 export default {
   namespaced: true,
   state: {
-    Token: process.env.VUE_APP_TOKEN,
+    Token: sessionStorage.getItem('token'),
     stories: [],
     images: [],
     comments: [],

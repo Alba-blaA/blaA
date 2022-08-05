@@ -7,7 +7,7 @@
           <input type="text" v-model="searchWord" @keyup.enter="searchStore">
         </div>
         <div v-if="searchList.length">
-          <ReviewMapList v-for="searchChild in searchList" :key="searchChild.id" :searchChild="searchChild"/>
+          <ReviewMapList v-for="searchChild in searchList" :key="searchChild.id" :searchChild="searchChild" @select-store="selectStore"/>
           <PaginationBar :currentPage="currentPage" :numberOfPages="numberOfPages" @click="searchStore"/>
         </div>
         <p v-else>검색결과가 없습니다.</p>
@@ -27,7 +27,7 @@ export default {
     ReviewMapList,
     PaginationBar
   },
-  setup() {
+  setup(props, {emit}) {
     const searchList = ref([])
     const searchWord = ref('')
     const currentPage = ref(1)
@@ -60,12 +60,18 @@ export default {
       return Math.ceil(totalCount.value / 5)
     })
 
+    // 상점 선택 결과 전송
+    const selectStore = (data) => {
+      emit('select-store', data)
+    }
+
     return {
       searchWord,
       searchList,
       searchStore,
       currentPage,
       numberOfPages,
+      selectStore,
     }
   }
 
