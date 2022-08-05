@@ -152,13 +152,6 @@ class KakaoSignInCallbackView(View):
             client_id = "0f5982ee3aa76733f951e5add93878c1"
             redirect_uri = "http://127.0.0.1:8000/account/sign-in/kakao/callback"
             
-            # API_HOST = f'https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={client_id}&redirect_uri={redirect_uri}&code={code}'
-            
-            # response = requests.POST(API_HOST)
-            # text = json.loads(response.text)
-            # print(response.status_code)
-            # print(text)
-            
             token_request = requests.post(                                        
                 f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={client_id}&redirect_uri={redirect_uri}&code={code}"
             )
