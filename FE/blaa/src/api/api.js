@@ -21,6 +21,8 @@ export default {
     login: () => HOST + ACCOUNTS + "login/",
     logout: () => HOST + ACCOUNTS + "logout/",
     signup: () => HOST + ACCOUNTS + "signup/",
+    emailCheck: () => HOST + ACCOUNTS + "unique/email/",
+    nicknameCheck: () => HOST + ACCOUNTS + "unique/nickname/",
     // Token 으로 현재 user 판단
     currentUserInfo: () => HOST + ACCOUNTS + "user/",
     // username으로 프로필 제공

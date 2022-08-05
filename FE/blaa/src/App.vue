@@ -8,6 +8,8 @@
     <p>로그인이 필요합니다.</p>
     <button @click="login">로그인</button>
     &nbsp;
+    <button @click="kakaoLogin">카카오 로그인</button>
+    &nbsp;
     <button @click="register">회원가입</button>
   </div>
   <router-view />
@@ -39,6 +41,14 @@ export default {
 
     const login = () => {
       router.push({ name: "login" });
+    };
+
+    const kakaoLogin = () => {
+      const params = {
+        redirectUri: "http://localhost:8080/kakao",
+        // redirectUri: "http://127.0.0.1:8000/account/sign-in/kakao/callback",
+      };
+      window.Kakao.Auth.authorize(params);
     };
 
     const logout = () => {
@@ -83,6 +93,7 @@ export default {
       isLogin,
       userInfo,
       login,
+      kakaoLogin,
       logout,
       register,
     };
