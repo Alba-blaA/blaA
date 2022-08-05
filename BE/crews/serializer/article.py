@@ -43,6 +43,7 @@ class CrewArticleSerializer(serializers.ModelSerializer) :
 class CrewArticleRUDSerializer(serializers.ModelSerializer) :
     # crew_pk = CrewSerializerForArticle()
     images = serializers.SerializerMethodField()
+    image_update = serializers.BooleanField(write_only=True)
     def get_images(self, obj):
         image = obj.crewarticleimage_set.all()
         return ArticleImageSerializer(instance=image, many=True).data
@@ -64,15 +65,15 @@ class CrewArticleRUDSerializer(serializers.ModelSerializer) :
             images_data = self.context['request'].FILES 
         except:
             images_data = None
-            
+        print(validated_data.get('image_update'))
         if images_data is not None:
             image_instance_list = []
             for image_data in images_data.getlist('images'):
-                print('asdf',image_data)
-                print(CrewArticleImage.objects.get(article_picture =f'crew_article/image/{image_data}'))
-                # image, created = CrewArticleImage.objects.get_or_create(article_id = instance.pk,article_picture=f'crew_article/image/{image_data}')
-                # print(image,created)
-                # image_instance_list.append(image)
+                # print('asdf',image_data)
+                # print(CrewArticleImage.objects.get(article_picture =f'crew_article/image/{image_data}'))
+                image, created = CrewArticleImage.objects.get_or_create(article_id = instance.pk,article_picture=f'crew_article/image/{image_data}')
+                if created :
+                    image_instance_list.append(image)
 
             instance.crewarticleimage_set.set(image_instance_list)
             # instance.crewarticleimage_set.all()
