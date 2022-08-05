@@ -16,6 +16,10 @@
 </template>
 
 <script>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> develop_FE
 // import axios from 'axios';
 import { useStore } from "vuex";
 import { computed } from "vue";
@@ -61,12 +65,30 @@ export default {
     // const login = () => {
     //   router.push("/login");
     // };
+<<<<<<< HEAD
+=======
+=======
+//
+// import axios from 'axios'
+// import { useStore } from "vuex";
+
+export default {
+  setup() {
+    // vuex store 사용법 예제
+    // const store = useStore();
+
+>>>>>>> feature/story
+>>>>>>> develop_FE
     // // actions
     // store.dispatch("test/test");
     // // state
     // console.log(store.state.test.data);
     // // getters
     // console.log(store.getters["test/example"]);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> develop_FE
     return {
       isLogin,
       userInfo,
@@ -75,6 +97,11 @@ export default {
       logout,
       register,
     };
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> feature/story
+>>>>>>> develop_FE
   },
 };
 </script>
