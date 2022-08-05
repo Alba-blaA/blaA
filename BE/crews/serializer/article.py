@@ -65,7 +65,7 @@ class CrewArticleRUDSerializer(serializers.ModelSerializer) :
             images_data = self.context['request'].FILES 
         except:
             images_data = None
-        print(validated_data.get('image_update'))
+        # print(validated_data.get())
         if images_data is not None:
             image_instance_list = []
             for image_data in images_data.getlist('images'):
