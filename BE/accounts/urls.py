@@ -12,5 +12,5 @@ urlpatterns=[
     path('change_password/<int:user_pk>/', views.ChangePasswordView.as_view(), name='auth_change_password'),
     path('sign-in/kakao/', views.KakaoSignInView.as_view()),
     path('sign-in/kakao/callback/', views.KakaoSignInCallbackView.as_view()),
-    
+    path('kakao/', views.KaKaoLogin.as_view()),
 ]
