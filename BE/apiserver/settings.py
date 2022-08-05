@@ -37,14 +37,22 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    # app 
     'accounts',
+    'categorys',
+    'reviews',
     'stories',
+    'crews',
+
+    #3rd-party
     'django_extensions',
     'corsheaders',
     'django_filters',
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
+    
+    #default
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -56,6 +64,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -113,13 +122,35 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS' :{
+        'Bearer':{
+            'type':'apiKey',
+            'name':'Authorization',
+            'in':'header'
+        }
+    }
+}
+# SWAGGER_SETTINGS = {
+#     'SECURITY_DEFINITIONS' :{
+#         'Bearer':{
+#             'type':'apiKey',
+#             'name':'Authorization',
+#             'in':'header'
+#         }
+#     }
+# }
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'accounts.jwt.JWTAuthentications',
     ],
     # 'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE':3
+    'PAGE_SIZE':10
 }
 
 JWT_AUTH = { 

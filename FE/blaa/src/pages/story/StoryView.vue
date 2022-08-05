@@ -1,7 +1,7 @@
 <template>
 <div>
   <h1>여기는 오출완 페이지입니다!</h1>
-  <router-link :to="{name: storycreate}">+</router-link>
+  <router-link class="btn btn-primary" style="maring-left:5px" :to="{name: 'createStory'}">+</router-link>
   <!-- Button trigger modal -->
   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
     검색
@@ -45,7 +45,7 @@ export default {
 
     const searchHastTag = (hastTag) => {
       // 검색 기능 구현
-      console.log(hastTag)
+      hastTag
     }
 
     return {

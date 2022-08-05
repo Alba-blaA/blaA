@@ -1,22 +1,30 @@
 from django.http import JsonResponse
 from django.shortcuts import redirect, render,get_object_or_404
-from rest_framework.generics import GenericAPIView,UpdateAPIView
+from rest_framework.generics import GenericAPIView,CreateAPIView,UpdateAPIView,ListAPIView
 from accounts.models import User
 from rest_framework.decorators import api_view
-from accounts.serializers import  (RegisterSerializer,LoginSerializer,
-                                   UserSerializer,ChangePasswordSerializer)
+from accounts.serializers import  (RegisterSerializer,LoginSerializer, UserCrewSerializer,
+                                   UserSerializer,ChangePasswordSerializer,
+                                   NicknameUniqueCheckSerializer,EmailUniqueCheckSerializer)
 from rest_framework import response,status,permissions
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser,FormParser
 # Create your views here.
 from django import http
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+
+from crews.models import Crew
 
 #user 확인 API 
 class AuthUserAPIView(GenericAPIView) :
+    # authentication_classes=[]
     #인증된 유저만 (토큰 필요 )
     permission_classes=(permissions.IsAuthenticated,)
     #요청한 유저를 가져와서, serializer에 넣음 
+    serializer_class = RegisterSerializer
     def get(self,request) :
         user = request.user
         serializers=RegisterSerializer(user)
@@ -69,7 +77,11 @@ class ChangePasswordView(UpdateAPIView):
 
     
 #유저 프로필 RUD API
-class UserRetrieveUpdateDeleteAPIView(APIView):
+class UserRetrieveUpdateDeleteAPIView(GenericAPIView):
+    # authentication_classes=[]
+    serializer_class = UserSerializer
+
+
     #요청한 user_pk로 유저 조회 
     def get_object(self, user_pk):
         try:
@@ -79,6 +91,7 @@ class UserRetrieveUpdateDeleteAPIView(APIView):
             raise http.Http404
     ## 'email','name','nickname','region','category','is_alba','image'
     #user 정보 조회 
+    # @swagger_auto_schema(tags=["TO-DO 생성"], request_body=UserSerializer, query_serializer=UserSerializer)
     def get(self, request,user_pk, format=None):
         #user_pk로 user 가져오기 
         user = self.get_object(user_pk)
@@ -95,7 +108,7 @@ class UserRetrieveUpdateDeleteAPIView(APIView):
         if request.user != user :
             return Response({'message':"You do not have permission to change the user's information,try again"},status=status.HTTP_400_BAD_REQUEST)
         #아니면 회원정보 수정 
-        serializer = UserSerializer(user, data=request.data)
+        serializer = UserSerializer(instance=user, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -130,3 +143,41 @@ def follow(request, user_pk):
                 }
         return JsonResponse(context)
     return redirect('accounts:login')
+
+
+class EmailUniqueCheck(CreateAPIView):
+    authentication_classes=[]
+    serializer_class = EmailUniqueCheckSerializer
+
+    def post(self, request, format=None):
+        serializer = self.get_serializer(data=request.data, context={'request': request})
+
+        if serializer.is_valid():
+            return Response(data={'detail':['You can use this email']}, status=status.HTTP_200_OK)
+        else:
+            detail = dict()
+            detail['detail'] = serializer.errors['email']
+            return Response(data=detail, status=status.HTTP_400_BAD_REQUEST)
+        
+class NicknameUniqueCheck(CreateAPIView):
+    authentication_classes=[]
+    serializer_class = NicknameUniqueCheckSerializer
+
+    def post(self, request, format=None):
+        serializer = self.get_serializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            return Response(data={'detail':['You can use this nickname']}, status=status.HTTP_200_OK)
+        else:
+            detail = dict()
+            detail['detail'] = serializer.errors['nickname']
+            return Response(data=detail, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class UserCrewAPIView(ListAPIView) :
+    serializer_class = UserCrewSerializer 
+
+
+    def get_queryset(self):
+        print(self.request.user)
+        return User.objects.filter(email=self.request.user)
