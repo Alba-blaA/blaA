@@ -20,6 +20,7 @@ import ReviewView from "@/pages/review/ReviewView.vue";
 import ReviewForm from "@/pages/review/ReviewForm.vue";
 import ReviewDetail from "@/pages/review/ReviewDetail.vue";
 import ReviewCommentDetail from "@/pages/review/ReviewCommentDetail.vue";
+import Chatroom from "@/pages/chat/ChatroomView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -125,6 +126,11 @@ const router = createRouter({
       path: "/profile",
       name: "profile",
       component: Profile,
+    },
+    {
+      path: "/chatroom",
+      name: "chatroom",
+      component: Chatroom,
     },
   ],
 });
