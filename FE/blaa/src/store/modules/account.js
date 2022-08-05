@@ -17,7 +17,7 @@ const accountStore = {
       tel: null,
       region: null,
       category: null,
-      isAlba: false,
+      is_alba: false,
       image: null,
     },
     category: [],
@@ -68,8 +68,8 @@ const accountStore = {
     SET_SIGNUP_CATEGORY: (state, category) => {
       state.signupUser.category = category;
     },
-    SET_SIGNUP_ALBA: (state, isAlba) => {
-      state.signupUser.isAlba = isAlba;
+    SET_SIGNUP_ALBA: (state, is_alba) => {
+      state.signupUser.is_alba = is_alba;
     },
     SET_SIGNUP_IMAGE: (state, image) => {
       state.signupUser.image = image;
