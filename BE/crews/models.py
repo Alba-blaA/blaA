@@ -32,6 +32,8 @@ class CrewArticleImage(models.Model) :
     article =models.ForeignKey(CrewArticle,on_delete=models.CASCADE)
     article_picture = models.ImageField(upload_to='crew_article/image')
 
+    def __str__(self) :
+        return str(self.article_picture)
 
 class CrewArticleComment(TrackingModel,models.Model) :
     article =models.ForeignKey(CrewArticle,on_delete=models.CASCADE)
