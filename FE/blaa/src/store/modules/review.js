@@ -5,7 +5,7 @@ export default {
   namespaced: true,
   state: {
     reviews: [],
-    Token: process.env.VUE_APP_TOKEN
+    Token: sessionStorage.getItem('token')
   },
   mutations: {
     GET_REVIEWS(state, payload){
