@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render,get_object_or_404
 from rest_framework.generics import GenericAPIView,CreateAPIView,UpdateAPIView,ListAPIView
 from accounts.models import User
 from rest_framework.decorators import api_view
-from accounts.serializers import  (RegisterSerializer,LoginSerializer, UserCrewSerializer,
+from accounts.serializers import  (RegisterSerializer,LoginSerializer, UserCrewSerializer, UserReviewSerializer,
                                    UserSerializer,ChangePasswordSerializer,
                                    NicknameUniqueCheckSerializer,EmailUniqueCheckSerializer)
 from rest_framework import response,status,permissions
@@ -180,4 +180,21 @@ class UserCrewAPIView(ListAPIView) :
 
     def get_queryset(self):
         print(self.request.user)
+        return User.objects.filter(email=self.request.user)
+
+
+class UserCrewAPIView(ListAPIView) :
+    serializer_class = UserCrewSerializer 
+
+
+    def get_queryset(self):
+        # print(self.request.user)
+        return User.objects.filter(email=self.request.user)
+
+class UserReviewAPIView(ListAPIView) :
+    serializer_class = UserReviewSerializer 
+
+
+    def get_queryset(self):
+        # print(self.request.user)
         return User.objects.filter(email=self.request.user)
