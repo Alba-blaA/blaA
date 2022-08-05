@@ -14,6 +14,7 @@ from rest_framework.views import APIView
 # Create your views here.
 from django import http
 import requests
+from rest_framework.authentication import get_authorization_header
 
 #user 확인 API 
 class AuthUserAPIView(GenericAPIView) :
@@ -142,6 +143,45 @@ class KakaoSignInView(View):
         return redirect(
             f"https://kauth.kakao.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
         )
+from django.views.decorators.csrf import csrf_exempt 
+# @csrf_exempt
+class KaKaoLogin(View):
+    # authentication_classes=[]
+    def get(self, request):
+        # API_HOST = f'https://kapi.kakao.com/v2/user/me'
+            
+        # response = requests.get(API_HOST)
+        # print(response)
+        # text = json.loads(response.text)
+        # print(response.status_code)
+        # print(text)
+        
+        # print(json.loads(request.body))
+        # data=json.loads(request.body)
+        auth_header = get_authorization_header(request)
+        # print(auth_header)
+        #받은 header를 utf-8로 디코딩한다. 
+        auth_data = auth_header.decode('utf-8')
+        # print(auth_data)
+        #token 형식이 Bearer + Token 이므로, ' '로 나눈다. 
+        auth_token = auth_data.split(' ')
+        print(auth_token)
+        URL = f'https://kapi.kakao.com/v2/user/me'
+        # token = '7LFdr9efDtY-y2oghj4VtF3FR-ZPIKyYwFQmNjRGCilwUQAAAYJnqUQx'
+        headers = {'Authorization': f'Bearer {auth_token[1]}','Content-Type': 'application/json; charset=utf-8'}
+        response = requests.get(URL, headers=headers)
+        print(response)
+        text = json.loads(response.text)
+        print(response.status_code)
+        print(text)
+        
+        return JsonResponse(data={'data':text})
+        # token_request = requests.get(                                        
+        #         f'https://kapi.kakao.com/v2/user/me'            )
+
+        # token_json = token_request.json()                                    
+        # print(token_json)
+        
         
 class KakaoSignInCallbackView(View):
     def get(self, request):
@@ -152,12 +192,7 @@ class KakaoSignInCallbackView(View):
             client_id = "0f5982ee3aa76733f951e5add93878c1"
             redirect_uri = "http://127.0.0.1:8000/account/sign-in/kakao/callback"
             
-            # API_HOST = f'https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={client_id}&redirect_uri={redirect_uri}&code={code}'
             
-            # response = requests.POST(API_HOST)
-            # text = json.loads(response.text)
-            # print(response.status_code)
-            # print(text)
             
             token_request = requests.post(                                        
                 f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={client_id}&redirect_uri={redirect_uri}&code={code}"
@@ -171,7 +206,10 @@ class KakaoSignInCallbackView(View):
                 return JsonResponse({"message": "INVALID_CODE"}, status = 400)
 
             access_token = token_json.get("access_token")
-            print(access_token)                        
+            print(access_token)
+            
+            
+                                    
 
         except KeyError:
             return JsonResponse({"message" : "INVALID_TOKEN"}, status = 400)
