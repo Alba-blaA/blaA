@@ -98,11 +98,12 @@ export default {
         // })
         console.log(form)
         try {
+          const token = process.env.VUE_APP_TOKEN
           const res = await axios.post(api.story.story(), form
             , {
             headers: {
               "Content-Type": "multipart/form-data",
-              "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNjY0Nzg0NTYxfQ.1bIJV7Baadoa_b68_lJ9c_RGKL6p8YJGmgh6xG-iik4"
+              "Authorization": `Bearer ${token}`
             },
           })
           console.log(res.data)

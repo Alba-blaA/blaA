@@ -4,7 +4,7 @@ import api from '@/api/api'
 export default {
   namespaced: true,
   state: {
-    Token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNjY0Nzg0NTYxfQ.1bIJV7Baadoa_b68_lJ9c_RGKL6p8YJGmgh6xG-iik4',
+    Token: process.env.VUE_APP_TOKEN,
     stories: [],
     images: [],
     comments: [],

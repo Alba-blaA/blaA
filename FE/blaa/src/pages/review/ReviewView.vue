@@ -1,5 +1,6 @@
 <template>
   <h1>여기는 리뷰 페이지입니다!</h1>
+  <router-link class="btn btn-primary" :to="{name: 'createReview'}">리뷰 생성</router-link>
   <ReviewList :reviews="reviews"/>
 </template>
 
@@ -17,6 +18,7 @@ export default {
     const reviews = ref({})
 
     const start = async () => {
+      console.log(process.env.VUE_APP_TOKEN)
       await store.dispatch('review/getReviews')
       reviews.value = computed(() => {
         return store.state.review.reviews
