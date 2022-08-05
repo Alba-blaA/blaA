@@ -162,6 +162,8 @@ export default {
       if (!err) {
         alert(msg);
       } else {
+        store.commit("account/SET_SIGNUP_NICKNAME", user.value.nickname);
+
         store.commit("account/SET_SIGNUP_CATEGORY", user.value.category);
 
         var sido = document.getElementById("signup-sido");

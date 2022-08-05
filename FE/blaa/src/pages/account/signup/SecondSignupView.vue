@@ -11,6 +11,7 @@
       <input
         id="signup-password"
         type="password"
+        autocomplete="off"
         v-model="user.password"
         placeholder="Enter password"
       />
@@ -19,6 +20,7 @@
       <input
         id="signup-checkpassword"
         type="password"
+        autocomplete="off"
         placeholder="Check password"
       />
       <br />
