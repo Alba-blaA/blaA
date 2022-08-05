@@ -4,9 +4,15 @@ const HOST = "http://localhost:8000/api/v1/";
 // ===================================
 // 세부 url
 const ACCOUNTS = "accounts/";
+<<<<<<< HEAD
 const CATEGORYS = "categorys/";
 // const STORY = 'story/'
 // const REVIEWS = 'reviews/'
+=======
+const STORY = 'stories/'
+const COMMENT = 'comment/'
+const REVIEW = 'review/'
+>>>>>>> feature/story
 // const CREW = 'crew/'
 // const CHAT = 'chat/'
 
@@ -20,6 +26,7 @@ export default {
     // username으로 프로필 제공
     profile: (username) => HOST + ACCOUNTS + "profile/" + username,
   },
+<<<<<<< HEAD
   categorys: {
     job: () => HOST + CATEGORYS + "job/",
     region: () => HOST + CATEGORYS + "region/",
@@ -46,4 +53,21 @@ export default {
   //   comment: (articlePk, commentPk) =>
   //     HOST + ARTICLES + ${articlePk}/ + COMMENTS + ${commentPk}/,
   // },
+=======
+  story: {
+    story: () => HOST + STORY,
+    detail: (story_pk) => HOST + STORY + story_pk,
+    like: (story_pk) => HOST + STORY + 'like/' + story_pk,
+    comment:(story_pk) => HOST + STORY + COMMENT + story_pk,
+    commentChange: (comment_pk) => HOST + STORY + COMMENT + 'ud/' + comment_pk
+  },
+  review: {
+    review: () => HOST + REVIEW,
+    searchReview: (search_name) => HOST + REVIEW + search_name,
+    storeDetail: (store_pk) => HOST + REVIEW + store_pk,
+    addStore: () => HOST + 'store/',
+    reviewDetail: (review_pk) => HOST + REVIEW + review_pk,
+    like: (review_pk) => HOST + REVIEW + 'like/' + review_pk
+  }
+>>>>>>> feature/story
 };
