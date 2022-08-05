@@ -5,12 +5,13 @@ export default {
   namespaced: true,
   state: {
     reviews: [],
+    searchStores: [],
     Token: sessionStorage.getItem('token')
   },
   mutations: {
     GET_REVIEWS(state, payload){
       state.reviews = payload
-    }
+    },
   },
   actions: {
     async getReviews({commit, state}) {

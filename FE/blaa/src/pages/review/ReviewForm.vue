@@ -1,4 +1,5 @@
 <template>
+  <!-- 가게 주소 -->
   <ReviewMap v-if="isModalOpen" @close-modal="isModalOpen=false" @select-store="selectStore"/>
   <router-link :to="{name: 'review'}">뒤로</router-link>
   <h1>리뷰 작성 폼</h1>
@@ -7,7 +8,8 @@
     <p class="form-input">가게주소 : {{storeAddress}}</p>
   </div>
   <!-- 별점 -->
-  <form id="myform" class="mb-3" @click.prevent="checkStar">
+  <span>별점 : </span>
+  <form id="myform" class="mb-3" @click="checkStar">
     <fieldset>
       <input type="radio" name="reviewStar" value="5" id="rate1"><label for="rate1">★</label>
       <input type="radio" name="reviewStar" value="4" id="rate2"><label for="rate2">★</label>
@@ -16,6 +18,8 @@
       <input type="radio" name="reviewStar" value="1" id="rate5"><label for="rate5">★</label>
     </fieldset>
   </form>
+  <span> {{star}}점 </span>
+  <hr>
   <!-- 버튼식 -->
   <!-- 한줄평 -->
   
@@ -36,7 +40,7 @@ export default {
     const storeButton = ref([])
     const oneReview = ref('')
     const isModalOpen = ref(false)
-    const star = ref('')
+    const star = ref(0)
 
     // 상점 선택하기
     const selectStore = (data) => {
@@ -47,15 +51,17 @@ export default {
 
     // 별점 가져오기
     const checkStar = () => {
-      console($('input[name=reviewStar]:checked').val())
       star.value = $('input[name=reviewStar]:checked').val()
     }
+
+    
     return {
       isModalOpen,
       selectStore,
       storeName,
       storeAddress,
-      checkStar
+      checkStar,
+      star
     }
   }
 }
@@ -70,9 +76,16 @@ export default {
 #myform fieldset legend{
     text-align: right;
 }
+
+#myfomr > input{
+    cursor: pointer;
+    width:10px;
+    height: 10px;
+}
 #myform input[type=radio]{
     display: none;
 }
+/* 노란색이안먹어 */
 #myform label:hover{
     text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 }
