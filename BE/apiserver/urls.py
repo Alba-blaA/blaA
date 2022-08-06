@@ -21,5 +21,6 @@ urlpatterns = [
     path('api/v1/accounts/',include('accounts.urls')),
     path('api/v1/stories/',include('stories.urls')),
     path('account/',include('accounts.urls')),
+    path('api/v1/blacklist/', include('blacklists.urls')),
     
 ]

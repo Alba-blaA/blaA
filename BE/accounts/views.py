@@ -1,5 +1,5 @@
 import json
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render,get_object_or_404
 from django.views import View
 from rest_framework.generics import GenericAPIView,UpdateAPIView
@@ -15,6 +15,12 @@ from rest_framework.views import APIView
 from django import http
 import requests
 from rest_framework.authentication import get_authorization_header
+from django.conf import settings
+import jwt
+from datetime import datetime, timedelta
+
+# JWT_PAYLOAD_HANDLER = settings.JWT_AUTH['JWT_PAYLOAD_HANDLER']
+# JWT_ENCODE_HANDLER = settings.JWT_AUTH['JWT_ENCODE_HANDLER']
 
 #user 확인 API 
 class AuthUserAPIView(GenericAPIView) :
@@ -173,14 +179,55 @@ class KaKaoLogin(View):
         text = json.loads(response.text)
         print(response.status_code)
         print(text)
+        print(text.get('properties').get('nickname'))
         
-        return JsonResponse(data={'data':text})
-        # token_request = requests.get(                                        
-        #         f'https://kapi.kakao.com/v2/user/me'            )
+        serializer_class = RegisterSerializer
+            
+        data = {
+            "email" : text.get('kakao_account').get('email'),
+            "name" : text.get('properties').get('nickname'),
+            "password" : "asdwghoiwehvewo",
+            "nickname" : "dfdfef",
+            "region" : "defs",
+            "category" : "fwberbe",
+            "is_alba" : True,
+                
+                }
+        if User.objects.filter(email=data['email']) :
+            user = User.objects.get(email=data['email']) 
+            print(user)
+            # payload = JWT_PAYLOAD_HANDLER(user)
+            # jwt_token = JWT_ENCODE_HANDLER(payload)
+            dt = datetime.now( ) + timedelta(days=60)
+            token = jwt.encode({
+                'id': user.pk,
+                'exp': dt.utcfromtimestamp(dt.timestamp())
+        }, settings.SECRET_KEY, algorithm='HS256')
+            # print(json.load(token))
+            print(str(token, 'utf-8'))
+            context = {
+                'token' :str(token, 'utf-8')
+            }
+            return JsonResponse(context)
+            # return HttpResponse(data={'token':token},status=status.HTTP_200_OK)
+        else :
+            #요청이 온 데이터로 serializer 
+            serializers = serializer_class(data=data)  
+            #오류가 발생하지 않으면 회원가입 승인 
+            if serializers.is_valid(raise_exception=True) :
+                serializers.save()
+                token = serializers.data['token']
+                print(token)
+                print(type(token))
+                token = token.split('\'')
+                print(token)
+                print(token[1])
+                serializers.data['token'] = token[1]
+                print(serializers.data)
+                print(serializers.data['token'])
+                return JsonResponse(serializers.data,status=status.HTTP_201_CREATED)
+            return JsonResponse(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
 
-        # token_json = token_request.json()                                    
-        # print(token_json)
-        
         
 class KakaoSignInCallbackView(View):
     def get(self, request):
@@ -190,7 +237,6 @@ class KakaoSignInCallbackView(View):
             code = request.GET.get("code")                                       
             client_id = "0f5982ee3aa76733f951e5add93878c1"
             redirect_uri = "http://127.0.0.1:8000/account/sign-in/kakao/callback"
-            
             
             
             token_request = requests.post(                                        
@@ -206,7 +252,6 @@ class KakaoSignInCallbackView(View):
 
             access_token = token_json.get("access_token")
             print(access_token)
-            
             
                                     
 
