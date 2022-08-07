@@ -1,7 +1,10 @@
 // import jwt_decode from "jwt-decode";
 import { login, findByToken } from "@/hooks/user.js";
+import { useCookies } from "vue3-cookies";
 import axios from "axios";
 import api from "@/api/api.js";
+
+const { cookies } = useCookies();
 
 const accountStore = {
   namespaced: true,
@@ -9,6 +12,12 @@ const accountStore = {
     isLogin: false,
     isLoginError: false,
     userInfo: null,
+    kakaoUserInfo: {
+      email: null,
+      name: null,
+      image: null,
+    },
+    kakaoLogin: false,
     signupUser: {
       email: null,
       password: null,
@@ -24,6 +33,7 @@ const accountStore = {
     si: [],
     gu: [],
     dong: [],
+    loginToken: null,
   },
   getters: {
     dong_list(state) {
@@ -46,6 +56,14 @@ const accountStore = {
     USER_INFO: (state, userInfo) => {
       state.isLogin = true;
       state.userInfo = userInfo;
+    },
+    SET_KAKAO_USER_INFO: (state, kakaoUserInfo) => {
+      state.kakaoUserInfo.email = kakaoUserInfo.email;
+      state.kakaoUserInfo.name = kakaoUserInfo.name;
+      state.kakaoUserInfo.image = kakaoUserInfo.image;
+    },
+    KAKAO_LOGIN: (state, kakaoLogin) => {
+      state.kakaoLogin = kakaoLogin;
     },
     SET_SIGNUP_EMAIL: (state, email) => {
       state.signupUser.email = email;
@@ -89,6 +107,28 @@ const accountStore = {
     GET_DONG_LIST: (state, payload) => {
       state.dong = payload;
     },
+    SET_LOGIN_TOKEN: (state, token) => {
+      state.loginToken = token;
+    },
+    SAVE_STATE_TO_STORAGE: (state) => {
+      console.log("state.userInfo : ", state.userInfo);
+      sessionStorage.setItem("login-userInfo", JSON.stringify(state.userInfo));
+      sessionStorage.setItem("login-token", state.loginToken);
+    },
+    READ_STATE_FROM_STORAGE: (state) => {
+      if (JSON.parse(sessionStorage.getItem("login-userInfo")) != null) {
+        state.userInfo = JSON.parse(sessionStorage.getItem("login-userInfo"));
+      }
+      if (sessionStorage.getItem("login-token") != null) {
+        state.loginToken = sessionStorage.getItem("login-token");
+      }
+    },
+    RESET_STORAGE: (state) => {
+      state.userInfo = null;
+      state.loginToken = "";
+      sessionStorage.removeItem("login-userInfo");
+      sessionStorage.removeItem("login-token");
+    },
   },
   actions: {
     async userConfirm({ commit }, user) {
@@ -100,6 +140,8 @@ const accountStore = {
             commit("LOGIN", true);
             commit("LOGIN_ERROR", false);
             sessionStorage.setItem("token", token);
+            commit("SET_LOGIN_TOKEN", token);
+
             console.log("로그인성공");
           } else {
             commit("LOGIN", false);
@@ -126,6 +168,7 @@ const accountStore = {
             console.log("response : ", response);
             commit("USER_INFO", response.data.user);
             console.log("userInfo : ", response.data.user);
+            commit("SAVE_STATE_TO_STORAGE");
           } else {
             console.log("유저 정보 없음");
           }
@@ -135,6 +178,9 @@ const accountStore = {
           console.log("getUserInfo 에러", error);
         }
       );
+    },
+    doReadStateFromStorage({ commit }) {
+      commit("READ_STATE_FROM_STORAGE");
     },
     getCategoryList(context) {
       axios.get(api.categorys.job()).then(({ data }) => {
