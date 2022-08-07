@@ -1,23 +1,90 @@
 <template>
-  <router-view />
+  <div>
+    <h1>메인페이지</h1>
+      <div v-if="userInfo">
+        <p>{{ userInfo.nickname }} 님</p>
+        <button @click.prevent="logout">로그아웃</button>
+        <button @click.prevent = "gochat">채팅하러가기</button>
+        <button @click.prevent = "gostory">오출완가기</button>
+      </div>
+      <div v-else>
+        <p>로그인이 필요합니다.</p>
+        <button @click="login">로그인</button>
+        &nbsp;
+        <button @click="kakaoLogin">카카오 로그인</button>
+        &nbsp;
+        <button @click="register">회원가입</button>
+      </div>
+    <router-view />
+  </div>
 </template>
 
 <script>
-//
-// import axios from 'axios'
+// import axios from 'axios';
 import { useStore } from "vuex";
+import { computed, onMounted } from "vue";
+import router from "@/router/index.js";
 
 export default {
   setup() {
-    // vuex store 사용법 예제
+    // // vuex store 사용법 예제
     const store = useStore();
+    // const router = useRoute();
 
-    // actions
-    store.dispatch("test/test");
-    // state
-    console.log(store.state.test.data);
-    // getters
-    console.log(store.getters["test/example"]);
+    const isLogin = computed(() => {
+      return store.state.account.isLogin;
+    });
+
+    const userInfo = computed(() => {
+      return store.state.account.userInfo;
+    });
+
+    onMounted(() => {
+      store.dispatch("account/doReadStateFromStorage");
+    });
+
+    const login = () => {
+      router.push({ name: "login" });
+    };
+
+    const gochat = () => {
+      router.push({ path: "/chat"});
+    };
+
+    const gostory = () => {
+      router.push({ path: "/story"});
+    };
+
+    const kakaoLogin = () => {
+      const params = {
+        redirectUri: "http://localhost:8080/kakao",
+        // redirectUri: "http://127.0.0.1:8000/account/sign-in/kakao/callback",
+      };
+      window.Kakao.Auth.authorize(params);
+    };
+
+    const logout = () => {
+      store.commit("account/LOGIN", false);
+      store.commit("account/USER_INFO", null);
+      sessionStorage.removeItem("token");
+      store.commit("account/RESET_STORAGE");
+      router.go();
+    };
+
+    const register = () => {
+      router.push({ name: "signup" });
+    };
+
+    return {
+      isLogin,
+      userInfo,
+      login,
+      kakaoLogin,
+      logout,
+      register,
+      gochat,
+      gostory,
+    };
   },
 };
 </script>
