@@ -5,25 +5,27 @@
     <form>
       <input id="signup-email" v-model="user.email" placeholder="Enter email" />
       &nbsp;
-      <button @click.prevent="emailCheck">중복확인</button>
+      <button id="btnEmailCheck" @click.prevent="emailCheck">중복확인</button>
       <br />
 
-      <input
-        id="signup-password"
-        type="password"
-        autocomplete="off"
-        v-model="user.password"
-        placeholder="Enter password"
-      />
-      <br />
+      <b id="password-form">
+        <input
+          id="signup-password"
+          type="password"
+          autocomplete="off"
+          v-model="user.password"
+          placeholder="Enter password"
+        />
+        <br />
 
-      <input
-        id="signup-checkpassword"
-        type="password"
-        autocomplete="off"
-        placeholder="Check password"
-      />
-      <br />
+        <input
+          id="signup-checkpassword"
+          type="password"
+          autocomplete="off"
+          placeholder="Check password"
+        />
+        <br />
+      </b>
 
       <input id="signup-name" v-model="user.name" placeholder="Enter name" />
       <br />
@@ -43,8 +45,9 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useStore } from "vuex";
+import { useCookies } from "vue3-cookies";
 import router from "@/router/index.js";
 import axios from "axios";
 import api from "@/api/api.js";
@@ -52,6 +55,7 @@ import api from "@/api/api.js";
 export default {
   setup() {
     const store = useStore();
+    const { cookies } = useCookies();
 
     const user = ref({
       email: null,
@@ -60,6 +64,21 @@ export default {
       tel1: null,
       tel2: null,
       tel3: null,
+    });
+
+    onMounted(() => {
+      const kakaoUserInfo = store.state.account.kakaoUserInfo;
+      user.value.email = kakaoUserInfo.email;
+      document.getElementById("signup-email").disabled = true;
+      document.getElementById("btnEmailCheck");
+
+      user.value.password = cookies.get("access-token");
+      document.getElementById("signup-password").style.display = "none";
+      document.getElementById("signup-checkpassword").style.display = "none";
+      document.getElementById("password-form").innerHTML = "";
+
+      user.value.name = kakaoUserInfo.name;
+      document.getElementById("signup-name").disabled = true;
     });
 
     const emailCheck = () => {
@@ -95,16 +114,20 @@ export default {
       err &&
         !user.value.email &&
         ((msg = "이메일을 입력해주세요"), (err = false));
-      err &&
-        !user.value.password &&
-        ((msg = "비밀번호를 입력해주세요"), (err = false));
-      err &&
-        user.value.password.length < 6 &&
-        ((msg = "비밀번호는 6자리 이상이어야 합니다."), (err = false));
-      err &&
-        user.value.password !=
-          document.getElementById("signup-checkpassword").value &&
-        ((msg = "비밀번호가 일치하지 않습니다."), (err = false));
+
+      if (!store.state.account.kakaoLogin) {
+        err &&
+          !user.value.password &&
+          ((msg = "비밀번호를 입력해주세요"), (err = false));
+        err &&
+          user.value.password.length < 6 &&
+          ((msg = "비밀번호는 6자리 이상이어야 합니다."), (err = false));
+        err &&
+          user.value.password !=
+            document.getElementById("signup-checkpassword").value &&
+          ((msg = "비밀번호가 일치하지 않습니다."), (err = false));
+      }
+
       err && !user.value.name && ((msg = "이름을 입력해주세요"), (err = false));
 
       if (!err) {
