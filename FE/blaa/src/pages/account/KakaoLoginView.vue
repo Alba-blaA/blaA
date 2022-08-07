@@ -8,12 +8,16 @@
 import { getKakaoToken, getKakaoUserInfo } from "@/hooks/kakaologin.js";
 import { useRoute } from "vue-router";
 import { useCookies } from "vue3-cookies";
+import { useStore } from "vuex";
 import router from "@/router/index.js";
+import axios from "axios";
+import api from "@/api/api.js";
 
 export default {
   setup() {
     const route = useRoute();
     const { cookies } = useCookies();
+    const store = useStore();
 
     const setKakaoToken = async () => {
       console.log("카카오 인증 코드", route.query.code);
@@ -28,15 +32,28 @@ export default {
       cookies.set("refresh-token", data.refresh_token, "1d");
       await setUserInfo();
       alert("카카오 로그인 완료!");
-      router.replace("/");
+
+      axios
+        .post(
+          api.accounts.emailCheck(),
+          store.state.account.kakaoUserInfo.email
+        )
+        .then(() => {
+          router.push({ name: "choice" });
+        })
+        .catch(() => {
+          router.replace("/");
+        });
     };
 
     const setUserInfo = async () => {
-      await getKakaoUserInfo();
-      // const userInfo = {
-      //   name: res.kakao_account.profile.nickname,
-      //   platform: "kakao",
-      // };
+      const data = await getKakaoUserInfo();
+      const kakaoUserInfo = {
+        email: data.kakao_account.email,
+        name: data.kakao_account.profile.nickname,
+        image: data.kakao_account.profile.profile_image_url,
+      };
+      store.commit("SET_KAKAO_USER_INFO", kakaoUserInfo);
     };
 
     if (route.query.code) {

@@ -57,6 +57,7 @@ const getKakaoUserInfo = async () => {
     },
   });
   console.log("카카오 계정 정보", data);
+
   return data;
 };
 
