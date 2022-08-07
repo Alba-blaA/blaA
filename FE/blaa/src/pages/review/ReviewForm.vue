@@ -1,11 +1,15 @@
 <template>
   <!-- 가게 주소 -->
   <ReviewMap v-if="isModalOpen" @close-modal="isModalOpen=false" @select-store="selectStore"/>
-  <router-link :to="{name: 'review'}">뒤로</router-link>
+  <div>
+    <router-link :to="{name: 'review'}">뒤로</router-link>
+    <button @click="sumbitReview">제출완료</button>
+  </div>
   <h1>리뷰 작성 폼</h1>
   <div>
     <p class="form-input">가게명 : {{storeName}} <button class="btn btn-primary" @click="isModalOpen=true">검색</button></p>
     <p class="form-input">가게주소 : {{storeAddress}}</p>
+    <p v-if="storeError">가게를 검색해주세요</p>
   </div>
   <!-- 별점 -->
   <span>별점 : </span>
@@ -19,31 +23,53 @@
     </fieldset>
   </form>
   <span> {{star}}점 </span>
+  <p v-if="starError">별점을 입력해주세요</p>
   <hr>
   <!-- 버튼식 -->
+  <form @click="checkBtn">
+    <label for="kind" class="btn"><input type="checkbox" name="reviewBtn" vlaue="1" id="kind" class="checkList" >친절한 사장님</label>
+    <label for="clean" class="btn"><input type="checkbox" name="reviewBtn" value="2" id="clean" class="checkList">깨끗한 매장</label>
+    <label for="short" class="btn"><input type="checkbox" name="reviewBtn" value="3" id="short" class="checkList">교통 접근성</label>
+    <label for="good" class="btn"><input type="checkbox" name="reviewBtn" value="4" id="good" class="checkList">좋은 분위기</label>
+    <label for="workblance" class="btn"><input type="checkbox" name="reviewBtn" value="5" id="workblance" class="checkList">칼퇴근 가능</label>
+    <label for="uniform" class="btn"><input type="checkbox" name="reviewBtn" value="6" id="uniform" class="checkList">유니폼 제공</label>
+  </form>
+
   <!-- 한줄평 -->
-  
+  <div class="oneReview">
+    <p>한줄평</p>
+    <input type="text" class="form-input" v-model="oneReview">
+  </div>
 </template>
 
 <script>
 import ReviewMap from '@/components/review/ReviewMap.vue'
 import { ref } from 'vue'
 import $ from 'jquery'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 export default {
   components: {
     ReviewMap,
   },
   setup() {
+    const store = useStore()
+    const router = useRouter()
     const storeName = ref('')
     const storeAddress = ref('')
-    const storeButton = ref([])
+    const storeError = ref(false)
+    // 6개의 버튼으로 이루어짐
+    const storeButton = ref([0,0,0,0,0,0])
     const oneReview = ref('')
     const isModalOpen = ref(false)
     const star = ref(0)
+    const starError = ref(false)
+    const isStore = ref(true)
 
     // 상점 선택하기
     const selectStore = (data) => {
+      isStore.value = data.isStore
       storeName.value = data.name
       storeAddress.value = data.region
       isModalOpen.value = false
@@ -54,14 +80,67 @@ export default {
       star.value = $('input[name=reviewStar]:checked').val()
     }
 
-    
+    // 값을 가져와야됨.. 어케 가져오지?
+    const checkBtn = () => {
+      $('input:checkbox[name="reviewBtn"]').each(function(i) {
+        if ($(this).is(':checked') == true) {
+          $(this).parent().addClass("selected")
+          // 값 변경
+          if (storeButton.value[i] == 0) {
+            storeButton.value[i] = i + 1
+          }
+        } else {
+          $(this).parent().removeClass("selected")
+          if (storeButton.value[i] == 1) {
+            storeButton.value[i] = 0
+          }
+        }
+      })
+      console.log(storeButton.value)
+    }
+
+    const sumbitReview = async() => {
+      if ( storeName.value && storeAddress.value && star.value ){
+        // Array => [1,4,6] 선택한 인자만 넘어감
+        const buttonType = ref([])
+        for (let type in storeButton.value) {
+          if (type) {
+            buttonType.value.push(type)
+          }
+        }
+        const data = {
+          // 값을 생성하는지 아닌지 여부를 확인하기위해서
+          isStore: isStore.value,
+          name: storeName.value,
+          region: storeAddress.value,
+          star: star.value,
+          oneline_review: oneReview.value,
+          type: buttonType.value
+        }
+        await store.dispatch('review/makeReview', data)
+        router.push({
+          name: 'review'
+        })
+
+      } else {
+        // 에러 발생시 에러 문구 출력
+        storeError.value = storeName.value ? true : false
+        starError.value = star.value ? true : false 
+      }
+    }
+
     return {
       isModalOpen,
       selectStore,
       storeName,
       storeAddress,
       checkStar,
-      star
+      star,
+      checkBtn,
+      oneReview,
+      sumbitReview,
+      starError,
+      storeError
     }
   }
 }
@@ -76,8 +155,7 @@ export default {
 #myform fieldset legend{
     text-align: right;
 }
-
-#myfomr > input{
+#myform > input{
     cursor: pointer;
     width:10px;
     height: 10px;
@@ -85,6 +163,14 @@ export default {
 #myform input[type=radio]{
     display: none;
 }
+input[type=checkbox]{
+  display: none;
+}
+
+.selected {
+  background-color:greenyellow;
+}
+
 /* 노란색이안먹어 */
 #myform label:hover{
     text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);

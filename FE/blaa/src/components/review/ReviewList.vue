@@ -1,8 +1,10 @@
 <template>
   <div v-if="reviews.length">
-    
+    <div v-for="review in reviews" :key="review.id">
+      
+    </div>
   </div>
-  <div v-else>아직 리뷰가 없어요 ㅠㅠ</div>
+  <p v-else>아직 리뷰가 없어요 ㅠㅠ</p>
 </template>
 
 <script>
@@ -12,8 +14,8 @@ export default {
       type: Array
     }
   },
-  setup() {
-
+  setup(props) {
+    console.log(props.reviews)
   }
 }
 </script>

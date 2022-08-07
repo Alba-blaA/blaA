@@ -18,11 +18,11 @@ export default {
     const reviews = ref({})
 
     const start = async () => {
-      console.log(process.env.VUE_APP_TOKEN)
-      await store.dispatch('review/getReviews')
-      reviews.value = computed(() => {
-        return store.state.review.reviews
-      })
+      await store.dispatch('review/getReviews').then(
+        reviews.value = computed(() => {
+          return store.state.review.reviews
+        })
+      )
     }
 
     start()

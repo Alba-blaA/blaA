@@ -12,12 +12,6 @@ import StoryMain from '@/pages/story/StoryMain.vue'
 import StoryForm from '@/pages/story/StoryForm.vue'
 import StoryDetailView from '@/pages/story/StoryDetailView.vue'
 
-import Chat from "@/pages/chat/ChatView.vue";
-
-import Profile from "@/pages/profile/ProfileView.vue";
-
-import Login from "@/pages/account/LoginView.vue";
-
 import Crew from "@/pages/crew/CrewView.vue";
 
 import ReviewMain from "@/pages/review/ReviewMain.vue";
