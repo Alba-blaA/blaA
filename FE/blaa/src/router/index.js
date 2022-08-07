@@ -8,8 +8,23 @@ import SignupChoice from "@/pages/account/signup/FirstSignupView.vue";
 import SignupForm from "@/pages/account/signup/SecondSignupView.vue";
 import SignupCategory from "@/pages/account/signup/ThirdSignupView.vue";
 import Story from "@/pages/story/StoryView.vue";
+import StoryMain from '@/pages/story/StoryMain.vue'
+import StoryForm from '@/pages/story/StoryForm.vue'
+import StoryDetailView from '@/pages/story/StoryDetailView.vue'
+
+import Chat from "@/pages/chat/ChatView.vue";
+
+import Profile from "@/pages/profile/ProfileView.vue";
+
+import Login from "@/pages/account/LoginView.vue";
+
 import Crew from "@/pages/crew/CrewView.vue";
-import Review from "@/pages/review/ReviewView.vue";
+
+import ReviewMain from "@/pages/review/ReviewMain.vue";
+import ReviewView from "@/pages/review/ReviewView.vue";
+import ReviewForm from "@/pages/review/ReviewForm.vue";
+import ReviewDetail from "@/pages/review/ReviewDetail.vue";
+import ReviewCommentDetail from "@/pages/review/ReviewCommentDetail.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -49,8 +64,25 @@ const router = createRouter({
     },
     {
       path: "/story",
-      name: "story",
-      component: Story,
+      name: "",
+      component: StoryMain,
+      children: [
+        {
+          path: '',
+          name: 'story',
+          component: Story
+        },
+        {
+          path: 'create',
+          name: 'createStory',
+          component: StoryForm
+        },
+        {
+          path: ':story_pk',
+          name: 'detailStory',
+          component: StoryDetailView
+        },
+      ]
     },
     {
       path: "/crew",
@@ -59,8 +91,30 @@ const router = createRouter({
     },
     {
       path: "/review",
-      name: "review",
-      component: Review,
+      name: "",
+      component: ReviewMain,
+      children: [
+        {
+          path: '',
+          name: 'review',
+          component: ReviewView
+        },
+        {
+          path: 'create',
+          name: 'createReview',
+          component: ReviewForm
+        },
+        {
+          path: ':store_pk',
+          name: 'detailReview',
+          component: ReviewDetail
+        },
+        {
+          path: ':store_pk/:review_pk',
+          name: 'detailComment',
+          component: ReviewCommentDetail
+        },
+      ]
     },
     {
       path: "/chat",
