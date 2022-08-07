@@ -188,7 +188,7 @@ class UserCrewAPIView(ListAPIView) :
 
 
     def get_queryset(self):
-        print(self.request.user)
+        # print(self.request.user)
         return User.objects.filter(email=self.request.user)
 
 class UserReviewAPIView(ListAPIView) :
@@ -196,5 +196,5 @@ class UserReviewAPIView(ListAPIView) :
 
 
     def get_queryset(self):
-        print(self.request.user)
+        # print(self.request.user)
         return User.objects.filter(email=self.request.user)

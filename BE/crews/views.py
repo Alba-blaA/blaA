@@ -72,7 +72,7 @@ class CrewRetriveUpdateDeleteView(RetrieveUpdateDestroyAPIView) :
     def destroy(self, request,crew_pk, *args, **kwargs):
         crew = Crew.objects.get(crew_pk=crew_pk)
         if request.user != crew.crew_leader :
-            return Response({'message':"You do not have permission to change the user's information,try again"},status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message':"You do not have permission to change the crew's information,try again"},status=status.HTTP_400_BAD_REQUEST)
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -101,12 +101,16 @@ class CrewArticleListCreateAPIView(ListCreateAPIView):
         return Response(serializer.data)
 
     def create(self, request, crew_id,*args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        print(request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(crew_id,serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        crew = Crew.objects.get(crew_pk=crew_id)
+        if request.user in crew.crew_member.all() :
+            serializer = self.get_serializer(data=request.data)
+            print(request.data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(crew_id,serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        else :
+            return Response({'message':"You do not have permission to create the article in crew ,try again"},status=status.HTTP_400_BAD_REQUEST)
 
 
     def perform_create(self, crew_id,serializer):
@@ -134,26 +138,34 @@ class CrewArticleRetriveUpdateDeleteView(RetrieveUpdateDestroyAPIView) :
         return Response(serializer.data)
 
 
-    def update(self, request,crew_article_pk, *args, **kwargs):
+    def update(self, request,crew_id,crew_article_pk, *args, **kwargs):
         article = CrewArticle.objects.get(crew_article_pk=crew_article_pk)
-        
         
         if request.user != article.user :
             return Response({'message':"You do not have permission to change the article's information,try again"},status=status.HTTP_400_BAD_REQUEST)
-        
-        
+    
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
+        self.perform_update(serializer,crew_id)
+        
         if getattr(instance, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
 
         return Response(serializer.data)
+
+    def perform_update(self, serializer,crew_id):
+        # print(serializer)
+        crew = Crew.objects.get(crew_pk=crew_id)
+        # print(crew)
+        # print(serializer)
+        serializer.save(user=self.request.user,crew=crew)
+        # print('---------------------------------------')
+        return serializer.data
+
 
     def destroy(self, request,crew_article_pk, *args, **kwargs):
         article = CrewArticle.objects.get(crew_article_pk=crew_article_pk)
