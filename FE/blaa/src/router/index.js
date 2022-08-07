@@ -25,7 +25,7 @@ const router = createRouter({
       name: "story",
       component: Story,
     },
-  
+
     {
       path: "/crew",
       name: "crew",
@@ -47,7 +47,7 @@ const router = createRouter({
               name: "friendshipcrew",
               component: () => import("@/components/crew/register/FriendshipRegister.vue"),
             },
-          ]
+          ],
         },
         {
           path: "list",
@@ -64,30 +64,34 @@ const router = createRouter({
               name: "mycrewlist",
               component: () => import("@/components/crew/list/MyCrewItem.vue"),
             },
-          ]
+          ],
         },
         {
           path: "article",
           name: "article",
-          redirect: "/crew/article/list",
-          component: () => import ("@/components/crew/article/BoardView.vue"),
+          component: () => import("@/components/crew/article/BoardView.vue"),
           children: [
             {
-              path: "list",
+              path: ":crew_pk",
+              name: "crewboard",
+              component: () => import("@/components/crew/crewBoard.vue"),
+            },
+            {
+              path: "articlelist:/crew_pk",
               name: "articlelist",
               component: () => import("@/components/crew/article/BoardList.vue"),
             },
             {
-              path: "regist",
+              path: "articleregist/:crew_pk",
               name: "articleregist",
-              component: () => import("@/components/crew/article/BoardRegister.vue"),
+              component: () => import("@/components/crew/article/BoardRegist.vue"),
             },
             {
-              path: "detail/:crew_article_pk",
+              path: "articledetail/:crew_article_pk",
               name: "articledetail",
               component: () => import("@/components/crew/article/BoardDetail.vue"),
             },
-          ]
+          ],
         },
         {
           path: "schedule",
@@ -101,7 +105,7 @@ const router = createRouter({
           //   },
           // ]
         },
-      ]
+      ],
     },
     {
       path: "/review",

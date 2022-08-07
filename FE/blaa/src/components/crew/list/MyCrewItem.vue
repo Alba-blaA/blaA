@@ -1,5 +1,5 @@
 <template>
-  <hr/>
+  <hr />
   <table>
     <thead>
       <tr>
@@ -48,5 +48,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

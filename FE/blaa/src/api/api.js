@@ -6,7 +6,7 @@ const HOST = "http://localhost:8000/api/v1/";
 const ACCOUNTS = "accounts/";
 // const STORY = 'story/'
 // const REVIEWS = 'reviews/'
-// const CREW = 'crew/'
+const CREW = 'crews/'
 // const CHAT = 'chat/'
 
 export default {
@@ -19,6 +19,10 @@ export default {
     // username으로 프로필 제공
     profile: (username) => HOST + ACCOUNTS + "profile/" + username,
   },
+  crew: {
+    crewList: () => HOST + CREW,
+    article: (crew_pk) => HOST + CREW + "article/" + crew_pk,
+  }
   // 예시
   // movies: {
   //   // /articles/
