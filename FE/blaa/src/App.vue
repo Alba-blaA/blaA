@@ -18,7 +18,7 @@
 <script>
 // import axios from 'axios';
 import { useStore } from "vuex";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import router from "@/router/index.js";
 
 export default {
@@ -33,6 +33,10 @@ export default {
 
     const userInfo = computed(() => {
       return store.state.account.userInfo;
+    });
+
+    onMounted(() => {
+      store.dispatch("account/doReadStateFromStorage");
     });
 
     const login = () => {
@@ -51,6 +55,7 @@ export default {
       store.commit("account/LOGIN", false);
       store.commit("account/USER_INFO", null);
       sessionStorage.removeItem("token");
+      store.commit("account/RESET_STORAGE");
       router.go();
     };
 
