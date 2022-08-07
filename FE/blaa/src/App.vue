@@ -3,7 +3,7 @@
   <div v-if="userInfo">
     <p>{{ userInfo.nickname }} 님</p>
     <button @click.prevent="logout">로그아웃</button>
-    <button @click.prevent = "gochat">채팅하러가기</button>
+    <button @click.prevent = "gochatroom">채팅하러가기</button>
     <button @click.prevent = "gostory">오출완가기</button>
   </div>
   <div v-else>
@@ -41,8 +41,8 @@ export default {
       router.push({ name: "login" });
     };
 
-    const gochat = () => {
-      router.push({ path: "/chat"});
+    const gochatroom = () => {
+      router.push({ path: "/chatroom"});
     };
 
     const gostory = () => {
@@ -75,7 +75,7 @@ export default {
       kakaoLogin,
       logout,
       register,
-      gochat,
+      gochatroom,
       gostory,
     };
   },

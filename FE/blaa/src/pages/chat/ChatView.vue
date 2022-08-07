@@ -25,8 +25,7 @@
         v-for="message in state.messages" 
         :key="message.key" 
         :class="(message.username == state.username ? 'message current-user' : 'message')">
-        <div class="message-inner">
-          <div class="username">{{ message.username }}</div>
+        <div class="message-inner">          
           <div class="content">{{ message.content }}</div>
         </div>
       </div>
@@ -71,10 +70,8 @@ import { useStore } from "vuex";
 export default {
   setup () {
     const store = useStore();    
-    const userInfo = store.state.account.userInfo;    
-   
-
-    const inputUsername = ref("");
+    const userInfo = store.state.account.userInfo;   
+     
     const inputMessage = ref("");
     var scrollingElement = (document.scrollingElement || document.body);
 
@@ -87,8 +84,7 @@ export default {
       username: "",
       messages: [],
     })
-
-    
+ 
 
     const Logout = () => {
       state.username = "익명";
@@ -106,7 +102,7 @@ export default {
         username: state.username,
         content: inputMessage.value,
         from_userpk: userInfo.user_pk,
-        to_userpk: 2,
+        to_userpk: 1,
       }
 
       await messageRef.push(message); 
@@ -137,7 +133,8 @@ export default {
             content: data[key].content,
           })
         }) 
-        state.messages = messages;         
+        state.messages = messages;
+        console.log(messages);         
       })
     })
 
@@ -145,8 +142,7 @@ export default {
       router.push({ path : '../'})
      
     }
-    return {
-      inputUsername,      
+    return {           
       state,
       inputMessage,
       SendMessage,
@@ -300,7 +296,8 @@ export default {
     text-align: left;
   }
   .view.chat .chat-box .message.current-user {
-    margin-top: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     justify-content: flex-end;
     text-align: right;
   }
