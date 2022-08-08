@@ -1,4 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
+import Home from "@/App.vue";
+import Chat from "@/pages/chat/ChatView.vue";
+import Profile from "@/pages/profile/ProfileView.vue";
+import Login from "@/pages/account/LoginView.vue";
+import Signup from "@/pages/account/signup/SignupView.vue";
+import SignupChoice from "@/pages/account/signup/FirstSignupView.vue";
+import SignupForm from "@/pages/account/signup/SecondSignupView.vue";
+import SignupCategory from "@/pages/account/signup/ThirdSignupView.vue";
 import Story from "@/pages/story/StoryView.vue";
 import StoryMain from '@/pages/story/StoryMain.vue'
 import StoryForm from '@/pages/story/StoryForm.vue'
@@ -13,7 +21,7 @@ import Login from "@/pages/account/LoginView.vue";
 import Crew from "@/pages/crew/CrewView.vue";
 
 import ReviewMain from "@/pages/review/ReviewMain.vue";
-import Review from "@/pages/review/ReviewView.vue";
+import ReviewView from "@/pages/review/ReviewView.vue";
 import ReviewForm from "@/pages/review/ReviewForm.vue";
 import ReviewDetail from "@/pages/review/ReviewDetail.vue";
 import ReviewCommentDetail from "@/pages/review/ReviewCommentDetail.vue";
@@ -22,9 +30,37 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
+      path: "/",
+      name: "home",
+      components: Home,
+    },
+    {
       path: "/login",
       name: "login",
       component: Login,
+    },
+    {
+      path: "/signup",
+      name: "signup",
+      component: Signup,
+      redirect: "/signup/1",
+      children: [
+        {
+          path: "1",
+          name: "choice",
+          component: SignupChoice,
+        },
+        {
+          path: "2",
+          name: "form",
+          component: SignupForm,
+        },
+        {
+          path: "3",
+          name: "category",
+          component: SignupCategory,
+        },
+      ],
     },
     {
       path: "/story",
@@ -32,7 +68,7 @@ const router = createRouter({
       component: StoryMain,
       children: [
         {
-          path: 'main',
+          path: '',
           name: 'story',
           component: Story
         },
@@ -59,9 +95,9 @@ const router = createRouter({
       component: ReviewMain,
       children: [
         {
-          path: '/',
+          path: '',
           name: 'review',
-          component: Review
+          component: ReviewView
         },
         {
           path: 'create',

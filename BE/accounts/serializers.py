@@ -1,13 +1,20 @@
 from rest_framework import serializers
 from accounts.models import User
 from django.contrib.auth.password_validation import validate_password
+from rest_framework.validators import UniqueValidator
+from crews.models import Crew
+from crews.serializer.crew import CrewListSerializer
+from reviews.models import Review
 # 모델 시리어라이저를 상속받는 이유는 이미 모델이 있기 때문이다.
 class RegisterSerializer(serializers.ModelSerializer) :
     password = serializers.CharField(max_length=128,min_length=6,write_only=True)
     token = serializers.CharField(max_length=255, read_only=True)
+    followers = serializers.IntegerField(source = 'followers.count')
+    followings = serializers.IntegerField(source = 'followings.count')
     class Meta() :
         model=User
-        fields= ('email','password','name','nickname','region','category','is_alba','image','token')
+        fields= ('user_pk','email','password','tel','name','nickname','region','category','is_alba','token','image','followers','followings')
+        read_only_fields = ['image','followers','followings']
     def create(create,validated_data) :
 
         return User.objects.create_user(**validated_data)
@@ -19,16 +26,24 @@ class LoginSerializer(serializers.ModelSerializer) :
     
     class Meta() :
         model=User
-        fields = ('email','password','token',)
+        fields = ('user_pk','email','password','token',)
         
         read_only_fields = ['token']
 
-class UserSerializer(serializers.ModelSerializer):
+class UserListSerializer(serializers.ModelSerializer) :
+        
+    class Meta :
+        model=User
+        fields = ('user_pk','image','nickname')
+        
 
+class UserSerializer(serializers.ModelSerializer):
+    followers = serializers.IntegerField(source = 'followers.count')
+    followings = serializers.IntegerField(source = 'followings.count')
     class Meta:
         model = User
-        fields= ('email','name','nickname','region','category','is_alba','image')
-        read_only_fields = ['email']
+        fields= ['user_pk','email','name','nickname','region','category','is_alba','image','followers','followings']
+        read_only_fields = ['email','followers','followings']
         
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
@@ -57,3 +72,43 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+
+class EmailUniqueCheckSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
+
+    class Meta:
+        model = User
+        fields = ('email',)
+        
+ # 닉네임 중복 검사
+class NicknameUniqueCheckSerializer(serializers.ModelSerializer):
+    nickname = serializers.CharField(required=True, min_length=1, max_length=20, validators=[UniqueValidator(queryset=User.objects.all())])
+
+    class Meta:
+        model = User
+        fields = ('nickname',)
+
+class UserCrewSerializer(serializers.ModelSerializer):
+    
+    crews = CrewListSerializer(many=True)
+    class Meta:
+        model = User
+        fields= ('user_pk','crews')
+
+
+class ReviewSerializer(serializers.ModelSerializer) :
+    store = serializers.CharField(source='store.name')
+    class Meta: 
+        model = Review
+        fields = ('review_pk','user','star','store')
+        
+
+class UserReviewSerializer(serializers.ModelSerializer):
+    
+    reviews = ReviewSerializer(many=True)
+    class Meta:
+        model = User
+        fields= ('user_pk','reviews')
+        

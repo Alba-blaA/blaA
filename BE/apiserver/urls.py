@@ -16,11 +16,50 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 
+from django.conf import settings
+from django.conf.urls.static import static
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+from apiserver.swagger import BothHttpAndHttpsSchemaGenerator
+
+schema_view = get_schema_view(
+   openapi.Info(
+    title="blaA API",
+    default_version='v1',
+    description="BlaA API Test description",
+    terms_of_service="https://www.google.com/policies/terms/",
+    contact=openapi.Contact(email="contact@snippets.local"),
+    license=openapi.License(name="BSD License"),
+   ),
+    public=True,
+    generator_class=BothHttpAndHttpsSchemaGenerator,
+    permission_classes=[permissions.AllowAny],
+    authentication_classes=[],
+
+)
+
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('api/v1/admin/', admin.site.urls),
     path('api/v1/accounts/',include('accounts.urls')),
+    path('api/v1/categorys/',include('categorys.urls')),
+    path('api/v1/reviews/',include('reviews.urls')),
     path('api/v1/stories/',include('stories.urls')),
+<<<<<<< HEAD
     path('account/',include('accounts.urls')),
     path('api/v1/blacklist/', include('blacklists.urls')),
     
 ]
+=======
+    path('api/v1/crews/',include('crews.urls')),
+
+
+    #--------------------swagger--------------
+    path('api/v1/swagger.json', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    # path('swagger(?P<format>\.json|\.yaml)$/', schema_view.without_ui(cache_timeout=0), name='swagger'),
+    path('api/v1/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('api/v1/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+>>>>>>> develop

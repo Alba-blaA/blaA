@@ -1,11 +1,12 @@
 <template>
 <!-- enctype 파일 업로드에서 무조건 사용 -->
-<form @submit.prevent="Sumbit" enctype="multipart/form-data" method="POST">
-  <h1>오출완 작성</h1>
+<h1>오출완 작성</h1>
+<router-link :to="{name: 'story'}">뒤로</router-link>
+<form @submit.prevent="Sumbit" enctype="multipart/form-data">
   <button type="submit">등록</button>
   <div>
     <label for="story_picture">사진 등록</label>
-    <input class="story_picture" id="story_picture" type="file" @change="previewFile" /><br />
+    <input class="story_picture" id="story_picture" type="file" @change="previewFile"/><br />
     <img class="img_test" src="" height="200" alt="이미지 미리보기..." />
     <div v-if="isPictureVaild" style="color: red">
       사진을 등록해주세요!
@@ -45,12 +46,13 @@ export default {
     const story_title = ref('')
     const isPictureVaild = ref(false)
     const isTitleVaild = ref(false)
+    const image_url = ref('')
     
     // 업로드 된 이미지를 미리 확인하는 함수
-    function previewFile() {
+    function previewFile(e) {
       const preview = document.querySelector('.img_test')
-      if (document.querySelector('.story_picture').files[0]) {
-        story_picture.value = document.querySelector('.story_picture').files[0]
+      if (e.target.files[0]) {
+        story_picture.value = e.target.files[0]
         const reader = new FileReader();
 
         // 파일명을 가져와서 소문자로 변환
@@ -65,6 +67,7 @@ export default {
         ) {
           reader.onload = e => {
             preview.src = e.target.result
+            image_url.value = e.target.result
           }
           reader.readAsDataURL(story_picture.value)
         } else if (story_picture.value.size <= 25165824) {
@@ -87,17 +90,23 @@ export default {
       // 사진과 제목 값이 모두 존재할 때 생성
       if (story_picture.value && story_title.value) {
         const form = new FormData()
-        form.append("file", {
-          story_picture: story_picture.value,
-          story_title: story_title.value
-        })
+        form.append('story_picture', story_picture.value)
+        form.append('story_title', story_title.value)
+        // form.append("file", {
+        //   story_picture: story_picture.value,
+        //   story_title: story_title.value
+        // })
+        console.log(form)
         try {
-          const res = await axios.post(api.story.story(), form, {
+          const token = process.env.VUE_APP_TOKEN
+          const res = await axios.post(api.story.story(), form
+            , {
             headers: {
               "Content-Type": "multipart/form-data",
-              "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNjY0NzAwMjkzfQ.Z4wpr2HSWfxtlowEa_Gx7ar9V912459jVogY_V72tk8"
+              "Authorization": `Bearer ${token}`
             },
           })
+          console.log(res.data)
           const index = res.data.story_pk
           // 작성 후 상세페이지로 이동
           router.push({

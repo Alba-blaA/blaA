@@ -79,7 +79,7 @@ def comment_list_or_create(request, story_pk):
     def comment_list():
         story = get_object_or_404(Story, story_pk = story_pk)
         print(story)
-        comments = get_list_or_404(Comment,story_pk=story)
+        comments = Comment.objects.filter(story_pk=story)
         serializer = CommentSerializer(comments, many= True)
         return Response(serializer.data)
     

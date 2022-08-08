@@ -6,17 +6,25 @@
 <script>
 import { ref } from 'vue'
 import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
 
 export default {
   setup() {
-    const comment = ref(null)
+    const comment = ref('')
     const store = useStore()
+    const route = useRoute()
 
     const CommentCreate = () => {
-      store.dispatch('story/createComment', comment)
+      const content = {
+        story_comment: comment.value,
+        story_pk: route.params.story_pk
+      }
+      store.dispatch('story/createComment', content)
     }
+
     return {
-      CommentCreate
+      CommentCreate,
+      comment
     }
   }
 }
