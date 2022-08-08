@@ -42,4 +42,10 @@ class CrewArticleComment(TrackingModel,models.Model) :
     user =models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     comment_content = models.TextField()
 
+class CrewInvite(models.Model) :
+    crew = models.ForeignKey(Crew,on_delete=models.CASCADE) 
+    user =models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    crew_leader_accept = models.BooleanField()
+    user_accept = models.BooleanField()
+
     
