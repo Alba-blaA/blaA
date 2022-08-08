@@ -290,4 +290,15 @@ def crew_schedule_update_or_delete(request, crew_schedule_pk):
         return schedule_update()
     elif request.method == 'DELETE':
         return schedule_delete()
+
+@api_view(['GET'])
+def crew_schedule_work_list(request, crew_schedule_pk):
+    schedule = CrewSchedule.objects.get(crew_schedule_pk=crew_schedule_pk)
+    print(schedule.crew_day)
+    tmp = CrewSchedule.objects.filter(crew_day=schedule.crew_day)
+    print(tmp)
+    print(len(tmp))
+    for tm in len(tmp):
+        print(tm.get('user_id'))
+    
     
