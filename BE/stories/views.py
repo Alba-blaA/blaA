@@ -241,8 +241,8 @@ def story_both_filter(request):
     return Response(serializer.data)
 
 @api_view(['GET'])   
-def mystory_list(request):
-    story = Story.objects.filter(Q(user_pk=request.user))
+def mystory_list(request,user_pk):
+    story = Story.objects.filter(Q(user_pk=user_pk))
     serializer = StorySerializer(story, many=True)
     return Response(serializer.data)
     
