@@ -236,7 +236,7 @@ class CrewCommentUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
             instance._prefetched_objects_cache = {}
         return Response(serializer.data)
 
-    def perform_update(self, serializer,crew_id,crew_article_pk):
+    def perform_update(self, serializer,crew_id,crew_article_pk ):
         print(crew_id,crew_article_pk)
         crew = Crew.objects.get(crew_pk=crew_id)
         article = CrewArticle.objects.get(crew_article_pk=crew_article_pk)
