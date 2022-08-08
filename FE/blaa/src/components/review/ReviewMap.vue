@@ -4,11 +4,11 @@
       <div class="modal-card" style="opacity: 1">
         <div>
           <p>장소를 검색하세요 <span  @click="$emit('close-modal')" style="cursor:pointer"> 닫기</span></p>
-          <input type="text" v-model="searchWord" @keypress.enter="searchStore" @keyup.enter="test">
-          <button> 제출</button>
+          <input type="text" v-model="searchWord" @keypress.enter="firstSearchStore">
+          <input type="checkbox" v-model="isStore" id="store" @click="switchIsStore"><label for="store">가게추가하기</label>
         </div>
         <div v-if="searchList">
-          <ReviewMapList v-for="searchChild in searchList" :key="searchChild.id" :searchChild="searchChild" @select-store="selectStore"/>
+          <ReviewMapList :isStore="isStore" v-for="searchChild in searchList" :key="searchChild.id" :searchChild="searchChild" @select-store="selectStore"/>
           <PaginationBar :currentPage="currentPage" :numberOfPages="numberOfPages" @click="searchStore"/>
         </div>
         <p v-else>검색결과가 없습니다.</p>
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import axios from 'axios'
 import api from '@/api/api'
@@ -31,25 +31,59 @@ export default {
     PaginationBar
   },
   setup(props, {emit}) {
-    const isStore = ref(true)
+    const isStore = ref(false)
     const store = useStore()
     const searchList = ref([])
     const searchWord = ref('')
     const currentPage = ref(1)
     const totalCount = ref(0)
+    const searchError = ref(false)
 
-    const test = () => {
-      console.log('테스트중')
+    // 추가 버튼을 클릭할 떄
+    const switchIsStore = async() => {
+      isStore.value = !isStore.value
+      firstSearchStore()
+    }
+
+    const firstSearchStore = async() => {
+      if (!searchWord.value) {
+        searchError.value = true
+      } else {
+        if (!isStore.value) {
+          try {
+            const res = await axios.get(api.review.store(), {
+              headers: {
+                Authorization: `Bearer ${store.state.review.Token}` 
+              },
+              params: {
+                search: searchWord.value,
+                page: 1
+              }
+            })
+            isStore.value = res.data.count ? false : true
+            searchList.value = res.data.results
+            totalCount.value = res.data.count
+            // 처음 찾았을 떄 없으면
+            if (isStore.value) {
+              serachNewStore(1)
+            }
+          } catch (error) {
+              console.error(error)
+          }
+        } else {
+          serachNewStore(1)
+        }
+      }
     }
 
     const serachNewStore = async(page = currentPage.value) => {
       try {
           const res = await axios.get(`https://dapi.kakao.com/v2/local/search/keyword.json?query=${searchWord.value}`, {
             headers: {
-              Authorization: `KakaoAK ${process.env.VUE_APP_KAKAO_REST_API_KEY}`
+              Authorization: `KakaoAK 8f46e3774c965e5aefdfc2bb2de1af41`
             },
             params: {
-              page: page,
+              page: currentPage.value,
               size: 5
             }
           })
@@ -61,38 +95,32 @@ export default {
         }
     }
 
+    
     // 가게를 검색하는 함수
     const searchStore = async(page = currentPage.value) => {
-      console.log('검색')
-      if (isStore.value) {
+      if (!isStore.value) {
         try {
-          const res = await axios.get(api.review.review(), {
+          const res = await axios.get(api.review.store(), {
             headers: {
               Authorization: `Bearer ${store.state.review.Token}` 
             },
             params: {
               search: searchWord.value,
-              page: page
+              page: currentPage.value
             }
           })
-          console.log(res)
-          isStore.value = res.data ? true : false
-          searchList.value = res.data.results 
+          isStore.value = res.data.count ? true : false
+          searchList.value = res.data.results
           totalCount.value = res.data.count
           // 처음 찾았을 떄 없으면
-          if (isStore.value) {
-            serachNewStore(page)
-          }
         } catch (error) {
             console.error(error)
         }
-      // 그 이후에 없으면
       } else {
         serachNewStore(page)
       }
-
+    }
       
-    
     // 페이지 수 계산
     const numberOfPages = computed(() => {
       return Math.ceil(totalCount.value / 5)
@@ -102,24 +130,24 @@ export default {
     const selectStore = (data) => {
       data = {
         ...data,
-        // 상점 생성 유무를 전송
+        // 상점 생성 유무를 전송 false x / true 생성해야됨ㄴ
         isStore: isStore.value
       }
       emit('select-store', data)
     }
 
     return {
+      isStore,
       searchWord,
       searchList,
       searchStore,
       currentPage,
       numberOfPages,
       selectStore,
-      test
+      firstSearchStore,
+      switchIsStore
     }
   }
-}
-
 }
 </script>
 

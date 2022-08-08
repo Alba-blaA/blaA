@@ -9,7 +9,7 @@
   <div>
     <p class="form-input">가게명 : {{storeName}} <button class="btn btn-primary" @click="isModalOpen=true">검색</button></p>
     <p class="form-input">가게주소 : {{storeAddress}}</p>
-    <p v-if="storeError">가게를 검색해주세요</p>
+    <p v-if="storeError" class="error">가게를 검색해주세요</p>
   </div>
   <!-- 별점 -->
   <span>별점 : </span>
@@ -23,7 +23,7 @@
     </fieldset>
   </form>
   <span> {{star}}점 </span>
-  <p v-if="starError">별점을 입력해주세요</p>
+  <p v-if="starError" class="error">별점을 입력해주세요</p>
   <hr>
   <!-- 버튼식 -->
   <form @click="checkBtn">
@@ -39,6 +39,7 @@
   <div class="oneReview">
     <p>한줄평</p>
     <input type="text" class="form-input" v-model="oneReview">
+    <p v-if="oneReviewError" class="error">한줄평을 입력해주세요</p>
   </div>
 </template>
 
@@ -62,13 +63,16 @@ export default {
     // 6개의 버튼으로 이루어짐
     const storeButton = ref([0,0,0,0,0,0])
     const oneReview = ref('')
+    const oneReviewError = ref(false)
     const isModalOpen = ref(false)
     const star = ref(0)
     const starError = ref(false)
     const isStore = ref(true)
+    const store_pk = ref(0)
 
     // 상점 선택하기
     const selectStore = (data) => {
+      store_pk.value = data.store_pk
       isStore.value = data.isStore
       storeName.value = data.name
       storeAddress.value = data.region
@@ -91,41 +95,43 @@ export default {
           }
         } else {
           $(this).parent().removeClass("selected")
-          if (storeButton.value[i] == 1) {
+          if (storeButton.value[i] == i+1) {
             storeButton.value[i] = 0
           }
         }
       })
-      console.log(storeButton.value)
     }
 
     const sumbitReview = async() => {
-      if ( storeName.value && storeAddress.value && star.value ){
+      if ( storeName.value && storeAddress.value && star.value && oneReview.value ){
         // Array => [1,4,6] 선택한 인자만 넘어감
-        const buttonType = ref([])
-        for (let type in storeButton.value) {
-          if (type) {
-            buttonType.value.push(type)
+        const buttonType = []
+        for (let idx = 0; idx < 6; idx++) {
+          if (storeButton.value[idx]) {
+            buttonType.push(String(idx+1))
           }
         }
+        console.log(buttonType)
         const data = {
           // 값을 생성하는지 아닌지 여부를 확인하기위해서
           isStore: isStore.value,
+          store_pk: store_pk.value,
           name: storeName.value,
           region: storeAddress.value,
-          star: star.value,
+          star: Number(star.value),
           oneline_review: oneReview.value,
-          type: buttonType.value
+          type: buttonType
         }
-        await store.dispatch('review/makeReview', data)
-        router.push({
-          name: 'review'
-        })
-
+        await store.dispatch('review/makeReviews', data).then(
+          router.push({
+            name: 'review'
+          })
+        )
       } else {
         // 에러 발생시 에러 문구 출력
-        storeError.value = storeName.value ? true : false
-        starError.value = star.value ? true : false 
+        oneReviewError.value = oneReview.value == '' ? true : false
+        storeError.value = storeName.value == '' ? true : false
+        starError.value = star.value == 0 ? true : false 
       }
     }
 
@@ -140,7 +146,8 @@ export default {
       oneReview,
       sumbitReview,
       starError,
-      storeError
+      storeError,
+      oneReviewError
     }
   }
 }
@@ -166,7 +173,9 @@ export default {
 input[type=checkbox]{
   display: none;
 }
-
+.error {
+  color: red;
+}
 .selected {
   background-color:greenyellow;
 }

@@ -36,7 +36,7 @@ export default {
         // 후에 교체 예정
         const res = await axios.get(api.story.story(), {
           headers: {
-            Authorization: `Baerer ${state.Token}`
+            Authorization: `Bearer ${state.Token}`
           }
         })
         commit('GET_IMAGES',res.data)
@@ -49,7 +49,7 @@ export default {
       try {
         const res = await axios.get(api.story.detail(story_pk), {
           headers: {
-            Authorization: `Baerer ${state.Token}`
+            Authorization: `Bearer ${state.Token}`
           }
         })
         commit('GET_CURRENT_STORY', res.data)
@@ -61,7 +61,7 @@ export default {
       try {
         await axios.delete(api.story.detail(story_pk), {
           headers: {
-            Authorization: `Baerar ${state.Token}`
+            Authorization: `Bearer ${state.Token}`
           }
         })
         commit('DELETE_CURRENT_STORY')

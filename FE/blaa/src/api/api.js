@@ -62,7 +62,8 @@ export default {
     commentChange: (comment_pk) => HOST + STORY + COMMENT + 'ud/' + comment_pk
   },
   review: {
-    review: () => HOST + REVIEW + STORE,
+    store: () => HOST + REVIEW + STORE,
+    review: (store_pk) => HOST + REVIEW + store_pk + '/',
     searchReview: (search_name) => HOST + REVIEW + search_name,
     storeDetail: (store_pk) => HOST + REVIEW + store_pk,
     addStore: () => HOST + 'store/',

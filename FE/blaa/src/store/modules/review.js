@@ -16,7 +16,7 @@ export default {
   actions: {
     async getReviews({commit, state}) {
       try {
-        const res = await axios.get(api.review.review(), {
+        const res = await axios.get(api.review.store(), {
           headers: {
             Authorization: `Baerer ${state.Token}`
           }
@@ -28,31 +28,40 @@ export default {
       } 
     },
     async makeReviews({state}, data) {
-      const isStore = data.slice(0, 1)
-      const store = data.slice(0,2)
+      const isStore = data.isStore
+      const store = {
+        name: data.name,
+        region: data.region,
+        store_pk: data.store_pk
+      }
+      const review = {
+        oneline_review: data.oneline_review,
+        star: data.star,
+        chosen_button: data.type
+      }
       // 스토어 정보가 없어 새로 생성시
-      if (!isStore) {
+      if (isStore) {
         try {
-          const res = await axios.post(api.review.review(), store, {
+          const res = await axios.post(api.review.store(), store, {
             headers: {
               Authorization: `Baerer ${state.Token}`
             }
           })
-          // 추후 넘어오는 데이터의 형태를 확인하고 리뷰 생성으로 넘겨줌
-          console.log(res.data)
+          store.store_pk = res.data.store_pk
         } catch (error) {
           console.error(error)
         }
       }
+      // 리뷰 생성
       try {
-        await axios.post(api.review.review(), {
-          data
-        }, {
+        console.log(review)
+        const res = await axios.post(api.review.review(store.store_pk), review, {
           headers: {
             Authorization: `Baerer ${state.Token}`
           }
         })
-      } catch (error) {
+        console.log(res.data)
+      } catch(error) {
         console.error(error)
       }
     }
