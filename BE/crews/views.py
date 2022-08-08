@@ -270,3 +270,24 @@ def crew_schedule_list_or_create(request, crew_id):
         return schedule_list()
     elif request.method == 'POST':
         return schedule_create()
+    
+@api_view(['PUT', 'DELETE'])  
+def crew_schedule_update_or_delete(request, crew_schedule_pk):
+    
+    schedule = CrewSchedule.objects.get(crew_schedule_pk=crew_schedule_pk)
+    
+    def schedule_update():
+        serializer = CrewScheduleSerializer(instance=schedule, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+                serializer.save(crew_id=schedule.crew_id)
+                return Response(serializer.data)
+            
+    def schedule_delete():
+        schedule.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    if request.method == 'PUT':
+        return schedule_update()
+    elif request.method == 'DELETE':
+        return schedule_delete()
+    
