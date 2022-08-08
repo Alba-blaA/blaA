@@ -28,6 +28,13 @@ class LoginSerializer(serializers.ModelSerializer) :
         
         read_only_fields = ['token']
 
+class UserListSerializer(serializers.ModelSerializer) :
+        
+    class Meta() :
+        model=User
+        fields = ('user_pk','image','nickname')
+        
+
 class UserSerializer(serializers.ModelSerializer):
     
     class Meta:
