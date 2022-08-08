@@ -184,9 +184,7 @@ class CrewCommentListCreateAPIView(ListCreateAPIView):
     lookup_field = 'crew_article_pk'
 
     def list(self, request, crew_id,crew_article_pk,*args, **kwargs):
-        crew = Crew.objects.get(crew_pk=crew_id)
-
-        queryset = CrewArticleComment.objects.filter(article=crew_article_pk)
+        queryset = CrewArticleComment.objects.filter(article=crew_article_pk,crew=crew_id)
 
         page = self.paginate_queryset(queryset)
         if page is not None:
