@@ -74,7 +74,7 @@ export default {
       try {
         const res = await axios.get(api.story.comment(story_pk), {
           headers: {
-            Authorization: `Baerer ${state.Token}`
+            Authorization: `Bearer ${state.Token}`
           }
         })
         commit('GET_COMMENT', res.data)
@@ -92,7 +92,7 @@ export default {
           },
           {
             headers: {
-              Authorization: `Baerer ${state.Token}`
+              Authorization: `Bearer ${state.Token}`
             }
           })
         // 작성자, 내용, 날짜, 작성자 프로필을 요청하여 추가적으로 입력

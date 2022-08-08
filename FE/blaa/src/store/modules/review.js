@@ -22,7 +22,7 @@ export default {
       try {
         const res = await axios.get(api.review.store(), {
           headers: {
-            Authorization: `Baerer ${state.Token}`
+            Authorization: `Bearer ${state.Token}`
           }
         })
         commit('GET_REVIEWS', res.data.results)
@@ -34,7 +34,7 @@ export default {
       try {
         const res = await axios.get(api.review.review(store_pk),{
           headers: {
-            Authorizaiton: `Baerer ${state.Token}`
+            Authorization: `Bearer ${state.Token}`
           }
         })
         commit('GET_REVIEW', res.data)
@@ -59,7 +59,7 @@ export default {
         try {
           const res = await axios.post(api.review.store(), store, {
             headers: {
-              Authorization: `Baerer ${state.Token}`
+              Authorization: `Bearer ${state.Token}`
             }
           })
           store.store_pk = res.data.store_pk
@@ -72,7 +72,7 @@ export default {
         console.log(review)
         const res = await axios.post(api.review.review(store.store_pk), review, {
           headers: {
-            Authorization: `Baerer ${state.Token}`
+            Authorization: `Bearer ${state.Token}`
           }
         })
         console.log(res.data)

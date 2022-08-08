@@ -99,7 +99,7 @@ const router = createRouter({
           component: ReviewForm
         },
         {
-          path: ':store_pk',
+          path: ':store_pk/:store_name',
           name: 'detailReview',
           component: ReviewDetail
         },

@@ -22,7 +22,8 @@ export default {
       router.push({
         name: 'detailReview',
         params: {
-          store_pk: props.review.store_pk
+          store_pk: props.review.store_pk,
+          store_name: props.review.name
         }
       })
     }
