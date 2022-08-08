@@ -13,7 +13,9 @@ class JWTAuthentications(BaseAuthentication) :
         auth_header = get_authorization_header(request)
         # print(auth_header)
         #받은 header를 utf-8로 디코딩한다. 
+        print(auth_header)
         auth_data = auth_header.decode('utf-8')
+        print(auth_data)
         # print(auth_data)
         #token 형식이 Bearer + Token 이므로, ' '로 나눈다. 
         auth_token = auth_data.split(' ')
