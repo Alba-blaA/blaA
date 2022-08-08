@@ -8,6 +8,8 @@ export default {
     messages : [],
     to_userProfile : "",
     from_userProfile : "",
+    allusers : ["hi"],
+
 
   },
   mutations: {

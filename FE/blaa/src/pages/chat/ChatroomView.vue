@@ -3,14 +3,14 @@
 <body>
     <div class="chat_list_wrap">
         <div class="header">
-            blaA's chatting-rooms
+            {{ userInfo.nickname }}'s bla
         </div>
         <div class="search">
-            <input type="text" placeholder="닉네임 검색" />
+            <input v-model="searchText" type="text" placeholder="닉네임 검색" />
         </div>
         <div class="list">
             <ul>
-                <li @click="gochat(message.from_userpk)" v-for="message in state.messages" :key = "message.key">
+                <li @click="gochat(message.from_userpk)" v-for="message in filteredMessages" :key = "message.key">
                     <table cellpadding="0" cellspacing="0">
                         <tr>
                             <td class="profile_td">
@@ -40,7 +40,7 @@
 <script>
 import router from '@/router';
 import db from '@/db'
-import { reactive, onMounted } from 'vue';
+import { reactive, onMounted, ref, computed } from 'vue';
 import { useStore } from "vuex";
 import api from "@/api/api.js"
 import axios from 'axios'
@@ -57,6 +57,16 @@ export default {
 
     const store = useStore();
     const userInfo = store.state.account.userInfo;
+
+    const searchText = ref('');
+    const filteredMessages = computed(() => {
+      if (searchText.value) {
+        return state.messages.filter( message => {
+          return message.username.includes(searchText.value);
+        });
+      }
+      return state.messages;
+    });
 
     const state = reactive({      
       messages: [],      
@@ -113,7 +123,9 @@ export default {
     return {
       gochat,
       userInfo,
-      state
+      state,
+      filteredMessages,
+      searchText
 
     }
   }

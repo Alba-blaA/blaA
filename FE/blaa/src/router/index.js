@@ -21,6 +21,7 @@ import ReviewForm from "@/pages/review/ReviewForm.vue";
 import ReviewDetail from "@/pages/review/ReviewDetail.vue";
 import ReviewCommentDetail from "@/pages/review/ReviewCommentDetail.vue";
 import Chatroom from "@/pages/chat/ChatroomView.vue";
+import SearchAllUsers from "@/pages/crew/SearchAllUsers.vue"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -132,6 +133,11 @@ const router = createRouter({
       name: "chatroom",
       component: Chatroom,
     },
+    {
+      path: "/searchusers",
+      name: "searchusers",
+      component: SearchAllUsers
+    }
   ],
 });
 
