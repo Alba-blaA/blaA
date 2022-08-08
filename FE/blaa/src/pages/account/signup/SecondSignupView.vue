@@ -67,18 +67,21 @@ export default {
     });
 
     onMounted(() => {
-      const kakaoUserInfo = store.state.account.kakaoUserInfo;
-      user.value.email = kakaoUserInfo.email;
-      document.getElementById("signup-email").disabled = true;
-      document.getElementById("btnEmailCheck");
+      const kakaoLogin = store.state.account.kakaoLogin;
+      if(kakaoLogin) {
+        user.value.email = store.state.account.kakaoUserInfo.email;
+        document.getElementById("signup-email").disabled = true;
+        document.getElementById("btnEmailCheck");
 
-      user.value.password = cookies.get("access-token");
-      document.getElementById("signup-password").style.display = "none";
-      document.getElementById("signup-checkpassword").style.display = "none";
-      document.getElementById("password-form").innerHTML = "";
+        user.value.password = cookies.get("access-token");
+        document.getElementById("signup-password").style.display = "none";
+        document.getElementById("signup-checkpassword").style.display = "none";
+        document.getElementById("password-form").innerHTML = "";
 
-      user.value.name = kakaoUserInfo.name;
-      document.getElementById("signup-name").disabled = true;
+        user.value.name = store.state.account.kakaoUserInfo.name;
+        document.getElementById("signup-name").disabled = true;
+      }
+      
     });
 
     const emailCheck = () => {

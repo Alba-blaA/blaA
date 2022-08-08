@@ -16,6 +16,7 @@
         <button @click="register">회원가입</button>
       </div>
     <router-view />
+
   </div>
 </template>
 
@@ -47,13 +48,17 @@ export default {
       router.push({ name: "login" });
     };
 
-    const gochat = () => {
-      router.push({ path: "/chat"});
+    const gochatroom = () => {
+      router.push({ path: "/chatroom"});
     };
 
     const gostory = () => {
       router.push({ path: "/story"});
     };
+
+    const gosearch = () => {
+      router.push({path : "/searchusers"})
+    }
 
     const kakaoLogin = () => {
       const params = {
@@ -82,8 +87,9 @@ export default {
       kakaoLogin,
       logout,
       register,
-      gochat,
+      gochatroom,
       gostory,
+      gosearch
     };
   },
 };

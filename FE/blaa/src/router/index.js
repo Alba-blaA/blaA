@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/pages/home/HomeView.vue";
 import Chat from "@/pages/chat/ChatView.vue";
-import Profile from "@/pages/profile/ProfileView.vue";
+import MyProfile from "@/pages/profile/ProfileView.vue";
 import Login from "@/pages/account/LoginView.vue";
 import KakaoLogin from "@/pages/account/KakaoLoginView.vue";
 import Signup from "@/pages/account/signup/SignupView.vue";
@@ -21,6 +21,11 @@ import ReviewForm from "@/pages/review/ReviewForm.vue";
 import ReviewDetail from "@/pages/review/ReviewDetail.vue";
 import ReviewCommentDetail from "@/pages/review/ReviewCommentDetail.vue";
 import Chatroom from "@/pages/chat/ChatroomView.vue";
+import SearchAllUsers from "@/pages/crew/SearchAllUsers.vue"
+
+import ProfileMain from "@/pages/profile/ProfileMainView.vue";
+import UpdateUserInfo from "@/pages/profile/UpdateUserInfoView.vue";
+import MyStory from "@/pages/profile/MyStoryView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -184,9 +189,9 @@ const router = createRouter({
           component: ReviewForm,
         },
         {
-          path: ":store_pk",
-          name: "detailReview",
-          component: ReviewDetail,
+          path: ':store_pk/:store_name',
+          name: 'detailReview',
+          component: ReviewDetail
         },
         {
           path: ":store_pk/:review_pk",
@@ -196,20 +201,42 @@ const router = createRouter({
       ],
     },
     {
-      path: "/chat",
+      path: "/chat/:from_userpk",
       name: "chat",
       component: Chat,
     },
     {
       path: "/profile",
-      name: "profile",
-      component: Profile,
+      name: "",
+      component: ProfileMain,
+      children: [
+        {
+          path: "",
+          name: "Profile",
+          component: MyProfile,
+        },
+        {
+          path: "update/:user_pk",
+          name: "updateInfo",
+          component: UpdateUserInfo,
+        },
+        {
+          path: "mystory/:user_pk",
+          name: "mystory",
+          component: MyStory,
+        }
+      ]
     },
     {
       path: "/chatroom",
       name: "chatroom",
       component: Chatroom,
     },
+    {
+      path: "/searchusers",
+      name: "searchusers",
+      component: SearchAllUsers
+    }
   ],
 });
 

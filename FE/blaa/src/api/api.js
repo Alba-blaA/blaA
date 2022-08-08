@@ -9,7 +9,8 @@ const STORY = 'stories/'
 const COMMENT = 'comment/'
 const REVIEW = 'reviews/'
 const STORE = 'store/'
-const CREW = 'crews/'
+const CREW = 'crew/'
+// const CHAT = 'chat/'
 
 export default {
   accounts: {
@@ -22,6 +23,7 @@ export default {
     currentUserInfo: () => HOST + ACCOUNTS + "user/",
     // username으로 프로필 제공
     profile: (username) => HOST + ACCOUNTS + "profile/" + username,
+    myInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
   },
 
   crew: {
@@ -61,14 +63,16 @@ export default {
     detail: (story_pk) => HOST + STORY + story_pk + '/',
     like: (story_pk) => HOST + STORY + 'like/' + story_pk,
     comment:(story_pk) => HOST + STORY + COMMENT + story_pk +'/',
-    commentChange: (comment_pk) => HOST + STORY + COMMENT + 'ud/' + comment_pk
+    commentChange: (comment_pk) => HOST + STORY + COMMENT + 'ud/' + comment_pk,
+    myStory: (user_pk) => HOST + STORY + "mystory/" + user_pk + "/",
   },
   review: {
-    review: () => HOST + REVIEW + STORE,
-    searchReview: (search_name) => HOST + REVIEW + search_name,
-    storeDetail: (store_pk) => HOST + REVIEW + store_pk,
-    addStore: () => HOST + 'store/',
-    reviewDetail: (review_pk) => HOST + REVIEW + review_pk,
+    store: () => HOST + REVIEW + STORE,
+    review: (store_pk) => HOST + REVIEW + store_pk + '/',
+    reviewDetail: (review_pk) => HOST + REVIEW + 'detail/' + review_pk + '/',
     like: (review_pk) => HOST + REVIEW + 'like/' + review_pk
+  },
+  crew: {
+    myCrew: (user_pk) => HOST + CREW + user_pk + "/",
   }
 };

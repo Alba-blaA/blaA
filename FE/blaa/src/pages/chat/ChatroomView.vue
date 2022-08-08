@@ -1,46 +1,32 @@
 <template>
-<head>
-<title></title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="stylesheet" href="#">
-</head>
+
 <body>
     <div class="chat_list_wrap">
         <div class="header">
-            blaA's chatting-rooms
+            {{ userInfo.nickname }}'s bla
         </div>
         <div class="search">
-            <input type="text" placeholder="닉네임 검색" />
+            <input v-model="searchText" type="text" placeholder="닉네임 검색" />
         </div>
         <div class="list">
             <ul>
-                <li>
+                <li @click="gochat(message.from_userpk)" v-for="message in filteredMessages" :key = "message.key">
                     <table cellpadding="0" cellspacing="0">
                         <tr>
                             <td class="profile_td">
-                            <!--Img-->
+                            <!--ProfileImg-->
                                 <img src="" />
+                                <div>{{ message.from_userpk }}</div>
                             </td>
                             <td class="chat_td">
                             <!--Email & Preview-->
                                 <div class="email">
-                                    kkotkkio@gmail.com
+                                    {{ message.username}}
                                 </div>
                                 <div class="chat_preview">
-                                    안녕하세요~
+                                    {{ message.content }}
                                 </div>
-                            </td>
-
-                            <td class="time_td">
-                                <!--Time & Check-->
-                                <div class="time">
-                                    2016.09.29 17:54
-                                </div>
-                                <div class="check">
-                                <p></p>
-                                </div>
-                            </td>
+                            </td>                            
                         </tr>
                     </table>
                 </li>
@@ -52,7 +38,97 @@
 </template>
 
 <script>
+import router from '@/router';
+import db from '@/db'
+import { reactive, onMounted, ref, computed } from 'vue';
+import { useStore } from "vuex";
+import api from "@/api/api.js"
+import axios from 'axios'
+
 export default {
+  setup () {
+    const gochat = (from_userpk) => {
+      router.push({ name: 'chat',
+      params: {
+        from_userpk: from_userpk
+      }}
+      )
+    }
+
+    const store = useStore();
+    const userInfo = store.state.account.userInfo;
+
+    const searchText = ref('');
+    const filteredMessages = computed(() => {
+      if (searchText.value) {
+        return state.messages.filter( message => {
+          return message.username.includes(searchText.value);
+        });
+      }
+      return state.messages;
+    });
+
+    const state = reactive({      
+      messages: [],      
+      
+    })
+
+    onMounted(async () =>  {      
+      if (userInfo) {
+        const messageRef = db.database().ref("messages");     
+        
+        messageRef.on('value', snapshot =>  {
+          const data = snapshot.val();
+          let messages = [];
+               
+          Object.keys(data).forEach(key =>       
+          {if (data[key].to_userpk == userInfo.user_pk) {            
+              messages.push({
+                id: key,
+                username: data[key].username,
+                content: data[key].content,
+                from_userpk : data[key].from_userpk,
+                to_userpk : data[key].to_userpk,
+                to_usernickname : "sorry",
+                to_userprofileurl : "you failed"                
+              })                         
+            }
+          }
+          )          
+          let arrayUniqueByKey = [...new Map(messages.map(item =>
+          [item['from_userpk'], item])).values()];
+          let token = sessionStorage.getItem("token");
+
+          for (let index = 0; index < arrayUniqueByKey.length; index++)  {                         
+            axios.get(api.accounts.pkinfo(arrayUniqueByKey[index]['from_userpk']),
+            {
+              headers : {"Authorization": `Bearer ${token}`}
+            }).then(response => {                          
+              arrayUniqueByKey[index]['to_usernickname'] = response.data.nickname,
+              arrayUniqueByKey[index]['to_userprofileurl'] = response.data.image                                            
+            })                 
+                                   
+          }
+          state.messages = arrayUniqueByKey;
+          console.log(state.messages);
+        
+          // state.messages = arrayUniqueByKey;  
+          // console.log(state.messages[2]['to_usernickname']);      
+                           
+        })             
+      }
+        
+    }
+    )
+    return {
+      gochat,
+      userInfo,
+      state,
+      filteredMessages,
+      searchText
+
+    }
+  }
 
 }
 </script>
