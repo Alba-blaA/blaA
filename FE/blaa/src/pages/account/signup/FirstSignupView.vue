@@ -14,13 +14,13 @@ export default {
 
     const isAlba = () => {
       store.commit("account/SET_SIGNUP_ALBA", true);
-      console.log("isAlba : ", store.state.account.signupUser.isAlba);
+      console.log("isAlba : ", store.state.account.signupUser.is_alba);
       router.push({ name: "form" });
     };
 
     const isPublic = () => {
       store.commit("account/SET_SIGNUP_ALBA", false);
-      console.log("isAlba : ", store.state.account.signupUser.isAlba);
+      console.log("isAlba : ", store.state.account.signupUser.is_alba);
       router.push({ name: "form" });
     };
 

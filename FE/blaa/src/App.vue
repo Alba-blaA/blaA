@@ -3,6 +3,9 @@
   <div v-if="userInfo">
     <p>{{ userInfo.nickname }} 님</p>
     <button @click.prevent="logout">로그아웃</button>
+    <button @click.prevent = "gochatroom">채팅하러가기</button>
+    <button @click.prevent = "gostory">오출완가기</button>
+    <button @click.prevent = "gosearch">유저정보검색하기</button>
   </div>
   <div v-else>
     <p>로그인이 필요합니다.</p>
@@ -43,6 +46,18 @@ export default {
       router.push({ name: "login" });
     };
 
+    const gochatroom = () => {
+      router.push({ path: "/chatroom"});
+    };
+
+    const gostory = () => {
+      router.push({ path: "/story"});
+    };
+
+    const gosearch = () => {
+      router.push({path : "/searchusers"})
+    }
+
     const kakaoLogin = () => {
       const params = {
         redirectUri: "http://localhost:8080/kakao",
@@ -70,6 +85,9 @@ export default {
       kakaoLogin,
       logout,
       register,
+      gochatroom,
+      gostory,
+      gosearch
     };
   },
 };

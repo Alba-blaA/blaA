@@ -20,6 +20,8 @@ import ReviewView from "@/pages/review/ReviewView.vue";
 import ReviewForm from "@/pages/review/ReviewForm.vue";
 import ReviewDetail from "@/pages/review/ReviewDetail.vue";
 import ReviewCommentDetail from "@/pages/review/ReviewCommentDetail.vue";
+import Chatroom from "@/pages/chat/ChatroomView.vue";
+import SearchAllUsers from "@/pages/crew/SearchAllUsers.vue"
 
 import ProfileMain from "@/pages/profile/ProfileMainView.vue";
 import UpdateUserInfo from "@/pages/profile/UpdateUserInfoView.vue";
@@ -109,9 +111,9 @@ const router = createRouter({
           component: ReviewForm,
         },
         {
-          path: ":store_pk",
-          name: "detailReview",
-          component: ReviewDetail,
+          path: ':store_pk/:store_name',
+          name: 'detailReview',
+          component: ReviewDetail
         },
         {
           path: ":store_pk/:review_pk",
@@ -121,7 +123,7 @@ const router = createRouter({
       ],
     },
     {
-      path: "/chat",
+      path: "/chat/:from_userpk",
       name: "chat",
       component: Chat,
     },
@@ -147,6 +149,16 @@ const router = createRouter({
         }
       ]
     },
+    {
+      path: "/chatroom",
+      name: "chatroom",
+      component: Chatroom,
+    },
+    {
+      path: "/searchusers",
+      name: "searchusers",
+      component: SearchAllUsers
+    }
   ],
 });
 

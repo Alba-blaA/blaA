@@ -66,11 +66,9 @@ export default {
     myStory: (user_pk) => HOST + STORY + "mystory/" + user_pk + "/",
   },
   review: {
-    review: () => HOST + REVIEW + STORE,
-    searchReview: (search_name) => HOST + REVIEW + search_name,
-    storeDetail: (store_pk) => HOST + REVIEW + store_pk,
-    addStore: () => HOST + 'store/',
-    reviewDetail: (review_pk) => HOST + REVIEW + review_pk,
+    store: () => HOST + REVIEW + STORE,
+    review: (store_pk) => HOST + REVIEW + store_pk + '/',
+    reviewDetail: (review_pk) => HOST + REVIEW + 'detail/' + review_pk + '/',
     like: (review_pk) => HOST + REVIEW + 'like/' + review_pk
   },
   crew: {
