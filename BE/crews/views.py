@@ -159,12 +159,8 @@ class CrewArticleRetriveUpdateDeleteView(RetrieveUpdateDestroyAPIView) :
         return Response(serializer.data)
 
     def perform_update(self, serializer,crew_id):
-        # print(serializer)
         crew = Crew.objects.get(crew_pk=crew_id)
-        # print(crew)
-        # print(serializer)
         serializer.save(user=self.request.user,crew=crew)
-        # print('---------------------------------------')
         return serializer.data
 
 
@@ -176,6 +172,9 @@ class CrewArticleRetriveUpdateDeleteView(RetrieveUpdateDestroyAPIView) :
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
 
 class CrewCommentListCreateAPIView(ListCreateAPIView):
     # authentication_classes=[]
@@ -211,3 +210,43 @@ class CrewCommentListCreateAPIView(ListCreateAPIView):
         article = CrewArticle.objects.get(crew_article_pk=crew_article_pk)
         serializer.save(user=self.request.user,crew=crew,article=article)
         return serializer.data
+
+
+class CrewCommentUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
+    # authentication_classes=[]
+    serializer_class = CrewCommentSerializer
+    queryset=CrewArticleComment.objects.all()
+    lookup_field = 'crew_comment_pk'
+    def update(self, request,crew_id,crew_article_pk,crew_comment_pk, *args, **kwargs):
+        comment = CrewArticleComment.objects.get(crew_comment_pk=crew_comment_pk)
+        
+        if request.user != comment.user :
+            return Response({'message':"You do not have permission to change the comment's information,try again"},status=status.HTTP_400_BAD_REQUEST)
+    
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        print(crew_id)
+        self.perform_update(serializer,crew_id,crew_article_pk)
+        
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+        return Response(serializer.data)
+
+    def perform_update(self, serializer,crew_id,crew_article_pk):
+        print(crew_id,crew_article_pk)
+        crew = Crew.objects.get(crew_pk=crew_id)
+        article = CrewArticle.objects.get(crew_article_pk=crew_article_pk)
+        serializer.save(user=self.request.user,crew=crew,article=article)
+        return serializer.data
+
+    def destroy(self, request,crew_comment_pk, *args, **kwargs):
+        comment = CrewArticleComment.objects.get(crew_comment_pk=crew_comment_pk)
+        if request.user != comment.user :
+            return Response({'message':"You do not have permission to change the comment's information,try again"},status=status.HTTP_400_BAD_REQUEST)
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
