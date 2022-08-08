@@ -3,10 +3,15 @@
   <div v-if="userInfo">
     <p>{{ userInfo.nickname }} 님</p>
     <button @click.prevent="logout">로그아웃</button>
+    <button @click.prevent = "gochatroom">채팅하러가기</button>
+    <button @click.prevent = "gostory">오출완가기</button>
+    <button @click.prevent = "gosearch">유저정보검색하기</button>
   </div>
   <div v-else>
     <p>로그인이 필요합니다.</p>
     <button @click="login">로그인</button>
+    &nbsp;
+    <button @click="kakaoLogin">카카오 로그인</button>
     &nbsp;
     <button @click="register">회원가입</button>
   </div>
@@ -16,7 +21,7 @@
 <script>
 // import axios from 'axios';
 import { useStore } from "vuex";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import router from "@/router/index.js";
 
 export default {
@@ -33,14 +38,39 @@ export default {
       return store.state.account.userInfo;
     });
 
+    onMounted(() => {
+      store.dispatch("account/doReadStateFromStorage");
+    });
+
     const login = () => {
       router.push({ name: "login" });
+    };
+
+    const gochatroom = () => {
+      router.push({ path: "/chatroom"});
+    };
+
+    const gostory = () => {
+      router.push({ path: "/story"});
+    };
+
+    const gosearch = () => {
+      router.push({path : "/searchusers"})
+    }
+
+    const kakaoLogin = () => {
+      const params = {
+        redirectUri: "http://localhost:8080/kakao",
+        // redirectUri: "http://127.0.0.1:8000/account/sign-in/kakao/callback",
+      };
+      window.Kakao.Auth.authorize(params);
     };
 
     const logout = () => {
       store.commit("account/LOGIN", false);
       store.commit("account/USER_INFO", null);
       sessionStorage.removeItem("token");
+      store.commit("account/RESET_STORAGE");
       router.go();
     };
 
@@ -48,21 +78,16 @@ export default {
       router.push({ name: "signup" });
     };
 
-    // const login = () => {
-    //   router.push("/login");
-    // };
-    // // actions
-    // store.dispatch("test/test");
-    // // state
-    // console.log(store.state.test.data);
-    // // getters
-    // console.log(store.getters["test/example"]);
     return {
       isLogin,
       userInfo,
       login,
+      kakaoLogin,
       logout,
       register,
+      gochatroom,
+      gostory,
+      gosearch
     };
   },
 };

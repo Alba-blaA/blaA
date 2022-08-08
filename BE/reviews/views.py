@@ -60,23 +60,26 @@ class StoreReviewListCreateAPIView(ListCreateAPIView) :
     def review_button_aggregate(self,store_pk) :
         store = get_object_or_404(Store,store_pk=store_pk)
         cnt = store.review.count()
-
         tmp = {'친절한 사장님': 0,'깨끗한 매장':0 ,'좋은 분위기':0,'교통 접근성':0,'칼퇴근 가능':0,'유니폼 제공':0}
-        for button_review in store.storebuttonreview_set.all() :
-            tmp[button_review.button.type] += 1 
+        if cnt :
+            for button_review in store.storebuttonreview_set.all() :
+                tmp[button_review.button.type] += 1 
 
-        for btn in tmp :
-            tmp[btn] = int(round(tmp[btn]/cnt,2)*100)
-
+            for btn in tmp :
+                tmp[btn] = int(round(tmp[btn]/cnt,2)*100)
         return tmp
 
     def review_star_aggregate(self,store_pk) :
         store = get_object_or_404(Store,store_pk=store_pk)
         cnt = store.review.count()
-        review = Review.objects.filter(store=store).aggregate(Sum('star'))
-        # sum = Store.objects.all().aggregate(Sum('star'))
-        print(cnt,review)
-        return round(review['star__sum']/cnt,1)
+
+        if cnt :
+            review = Review.objects.filter(store=store).aggregate(Sum('star'))
+            # sum = Store.objects.all().aggregate(Sum('star'))
+            print(cnt,review)
+            return round(review['star__sum']/cnt,1)
+        else :
+            return 0
 
 
     def list(self, request,store_pk):

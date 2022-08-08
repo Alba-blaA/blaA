@@ -36,5 +36,31 @@ class CrewArticleImage(models.Model) :
         return str(self.article_picture)
 
 class CrewArticleComment(TrackingModel,models.Model) :
+    crew_comment_pk = models.AutoField(primary_key=True)
+    crew = models.ForeignKey(Crew,on_delete=models.CASCADE) 
     article =models.ForeignKey(CrewArticle,on_delete=models.CASCADE)
+    user =models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    comment_content = models.TextField()
+
+class CrewInvite(models.Model) :
+    crew = models.ForeignKey(Crew,on_delete=models.CASCADE) 
+    user =models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    crew_leader_accept = models.BooleanField()
+    user_accept = models.BooleanField()
+    
+class CrewSchedule(models.Model) :
+    crew_schedule_pk = models.AutoField(primary_key=True)
+    crew = models.ForeignKey(Crew,on_delete=models.CASCADE)
+    user =models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    crew_day = models.DateField()
+    color = models.CharField(max_length=20)
+    crew_starthour = models.TimeField()
+    crew_endhour = models.TimeField()
+    
+    def __str__(self) :
+        return self.crew_day
+    
+    
+
+
     

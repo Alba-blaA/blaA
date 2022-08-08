@@ -7,6 +7,7 @@
       <input
         id="login-userpw"
         type="password"
+        autocomplete="off"
         v-model="user.password"
         placeholder="Enter Password"
       />

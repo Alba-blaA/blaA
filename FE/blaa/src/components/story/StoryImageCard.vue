@@ -10,8 +10,8 @@
     }"
   >
     <div class="image" @click="moveToDetail" style="cursor:pointer">
-      <img :src="image.urls.small" class="image" :style="{ width: '100%' }" />
-      <span>{{ image.user.instagram_username }}</span>
+      <img :src="host + image.story_picture" class="image" :style="{ width: '100%' }" />
+      <span>{{ image.user_pk.nickname }}</span>
     </div>
   </div>
 </template>
@@ -19,7 +19,8 @@
 <script>
 import { ref } from 'vue'
 import { round } from 'mathjs'
-import { useRouter} from 'vue-router'
+import { useRouter } from 'vue-router'
+// import api from '@/api/api'
 
 export default {
   props: {
@@ -32,6 +33,7 @@ export default {
     const router = useRouter()
     const tH = ref(null)
     const gap = ref(null)
+    const host = ref('http://localhost:8000')
 
     tH.value = round(props.image.height / (props.image.width / 200)) + 30
     gap.value = round(tH.value / 10)
@@ -40,14 +42,18 @@ export default {
     const moveToDetail = () => {
       console.log(props.image)
       router.push({
-        // name: storyDetail
+        name: 'detailStory',
+        params: {
+          story_pk: props.image.story_pk
+        }
       })
     }
 
     return {
         tH,
         gap,
-        moveToDetail
+        moveToDetail,
+        host
     }
   }
 }
