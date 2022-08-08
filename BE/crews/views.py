@@ -2,7 +2,7 @@ import json
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView,ListAPIView,CreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
-from crews.models import Crew, CrewArticle
+from crews.models import Crew, CrewArticle, CrewArticleComment
 from rest_framework import filters
 from django.http import Http404
 from django.db.models import Count 
@@ -10,6 +10,7 @@ from django.db.models import Sum
 from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 from crews.serializer.article import CrewArticleRUDSerializer, CrewArticleSerializer
+from crews.serializer.comment import CrewCommentSerializer
 from crews.serializer.crew import CrewCreateSerializer, CrewListSerializer, CrewSerializer
 
 
@@ -175,3 +176,40 @@ class CrewArticleRetriveUpdateDeleteView(RetrieveUpdateDestroyAPIView) :
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class CrewCommentListCreateAPIView(ListCreateAPIView):
+    # authentication_classes=[]
+    serializer_class = CrewCommentSerializer
+    queryset=CrewArticleComment.objects.all()
+    lookup_field = 'crew_article_pk'
+
+    def list(self, request, crew_id,crew_article_pk,*args, **kwargs):
+        crew = Crew.objects.get(crew_pk=crew_id)
+
+        queryset = CrewArticleComment.objects.filter(article=crew_article_pk)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request, crew_id,crew_article_pk,*args, **kwargs):
+        crew = Crew.objects.get(crew_pk=crew_id)
+        if request.user in crew.crew_member.all() :
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(crew_id,crew_article_pk,serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        else :
+            return Response({'message':"You do not have permission to create the article in crew ,try again"},status=status.HTTP_400_BAD_REQUEST)
+
+
+    def perform_create(self, crew_id,crew_article_pk,serializer):
+        crew = Crew.objects.get(crew_pk=crew_id)
+        article = CrewArticle.objects.get(crew_article_pk=crew_article_pk)
+        serializer.save(user=self.request.user,crew=crew,article=article)
+        return serializer.data
