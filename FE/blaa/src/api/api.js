@@ -27,6 +27,11 @@ export default {
     currentUserInfo: () => HOST + ACCOUNTS + "user/",
     // username으로 프로필 제공
     profile: (username) => HOST + ACCOUNTS + "profile/" + username,
+    // userpk로 유저정보 조회
+    pkinfo: (user_pk) => HOST + ACCOUNTS + user_pk,
+    searchallusers: () => HOST + ACCOUNTS + "users"
+
+
   },
 
   categorys: {

@@ -25,8 +25,7 @@
         v-for="message in state.messages" 
         :key="message.key" 
         :class="(message.username == state.username ? 'message current-user' : 'message')">
-        <div class="message-inner">
-          <div class="username">{{ message.username }}</div>
+        <div class="message-inner">          
           <div class="content">{{ message.content }}</div>
         </div>
       </div>
@@ -66,15 +65,20 @@ import { reactive, onMounted, ref, onUpdated } from 'vue';
 import db from '@/db'
 import router from '@/router';
 import { useStore } from "vuex";
+import { useRoute } from 'vue-router'
 
 
 export default {
   setup () {
-    const store = useStore();    
-    const userInfo = store.state.account.userInfo;    
-   
+    const store = useStore(); 
+    const route = useRoute()
+    const userInfo = store.state.account.userInfo; 
+    const from_userpk = route.params.from_userpk 
+    const from_userprofile = ref("");
+    
 
-    const inputUsername = ref("");
+    console.log("from_userpk는",from_userpk)
+     
     const inputMessage = ref("");
     var scrollingElement = (document.scrollingElement || document.body);
 
@@ -87,8 +91,7 @@ export default {
       username: "",
       messages: [],
     })
-
-    
+ 
 
     const Logout = () => {
       state.username = "익명";
@@ -106,14 +109,15 @@ export default {
         username: state.username,
         content: inputMessage.value,
         from_userpk: userInfo.user_pk,
-        to_userpk: 2,
+        to_userpk: parseInt(from_userpk),
+        
       }
 
       await messageRef.push(message); 
       inputMessage.value = "";   
-      scrollToBottom()  
-               
-    }
+      scrollToBottom()
+              
+    }    
 
     onUpdated(() => {
       scrollToBottom()
@@ -122,31 +126,35 @@ export default {
     onMounted(() => {
       console.log(userInfo);
       if (userInfo) {
-        state.username = store.state.account.userInfo.nickname
-        console.log(state.username);        
+        state.username = store.state.account.userInfo.nickname           
+        const messageRef = db.database().ref("messages");     
+        messageRef.on('value', snapshot => {
+          const data = snapshot.val();
+          let messages = []; 
+          Object.keys(data).forEach(key => {
+            if ((data[key].to_userpk == userInfo.user_pk && data[key].from_userpk == parseInt(from_userpk)) || 
+                  (data[key].to_userpk == parseInt(from_userpk) && data[key].from_userpk == userInfo.user_pk)) {
+              messages.push({
+                id: key,
+                username: data[key].username,
+                content: data[key].content,
+                to_userpk: data[key].to_userpk,
+                from_userpk: data[key].from_userpk,
+                to_userprofile: data[key].to_userprofile
+              })            
+            }
+          }) 
+          state.messages = messages;                 
+        })
+       
       }
-      const messageRef = db.database().ref("messages");     
-      messageRef.on('value', snapshot => {
-        const data = snapshot.val();
-        let messages = [];
-
-        Object.keys(data).forEach(key => {
-          messages.push({
-            id: key,
-            username: data[key].username,
-            content: data[key].content,
-          })
-        }) 
-        state.messages = messages;         
-      })
     })
 
     const goback = () => {
       router.push({ path : '../'})
      
     }
-    return {
-      inputUsername,      
+    return {           
       state,
       inputMessage,
       SendMessage,
@@ -154,6 +162,8 @@ export default {
       Logout,
       scrollToBottom,
       userInfo,
+      from_userpk,
+      from_userprofile
     }
   }
 };
@@ -300,7 +310,8 @@ export default {
     text-align: left;
   }
   .view.chat .chat-box .message.current-user {
-    margin-top: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     justify-content: flex-end;
     text-align: right;
   }
