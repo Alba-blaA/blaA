@@ -9,18 +9,19 @@
             <input type="text" placeholder="닉네임 검색" />
         </div>
         <div class="list">
-            <ul v-for="message in state.messages" :key = "message.key">
-                <li @click="gochat">
+            <ul>
+                <li @click="gochat(message.from_userpk)" v-for="message in state.messages" :key = "message.key">
                     <table cellpadding="0" cellspacing="0">
                         <tr>
                             <td class="profile_td">
                             <!--ProfileImg-->
                                 <img src="" />
+                                <div>{{ message.from_userpk }}</div>
                             </td>
                             <td class="chat_td">
                             <!--Email & Preview-->
                                 <div class="email">
-                                    {{ message['to_usernickname']}}
+                                    {{ message.username}}
                                 </div>
                                 <div class="chat_preview">
                                     {{ message.content }}
@@ -46,8 +47,12 @@ import axios from 'axios'
 
 export default {
   setup () {
-    const gochat = () => {
-      router.push({ name: 'chat'})
+    const gochat = (from_userpk) => {
+      router.push({ name: 'chat',
+      params: {
+        from_userpk: from_userpk
+      }}
+      )
     }
 
     const store = useStore();
@@ -67,7 +72,7 @@ export default {
           let messages = [];
                
           Object.keys(data).forEach(key =>       
-          {if (data[key].from_userpk == userInfo.user_pk) {            
+          {if (data[key].to_userpk == userInfo.user_pk) {            
               messages.push({
                 id: key,
                 username: data[key].username,
@@ -81,11 +86,11 @@ export default {
           }
           )          
           let arrayUniqueByKey = [...new Map(messages.map(item =>
-          [item['to_userpk'], item])).values()];
+          [item['from_userpk'], item])).values()];
           let token = sessionStorage.getItem("token");
 
           for (let index = 0; index < arrayUniqueByKey.length; index++)  {                         
-            axios.get(api.accounts.pkinfo(arrayUniqueByKey[index]['to_userpk']),
+            axios.get(api.accounts.pkinfo(arrayUniqueByKey[index]['from_userpk']),
             {
               headers : {"Authorization": `Bearer ${token}`}
             }).then(response => {                          
@@ -94,7 +99,8 @@ export default {
             })                 
                                    
           }
-          console.log(arrayUniqueByKey);
+          state.messages = arrayUniqueByKey;
+          console.log(state.messages);
         
           // state.messages = arrayUniqueByKey;  
           // console.log(state.messages[2]['to_usernickname']);      
