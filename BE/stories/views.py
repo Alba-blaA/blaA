@@ -239,4 +239,10 @@ def story_both_filter(request):
     # story = get_list_or_404(Story, category= request.user.category)
     serializer = StorySerializer(story, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])   
+def mystory_list(request):
+    story = Story.objects.filter(Q(user_pk=request.user))
+    serializer = StorySerializer(story, many=True)
+    return Response(serializer.data)
     

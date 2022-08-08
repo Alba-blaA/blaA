@@ -15,4 +15,5 @@ urlpatterns=[
     path('hashtag/<int:story_pk>/',views.hashtag_list_or_create),
     path('hashtag/ud/<int:hashtag_pk>/',views.hashtag_update_or_delete),
     path('like/<int:story_pk>/', views.like_story),
+    path('mystory/', views.mystory_list),
 ] 
