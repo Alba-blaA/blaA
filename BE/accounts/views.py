@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render,get_object_or_404
 from rest_framework.generics import GenericAPIView,CreateAPIView,UpdateAPIView,ListAPIView
 from accounts.models import User
 from rest_framework.decorators import api_view
-from accounts.serializers import  (RegisterSerializer,LoginSerializer, UserCrewSerializer, UserReviewSerializer,
+from accounts.serializers import  (RegisterSerializer,LoginSerializer, UserCrewSerializer, UserListSerializer, UserReviewSerializer,
                                    UserSerializer,ChangePasswordSerializer,
                                    NicknameUniqueCheckSerializer,EmailUniqueCheckSerializer)
 from rest_framework import response,status,permissions
@@ -30,6 +30,13 @@ class AuthUserAPIView(GenericAPIView) :
         serializers=RegisterSerializer(user)
         #유저의 정보를 가져옴 
         return Response({'user':serializers.data})
+class UserListAPIView(ListAPIView) :
+    # authentication_classes=[]
+    #인증된 유저만 (토큰 필요 )
+    permission_classes=(permissions.IsAuthenticated,)
+    #요청한 유저를 가져와서, serializer에 넣음 
+    serializer_class = UserListSerializer
+    queryset = User.objects.all()
 
 #회원가입 API (POST)
 class RegisterAPIView(GenericAPIView) :
@@ -134,12 +141,12 @@ def follow(request, user_pk):
             if person.followers.filter(pk=user.pk).exists():
                 person.followers.remove(user)
                 context = {
-                    'result' : f'{request.user.nickname}님이 {person.nickname}을 Follow'
+                    'result' : f'{request.user.nickname}님이 {person.nickname}을 Follow 취소'
                 }
             else:
                 person.followers.add(user)
                 context = {
-                    'result' : f'{request.user.nickname}님이 {person.nickname}을 Follow 취소'
+                    'result' : f'{request.user.nickname}님이 {person.nickname}을 Follow'
                 }
         return JsonResponse(context)
     return redirect('accounts:login')
