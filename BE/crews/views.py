@@ -129,17 +129,17 @@ class CrewArticleRetriveUpdateDeleteView(RetrieveUpdateDestroyAPIView) :
     lookup_field = 'crew_article_pk'
 
 
-    def retrieve(self, request, crew_id,crew_article_pk,*args, **kwargs):
+    def retrieve(self, request, crew_article_pk,*args, **kwargs):
         instance = self.get_object()
-        crew = Crew.objects.get(crew_pk=crew_id)
         crew_article = CrewArticle.objects.get(crew_article_pk=crew_article_pk)
+        crew = Crew.objects.get(crew_pk=crew_article.crew_id)
         if crew_article.crew_private and not (request.user in crew.crew_member.all() ):
             return Response({'message':"You do not have permission to view the article's ,try again"},status=status.HTTP_400_BAD_REQUEST)
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
 
-    def update(self, request,crew_id,crew_article_pk, *args, **kwargs):
+    def update(self, request,crew_article_pk, *args, **kwargs):
         article = CrewArticle.objects.get(crew_article_pk=crew_article_pk)
         
         if request.user != article.user :
@@ -149,7 +149,7 @@ class CrewArticleRetriveUpdateDeleteView(RetrieveUpdateDestroyAPIView) :
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer,crew_id)
+        self.perform_update(serializer,article.crew_id)
         
         if getattr(instance, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
@@ -182,8 +182,8 @@ class CrewCommentListCreateAPIView(ListCreateAPIView):
     queryset=CrewArticleComment.objects.all()
     lookup_field = 'crew_article_pk'
 
-    def list(self, request, crew_id,crew_article_pk,*args, **kwargs):
-        queryset = CrewArticleComment.objects.filter(article=crew_article_pk,crew=crew_id)
+    def list(self, request, crew_article_pk,*args, **kwargs):
+        queryset = CrewArticleComment.objects.filter(article=crew_article_pk)
 
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -193,12 +193,13 @@ class CrewCommentListCreateAPIView(ListCreateAPIView):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
-    def create(self, request, crew_id,crew_article_pk,*args, **kwargs):
-        crew = Crew.objects.get(crew_pk=crew_id)
+    def create(self, request, crew_article_pk,*args, **kwargs):
+        article = CrewArticle.objects.get(crew_article_pk=crew_article_pk)
+        crew = Crew.objects.get(crew_pk=article.crew_id)
         if request.user in crew.crew_member.all() :
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            self.perform_create(crew_id,crew_article_pk,serializer)
+            self.perform_create(crew.crew_pk,crew_article_pk,serializer)
             headers = self.get_success_headers(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         else :
@@ -217,7 +218,7 @@ class CrewCommentUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = CrewCommentSerializer
     queryset=CrewArticleComment.objects.all()
     lookup_field = 'crew_comment_pk'
-    def update(self, request,crew_id,crew_article_pk,crew_comment_pk, *args, **kwargs):
+    def update(self, request,crew_comment_pk, *args, **kwargs):
         comment = CrewArticleComment.objects.get(crew_comment_pk=crew_comment_pk)
         
         if request.user != comment.user :
@@ -227,8 +228,8 @@ class CrewCommentUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
-        print(crew_id)
-        self.perform_update(serializer,crew_id,crew_article_pk)
+        # print(crew_id)
+        self.perform_update(serializer,comment.crew_id,comment.article_id)
         
         if getattr(instance, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
