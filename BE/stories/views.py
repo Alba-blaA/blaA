@@ -22,15 +22,14 @@ def story_list_or_create(request):
     def create_story():
         story_picture = request.FILES.get('story_picture')
         story_title = request.data['story_title']
-        # print(story_picture)
-        # print(story_title)
-        # print(request.data)
-        # print(picture, title)
+        print(story_picture)
         data = {
             'story_picture': story_picture,
-            'story_title' : story_title            
+            'story_title' : story_title
         }
-        # data=request.data
+        
+        print(data)
+        
         serializer = StorySerializer(data=data)
         
         if serializer.is_valid(raise_exception=True):
