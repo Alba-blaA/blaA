@@ -225,6 +225,7 @@ class KaKaoLogin(View):
                 serializers.data['token'] = token[1]
                 print(serializers.data)
                 print(serializers.data['token'])
+                
                 return JsonResponse(serializers.data,status=status.HTTP_201_CREATED)
             return JsonResponse(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
 
