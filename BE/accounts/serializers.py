@@ -13,8 +13,8 @@ class RegisterSerializer(serializers.ModelSerializer) :
     followings = serializers.IntegerField(source = 'followings.count')
     class Meta() :
         model=User
-        fields= ('user_pk','email','password','tel','name','nickname','region','category','is_alba','token','followers','followings')
-        read_only_fields = ['followers','followings']
+        fields= ('user_pk','email','password','tel','name','nickname','region','category','is_alba','token','image','followers','followings')
+        read_only_fields = ['image','followers','followings']
     def create(create,validated_data) :
 
         return User.objects.create_user(**validated_data)

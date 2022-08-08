@@ -36,5 +36,10 @@ class CrewArticleImage(models.Model) :
         return str(self.article_picture)
 
 class CrewArticleComment(TrackingModel,models.Model) :
+    crew_comment_pk = models.AutoField(primary_key=True)
+    crew = models.ForeignKey(Crew,on_delete=models.CASCADE) 
     article =models.ForeignKey(CrewArticle,on_delete=models.CASCADE)
+    user =models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    comment_content = models.TextField()
+
     
