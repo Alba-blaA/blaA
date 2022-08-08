@@ -1,5 +1,5 @@
 <template>   
-  <div class="view login" v-if="state.username === '' || state.username === null">
+  <!-- <div class="view login" v-if="state.username === '' || state.username === null">
     <form class="login-form" @submit.prevent="Login">
       <div class="form-inner">
         <h1>Login to FireChat</h1>
@@ -13,8 +13,9 @@
           value="Login" />
       </div>
     </form>
-  </div>  
-  <div class="view chat" v-else>
+  </div>   -->
+  
+  <div class="view chat"  v-if="userInfo">
     <header>
       <button class="logout" @click="Logout">Logout</button>
       <h1>{{ state.username }}'s Chatting Room</h1>      
@@ -24,8 +25,7 @@
         v-for="message in state.messages" 
         :key="message.key" 
         :class="(message.username == state.username ? 'message current-user' : 'message')">
-        <div class="message-inner">
-          <div class="username">{{ message.username }}</div>
+        <div class="message-inner">          
           <div class="content">{{ message.content }}</div>
         </div>
       </div>
@@ -43,6 +43,10 @@
     </footer>
     
   </div>
+
+  <div v-else>
+    <h1>로그인이 필요합니다.</h1>    
+  </div>
 </template>
 
 <!-- 
@@ -57,12 +61,24 @@
     채팅창에 currentuser별로 채팅 css를 다르게 구성하여 보여준다. 
 -->
 <script>
-import { reactive, onMounted, ref } from 'vue';
+import { reactive, onMounted, ref, onUpdated } from 'vue';
 import db from '@/db'
 import router from '@/router';
+import { useStore } from "vuex";
+import { useRoute } from 'vue-router'
+
+
 export default {
   setup () {
-    const inputUsername = ref("");
+    const store = useStore(); 
+    const route = useRoute()
+    const userInfo = store.state.account.userInfo; 
+    const from_userpk = route.params.from_userpk 
+    const from_userprofile = ref("");
+    
+
+    console.log("from_userpk는",from_userpk)
+     
     const inputMessage = ref("");
     var scrollingElement = (document.scrollingElement || document.body);
 
@@ -75,15 +91,12 @@ export default {
       username: "",
       messages: [],
     })
-    const Login = () => {
-      if(inputUsername.value != "" || inputUsername.value != null){
-        state.username = inputUsername.value;
-        inputUsername.value = "";
-      }
-    }
+ 
+
     const Logout = () => {
-      state.username = "";
+      state.username = "익명";
     }
+
     const SendMessage = async () => {
       console.log("Sendmessage");
       const messageRef = db.database().ref("messages");
@@ -91,45 +104,66 @@ export default {
         console.log("nothing");
         return;
       }
+
       const message = {
         username: state.username,
         content: inputMessage.value,
+        from_userpk: userInfo.user_pk,
+        to_userpk: parseInt(from_userpk),
+        
       }
-      await messageRef.push(message);
+
+      await messageRef.push(message); 
       inputMessage.value = "";   
-      scrollToBottom()               
-    }
+      scrollToBottom()
+              
+    }    
+
+    onUpdated(() => {
+      scrollToBottom()
+    })
 
     onMounted(() => {
-      const messageRef = db.database().ref("messages");     
-      messageRef.on('value', snapshot => {
-        const data = snapshot.val();
-        let messages = [];
-
-        Object.keys(data).forEach(key => {
-          messages.push({
-            id: key,
-            username: data[key].username,
-            content: data[key].content,
-          })
-        }) 
-        state.messages = messages;         
-      })
+      console.log(userInfo);
+      if (userInfo) {
+        state.username = store.state.account.userInfo.nickname           
+        const messageRef = db.database().ref("messages");     
+        messageRef.on('value', snapshot => {
+          const data = snapshot.val();
+          let messages = []; 
+          Object.keys(data).forEach(key => {
+            if ((data[key].to_userpk == userInfo.user_pk && data[key].from_userpk == parseInt(from_userpk)) || 
+                  (data[key].to_userpk == parseInt(from_userpk) && data[key].from_userpk == userInfo.user_pk)) {
+              messages.push({
+                id: key,
+                username: data[key].username,
+                content: data[key].content,
+                to_userpk: data[key].to_userpk,
+                from_userpk: data[key].from_userpk,
+                to_userprofile: data[key].to_userprofile
+              })            
+            }
+          }) 
+          state.messages = messages;                 
+        })
+       
+      }
     })
 
     const goback = () => {
       router.push({ path : '../'})
      
     }
-    return {
-      inputUsername,
-      Login,
+    return {           
       state,
       inputMessage,
       SendMessage,
       goback,
       Logout,
       scrollToBottom,
+      userInfo,
+      from_userpk,
+      from_userprofile
     }
   }
 };
@@ -276,7 +310,8 @@ export default {
     text-align: left;
   }
   .view.chat .chat-box .message.current-user {
-    margin-top: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     justify-content: flex-end;
     text-align: right;
   }

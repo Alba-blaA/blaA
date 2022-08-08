@@ -22,15 +22,14 @@ def story_list_or_create(request):
     def create_story():
         story_picture = request.FILES.get('story_picture')
         story_title = request.data['story_title']
-        # print(story_picture)
-        # print(story_title)
-        # print(request.data)
-        # print(picture, title)
+        print(story_picture)
         data = {
             'story_picture': story_picture,
-            'story_title' : story_title            
+            'story_title' : story_title
         }
-        # data=request.data
+        
+        print(data)
+        
         serializer = StorySerializer(data=data)
         
         if serializer.is_valid(raise_exception=True):
@@ -247,6 +246,12 @@ def story_category_filter(request):
 def story_both_filter(request):
     story = Story.objects.filter(Q(region= request.user.region)&Q(category= request.user.category)&~Q(user_pk = request.user))
     # story = get_list_or_404(Story, category= request.user.category)
+    serializer = StorySerializer(story, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])   
+def mystory_list(request,user_pk):
+    story = Story.objects.filter(Q(user_pk=user_pk))
     serializer = StorySerializer(story, many=True)
     return Response(serializer.data)
     
