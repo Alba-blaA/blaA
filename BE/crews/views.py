@@ -2,7 +2,7 @@ import json
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView,ListAPIView,CreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
-from crews.models import Crew, CrewArticle, CrewArticleComment
+from crews.models import Crew, CrewArticle, CrewArticleComment, CrewSchedule
 from rest_framework import filters
 from django.http import Http404
 from django.db.models import Count 
@@ -12,8 +12,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 from crews.serializer.article import CrewArticleRUDSerializer, CrewArticleSerializer
 from crews.serializer.comment import CrewCommentSerializer
 from crews.serializer.crew import CrewCreateSerializer, CrewListSerializer, CrewSerializer
-
-
+from crews.serializer.schedule import CrewScheduleSerializer
+from rest_framework.decorators import api_view
+from django.db.models import Q
 
 #리뷰를 작성할 가게 검색 or 가게 추가
 class CrewListCreateAPIView(ListCreateAPIView):
@@ -250,3 +251,22 @@ class CrewCommentUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+@api_view(['GET', 'POST'])    
+def crew_schedule_list_or_create(request, crew_id):
+    
+    def schedule_list():
+        schedule = CrewSchedule.objects.filter(Q(crew_id=crew_id))
+        serializer = CrewScheduleSerializer(schedule, many = True)
+        return Response(serializer.data)
+    
+    def schedule_create():
+        serializer = CrewScheduleSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(crew_id=crew_id)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+    if request.method == 'GET':
+        return schedule_list()
+    elif request.method == 'POST':
+        return schedule_create()
