@@ -181,27 +181,49 @@ class NicknameUniqueCheck(CreateAPIView):
 
 
 
+# class UserCrewAPIView(ListAPIView) :
+#     serializer_class = UserCrewSerializer 
+#     lookup_field = 'user_pk'
+
+#     def get_queryset(self):
+#         print(self.request.user)
+#         return User.objects.filter(email=self.request.user)
+
+
 class UserCrewAPIView(ListAPIView) :
     serializer_class = UserCrewSerializer 
+    lookup_field = 'user_pk'
 
+    def list(self, request,user_pk, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset(user_pk))
 
-    def get_queryset(self):
-        print(self.request.user)
-        return User.objects.filter(email=self.request.user)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
 
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
-class UserCrewAPIView(ListAPIView) :
-    serializer_class = UserCrewSerializer 
-
-
-    def get_queryset(self):
+    def get_queryset(self,user_pk):
         # print(self.request.user)
-        return User.objects.filter(email=self.request.user)
+        return User.objects.filter(user_pk=user_pk)
 
 class UserReviewAPIView(ListAPIView) :
     serializer_class = UserReviewSerializer 
+    lookup_field = 'user_pk'
 
+    def list(self, request,user_pk, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset(user_pk))
 
-    def get_queryset(self):
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+        
+    def get_queryset(self,user_pk):
         # print(self.request.user)
-        return User.objects.filter(email=self.request.user)
+        return User.objects.filter(user_pk=user_pk)
