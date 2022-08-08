@@ -1,25 +1,47 @@
 <template>
-  <div v-if="reviews.length">
-    <div v-for="review in reviews" :key="review.id">
-      
-    </div>
+  <div class="store" @click="moveToDetail">
+    <img :src="review.image" alt="이미지">
+    <br>
+    <p>{{review.name}}</p>
   </div>
-  <p v-else>아직 리뷰가 없어요 ㅠㅠ</p>
+  
 </template>
 
 <script>
+import { useRouter } from 'vue-router'
 export default {
   props: {
-    reviews: {
+    review: {
       type: Array
     }
   },
   setup(props) {
-    console.log(props.reviews)
+    const router = useRouter()
+    
+    const moveToDetail = () => {
+      router.push({
+        name: 'detailReview',
+        params: {
+          store_pk: props.review.store_pk
+        }
+      })
+    }
+    return {
+      moveToDetail,
+    }
   }
 }
 </script>
 
-<style>
-
+<style scoped>
+.store {
+  cursor:pointer;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 10px;
+  background-color: rgb(202, 255, 197);
+}
+p {
+  margin: 0
+}
 </style>

@@ -5,6 +5,7 @@ export default {
   namespaced: true,
   state: {
     reviews: [],
+    review: [],
     searchStores: [],
     Token: sessionStorage.getItem('token')
   },
@@ -12,6 +13,9 @@ export default {
     GET_REVIEWS(state, payload){
       state.reviews = payload
     },
+    GET_REVIEW(state, payload){
+      state.review = payload
+    }
   },
   actions: {
     async getReviews({commit, state}) {
@@ -21,11 +25,22 @@ export default {
             Authorization: `Baerer ${state.Token}`
           }
         })
-        commit('GET_REVIEWS', res.data)
-        console.log(res)
+        commit('GET_REVIEWS', res.data.results)
       } catch(error) {
         console.error(error)
       } 
+    },
+    async getReview({commit, state}, store_pk) {
+      try {
+        const res = await axios.get(api.review.review(store_pk),{
+          headers: {
+            Authorizaiton: `Baerer ${state.Token}`
+          }
+        })
+        commit('GET_REVIEW', res.data)
+      } catch (error) {
+        console.error(error)
+      }
     },
     async makeReviews({state}, data) {
       const isStore = data.isStore
