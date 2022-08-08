@@ -141,12 +141,12 @@ def follow(request, user_pk):
             if person.followers.filter(pk=user.pk).exists():
                 person.followers.remove(user)
                 context = {
-                    'result' : f'{request.user.nickname}님이 {person.nickname}을 Follow'
+                    'result' : f'{request.user.nickname}님이 {person.nickname}을 Follow 취소'
                 }
             else:
                 person.followers.add(user)
                 context = {
-                    'result' : f'{request.user.nickname}님이 {person.nickname}을 Follow 취소'
+                    'result' : f'{request.user.nickname}님이 {person.nickname}을 Follow'
                 }
         return JsonResponse(context)
     return redirect('accounts:login')
