@@ -3,14 +3,15 @@ import Home from "@/App.vue";
 import Chat from "@/pages/chat/ChatView.vue";
 import Profile from "@/pages/profile/ProfileView.vue";
 import Login from "@/pages/account/LoginView.vue";
+import KakaoLogin from "@/pages/account/KakaoLoginView.vue";
 import Signup from "@/pages/account/signup/SignupView.vue";
 import SignupChoice from "@/pages/account/signup/FirstSignupView.vue";
 import SignupForm from "@/pages/account/signup/SecondSignupView.vue";
 import SignupCategory from "@/pages/account/signup/ThirdSignupView.vue";
 import Story from "@/pages/story/StoryView.vue";
-import StoryMain from '@/pages/story/StoryMain.vue'
-import StoryForm from '@/pages/story/StoryForm.vue'
-import StoryDetailView from '@/pages/story/StoryDetailView.vue'
+import StoryMain from "@/pages/story/StoryMain.vue";
+import StoryForm from "@/pages/story/StoryForm.vue";
+import StoryDetailView from "@/pages/story/StoryDetailView.vue";
 
 import Crew from "@/pages/crew/CrewView.vue";
 
@@ -19,6 +20,7 @@ import ReviewView from "@/pages/review/ReviewView.vue";
 import ReviewForm from "@/pages/review/ReviewForm.vue";
 import ReviewDetail from "@/pages/review/ReviewDetail.vue";
 import ReviewCommentDetail from "@/pages/review/ReviewCommentDetail.vue";
+import Chatroom from "@/pages/chat/ChatroomView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -32,6 +34,11 @@ const router = createRouter({
       path: "/login",
       name: "login",
       component: Login,
+    },
+    {
+      path: "/kakao",
+      name: "kakao",
+      component: KakaoLogin,
     },
     {
       path: "/signup",
@@ -62,21 +69,21 @@ const router = createRouter({
       component: StoryMain,
       children: [
         {
-          path: '',
-          name: 'story',
-          component: Story
+          path: "",
+          name: "story",
+          component: Story,
         },
         {
-          path: 'create',
-          name: 'createStory',
-          component: StoryForm
+          path: "create",
+          name: "createStory",
+          component: StoryForm,
         },
         {
-          path: ':story_pk',
-          name: 'detailStory',
-          component: StoryDetailView
+          path: ":story_pk",
+          name: "detailStory",
+          component: StoryDetailView,
         },
-      ]
+      ],
     },
     {
       path: "/crew",
@@ -89,14 +96,14 @@ const router = createRouter({
       component: ReviewMain,
       children: [
         {
-          path: '',
-          name: 'review',
-          component: ReviewView
+          path: "",
+          name: "review",
+          component: ReviewView,
         },
         {
-          path: 'create',
-          name: 'createReview',
-          component: ReviewForm
+          path: "create",
+          name: "createReview",
+          component: ReviewForm,
         },
         {
           path: ':store_pk/:store_name',
@@ -104,11 +111,11 @@ const router = createRouter({
           component: ReviewDetail
         },
         {
-          path: ':store_pk/:review_pk',
-          name: 'detailComment',
-          component: ReviewCommentDetail
+          path: ":store_pk/:review_pk",
+          name: "detailComment",
+          component: ReviewCommentDetail,
         },
-      ]
+      ],
     },
     {
       path: "/chat",
@@ -119,6 +126,11 @@ const router = createRouter({
       path: "/profile",
       name: "profile",
       component: Profile,
+    },
+    {
+      path: "/chatroom",
+      name: "chatroom",
+      component: Chatroom,
     },
   ],
 });
