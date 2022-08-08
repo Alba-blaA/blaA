@@ -30,8 +30,9 @@
 </template>
 
 <script>
-import {ref} from 'vue'
+import { ref} from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 import axios from 'axios'
 import api from '@/api/api'
 import HashTagForm from '@/components/story/HashTagForm.vue'
@@ -41,13 +42,14 @@ export default {
     HashTagForm
   },
   setup() {
+    const store = useStore()
     const router = useRouter()
     const story_picture = ref(null)
     const story_title = ref('')
     const isPictureVaild = ref(false)
     const isTitleVaild = ref(false)
     const image_url = ref('')
-    
+
     // 업로드 된 이미지를 미리 확인하는 함수
     function previewFile(e) {
       const preview = document.querySelector('.img_test')
@@ -98,7 +100,7 @@ export default {
         // })
         console.log(form)
         try {
-          const token = process.env.VUE_APP_TOKEN
+          const token = store.state.story.Token
           const res = await axios.post(api.story.story(), form
             , {
             headers: {

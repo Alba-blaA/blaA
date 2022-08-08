@@ -4,7 +4,7 @@ import api from '@/api/api'
 export default {
   namespaced: true,
   state: {
-    Token: process.env.VUE_APP_TOKEN,
+    Token: sessionStorage.getItem('token'),
     stories: [],
     images: [],
     comments: [],
@@ -36,7 +36,7 @@ export default {
         // 후에 교체 예정
         const res = await axios.get(api.story.story(), {
           headers: {
-            Authorization: `Baerer ${state.Token}`
+            Authorization: `Bearer ${state.Token}`
           }
         })
         commit('GET_IMAGES',res.data)
@@ -49,7 +49,7 @@ export default {
       try {
         const res = await axios.get(api.story.detail(story_pk), {
           headers: {
-            Authorization: `Baerer ${state.Token}`
+            Authorization: `Bearer ${state.Token}`
           }
         })
         commit('GET_CURRENT_STORY', res.data)
@@ -61,7 +61,7 @@ export default {
       try {
         await axios.delete(api.story.detail(story_pk), {
           headers: {
-            Authorization: `Baerar ${state.Token}`
+            Authorization: `Bearer ${state.Token}`
           }
         })
         commit('DELETE_CURRENT_STORY')
@@ -74,7 +74,7 @@ export default {
       try {
         const res = await axios.get(api.story.comment(story_pk), {
           headers: {
-            Authorization: `Baerer ${state.Token}`
+            Authorization: `Bearer ${state.Token}`
           }
         })
         commit('GET_COMMENT', res.data)
@@ -92,7 +92,7 @@ export default {
           },
           {
             headers: {
-              Authorization: `Baerer ${state.Token}`
+              Authorization: `Bearer ${state.Token}`
             }
           })
         // 작성자, 내용, 날짜, 작성자 프로필을 요청하여 추가적으로 입력
