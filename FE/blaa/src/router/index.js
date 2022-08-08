@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/App.vue";
 import Chat from "@/pages/chat/ChatView.vue";
-import Profile from "@/pages/profile/ProfileView.vue";
+import MyProfile from "@/pages/profile/ProfileView.vue";
 import Login from "@/pages/account/LoginView.vue";
 import KakaoLogin from "@/pages/account/KakaoLoginView.vue";
 import Signup from "@/pages/account/signup/SignupView.vue";
@@ -22,6 +22,10 @@ import ReviewDetail from "@/pages/review/ReviewDetail.vue";
 import ReviewCommentDetail from "@/pages/review/ReviewCommentDetail.vue";
 import Chatroom from "@/pages/chat/ChatroomView.vue";
 import SearchAllUsers from "@/pages/crew/SearchAllUsers.vue"
+
+import ProfileMain from "@/pages/profile/ProfileMainView.vue";
+import UpdateUserInfo from "@/pages/profile/UpdateUserInfoView.vue";
+import MyStory from "@/pages/profile/MyStoryView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -125,8 +129,25 @@ const router = createRouter({
     },
     {
       path: "/profile",
-      name: "profile",
-      component: Profile,
+      name: "",
+      component: ProfileMain,
+      children: [
+        {
+          path: "",
+          name: "Profile",
+          component: MyProfile,
+        },
+        {
+          path: "update/:user_pk",
+          name: "updateInfo",
+          component: UpdateUserInfo,
+        },
+        {
+          path: "mystory/:user_pk",
+          name: "mystory",
+          component: MyStory,
+        }
+      ]
     },
     {
       path: "/chatroom",
