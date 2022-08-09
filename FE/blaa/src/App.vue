@@ -1,21 +1,23 @@
 <template>
-  <h1>메인페이지</h1>
-  <div v-if="userInfo">
-    <p>{{ userInfo.nickname }} 님</p>
-    <button @click.prevent="logout">로그아웃</button>
-    <button @click.prevent = "gochatroom">채팅하러가기</button>
-    <button @click.prevent = "gostory">오출완가기</button>
-    <button @click.prevent = "gosearch">유저정보검색하기</button>
+  <div>
+    <h1>메인페이지</h1>
+    <div v-if="userInfo">
+      <p>{{ userInfo.nickname }} 님</p>
+      <button @click.prevent="logout">로그아웃</button>
+      <button @click.prevent="gochat">채팅하러가기</button>
+      <button @click.prevent="gostory">오출완가기</button>
+      <button @click.prevent="gocrew">크루가기</button>
+    </div>
+    <div v-else>
+      <p>로그인이 필요합니다.</p>
+      <button @click="login">로그인</button>
+      &nbsp;
+      <button @click="kakaoLogin">카카오 로그인</button>
+      &nbsp;
+      <button @click="register">회원가입</button>
+    </div>
+    <router-view />
   </div>
-  <div v-else>
-    <p>로그인이 필요합니다.</p>
-    <button @click="login">로그인</button>
-    &nbsp;
-    <button @click="kakaoLogin">카카오 로그인</button>
-    &nbsp;
-    <button @click="register">회원가입</button>
-  </div>
-  <router-view />
 </template>
 
 <script>
@@ -47,16 +49,20 @@ export default {
     };
 
     const gochatroom = () => {
-      router.push({ path: "/chatroom"});
+      router.push({ path: "/chatroom" });
     };
 
     const gostory = () => {
-      router.push({ path: "/story"});
+      router.push({ path: "/story" });
     };
 
     const gosearch = () => {
-      router.push({path : "/searchusers"})
-    }
+      router.push({ path: "/searchusers" });
+    };
+
+    const gocrew = () => {
+      router.push({ path: "/crew" });
+    };
 
     const kakaoLogin = () => {
       const params = {
@@ -87,7 +93,8 @@ export default {
       register,
       gochatroom,
       gostory,
-      gosearch
+      gosearch,
+      gocrew,
     };
   },
 };

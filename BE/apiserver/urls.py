@@ -47,7 +47,7 @@ urlpatterns = [
     path('api/v1/categorys/',include('categorys.urls')),
     path('api/v1/reviews/',include('reviews.urls')),
     path('api/v1/stories/',include('stories.urls')),
-    path('account/',include('accounts.urls')),
+    # path('account/',include('accounts.urls')),
     path('api/v1/blacklist/', include('blacklists.urls')),
     path('api/v1/crews/',include('crews.urls')),
     #--------------------swagger--------------
