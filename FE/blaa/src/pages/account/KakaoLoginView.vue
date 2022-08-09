@@ -31,17 +31,17 @@ export default {
       cookies.set("access-token", data.access_token, "1d");
       cookies.set("refresh-token", data.refresh_token, "1d");
       await setUserInfo();
-      alert("카카오 로그인 완료!");
+
+      const emailCheck = { email: store.state.account.kakaoUserInfo.email };
 
       axios
-        .post(
-          api.accounts.emailCheck(),
-          store.state.account.kakaoUserInfo.email
-        )
+        .post(api.accounts.emailCheck(), emailCheck)
         .then(() => {
+          alert("회원가입 페이지로 이동");
           router.push({ name: "choice" });
         })
         .catch(() => {
+          alert("카카오 로그인 완료!");
           router.replace("/");
         });
     };
@@ -53,7 +53,8 @@ export default {
         name: data.kakao_account.profile.nickname,
         image: data.kakao_account.profile.profile_image_url,
       };
-      store.commit("SET_KAKAO_USER_INFO", kakaoUserInfo);
+      store.commit("account/KAKAO_LOGIN", true);
+      store.commit("account/SET_KAKAO_USER_INFO", kakaoUserInfo);
     };
 
     if (route.query.code) {
