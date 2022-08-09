@@ -21,11 +21,12 @@ import ReviewForm from "@/pages/review/ReviewForm.vue";
 import ReviewDetail from "@/pages/review/ReviewDetail.vue";
 import ReviewCommentDetail from "@/pages/review/ReviewCommentDetail.vue";
 import Chatroom from "@/pages/chat/ChatroomView.vue";
-import SearchAllUsers from "@/pages/crew/SearchAllUsers.vue"
+import SearchAllUsers from "@/pages/crew/SearchAllUsers.vue";
 
 import ProfileMain from "@/pages/profile/ProfileMainView.vue";
 import UpdateUserInfo from "@/pages/profile/UpdateUserInfoView.vue";
 import MyStory from "@/pages/profile/MyStoryView.vue";
+import MyFollow from "@/pages/profile/MyFollowView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -111,9 +112,9 @@ const router = createRouter({
           component: ReviewForm,
         },
         {
-          path: ':store_pk/:store_name',
-          name: 'detailReview',
-          component: ReviewDetail
+          path: ":store_pk/:store_name",
+          name: "detailReview",
+          component: ReviewDetail,
         },
         {
           path: ":store_pk/:review_pk",
@@ -143,11 +144,21 @@ const router = createRouter({
           component: UpdateUserInfo,
         },
         {
+          path: "follower/:user_pk",
+          name: "myfollower",
+          component: MyFollow,
+        },
+        {
+          path: "following/:user_pk",
+          name: "myfollowing",
+          component: MyFollow,
+        },
+        {
           path: "mystory/:user_pk",
           name: "mystory",
           component: MyStory,
-        }
-      ]
+        },
+      ],
     },
     {
       path: "/chatroom",
@@ -157,8 +168,8 @@ const router = createRouter({
     {
       path: "/searchusers",
       name: "searchusers",
-      component: SearchAllUsers
-    }
+      component: SearchAllUsers,
+    },
   ],
 });
 

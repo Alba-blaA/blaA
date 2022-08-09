@@ -53,7 +53,7 @@ export default {
         name: data.kakao_account.profile.nickname,
         image: data.kakao_account.profile.profile_image_url,
       };
-      store.commit("SET_KAKAO_USER_INFO", kakaoUserInfo);
+      store.commit("account/SET_KAKAO_USER_INFO", kakaoUserInfo);
     };
 
     if (route.query.code) {
