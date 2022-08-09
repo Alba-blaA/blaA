@@ -2,20 +2,20 @@
   <div>
     <h2>글 목록</h2>
     <table>
-      <board-item v-for="(article, i) in articles.results" :key="i" v-bind="article" />
+      <article-list-item v-for="(article, i) in articles.results" :key="i" v-bind="article" />
     </table>
     <button @click="moveRegist">글쓰기</button>
   </div>
 </template>
 
 <script>
-import BoardItem from "@/components/crew/article/BoardItem.vue";
+import ArticleListItem from "@/components/crew/article/ArticleListItem.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { ref } from "vue";
 export default {
   components: {
-    BoardItem,
+    ArticleListItem,
   },
   setup() {
     const store = useStore();

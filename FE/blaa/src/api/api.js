@@ -9,7 +9,7 @@ const STORY = "stories/";
 const COMMENT = "comment/";
 const REVIEW = "reviews/";
 const STORE = "store/";
-const CREW = "crew/";
+const CREW = "crews/";
 // const CHAT = 'chat/'
 
 export default {
@@ -31,7 +31,7 @@ export default {
     crewInfo: (crew_pk) => HOST + CREW + crew_pk,
     articles: (crew_pk) => HOST + CREW + "article/" + crew_pk + "/",
     article: (crew_article_pk) => HOST + CREW + "article/edit/" + crew_article_pk + "/",
-    myCrew: (user_pk) => HOST + CREW + user_pk + "/",
+    // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
   },
   categorys: {
     job: () => HOST + CATEGORYS + "job/",

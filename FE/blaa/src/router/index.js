@@ -135,27 +135,27 @@ const router = createRouter({
           path: ":crew_pk",
           name: "crewboard",
           redirect: { name: "articlelist" },
-          component: () => import("@/components/crew/crewBoard.vue"),
+          component: () => import("@/components/crew/CrewBoard.vue"),
           children: [
             {
               path: "list",
               name: "articlelist",
-              component: () => import("@/components/crew/article/BoardList.vue"),
+              component: () => import("@/components/crew/article/ArticleList.vue"),
             },
             {
               path: "regist",
               name: "articleregist",
-              component: () => import("@/components/crew/article/BoardRegist.vue"),
+              component: () => import("@/components/crew/article/ArticleRegist.vue"),
             },
             {
               path: ":crew_article_pk",
               name: "articledetail",
-              component: () => import("@/components/crew/article/BoardDetail.vue"),
+              component: () => import("@/components/crew/article/ArticleDetail.vue"),
             },
             {
               path: ":crew_article_pk",
               name: "articlemodify",
-              component: () => import("@/components/crew/article/BoardModify.vue"),
+              component: () => import("@/components/crew/article/ArticleModify.vue"),
             },
             {
               path: ":crew_article_pk",
