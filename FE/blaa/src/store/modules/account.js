@@ -1,7 +1,10 @@
 // import jwt_decode from "jwt-decode";
 import { login, findByToken } from "@/hooks/user.js";
+import { useCookies } from "vue3-cookies";
 import axios from "axios";
 import api from "@/api/api.js";
+
+const { cookies } = useCookies();
 
 const accountStore = {
   namespaced: true,
