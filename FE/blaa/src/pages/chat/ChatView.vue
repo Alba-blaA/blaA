@@ -76,6 +76,7 @@ export default {
     const from_userpk = route.params.from_userpk 
     const from_userprofile = ref("");
     
+    
 
     console.log("from_userpk는",from_userpk)
      
@@ -109,8 +110,7 @@ export default {
         username: state.username,
         content: inputMessage.value,
         from_userpk: userInfo.user_pk,
-        to_userpk: parseInt(from_userpk),
-        
+        to_userpk: parseInt(from_userpk),        
       }
 
       await messageRef.push(message); 

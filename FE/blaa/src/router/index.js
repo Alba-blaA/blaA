@@ -21,7 +21,7 @@ import ReviewForm from "@/pages/review/ReviewForm.vue";
 import ReviewDetail from "@/pages/review/ReviewDetail.vue";
 import ReviewCommentDetail from "@/pages/review/ReviewCommentDetail.vue";
 import Chatroom from "@/pages/chat/ChatroomView.vue";
-import SearchAllUsers from "@/pages/crew/SearchAllUsers.vue"
+import SearchAllUsers from "@/pages/crew/SearchAllUsersView.vue"
 
 import ProfileMain from "@/pages/profile/ProfileMainView.vue";
 import UpdateUserInfo from "@/pages/profile/UpdateUserInfoView.vue";

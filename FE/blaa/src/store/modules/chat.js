@@ -8,13 +8,14 @@ export default {
     messages : [],
     to_userProfile : "",
     from_userProfile : "",
-    allusers : ["hi"],
-
-
+    allusers : [],
   },
   mutations: {
     GET_TOPROFILE(state, userpk) {
       state.to_userProfile = userpk
+    },
+    GET_ALLUSERS(state, payload) {
+      state.allusers = payload
     },
   },
   actions: {
@@ -30,7 +31,21 @@ export default {
         // 에러 발생시
         console.log(error)
       }
-    }
+    },
+
+    async getAllUsers({commit, state}) {
+      try {        
+        const res = await axios.get(api.accounts.searchallusers(), {
+          headers: {
+            Authorization: `Bearer ${state.token}`
+          }
+        })
+        commit('GET_ALLUSERS',res.data)
+      } catch(error) {
+        // 에러 발생시
+        console.log(error)
+      }
+    },
 
   },
   getters: {},

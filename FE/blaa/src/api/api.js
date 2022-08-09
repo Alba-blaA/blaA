@@ -28,6 +28,7 @@ export default {
     // username으로 프로필 제공
     profile: (username) => HOST + ACCOUNTS + "profile/" + username,
     myInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
+    searchallusers: () => HOST + ACCOUNTS + "users/"
   },
 
   categorys: {
