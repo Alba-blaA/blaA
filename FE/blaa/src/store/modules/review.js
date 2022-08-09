@@ -15,6 +15,12 @@ export default {
     },
     GET_REVIEW(state, payload){
       state.review = payload
+    },
+    LIKE_ONE_REIVEW(state, payload){
+      const review_pk = payload.splice(0, 1)
+      // 해당값으로 리뷰를 갱신
+      state.review[review_pk-1].like_users = payload.like_users
+      state.review[review_pk-1].like_user_count = payload.like_user_count
     }
   },
   actions: {
@@ -39,6 +45,23 @@ export default {
         })
         commit('GET_REVIEW', res.data)
       } catch (error) {
+        console.error(error)
+      }
+    },
+    async likeOneReview({commit, state}, review_pk) {
+      try {
+        const res = await axios.post(api.review.like(review_pk), {
+          headers: {
+            Authorization: `Bearer ${state.Token}`
+          }
+        })
+        const data = {
+          review_pk: review_pk,
+          like_users: res.data.like_users,
+          like_user_count: res.data.like_user_count
+        }
+        commit('LIKE_ONE_REIVEW', data)
+      } catch(error) {
         console.error(error)
       }
     },

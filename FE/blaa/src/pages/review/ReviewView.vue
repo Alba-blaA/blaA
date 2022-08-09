@@ -3,6 +3,7 @@
   <router-link class="btn btn-primary" :to="{name: 'createReview'}">리뷰 생성</router-link>
   <div v-if="reviews"> 
     <ReviewList v-for="review in reviews" :key="review.store_pk" :review="review"/>
+    <PaginationBar :currentPage="currentPage" :numberOfPages="numberOfPages" @click="searchReview"/>
   </div>
   <p v-else>아직 리뷰가 없어요 ㅠㅠ</p>
   
@@ -11,26 +12,42 @@
 
 <script>
 import { useStore } from 'vuex'
-import { computed, ref } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
 import ReviewList from '@/components/review/ReviewList.vue'
+import PaginationBar from '@/components/review/PaginationBar.vue'
 
 export default {
   components: {
-    ReviewList
+    ReviewList,
+    PaginationBar
   },
   setup() {
     const store = useStore()
     const reviews = ref([])
+    const currentPage = ref(1)
+    const total = ref(0)
 
-    const start = async () => {
+    onBeforeMount(async() => {
       await store.dispatch('review/getReviews')
-        reviews.value = store.state.review.reviews
+      // 페이지네이션 처리      
+      reviews.value = store.state.review.reviews.slice((currentPage.value - 1)* 5 + 1, currentPage.value*5 + 1)
+      total.value = store.state.review.reviews.length
+      console.log(total.value)
+    })
+
+    // const numberOfPages = computed(() => {
+    //   console.log(total.value)
+    //   return Math.ceil(total.value / 5)
+    // })
+
+    const searchReview = (page = currentPage.value) => {
+      reviews.value = store.state.review.reviews.slice((page - 1)* 5 + 1, page * 5)
     }
 
-    start()
-
     return {
-      reviews
+      reviews,
+      searchReview,
+      // numberOfPages
     }
   }
 }

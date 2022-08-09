@@ -112,7 +112,6 @@ export default {
           isStore.value = res.data.count ? true : false
           searchList.value = res.data.results
           totalCount.value = res.data.count
-          // 처음 찾았을 떄 없으면
         } catch (error) {
             console.error(error)
         }
