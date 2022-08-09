@@ -13,7 +13,7 @@ from crews.serializer.comment import CrewCommentSerializer
 from crews.serializer.crew import CrewCreateSerializer, CrewInviteListSerializer, CrewListSerializer, CrewSerializer, UserInviteListSerializer
 from rest_framework.decorators import api_view
 from django.db.models import Q
-
+from django.http import HttpResponse, JsonResponse
 #리뷰를 작성할 가게 검색 or 가게 추가
 class CrewListCreateAPIView(ListCreateAPIView):
     # authentication_classes=[]
@@ -353,41 +353,94 @@ def CrewSignView(request,crew_pk) :
 
     return Response({'message':" You have successfully applied for membership."},status=status.HTTP_201_CREATED)
 
+
+
+
 #크루에 초대한 유저 리스트
 #유저의 가입승인을 기다리고 있는 리스트
-@api_view(['GET','POST'])
+#크루 가입신청 승인 
+@api_view(['GET'])
 def InviteSignListCrewView(request,crew_pk) :
-    def InviteList() :
-        type = request.GET.get('type', None)
-        crew = Crew.objects.get(crew_pk=crew_pk)
-        if request.user != crew.crew_leader :
-            return Response({'message':"The request is not authorized."},status=status.HTTP_401_UNAUTHORIZED)   
+    crew = Crew.objects.get(crew_pk=crew_pk)
+    user = request.user
+    if request.user != crew.crew_leader :
+        return Response({'message':"The request is not authorized."},status=status.HTTP_401_UNAUTHORIZED)   
 
-        #크루에 초대한 유저 리스트
-        if type == 'invite' :
-            query = CrewInvite.objects.filter(crew=crew,user_accept=False)
-        
-        #크루에 가입신청한 유저 리스트
-        elif type == 'sign' :
-            query = CrewInvite.objects.filter(crew=crew,user_accept=True)
+    type = request.GET.get('type', None)
 
-        serializer = CrewInviteListSerializer(query, many = True)
-        return Response(serializer.data)
-    if request.method == 'GET' :
-        return InviteList()
+    #크루에 초대한 유저 리스트
+    if type == 'invite' :
+        query = CrewInvite.objects.filter(crew=crew,user_accept=False)
+    
+    #크루에 가입신청한 유저 리스트
+    elif type == 'sign' :
+        query = CrewInvite.objects.filter(crew=crew,user_accept=True)
 
+    serializer = CrewInviteListSerializer(query, many = True)
+    return Response(serializer.data)
+
+
+
+#크루장이 유저의 가입 요청 승인하기
+@api_view(['POST'])
+def AcceptUserView(request,crew_pk,user_pk) :
+    crew = Crew.objects.get(crew_pk=crew_pk)
+    user = User.objects.get(user_pk=user_pk)
+
+    #크루리더가 아니면 리턴 
+    if request.user != crew.crew_leader :
+        return Response({'message':"The request is not authorized."},status=status.HTTP_401_UNAUTHORIZED)   
+
+    #이미 크루에 있는 유저면 리턴 
+    if crew.crew_member.filter(user_pk=user.user_pk).exists() :
+
+        return JsonResponse({'message':"You are already a registered user."},status=status.HTTP_400_BAD_REQUEST)
+
+    #둘다 아니면 크루에 추가 
+    crew.crew_member.add(user) 
+    obj = CrewInvite.objects.get(crew=crew,user=user) 
+    obj.delete() 
+    data = {
+        'message':f"{user.nickname}님이 {crew.crew_name}에 가입하셨습니다."
+    }
+    return JsonResponse(data)
+
+
+#유저에게 가입신청 보낸 크루 리스트
+#유저가 가입신청한 크루 리스트 
 @api_view(['GET'])
 def InviteSignListUserView(request) :
+    user = request.user
 
     type = request.GET.get('type', None)
     #유저에게 가입신청 보낸 크루 리스트
     if type == 'invite' :
-        query = CrewInvite.objects.filter(user=request.user,user_accept=False)
+        query = CrewInvite.objects.filter(user=user,user_accept=False)
     
     #유저가 가입신청한 크루 리스트 
     elif type == 'sign' :
-        query = CrewInvite.objects.filter(user=request.user,user_accept=True)
+        query = CrewInvite.objects.filter(user=user,user_accept=True)
 
     serializer = UserInviteListSerializer(query, many = True)
     return Response(serializer.data)
 
+
+#유저가 크루 초대 승인하기 
+@api_view(['POST'])
+def AcceptCrewView(request,crew_pk) :
+    crew = Crew.objects.get(crew_pk=crew_pk)
+    user = request.user
+
+    #크루에 이미 가입되어 있으면 
+    if crew.crew_member.filter(user_pk=user.user_pk).exists() :
+        print('-------------------error--------------------')
+        return JsonResponse({'message':"You are already a member of the crew."},status=status.HTTP_400_BAD_REQUEST)
+
+    #아니면 크루 가입
+    crew.crew_member.add(user) 
+    obj = CrewInvite.objects.get(crew=crew,user=user) 
+    obj.delete() 
+    data = {
+        'message':f"{user.nickname}님이 {crew.crew_name}에 가입하셨습니다."
+    }
+    return JsonResponse(data)
