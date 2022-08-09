@@ -258,7 +258,6 @@ class KakaoSignInCallbackView(View):
     def get(self, request):
 
         try:
-            print(request.GET)
             code = request.GET.get("code")                                       
             client_id = "0f5982ee3aa76733f951e5add93878c1"
             redirect_uri = "http://127.0.0.1:8000/account/sign-in/kakao/callback"
@@ -269,14 +268,13 @@ class KakaoSignInCallbackView(View):
             )
 
             token_json = token_request.json()                                    
-            print(token_json)
+
             error = token_json.get("error",None)
 
             if error is not None :
                 return JsonResponse({"message": "INVALID_CODE"}, status = 400)
 
             access_token = token_json.get("access_token")
-            print(access_token)
             
                                     
 

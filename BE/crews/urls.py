@@ -12,4 +12,8 @@ urlpatterns=[
     path('schedule/<int:crew_id>/', views.crew_schedule_list_or_create),
     path('schedule/ud/<int:crew_schedule_pk>/', views.crew_schedule_update_or_delete),
     path('schedule/work/<int:crew_id>/<str:schedule>/', views.crew_schedule_work_list),
+    path('invite/<int:crew_pk>/<int:user_pk>/', views.CrewInviteView),
+    path('sign/<int:crew_pk>/', views.CrewSignView),
+    path('invitelist/<int:crew_pk>/', views.InviteSignListCrewView),
+    path('signlist/', views.InviteSignListUserView),
     ] 
