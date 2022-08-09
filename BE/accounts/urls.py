@@ -13,7 +13,7 @@ urlpatterns=[
     path('change_password/<int:user_pk>/', views.ChangePasswordView.as_view(), name='auth_change_password'),
     path('sign-in/kakao/', views.KakaoSignInView.as_view()),
     path('sign-in/kakao/callback/', views.KakaoSignInCallbackView.as_view()),
-    path('kakao/', views.KaKaoLogin),
+    path('kakao/', views.KakaoLogin.as_view()),
     path('unique/email/', views.EmailUniqueCheck.as_view(), name='uniquecheck_email'),
     path('unique/nickname/', views.NicknameUniqueCheck.as_view(), name='uniquecheck_nickname'),
     path('crew/<int:user_pk>/', views.UserCrewAPIView.as_view(), name='user_crew'),
