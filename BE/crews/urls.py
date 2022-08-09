@@ -11,5 +11,5 @@ urlpatterns=[
     path('comment/update/<int:crew_comment_pk>/',views.CrewCommentUpdateDeleteAPIView.as_view(),name='crew_article_detail'),
     path('schedule/<int:crew_id>/', views.crew_schedule_list_or_create),
     path('schedule/ud/<int:crew_schedule_pk>/', views.crew_schedule_update_or_delete),
-    path('schedule/work/<str:schedule>/', views.crew_schedule_work_list),
-] 
+    path('schedule/work/<int:crew_id>/<str:schedule>/', views.crew_schedule_work_list),
+    ] 

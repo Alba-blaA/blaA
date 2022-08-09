@@ -2,18 +2,15 @@ import json
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView,ListAPIView,CreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
-from crews.serializer.schedule import CrewScheduleListSerializer
+from crews.serializer.schedule import CrewScheduleListSerializer,UserScheduleSerializer,CrewScheduleSerializer
 from crews.models import Crew, CrewArticle, CrewArticleComment, CrewSchedule
 from rest_framework import filters
-from django.http import Http404
-from django.db.models import Count 
-from django.db.models import Sum
+from accounts.models import User
 from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 from crews.serializer.article import CrewArticleRUDSerializer, CrewArticleSerializer
 from crews.serializer.comment import CrewCommentSerializer
 from crews.serializer.crew import CrewCreateSerializer, CrewListSerializer, CrewSerializer
-from crews.serializer.schedule import CrewScheduleSerializer
 from rest_framework.decorators import api_view
 from django.db.models import Q
 
@@ -296,10 +293,41 @@ def crew_schedule_update_or_delete(request, crew_schedule_pk):
 
 
 @api_view(['GET'])
-def crew_schedule_work_list(request, schedule):
+def crew_schedule_work_list(request,crew_id, schedule):
+    # print(crew.crew_member.crewschdule_set.all())
 
-    schedule = CrewSchedule.objects.filter(crew_day=schedule)
+    # crew_user = User.objects.filter(Q(crews=crew_id))
+    # print(crew_user)
+    # print(CrewSchedule.objects.filter(Q(crew_day=schedule)&Q(crew_id=crew_id)))
 
-    serializer = CrewScheduleSerializer(schedule, many = True)
+    # # #크루멤버이면서 스케쥴이 없는 사람 
+    # # print('crew and not schedule')
+    # # print(crew.crewschedule_set.filter(~Q(crew_day=schedule)) and crew.crew_member.all() )
+    # # print('crew and schedule')
+    # # print(crew.crewschedule_set.filter(Q(crew_day=schedule)) and crew.crew_member.all() )
+    
+    # #해당 날짜 크루 스케줄 조회 
+    # print(crew.crewschedule_set.filter(~Q(crew_day=schedule)))
+    # print(CrewSchedule.objects.filter(crew_day=schedule))
+    # print(schedule)
+    # schedule = CrewSchedule.objects.filter(crew_day=schedule)
+
+
+    work = request.GET.get('work', None)
+
+    crew = Crew.objects.get(crew_pk=crew_id)
+    
+    schedule = crew.crewschedule_set.filter(crew_day=schedule)
+
+    if int(work) :
+        serializer = CrewScheduleSerializer(schedule, many = True)
+    else : 
+        schedule_user = []
+        for s in schedule :
+            schedule_user.append(s.user.user_pk)
+        un_scedule_user = User.objects.filter(Q(crews=crew_id)&~Q(user_pk__in = schedule_user))
+        serializer = UserScheduleSerializer(un_scedule_user,many=True)
+
     return Response(serializer.data,status=status.HTTP_200_OK)
     
+
