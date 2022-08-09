@@ -1,13 +1,13 @@
 <template>
   <div>
-    <p>business crew 등록</p>
+    <p>Business crew 등록</p>
     <div>
       <label for="crew_name">크루명</label><br />
-      <input type="text" id="crew_name" name="crew_name" v-model="crew_name" ref="crew_name" /><br />
-      <label for="crew_explain">내용</label><br />
-      <textarea id="crew_explain" name="crew_explain" v-model="crew_explain" ref="crew_explain" cols="35" rows="5"></textarea><br />
-      <label for="crew_img">크루 이미지</label><br />
-      <input multiple @change="onInputImage()" ref="crew_img" type="file" />
+      <input type="text" id="crew_name" name="crew_name" v-model="crewData.crew_name" /><br />
+      <label for="crew_explain">크루 설명</label><br />
+      <textarea id="crew_explain" name="crew_explain" v-model="crewData.crew_explain" cols="35" rows="5"></textarea><br />
+      <label for="crew_region">크루 지역</label><br />
+      <input type="text" id="crew_region" name="crew_region" v-model="crewData.crew_region" /><br />
       <button @click="checkValue">등록</button>
       <button @click="moveList">목록</button>
     </div>
@@ -15,37 +15,53 @@
 </template>
 
 <script>
-import axios from "axios";
-const url = "http://127.0.0.1:8000/api/v1/";
-const auth = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNjY0ODQ4OTgxfQ.JBHgq3KkxPNASpcEfekXs8DVHPBftcTHgj91GZOrKtg";
+import { reactive } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 export default {
-  data() {
-    return {
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    const crewData = reactive({
       crew_name: "",
       crew_explain: "",
-      crew_img: "",
+      crew_region: "",
+      is_business: true,
+    });
+
+    const checkValue = () => {
+      let error = true;
+      let msg = "";
+      console.log("크루명: " + crewData.crew_name);
+      console.log("isbusiness: ", crewData.is_business);
+      !crewData.crew_name && ((msg = "크루명을 입력하세요."), (error = false));
+      error && !crewData.crew_explain && ((msg = "크루 설명을 입력하세요."), (error = false));
+      error && !crewData.crew_region && ((msg = "크루 지역을 입력하세요."), (error = false));
+
+      if (!error) alert(msg);
+      else registCrew();
     };
-  },
-  created() {
-    axios
-      .post(url + "crews/", {
-        headers: {
-          Authorization: auth,
-        },
-      })
-      .then((response) => {
-        console.log(response.data.results);
-        this.allcrew = response.data.results;
-      });
-  },
-  methods: {
-    onInputImage() {
-      this.crew_img = this.$refs.crew_img.files;
-      console.log(this.crew_img);
-    },
-    moveList() {
-      this.$router.push({ name: "crewlist" });
-    },
+
+    const registCrew = async () => {
+      try {
+        await store.dispatch("crew/registcrew", crewData);
+        alert("등록에 성공하였습니다.");
+        router.push({ name: "allcrewlist" });
+      } catch (error) {
+        console.log(error);
+        alert("등록에 실패하였습니다.");
+      }
+    };
+
+    const moveList = () => {
+      router.push({ name: "allcrewlist" });
+    };
+
+    return {
+      crewData,
+      checkValue,
+      moveList,
+    };
   },
 };
 </script>

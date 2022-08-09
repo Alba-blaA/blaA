@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h3>글 작성하기</h3>
+    <h3>글 수정하기</h3>
   </div>
-  <board-input-item type="regist"></board-input-item>
+  <board-input-item type="modify"></board-input-item>
 </template>
 
 <script>

@@ -1,60 +1,54 @@
 <template>
   <div>
-    {{ $route.params.crew_pk }} 의 게시판입니다.
-    
-    <h2>글 목록</h2>
-    <table>
-      <thead>
-        <th>글번호</th>
-        <th>글제목</th>
-        <th>글내용</th>
-        <th>작성일자</th>
-        <th>공개여부</th>
-        <th>고정여부</th>
-      </thead>
-      <board-item v-for="article in articles" :key="article.articleno" v-bind="article" />
-    </table>
-    <button @click="moveRegist">글쓰기</button>
+    {{ crewInfo.crew_name }} 의 게시판입니다.<br /><br />
+    <button @click="moveToArticle">Article</button>
+    <button @click="moveToCalendar">Calendar</button>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import BoardItem from "@/components/crew/article/BoardItem.vue";
-import axios from "axios";
-const url = "http://127.0.0.1:8000/api/v1/";
+import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
+import { reactive } from "vue";
 export default {
-  components: {
-    BoardItem,
-  },
-  props: {
-    crew_pk: Number,
-  },
-  data() {
+  setup() {
+    const store = useStore();
+    const route = useRoute();
+    const router = useRouter();
+    const crewInfo = reactive({
+      crew_pk: "",
+      crew_name: "",
+      crew_explain: "",
+      crew_region: "",
+      crew_img: "",
+      crew_member_count: "",
+      created_at: "",
+    });
+
+    const getCrewInfo = async () => {
+      await store.dispatch("crew/getCrewInfo", route.params.crew_pk);
+      Object.assign(crewInfo, store.state.crew.crewInfo);
+    };
+
+    const moveToArticle = () => {
+      router.push({ name: "articlelist" });
+    };
+
+    const moveToCalendar = () => {
+      router.push({ name: "schedule" });
+    };
+
+    getCrewInfo();
+
     return {
-      articles: [],
+      crewInfo,
+      getCrewInfo,
+      moveToArticle,
+      moveToCalendar,
     };
   },
-  created() {
-    console.log(this.$route.params.crew_pk);
-    axios
-      .get(url + "crews/article/" + this.$route.params.crew_pk + "/", {
-        headers: {
-          Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNjY0ODQ4OTgxfQ.JBHgq3KkxPNASpcEfekXs8DVHPBftcTHgj91GZOrKtg`,
-        },
-      })
-      .then((response) => {
-        console.log(response.data.results);
-        this.articles = response.data.results;
-      });
-  },
-  methods: {
-    moveRegist() {
-      this.$router.push({ name: "articleregist" });
-    },
-  },
-}
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

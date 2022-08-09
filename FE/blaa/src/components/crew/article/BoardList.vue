@@ -2,7 +2,7 @@
   <div>
     <h2>글 목록</h2>
     <table>
-      <board-item v-for="article in articles" :key="article.articleno" v-bind="article" />
+      <board-item v-for="(article, i) in articles.results" :key="i" v-bind="article" />
     </table>
     <button @click="moveRegist">글쓰기</button>
   </div>
@@ -10,39 +10,44 @@
 
 <script>
 import BoardItem from "@/components/crew/article/BoardItem.vue";
-import axios from "axios";
-const url = "http://127.0.0.1:8000/api/v1/";
-
+import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
+import { ref } from "vue";
 export default {
-  name: "BoardList",
   components: {
     BoardItem,
   },
-  props: {
-    crew_pk: Number,
-  },
-  data() {
-    return {
-      articles: [],
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    const route = useRoute();
+    const articles = ref([]);
+    // const Articles = reactive({
+    //   crew_article_pk: "",
+    //   images: [],
+    //   created_at: "",
+    //   updated_at: "",
+    //   crew_title: "",
+    //   crew_content: "",
+    //   crew_private: "",
+    //   crew_pin: "",
+    //   crew: "",
+    // });
+
+    const getArticles = async () => {
+      await store.dispatch("crew/getCrewArticle", route.params.crew_pk);
+      articles.value = store.state.crew.articles;
     };
-  },
-  created() {
-    console.log(this.crew_pk);
-    axios
-      .get(url + "crews/" + this.crew_pk, {
-        headers: {
-          Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNjY0ODQ4OTgxfQ.JBHgq3KkxPNASpcEfekXs8DVHPBftcTHgj91GZOrKtg`,
-        },
-      })
-      .then((response) => {
-        console.log(response.data.results);
-        this.allcrew = response.data.results;
-      });
-  },
-  methods: {
-    moveRegist() {
-      this.$router.push({ name: "articleregist" });
-    },
+
+    const moveRegist = () => {
+      router.push({ name: "articleregist" });
+    };
+    getArticles();
+    return {
+      articles,
+      getArticles,
+      moveRegist,
+    };
   },
 };
 </script>
