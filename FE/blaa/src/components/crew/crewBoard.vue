@@ -4,6 +4,8 @@
     <button @click="moveToArticle">Article</button>
     <button @click="moveToCalendar">Calendar</button>
     <router-view></router-view>
+    <button @click="modifyCrew">크루 수정</button>
+    <button @click="deleteCrew">크루 삭제</button>
   </div>
 </template>
 

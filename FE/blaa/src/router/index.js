@@ -100,34 +100,34 @@ const router = createRouter({
         {
           path: "regist",
           name: "crewregist",
-          component: () => import("@/components/crew/register/CrewRegister.vue"),
+          component: () => import("@/components/crew/register/CrewRegistView.vue"),
           children: [
             {
               path: "business",
               name: "businesscrew",
-              component: () => import("@/components/crew/register/BusinessRegister.vue"),
+              component: () => import("@/components/crew/register/CrewRegistBusiness.vue"),
             },
             {
               path: "friendship",
               name: "friendshipcrew",
-              component: () => import("@/components/crew/register/FriendshipRegister.vue"),
+              component: () => import("@/components/crew/register/CrewRegistFriendship.vue"),
             },
           ],
         },
         {
           path: "list",
           name: "crewlist",
-          component: () => import("@/components/crew/list/CrewList.vue"),
+          component: () => import("@/components/crew/list/CrewListView.vue"),
           children: [
             {
               path: "alllist",
               name: "allcrewlist",
-              component: () => import("@/components/crew/list/AllCrewItem.vue"),
+              component: () => import("@/components/crew/list/CrewListAll.vue"),
             },
             {
               path: "mylist/:user_pk",
               name: "mycrewlist",
-              component: () => import("@/components/crew/list/MyCrewItem.vue"),
+              component: () => import("@/components/crew/list/CrewListMy.vue"),
             },
           ],
         },

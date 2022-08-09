@@ -109,8 +109,6 @@ export default {
       }
     },
     async modifyArticle({ state }, payload) {
-      // console.log(payload.crew_article_pk);
-      console.log(payload.article);
       try {
         await axios.put(api.crew.article(payload.crew_article_pk), payload.article, {
           headers: {
