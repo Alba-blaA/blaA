@@ -161,8 +161,6 @@ class CrewArticleRetriveUpdateDeleteView(RetrieveUpdateDestroyAPIView) :
     def perform_update(self, serializer,crew_article_pk):
         # crew = Crew.objects.get(crew_pk=crew_id)
         serializer.save(crew_article_pk=crew_article_pk)
-        print(serializer.data)
-        print(CrewArticle.objects.get(crew_article_pk=40).crew_title)
         return serializer.data
 
 
