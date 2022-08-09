@@ -45,7 +45,7 @@
 
 <script>
 import ReviewMap from '@/components/review/ReviewMap.vue'
-import { ref } from 'vue'
+import { onMounted, ref, onBeforeMount } from 'vue'
 import $ from 'jquery'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -69,6 +69,10 @@ export default {
     const starError = ref(false)
     const isStore = ref(true)
     const store_pk = ref(0)
+
+    onBeforeMount(() => {
+      storeButton.value = [0,0,0,0,0,0]
+    })
 
     // 상점 선택하기
     const selectStore = (data) => {

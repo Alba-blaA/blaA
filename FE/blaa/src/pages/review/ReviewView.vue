@@ -32,22 +32,21 @@ export default {
       // 페이지네이션 처리      
       reviews.value = store.state.review.reviews.slice((currentPage.value - 1)* 5 + 1, currentPage.value*5 + 1)
       total.value = store.state.review.reviews.length
-      console.log(total.value)
     })
 
-    // const numberOfPages = computed(() => {
-    //   console.log(total.value)
-    //   return Math.ceil(total.value / 5)
-    // })
+    const numberOfPages = computed(() => {
+      return 2
+      // Math.ceil(total.value / 5)
+    })
 
     const searchReview = (page = currentPage.value) => {
-      reviews.value = store.state.review.reviews.slice((page - 1)* 5 + 1, page * 5)
+      reviews.value = store.state.review.reviews.slice((page - 1)* 5 + 1, page * 5 + 1)
     }
 
     return {
       reviews,
       searchReview,
-      // numberOfPages
+      numberOfPages
     }
   }
 }

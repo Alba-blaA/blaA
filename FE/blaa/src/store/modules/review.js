@@ -80,19 +80,36 @@ export default {
       // 스토어 정보가 없어 새로 생성시
       if (isStore) {
         try {
-          const res = await axios.post(api.review.store(), store, {
+          // 한번 더 스토어 정보가 있나 확인
+          const res = await axios.get(api.review.store(), {
             headers: {
               Authorization: `Bearer ${state.Token}`
+            },
+            params: {
+              search: store.name
             }
           })
-          store.store_pk = res.data.store_pk
-        } catch (error) {
+          // 그래도 없으면 생성 진행
+          if (res.data.count == 0) {
+            try {
+              const res = await axios.post(api.review.store(), store, {
+                headers: {
+                  Authorization: `Bearer ${state.Token}`
+                }
+              })
+              store.store_pk = res.data.store_pk
+            } catch (error) {
+              console.error(error)
+            }
+          } else {
+            store.store_pk = res.data.results[0].store_pk
+          }
+        } catch(error) {
           console.error(error)
         }
       }
       // 리뷰 생성
       try {
-        console.log(review)
         const res = await axios.post(api.review.review(store.store_pk), review, {
           headers: {
             Authorization: `Bearer ${state.Token}`

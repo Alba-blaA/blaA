@@ -1,6 +1,6 @@
 <template>
   <div class="store" @click="moveToDetail">
-    <img :src="review.image" alt="이미지">
+    <!-- <img :src="review.image" alt="이미지"> -->
     <br>
     <p>{{review.name}}</p>
   </div>
