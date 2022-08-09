@@ -7,6 +7,7 @@
       <label for="crew_explain">크루 설명</label><br />
       <textarea id="crew_explain" name="crew_explain" v-model="crewData.crew_explain" cols="35" rows="5"></textarea><br />
       <label for="crew_region">크루 지역</label><br />
+      <input type="text" id="crew_region" name="crew_region" v-model="crewData.crew_region" />
       <button @click="checkValue">등록</button>
       <button @click="moveList">목록</button>
     </div>

@@ -11,7 +11,6 @@
   >
     <div class="image" @click="moveToDetail" style="cursor: pointer">
       <img :src="host + image.story_picture" class="image" :style="{ width: '100%' }" />
-      {{ host + image.story_picture }}
       <span>{{ image.user_pk.nickname }}</span>
     </div>
   </div>
