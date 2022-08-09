@@ -1,11 +1,9 @@
-import email
-import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render,get_object_or_404
 from django.views import View
 from rest_framework.generics import GenericAPIView,UpdateAPIView,CreateAPIView,ListAPIView
 from accounts.models import User
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,permission_classes
 from accounts.serializers import  (RegisterSerializer,LoginSerializer, UserCrewSerializer, UserListSerializer, UserReviewSerializer,
                                    UserSerializer,ChangePasswordSerializer,
                                    NicknameUniqueCheckSerializer,EmailUniqueCheckSerializer)
@@ -171,71 +169,70 @@ class KakaoSignInView(View):
             f"https://kauth.kakao.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
         )
 
-from django.views.decorators.csrf import csrf_exempt
-
-
-@api_view(['POST'])
-def KaKaoLogin(request):
-    # # API_HOST = f'https://kapi.kakao.com/v2/user/me'
-        
-    # # response = requests.get(API_HOST)
-    # # print(response)
-    # # text = json.loads(response.text)
-    # # print(response.status_code)
-    # # print(text)
+class KakaoLogin(GenericAPIView) :
+    authentication_classes=[]
+    serializer_class = LoginSerializer
     
-    # # print(json.loads(request.body))
-    # # data=json.loads(request.body)
-    # auth_header = get_authorization_header(request)
-    # # print(auth_header)
-    # #받은 header를 utf-8로 디코딩한다. 
-    # auth_data = auth_header.decode('utf-8')
-    # # print(auth_data)
-    # #token 형식이 Bearer + Token 이므로, ' '로 나눈다. 
-    # auth_token = auth_data.split(' ')
-    # print(auth_token)
-    # URL = f'https://kapi.kakao.com/v2/user/me'
-    # # token = '7LFdr9efDtY-y2oghj4VtF3FR-ZPIKyYwFQmNjRGCilwUQAAAYJnqUQx'
-    # headers = {'Authorization': f'Bearer {auth_token[1]}','Content-Type': 'application/json; charset=utf-8'}
-    # response = requests.get(URL, headers=headers)
-    # print(response)
-    # text = json.loads(response.text)
-    # print(response.status_code)
-    # print(text)
-    # print(text.get('properties').get('nickname'))
-    
-    # serializer_class = RegisterSerializer
-        
-    # data = {
-    #     "email" : text.get('kakao_account').get('email'),
-    #     "name" : text.get('properties').get('nickname'),
-    #     "password" : "asdwghoiwehvewo",
-    #     "nickname" : "dfdfef",
-    #     "region" : "defs",
-    #     "category" : "fwberbe",
-    #     "is_alba" : True,
+    def post(self,request) :
+
+        data = request.data
+        if User.objects.filter(email=data['email']) :
+            user = User.objects.get(email=data['email']) 
+
+            dt = datetime.now( ) + timedelta(days=60)
+            token = jwt.encode({
+                'id': user.pk,
+                'exp': dt.utcfromtimestamp(dt.timestamp())
+        }, settings.SECRET_KEY, algorithm='HS256')
+            # print(json.load(token))
+
+            context = {
+                'email' : data['email'],
+                'token' :str(token, 'utf-8')
+            }
             
-    #         }
-    data =request.data
-    print(data)
-    if User.objects.filter(email=data['email']) :
-        user = User.objects.get(email=data['email']) 
-        print(user)
-        # payload = JWT_PAYLOAD_HANDLER(user)
-        # jwt_token = JWT_ENCODE_HANDLER(payload)
-        dt = datetime.now( ) + timedelta(days=60)
-        token = jwt.encode({
-            'id': user.pk,
-            'exp': dt.utcfromtimestamp(dt.timestamp())
-    }, settings.SECRET_KEY, algorithm='HS256')
-        # print(json.load(token))
-        print(str(token, 'utf-8'))
-        context = {
-            'email' : data['email'],
-            'token' :str(token, 'utf-8')
-        }
+            return JsonResponse(context)
+    # authentication_classes=[]
+# # API_HOST = f'https://kapi.kakao.com/v2/user/me'
+    
+# # response = requests.get(API_HOST)
+# # print(response)
+# # text = json.loads(response.text)
+# # print(response.status_code)
+# # print(text)
+
+# # print(json.loads(request.body))
+# # data=json.loads(request.body)
+# auth_header = get_authorization_header(request)
+# # print(auth_header)
+# #받은 header를 utf-8로 디코딩한다. 
+# auth_data = auth_header.decode('utf-8')
+# # print(auth_data)
+# #token 형식이 Bearer + Token 이므로, ' '로 나눈다. 
+# auth_token = auth_data.split(' ')
+# print(auth_token)
+# URL = f'https://kapi.kakao.com/v2/user/me'
+# # token = '7LFdr9efDtY-y2oghj4VtF3FR-ZPIKyYwFQmNjRGCilwUQAAAYJnqUQx'
+# headers = {'Authorization': f'Bearer {auth_token[1]}','Content-Type': 'application/json; charset=utf-8'}
+# response = requests.get(URL, headers=headers)
+# print(response)
+# text = json.loads(response.text)
+# print(response.status_code)
+# print(text)
+# print(text.get('properties').get('nickname'))
+
+# serializer_class = RegisterSerializer
+    
+# data = {
+#     "email" : text.get('kakao_account').get('email'),
+#     "name" : text.get('properties').get('nickname'),
+#     "password" : "asdwghoiwehvewo",
+#     "nickname" : "dfdfef",
+#     "region" : "defs",
+#     "category" : "fwberbe",
+#     "is_alba" : True,
         
-        return JsonResponse(context)
+#         }
         # return HttpResponse(data={'token':token},status=status.HTTP_200_OK)
     # else :
     #     #요청이 온 데이터로 serializer 
