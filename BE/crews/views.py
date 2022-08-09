@@ -1,6 +1,6 @@
 import json
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView,ListAPIView,CreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView,ListAPIView,CreateAPIView, DestroyAPIView,RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from crews.serializer.schedule import CrewScheduleListSerializer,UserScheduleSerializer,CrewScheduleSerializer
 from crews.models import Crew, CrewArticle, CrewArticleComment, CrewInvite, CrewSchedule
@@ -433,7 +433,6 @@ def AcceptCrewView(request,crew_pk) :
 
     #크루에 이미 가입되어 있으면 
     if crew.crew_member.filter(user_pk=user.user_pk).exists() :
-        print('-------------------error--------------------')
         return JsonResponse({'message':"You are already a member of the crew."},status=status.HTTP_400_BAD_REQUEST)
 
     #아니면 크루 가입
@@ -444,3 +443,15 @@ def AcceptCrewView(request,crew_pk) :
         'message':f"{user.nickname}님이 {crew.crew_name}에 가입하셨습니다."
     }
     return JsonResponse(data)
+
+@api_view(['POST'])
+def CrewLeaveAPIView(request,crew_pk) :
+
+    crew = Crew.objects.get(crew_pk=crew_pk)
+    if not crew.crew_member.filter(user_pk=request.user.user_pk).exists() :
+        return JsonResponse({'message':"You are not in a crew."},status=status.HTTP_400_BAD_REQUEST)
+
+    crew.crew_member.remove(request.user)
+
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
