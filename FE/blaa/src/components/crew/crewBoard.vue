@@ -3,6 +3,7 @@
     {{ crewInfo.crew_name }} 의 게시판입니다.<br /><br />
     <button @click="moveToArticle">Article</button>
     <button @click="moveToCalendar">Calendar</button>
+    <button @click="crewMember">Memebers</button>
     <router-view></router-view>
     <button @click="modifyCrew">크루 수정</button>
     <button @click="deleteCrew">크루 삭제</button>
@@ -43,11 +44,20 @@ export default {
 
     getCrewInfo();
 
+    const crewMember = (crew_pk) => {
+      router.push({ name: "crewmember"}, {
+        params : {
+          crew_pk : crew_pk
+        }
+      })
+    }
+
     return {
       crewInfo,
       getCrewInfo,
       moveToArticle,
       moveToCalendar,
+      crewMember,
     };
   },
 };

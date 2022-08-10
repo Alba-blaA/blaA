@@ -21,11 +21,12 @@ import ReviewForm from "@/pages/review/ReviewForm.vue";
 import ReviewDetail from "@/pages/review/ReviewDetail.vue";
 import ReviewCommentDetail from "@/pages/review/ReviewCommentDetail.vue";
 import Chatroom from "@/pages/chat/ChatroomView.vue";
-import SearchAllUsers from "@/pages/crew/SearchAllUsersView.vue"
+import SearchCrewUsers from "@/pages/crew/SearchCrewUsersView.vue"
 
 import ProfileMain from "@/pages/profile/ProfileMainView.vue";
 import UpdateUserInfo from "@/pages/profile/UpdateUserInfoView.vue";
 import MyStory from "@/pages/profile/MyStoryView.vue";
+import SearchAllUsers from "@/pages/crew/SearchAllUsersView.vue"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -174,6 +175,11 @@ const router = createRouter({
               //   },
               // ],
             },
+            {
+              path: "crewmember",
+              name: "crewmember",
+              component: () => import("@/components/crew/crewmember/CrewMemberView.vue")
+            }
           ],
         },
       ],
@@ -238,8 +244,13 @@ const router = createRouter({
       component: Chatroom,
     },
     {
+      path: "/searchusers/:crew_pk",
+      name: "searchcrewusers",
+      component: SearchCrewUsers
+    },
+    {
       path: "/searchusers",
-      name: "searchusers",
+      name: "searchallusers",
       component: SearchAllUsers
     }
   ],
