@@ -1,58 +1,58 @@
 <template>
   <!-- <a :href="userInfo.image"></a> -->
   <div id="profile">
-    <img id="imgProfile" :src="HOST + userInfo.image">
+    <img id="imgProfile" :src="HOST + userInfo.image" />
   </div>
-  
+
   <div>
-    <h3 style="float: left;">{{userInfo.nickname}}</h3> &nbsp;
+    <h3 style="float: left">{{ userInfo.nickname }}</h3>
+    &nbsp;
     <button @click="updateMyInfo">회원정보 수정</button>
   </div>
 
   <div>
-    <div style="float: left;">
+    <div @click="follower" style="float: left">
       <b>177</b>
-      <br>
+      <br />
       <b>팔로워</b>
     </div>
-    <div>
+    <div @click="following">
       <b>144</b>
-      <br>
+      <br />
       <b>팔로잉</b>
     </div>
   </div>
 
-  <hr>
+  <hr />
   <div @click="myStory">
     <h5><b>내 스토리</b></h5>
   </div>
 
-  <hr>
+  <hr />
   <div @click="myReview">
     <h5><b>내 리뷰</b></h5>
   </div>
 
-  <hr>
+  <hr />
   <div @click="myGroup">
     <h5><b>내 그룹</b></h5>
   </div>
 
-  <hr>
+  <hr />
   <div @click="myInfo">
     <h5><b>회원정보</b></h5>
   </div>
 
-  <hr>
+  <hr />
   <div>
     <h5><b>회원탈퇴</b></h5>
   </div>
-  <hr>
-  
+  <hr />
 </template>
 
 <script>
-import {useStore} from "vuex";
-import {ref} from "vue";
+import { useStore } from "vuex";
+import { ref } from "vue";
 import axios from "axios";
 import api from "@/api/api.js";
 import router from "@/router/index.js";
@@ -66,54 +66,76 @@ export default {
     const userInfo = store.state.account.userInfo;
     console.log(userInfo);
     console.log("nickname : ", userInfo.nickname);
-    console.log("image : ", userInfo.image)
+    console.log("image : ", userInfo.image);
 
     const updateMyInfo = () => {
       console.log("회원정보 수정");
-      router.push({name: "updateInfo", params: {user_pk: userInfo.user_pk}});
+      router.push({
+        name: "updateInfo",
+        params: { user_pk: userInfo.user_pk },
+      });
     };
+
+    const follower = () => {
+      console.log("팔로워 조회");
+      router.push({
+        name: "myfollower",
+        params: { user_pk: userInfo.user_pk },
+      });
+    };
+
+    const following = () => {};
 
     const myStory = () => {
       console.log("내 스토리 조회");
-      router.push({name: "mystory", params: {user_pk: userInfo.user_pk}});
-      console.log("페이지 이동")
-    }
+      router.push({ name: "mystory", params: { user_pk: userInfo.user_pk } });
+      console.log("페이지 이동");
+    };
 
     const myReview = () => {
       console.log("내 리뷰 조회");
-      
-    }
+      router.push({name: "myreview", params: {user_pk: userInfo.user_pk}})
+    };
 
     const myGroup = () => {
-      console.log("내 그룹 조회");
+      console.log("내 크루 조회");
       console.log(userInfo.user_pk);
-      axios.get(api.crew.myCrew(userInfo.user_pk)).then((data) => {
-        console.log(data);
-      }).catch((err) => {
-        console.log(err);
-      });
-    }
+      router.push({name: "mycrew", params: {user_pk: userInfo.user_pk}});
+      axios
+        .get(api.crew.myCrew(userInfo.user_pk))
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
 
     const myInfo = () => {
       console.log("회원정보 조회");
-      axios.get(api.accounts.myInfo(userInfo.user_pk)).then((data) => {
-        console.log(data);
-      }).catch((err) => {
-        console.log(err);
-      });
-    }
+      router.push({name: "myinfo", params: {user_pk: userInfo.user_pk}});
+      axios
+        .get(api.accounts.myInfo(userInfo.user_pk))
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
 
     return {
       userInfo,
       updateMyInfo,
+      follower,
+      following,
       HOST,
       myStory,
       myReview,
       myGroup,
       myInfo,
-    }
-  
-  }
+    };
+  },
 };
 </script>
 

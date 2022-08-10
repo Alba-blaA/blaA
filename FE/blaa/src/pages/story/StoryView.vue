@@ -40,8 +40,9 @@ export default {
 
     const images = ref(null)
     store.dispatch('story/getImages').then(() => {
-      images.value = store.state.story.images
+      images.value = store.state.story.images          
     })
+ 
 
     const searchHastTag = (hastTag) => {
       // 검색 기능 구현
