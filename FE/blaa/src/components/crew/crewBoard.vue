@@ -1,11 +1,11 @@
 <template>
   <div>
-    {{ crewInfo.crew_name }} 의 게시판입니다.<br /><br />
+    <h2>{{ crewInfo.crew_name }} 의 게시판입니다.</h2><br />
+    <p>{{ crewInfo.crew_member_count }} 명 참여중</p><br />
     <button @click="moveToArticle">Article</button>
     <button @click="moveToCalendar">Calendar</button>
+    <button @click="moveToDetail">크루 정보</button>
     <router-view></router-view>
-    <button @click="modifyCrew">크루 수정</button>
-    <button @click="deleteCrew">크루 삭제</button>
   </div>
 </template>
 
@@ -40,6 +40,11 @@ export default {
     const moveToCalendar = () => {
       router.push({ name: "schedule" });
     };
+    
+    const moveToDetail = () => {
+      router.push({ name: "crewdetail" });
+    };
+
 
     getCrewInfo();
 
@@ -48,6 +53,7 @@ export default {
       getCrewInfo,
       moveToArticle,
       moveToCalendar,
+      moveToDetail,
     };
   },
 };
