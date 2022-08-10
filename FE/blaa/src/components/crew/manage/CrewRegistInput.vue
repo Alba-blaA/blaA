@@ -28,9 +28,7 @@
 <script>
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { ref, reactive } from 'vue';
-import axios from 'axios'
-import api from '@/api/api'
+import { ref } from 'vue';
 export default {
   setup() {
     const router = useRouter();
@@ -56,16 +54,18 @@ export default {
       check.value=true;
     }
 
-    // const checkValue = () => {
-    //   let error = true;
-    //   let msg = "";
-    //   console.log("크루명: " + crew_name.value);
-    //   !crew_name.value && ((msg = "크루명을 입력하세요."), (error = false));
-    //   error && !crew_explain.value && ((msg = "크루 설명을 입력하세요."), (error = false));
-    //   error && !crew_region.value && ((msg = "크루 지역을 입력하세요."), (error = false));
+    const submitForm = () => {
+      let error = true;
+      let msg = "";
+      console.log("크루명: " + crew_name.value);
+      !crew_name.value && ((msg = "크루명을 입력하세요."), (error = false));
+      error && !crew_explain.value && ((msg = "크루 설명을 입력하세요."), (error = false));
+      error && !crew_region.value && ((msg = "크루 지역을 입력하세요."), (error = false));
 
-    //   if (!error) alert(msg);
-    // };
+      if (!error) alert(msg);
+      else crewRegist();
+    };
+
     const previewFile = (e) => {
       if (e.target.files[0]) {
         crew_img.value = e.target.files[0];
@@ -75,7 +75,7 @@ export default {
       }
     }
 
-    const submitForm = async () => {
+    const crewRegist = async () => {
       console.log(crew_name.value);
       const crewData = new FormData();
       crewData.append("crew_name", crew_name.value);
@@ -91,14 +91,13 @@ export default {
       try {
         const token = store.state.crew.Token;
         console.log(token);
-        const instance = await axios.post(api.crew.crew(), crewData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            "Authorization": `Bearer ${token}`
-          },
-        })
-        console.log(instance.data);
-        console.log("등록 성공");
+        await store.dispatch("crew/registcrew", crewData);
+        // if (!store.state.crew.success) alert("등록에 실패하였습니다.");
+        // else {
+        //   alert("등록에 성공하였습니다.");
+        //   moveList();
+        // }
+        console.log(store.state.crew.success);
       } catch (error) {
         console.log(error);
       }
@@ -125,13 +124,13 @@ export default {
       isbusiness,
       back,
       submitForm,
-      moveList,
       crew_name,
       crew_explain,
       crew_region,
       crew_img,
       is_business,
-      previewFile
+      previewFile,
+      moveList,
     };
   },
 };

@@ -9,6 +9,7 @@ export default {
     articles: [],
     article: [],
     crewInfo: [],
+    success: false,
   },
   mutations: {
     GET_ALL_CREWS(state, payload) {
@@ -84,6 +85,7 @@ export default {
             Authorization: `Bearer ${state.Token}`,
           },
         });
+        state.success = true;
         commit("GET_ARTICLE_DETAIL", instance.data);
       } catch (error) {
         console.log(error);
