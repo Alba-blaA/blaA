@@ -23,7 +23,7 @@ export default {
       crew_name: "",
       crew_explain: "",
       crew_region: "",
-      crew_img: "",
+      // crew_img: "",
       crew_member_count: "",
       created_at: "",
     });
@@ -42,9 +42,8 @@ export default {
     };
     
     const moveToDetail = () => {
-      router.push({ name: "crewdetail" });
+      router.push({ name: "crewdetail" , params: { crew_pk : crewInfo.crew_pk } });
     };
-
 
     getCrewInfo();
 

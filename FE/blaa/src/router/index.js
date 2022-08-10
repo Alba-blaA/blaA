@@ -99,19 +99,15 @@ const router = createRouter({
       children: [
         {
           path: "regist",
-          name: "crewregist",
+          name: "crewregistview",
+          redirect: { name:"crewregist" },
           component: () => import("@/components/crew/manage/CrewRegistView.vue"),
           children: [
             {
-              path: "business",
-              name: "businesscrew",
-              component: () => import("@/components/crew/manage/CrewRegistBusiness.vue"),
-            },
-            {
-              path: "friendship",
-              name: "friendshipcrew",
-              component: () => import("@/components/crew/manage/CrewRegistFriendship.vue"),
-            },
+              path: "",
+              name: "crewregist",
+              component: () => import("@/components/crew/manage/CrewRegistInput.vue"),
+            }
           ],
         },
         {

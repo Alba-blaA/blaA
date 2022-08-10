@@ -8,15 +8,7 @@ export default {
     AllCrews: [],
     articles: [],
     article: [],
-    crewInfo: {
-      crew_pk: "",
-      crew_name: "",
-      crew_explain: "",
-      crew_region: "",
-      crew_img: "",
-      crew_member_count: "",
-      created_at: "",
-    },
+    crewInfo: [],
   },
   mutations: {
     GET_ALL_CREWS(state, payload) {
@@ -52,9 +44,11 @@ export default {
       try {
         await axios.post(api.crew.crew(), crewData, {
           headers: {
+            'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${state.Token}`,
           },
         });
+        console.log("전송");
       } catch (error) {
         console.log(error);
       }
@@ -129,6 +123,20 @@ export default {
           },
         });
         alert("삭제가 완료되었습니다.");
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async modifyCrew({state}, payload) {
+      console.log("payload", payload);
+      console.log(payload.crew_pk);
+      console.log(payload.crew);
+      try {
+        await axios.put(api.crew.crewInfo(payload.crew_pk), payload.crew, {
+          headers: {
+            Authorization: `Bearer ${state.Token}`,
+          },
+        })
       } catch (error) {
         console.log(error);
       }

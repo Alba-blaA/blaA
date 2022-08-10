@@ -29,7 +29,7 @@ export default {
 
   crew: {
     crew: () => HOST + CREW,
-    crewInfo: (crew_pk) => HOST + CREW + crew_pk,
+    crewInfo: (crew_pk) => HOST + CREW + crew_pk + "/",
     articles: (crew_pk) => HOST + CREW + "article/" + crew_pk + "/",
     article: (crew_article_pk) => HOST + CREW + "article/edit/" + crew_article_pk + "/",
     // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
