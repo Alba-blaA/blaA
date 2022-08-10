@@ -15,6 +15,7 @@ const CREW = "crews/";
 export default {
   accounts: {
     login: () => HOST + ACCOUNTS + "login/",
+    kakaoLogin: () => HOST + ACCOUNTS + "kakao/",
     logout: () => HOST + ACCOUNTS + "logout/",
     signup: () => HOST + ACCOUNTS + "signup/",
     emailCheck: () => HOST + ACCOUNTS + "unique/email/",
@@ -76,5 +77,8 @@ export default {
     review: (store_pk) => HOST + REVIEW + store_pk + "/",
     reviewDetail: (review_pk) => HOST + REVIEW + "detail/" + review_pk + "/",
     like: (review_pk) => HOST + REVIEW + "like/" + review_pk,
+  },
+  crew: {
+    myCrew: (user_pk) => HOST + CREW + user_pk + "/",
   },
 };
