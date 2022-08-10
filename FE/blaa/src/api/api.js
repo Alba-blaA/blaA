@@ -1,5 +1,5 @@
 // 기본 url
-const HOST = "http://localhost:8000/api/v1/";
+const HOST = "http://127.0.0.1:8000/api/v1/";
 
 // ===================================
 // 세부 url
@@ -38,29 +38,6 @@ export default {
     job: () => HOST + CATEGORYS + "job/",
     region: () => HOST + CATEGORYS + "region/",
   },
-
-  // 예시
-  // movies: {
-  //   // /articles/
-  //   movies: () => HOST + MOVIES,
-  //   // /articles/1/
-  //   movie: moviePk => HOST + MOVIES + ${moviePk},
-  //   reviews: moviePk => HOST + MOVIES + ${moviePk}/ + REVIEWS,
-  //   recommendations: moviePk => HOST2 + ${moviePk}/ + RECOMMENDATIONS + "?api_key=87931dd6e8327ea04518e5e2a6836196&language=ko",
-  //   search: value => HOST3 + ${value}& + "api_key=87931dd6e8327ea04518e5e2a6836196&language=ko",
-  //   review: (moviePk, reviewPk) =>
-  //     HOST + MOVIES + ${moviePk}/ + REVIEWS + ${reviewPk}/,
-  // },
-  // articles: {
-  //   // /articles/
-  //   articles: () => HOST + ARTICLES,
-  //   // /articles/1/
-  //   article: articlePk => HOST + ARTICLES + ${articlePk}/,
-  //   likeArticle: articlePk => HOST + ARTICLES + ${articlePk}/ + 'like/',
-  //   comments: articlePk => HOST + ARTICLES + ${articlePk}/ + COMMENTS,
-  //   comment: (articlePk, commentPk) =>
-  //     HOST + ARTICLES + ${articlePk}/ + COMMENTS + ${commentPk}/,
-  // },
   story: {
     host: () => HOST,
     story: () => HOST + STORY,

@@ -133,6 +133,19 @@ export default {
         console.log(error);
       }
     },
+    async deleteCrew({state}, crew_pk) {
+      console.log(crew_pk);
+      try {
+        await axios.delete(api.crew.crewInfo(crew_pk), {
+          headers: {
+            Authorization: `Bearer ${state.Token}`,
+          },
+        })
+        alert("삭제가 완료되었습니다.");
+      } catch (error) {
+        console.log(error);
+      }
+    }
   },
   getters: {},
 };

@@ -12,8 +12,8 @@ export default {
     const router = useRouter();
 
     const dele = async () => {
-      await store.dispatch("crew/deleteArticle", route.params.crew_article_pk);
-      router.push({ name: "articlelist" });
+      await store.dispatch("crew/deleteCrew", route.params.crew_pk);
+      router.push({ name: "allcrewlist" });
     };
 
     dele();
