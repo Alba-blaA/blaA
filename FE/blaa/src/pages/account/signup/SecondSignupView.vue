@@ -3,7 +3,12 @@
   <div id="signup">
     <br />
     <form>
-      <input id="signup-email" v-model="user.email" placeholder="Enter email" />
+      <input
+        id="signup-email"
+        type="email"
+        v-model="user.email"
+        placeholder="Enter email"
+      />
       &nbsp;
       <button id="btnEmailCheck" @click.prevent="emailCheck">중복확인</button>
       <br />
@@ -68,7 +73,8 @@ export default {
 
     onMounted(() => {
       const kakaoLogin = store.state.account.kakaoLogin;
-      if(kakaoLogin) {
+      console.log("kakaoLogin : ", kakaoLogin);
+      if (kakaoLogin) {
         user.value.email = store.state.account.kakaoUserInfo.email;
         document.getElementById("signup-email").disabled = true;
         document.getElementById("btnEmailCheck");
@@ -81,7 +87,6 @@ export default {
         user.value.name = store.state.account.kakaoUserInfo.name;
         document.getElementById("signup-name").disabled = true;
       }
-      
     });
 
     const emailCheck = () => {
