@@ -16,19 +16,30 @@
     <button @click.prevent="gostory">오출완가기</button>
     <button @click.prevent="gosearch">유저정보검색하기</button>
   </div>
+
+  <div v-else>
+    <p>로그인이 필요합니다.</p>
+    <button type="button" @click="login">로그인</button>
+    &nbsp;
+    <button type="button" @click="kakaoLogin">카카오 로그인</button>
+    &nbsp;
+    <button @click="register">회원가입</button>
+  </div>
+  <router-view></router-view>
 </template>
 
 <script>
 // import axios from 'axios';
 import { useStore } from "vuex";
 import { computed, onMounted } from "vue";
-import router from "@/router/index.js";
+// import router from "@/router/index.js";
+import {useRouter} from "vue-router"
 
 export default {
   setup() {
     // // vuex store 사용법 예제
     const store = useStore();
-    // const router = useRoute();
+    const router = useRouter();
 
     const isLogin = computed(() => {
       return store.state.account.isLogin;
@@ -79,7 +90,7 @@ export default {
       store.commit("account/USER_INFO", null);
       sessionStorage.removeItem("token");
       store.commit("account/RESET_STORAGE");
-      router.go();
+      router.replace("/");
     };
 
     const register = () => {
