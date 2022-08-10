@@ -9,12 +9,10 @@ from reviews.models import Review
 class RegisterSerializer(serializers.ModelSerializer) :
     password = serializers.CharField(max_length=128,min_length=6,write_only=True)
     token = serializers.CharField(max_length=255, read_only=True)
-    followers = serializers.IntegerField(source = 'followers.count')
-    followings = serializers.IntegerField(source = 'followings.count')
     class Meta() :
         model=User
-        fields= ('user_pk','email','password','tel','name','nickname','region','category','is_alba','token','image','followers','followings')
-        read_only_fields = ['image','followers','followings']
+        fields= ('user_pk','email','password','tel','name','nickname','region','category','is_alba','token','image')
+        read_only_fields = ['image']
     def create(create,validated_data) :
 
         return User.objects.create_user(**validated_data)
@@ -38,12 +36,12 @@ class UserListSerializer(serializers.ModelSerializer) :
         
 
 class UserSerializer(serializers.ModelSerializer):
-    followers = serializers.IntegerField(source = 'followers.count')
-    followings = serializers.IntegerField(source = 'followings.count')
+    followers = serializers.IntegerField(source = 'followers.count',read_only=True)
+    followings = serializers.IntegerField(source = 'followings.count',read_only=True)
     class Meta:
         model = User
         fields= ['user_pk','email','name','nickname','region','category','is_alba','image','followers','followings']
-        read_only_fields = ['email','followers','followings']
+        read_only_fields = ['email']
         
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
