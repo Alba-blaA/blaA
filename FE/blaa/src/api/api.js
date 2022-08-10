@@ -65,12 +65,10 @@ export default {
   story: {
     host: () => HOST,
     story: () => HOST + STORY,
-
     detail: (story_pk) => HOST + STORY + story_pk + "/",
     like: (story_pk) => HOST + STORY + "like/" + story_pk,
     comment: (story_pk) => HOST + STORY + COMMENT + story_pk + "/",
     commentChange: (comment_pk) => HOST + STORY + COMMENT + "ud/" + comment_pk,
-    myStory: (user_pk) => HOST + STORY + "mystory/" + user_pk + "/",
   },
   review: {
     store: () => HOST + REVIEW + STORE,
@@ -78,4 +76,12 @@ export default {
     reviewDetail: (review_pk) => HOST + REVIEW + "detail/" + review_pk + "/",
     like: (review_pk) => HOST + REVIEW + "like/" + review_pk,
   },
+  profile: {
+    updateInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
+    myFollow: (user_pk) => HOST + ACCOUNTS + "followlist/" + user_pk + "/",
+    myStory: (user_pk) => HOST + STORY + "mystory/" + user_pk + "/",
+    myReview: (user_pk) => HOST + ACCOUNTS + "review/" + user_pk + "/",
+    myCrew: (user_pk) => HOST + ACCOUNTS + CREW + user_pk + "/",
+    myInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
+  }
 };

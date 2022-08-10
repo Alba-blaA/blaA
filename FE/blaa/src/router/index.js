@@ -25,7 +25,12 @@ import SearchAllUsers from "@/pages/crew/SearchAllUsersView.vue"
 
 import ProfileMain from "@/pages/profile/ProfileMainView.vue";
 import UpdateUserInfo from "@/pages/profile/UpdateUserInfoView.vue";
+import MyFollow from "@/pages/profile/MyFollowView.vue";
 import MyStory from "@/pages/profile/MyStoryView.vue";
+import MyReview from "@/pages/profile/MyReviewView.vue";
+import MyCrew from "@/pages/profile/MyCrewView.vue";
+import MyInfo from "@/pages/profile/MyInfoView.vue";
+
 
 const router = createRouter({
   history: createWebHistory(),
@@ -194,9 +199,9 @@ const router = createRouter({
           component: ReviewForm,
         },
         {
-          path: ':store_pk/:store_name',
-          name: 'detailReview',
-          component: ReviewDetail
+          path: ":store_pk/:store_name",
+          name: "detailReview",
+          component: ReviewDetail,
         },
         {
           path: ":store_pk/:review_pk",
@@ -221,16 +226,41 @@ const router = createRouter({
           component: MyProfile,
         },
         {
-          path: "update/:user_pk",
+          path: ":user_pk/update",
           name: "updateInfo",
           component: UpdateUserInfo,
         },
         {
-          path: "mystory/:user_pk",
+          path: ":user_pk/follower",
+          name: "myfollower",
+          component: MyFollow,
+        },
+        {
+          path: ":user_pk/followingk",
+          name: "myfollowing",
+          component: MyFollow,
+        },
+        {
+          path: ":user_pk/mystory",
           name: "mystory",
           component: MyStory,
+        },
+        {
+          path: ":user_pk/myreview",
+          name: "myreview",
+          component: MyReview,
+        },
+        {
+          path: ":user_pk/mycrew",
+          name: "mycrew",
+          component: MyCrew,
+        },
+        {
+          path: ":user_pk/myinfo",
+          name: "myinfo",
+          component: MyInfo,
         }
-      ]
+      ],
     },
     {
       path: "/chatroom",
@@ -240,8 +270,8 @@ const router = createRouter({
     {
       path: "/searchusers",
       name: "searchusers",
-      component: SearchAllUsers
-    }
+      component: SearchAllUsers,
+    },
   ],
 });
 
