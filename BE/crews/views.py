@@ -2,6 +2,7 @@ import json
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView,ListAPIView,CreateAPIView, DestroyAPIView,RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
+from crews.serializer.crew import CrewNoneImageCreateSerializer
 from crews.serializer.crew import CrewNonImageSerializer
 from crews.serializer.schedule import CrewScheduleListSerializer,UserScheduleSerializer,CrewScheduleSerializer
 from crews.models import Crew, CrewArticle, CrewArticleComment, CrewInvite, CrewSchedule
@@ -35,6 +36,16 @@ class CrewListCreateAPIView(ListCreateAPIView):
 
         serializer = CrewListSerializer(queryset, many=True)
         return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        if request.FILES.get('crew_img') :
+            serializer = self.get_serializer(data=request.data)
+        else : 
+            serializer = CrewNoneImageCreateSerializer(data= request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
         serializer.save(crew_leader=self.request.user)
@@ -342,9 +353,11 @@ class CrewUserAPIView(ListAPIView) :
 @api_view(['POST'])
 def CrewInviteView(request,crew_pk,user_pk) :
 #  크루장이 초대를 하는 로직인데 
+
     crew = Crew.objects.get(crew_pk=crew_pk) 
     user = User.objects.get(user_pk=user_pk)
     
+    print(crew,user)
     #초대하려는 사람이 이미 크루에 있으면 
     if crew.crew_member.filter(user_pk=user_pk).exists() :
         return Response({'message':"The user you want to invite has already joined the crew. Invalid request."},status=status.HTTP_409_CONFLICT)
@@ -355,7 +368,6 @@ def CrewInviteView(request,crew_pk,user_pk) :
     
     #둘다 아니면 초대목록에 추가 
     CrewInvite.objects.create(crew=crew,user=user,crew_leader_accept=True,user_accept=False)
-
     return Response({'message':" You have been successfully invited."},status=status.HTTP_201_CREATED)
 
 #유저가 가입신청할 때 

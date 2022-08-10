@@ -11,6 +11,12 @@ class CrewCreateSerializer(serializers.ModelSerializer) :
         fields= ('crew_pk','crew_leader','is_business','crew_name','crew_img','crew_explain','crew_region')
         read_only_fields = ('crew_leader',)
 
+class CrewNoneImageCreateSerializer(serializers.ModelSerializer) :
+
+    class Meta: 
+        model = Crew
+        fields= ('crew_pk','crew_leader','is_business','crew_name','crew_img','crew_explain','crew_region')
+        read_only_fields = ('crew_leader','crew_img')
 
 
 class CrewListSerializer(serializers.ModelSerializer) :
