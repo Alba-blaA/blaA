@@ -1,10 +1,9 @@
-import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render,get_object_or_404
 from django.views import View
 from rest_framework.generics import GenericAPIView,UpdateAPIView,CreateAPIView,ListAPIView
 from accounts.models import User
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,permission_classes
 from accounts.serializers import  (RegisterSerializer,LoginSerializer, UserCrewSerializer, UserListSerializer, UserReviewSerializer,
                                    UserSerializer,ChangePasswordSerializer,
                                    NicknameUniqueCheckSerializer,EmailUniqueCheckSerializer)
@@ -170,84 +169,89 @@ class KakaoSignInView(View):
             f"https://kauth.kakao.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
         )
 
-class KaKaoLogin(View):
-    # authentication_classes=[]
-    def get(self, request):
-        # API_HOST = f'https://kapi.kakao.com/v2/user/me'
-            
-        # response = requests.get(API_HOST)
-        # print(response)
-        # text = json.loads(response.text)
-        # print(response.status_code)
-        # print(text)
-        
-        # print(json.loads(request.body))
-        # data=json.loads(request.body)
-        auth_header = get_authorization_header(request)
-        # print(auth_header)
-        #받은 header를 utf-8로 디코딩한다. 
-        auth_data = auth_header.decode('utf-8')
-        # print(auth_data)
-        #token 형식이 Bearer + Token 이므로, ' '로 나눈다. 
-        auth_token = auth_data.split(' ')
-        print(auth_token)
-        URL = f'https://kapi.kakao.com/v2/user/me'
-        # token = '7LFdr9efDtY-y2oghj4VtF3FR-ZPIKyYwFQmNjRGCilwUQAAAYJnqUQx'
-        headers = {'Authorization': f'Bearer {auth_token[1]}','Content-Type': 'application/json; charset=utf-8'}
-        response = requests.get(URL, headers=headers)
-        print(response)
-        text = json.loads(response.text)
-        print(response.status_code)
-        print(text)
-        print(text.get('properties').get('nickname'))
-        
-        serializer_class = RegisterSerializer
-            
-        data = {
-            "email" : text.get('kakao_account').get('email'),
-            "name" : text.get('properties').get('nickname'),
-            "password" : "asdwghoiwehvewo",
-            "nickname" : "dfdfef",
-            "region" : "defs",
-            "category" : "fwberbe",
-            "is_alba" : True,
-                
-                }
+class KakaoLogin(GenericAPIView) :
+    authentication_classes=[]
+    serializer_class = LoginSerializer
+    
+    def post(self,request) :
+
+        data = request.data
         if User.objects.filter(email=data['email']) :
             user = User.objects.get(email=data['email']) 
-            print(user)
-            # payload = JWT_PAYLOAD_HANDLER(user)
-            # jwt_token = JWT_ENCODE_HANDLER(payload)
+
             dt = datetime.now( ) + timedelta(days=60)
             token = jwt.encode({
                 'id': user.pk,
                 'exp': dt.utcfromtimestamp(dt.timestamp())
         }, settings.SECRET_KEY, algorithm='HS256')
             # print(json.load(token))
-            print(str(token, 'utf-8'))
+
             context = {
+                'email' : data['email'],
                 'token' :str(token, 'utf-8')
             }
+            
             return JsonResponse(context)
-            # return HttpResponse(data={'token':token},status=status.HTTP_200_OK)
-        else :
-            #요청이 온 데이터로 serializer 
-            serializers = serializer_class(data=data)  
-            #오류가 발생하지 않으면 회원가입 승인 
-            if serializers.is_valid(raise_exception=True) :
-                serializers.save()
-                token = serializers.data['token']
-                print(token)
-                print(type(token))
-                token = token.split('\'')
-                print(token)
-                print(token[1])
-                serializers.data['token'] = token[1]
-                print(serializers.data)
-                print(serializers.data['token'])
-                
-                return JsonResponse(serializers.data,status=status.HTTP_201_CREATED)
-            return JsonResponse(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
+    # authentication_classes=[]
+# # API_HOST = f'https://kapi.kakao.com/v2/user/me'
+    
+# # response = requests.get(API_HOST)
+# # print(response)
+# # text = json.loads(response.text)
+# # print(response.status_code)
+# # print(text)
+
+# # print(json.loads(request.body))
+# # data=json.loads(request.body)
+# auth_header = get_authorization_header(request)
+# # print(auth_header)
+# #받은 header를 utf-8로 디코딩한다. 
+# auth_data = auth_header.decode('utf-8')
+# # print(auth_data)
+# #token 형식이 Bearer + Token 이므로, ' '로 나눈다. 
+# auth_token = auth_data.split(' ')
+# print(auth_token)
+# URL = f'https://kapi.kakao.com/v2/user/me'
+# # token = '7LFdr9efDtY-y2oghj4VtF3FR-ZPIKyYwFQmNjRGCilwUQAAAYJnqUQx'
+# headers = {'Authorization': f'Bearer {auth_token[1]}','Content-Type': 'application/json; charset=utf-8'}
+# response = requests.get(URL, headers=headers)
+# print(response)
+# text = json.loads(response.text)
+# print(response.status_code)
+# print(text)
+# print(text.get('properties').get('nickname'))
+
+# serializer_class = RegisterSerializer
+    
+# data = {
+#     "email" : text.get('kakao_account').get('email'),
+#     "name" : text.get('properties').get('nickname'),
+#     "password" : "asdwghoiwehvewo",
+#     "nickname" : "dfdfef",
+#     "region" : "defs",
+#     "category" : "fwberbe",
+#     "is_alba" : True,
+        
+#         }
+        # return HttpResponse(data={'token':token},status=status.HTTP_200_OK)
+    # else :
+    #     #요청이 온 데이터로 serializer 
+    #     serializers = serializer_class(data=data)  
+    #     #오류가 발생하지 않으면 회원가입 승인 
+    #     if serializers.is_valid(raise_exception=True) :
+    #         serializers.save()
+    #         token = serializers.data['token']
+    #         print(token)
+    #         print(type(token))
+    #         token = token.split('\'')
+    #         print(token)
+    #         print(token[1])
+    #         serializers.data['token'] = token[1]
+    #         print(serializers.data)
+    #         print(serializers.data['token'])
+            
+    #         return JsonResponse(serializers.data,status=status.HTTP_201_CREATED)
+    #     return JsonResponse(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
 
         
 class KakaoSignInCallbackView(View):
@@ -293,9 +297,9 @@ class EmailUniqueCheck(CreateAPIView):
         if serializer.is_valid():
             return Response(data={'detail':['You can use this email']}, status=status.HTTP_200_OK)
         else:
-            detail = dict()
-            detail['detail'] = serializer.errors['email']
-            return Response(data=detail, status=status.HTTP_400_BAD_REQUEST)
+            # detail = dict()
+            # detail['detail'] = serializer.errors['email']
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 class NicknameUniqueCheck(CreateAPIView):
     authentication_classes=[]
@@ -312,27 +316,49 @@ class NicknameUniqueCheck(CreateAPIView):
 
 
 
+# class UserCrewAPIView(ListAPIView) :
+#     serializer_class = UserCrewSerializer 
+#     lookup_field = 'user_pk'
+
+#     def get_queryset(self):
+#         print(self.request.user)
+#         return User.objects.filter(email=self.request.user)
+
+
 class UserCrewAPIView(ListAPIView) :
     serializer_class = UserCrewSerializer 
+    lookup_field = 'user_pk'
 
+    def list(self, request,user_pk, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset(user_pk))
 
-    def get_queryset(self):
-        print(self.request.user)
-        return User.objects.filter(email=self.request.user)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
 
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
-class UserCrewAPIView(ListAPIView) :
-    serializer_class = UserCrewSerializer 
-
-
-    def get_queryset(self):
+    def get_queryset(self,user_pk):
         # print(self.request.user)
-        return User.objects.filter(email=self.request.user)
+        return User.objects.filter(user_pk=user_pk)
 
 class UserReviewAPIView(ListAPIView) :
     serializer_class = UserReviewSerializer 
+    lookup_field = 'user_pk'
 
+    def list(self, request,user_pk, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset(user_pk))
 
-    def get_queryset(self):
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+        
+    def get_queryset(self,user_pk):
         # print(self.request.user)
-        return User.objects.filter(email=self.request.user)
+        return User.objects.filter(user_pk=user_pk)

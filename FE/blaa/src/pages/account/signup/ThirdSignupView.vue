@@ -190,6 +190,7 @@ export default {
                 "회원가입 후 vuex : ",
                 store.state.account.signupUser
               );
+              alert("회원가입 완료!");
             } else {
               console.log("회원가입 문제 발생");
               console.log("회원가입 문제 에러코드 : ", response.status);

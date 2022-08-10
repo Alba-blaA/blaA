@@ -57,9 +57,7 @@ class CrewSchedule(models.Model) :
     crew_starthour = models.TimeField()
     crew_endhour = models.TimeField()
     
-    def __str__(self) :
-        return self.crew_day
-    
+
     
 
 

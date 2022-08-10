@@ -12,10 +12,10 @@
 </template>
 
 <script>
-import { onMounted } from "vue";
+// import { onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-import axios from "axios";
+import axios from "@/api/axios.js";
 import api from "@/api/api.js";
 
 export default {
