@@ -1,5 +1,4 @@
 import Axios from "axios";
-import { useStore } from 'vuex';
 
 const axios = Axios.create({});
 
