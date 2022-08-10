@@ -2,6 +2,7 @@ import json
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView,ListAPIView,CreateAPIView, DestroyAPIView,RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
+from crews.serializer.crew import CrewNonImageSerializer
 from crews.serializer.schedule import CrewScheduleListSerializer,UserScheduleSerializer,CrewScheduleSerializer
 from crews.models import Crew, CrewArticle, CrewArticleComment, CrewInvite, CrewSchedule
 from rest_framework import filters
@@ -58,7 +59,11 @@ class CrewRetriveUpdateDeleteView(RetrieveUpdateDestroyAPIView) :
             return Response({'message':"You do not have permission to change the user's information,try again"},status=status.HTTP_400_BAD_REQUEST)
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+
+        if request.FILES.get('crew_img') :
+            serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        else : 
+            serializer = CrewNonImageSerializer(instance,data= request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
 

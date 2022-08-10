@@ -21,23 +21,30 @@ class CrewListSerializer(serializers.ModelSerializer) :
         fields= ('crew_pk','crew_leader','is_business','crew_name','crew_img','crew_member_count')
 
 
+
+class CrewNonImageSerializer(serializers.ModelSerializer) :
+    crew_member_count = serializers.IntegerField(source='crew_member.count', read_only=True)
+    crew_leader = serializers.CharField(source='crew_leader.nickname',read_only=True)
+    # crew_img = serializers.ImageField(required=False)
+    class Meta: 
+        model = Crew
+        fields= ('crew_pk','crew_name','crew_leader','crew_explain','crew_region','crew_member_count','created_at')
+        read_only_fields = ('crew_pk','crew_leader','crew_img')
+
 class CrewSerializer(serializers.ModelSerializer) :
     crew_member_count = serializers.IntegerField(source='crew_member.count', read_only=True)
     crew_leader = serializers.CharField(source='crew_leader.nickname',read_only=True)
-    crew_img = serializers.ImageField(required=False)
+    # crew_img = serializers.ImageField(required=False)
     class Meta: 
         model = Crew
         fields= ('crew_pk','crew_name','crew_leader','crew_explain','crew_region','crew_img','crew_member_count','created_at')
         read_only_fields = ('crew_pk','crew_leader',)
 
     def update(self, instance, validated_data):
-       
         instance.crew_name = validated_data.get('crew_name', instance.crew_name)
         instance.crew_explain = validated_data.get('crew_explain', instance.crew_explain)
         instance.crew_region = validated_data.get('crew_region', instance.crew_region)
-        # instance.crew_pin = validated_data.get('crew_pin', instance.crew_pin)
-        print(self.context['request'].FILES 
-        )
+        
         try:
             images_data = self.context['request'].FILES.get('crew_img')
         except:
