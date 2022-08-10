@@ -16,15 +16,6 @@
     <button @click.prevent="gostory">오출완가기</button>
     <button @click.prevent="gosearch">유저정보검색하기</button>
   </div>
-  <div v-else>
-    <p>로그인이 필요합니다.</p>
-    <button @click="login">로그인</button>
-    &nbsp;
-    <button @click="kakaoLogin">카카오 로그인</button>
-    &nbsp;
-    <button @click="register">회원가입</button>
-  </div>
-  <router-view />
 </template>
 
 <script>
@@ -71,6 +62,10 @@ export default {
       router.push({ path: "/searchusers" });
     };
 
+    const gocrew = () => {
+      router.push({ path: "/crew" });
+    };
+
     const kakaoLogin = () => {
       const params = {
         redirectUri: "http://localhost:8080/kakao",
@@ -102,6 +97,7 @@ export default {
       gochatroom,
       gostory,
       gosearch,
+      gocrew,
     };
   },
 };
