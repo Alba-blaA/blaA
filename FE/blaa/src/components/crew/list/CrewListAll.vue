@@ -18,7 +18,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(crew, i) in filtered" :key="i" v-bind="crew">
+      <tr v-for="(crew, i) in AllCrews.crews" :key="i" v-bind="crew">
         <td>{{ crew.crew_pk }}</td>
         <td>
           <router-link :to="{ name: 'crewboard', params: { crew_pk: crew.crew_pk } }">{{ crew.crew_name }}</router-link>
@@ -46,6 +46,7 @@ export default {
     const start = async () => {
       await store.dispatch("crew/allcrewlist");
       AllCrews.crews = store.state.crew.AllCrews.results;
+      console.log(AllCrews);
     };
     const crewJoin = () => {
       const userInfo = sessionStorage.getItem("login-userInfo");

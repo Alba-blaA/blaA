@@ -24,14 +24,15 @@ export default {
     // username으로 프로필 제공
     profile: (username) => HOST + ACCOUNTS + "profile/" + username,
     myInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
-    searchallusers: () => HOST + ACCOUNTS + "users/"
+    searchallusers: () => HOST + ACCOUNTS + "users/",
   },
 
   crew: {
     crew: () => HOST + CREW,
     crewInfo: (crew_pk) => HOST + CREW + crew_pk + "/",
-    articles: (crew_pk) => HOST + CREW + "article/" + crew_pk + "/",
     article: (crew_article_pk) => HOST + CREW + "article/edit/" + crew_article_pk + "/",
+    articles: (crew_pk) => HOST + CREW + "article/" + crew_pk + "/",
+    members: (crew_pk) => HOST + CREW + "user/" + crew_pk + "/",
     // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
   },
   categorys: {

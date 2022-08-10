@@ -9,6 +9,7 @@ export default {
     articles: [],
     article: [],
     crewInfo: [],
+    members: [],
     success: false,
   },
   mutations: {
@@ -27,45 +28,12 @@ export default {
     GET_ARTICLE_DETAIL(state, payload) {
       state.article = payload;
     },
+    GET_CREW_MEMBERS(state, payload) {
+      state.members = payload;
+    },
   },
   actions: {
-    async allcrewlist({ commit, state }) {
-      try {
-        const instance = await axios.get(api.crew.crew(), {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
-        });
-        commit("GET_ALL_CREWS", instance.data);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async registcrew({ state }, crewData) {
-      try {
-        await axios.post(api.crew.crew(), crewData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${state.Token}`,
-          },
-        });
-        console.log("전송");
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async getCrewInfo({ commit, state }, crew_pk) {
-      try {
-        const instance = await axios.get(api.crew.crewInfo(crew_pk), {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
-        });
-        commit("SET_CREW_INFO", instance.data);
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    ///////////////////////////Crew Article/////////////////////////////////
     async getCrewArticle({ commit, state }, crew_pk) {
       try {
         const instance = await axios.get(api.crew.articles(crew_pk), {
@@ -129,7 +97,33 @@ export default {
         console.log(error);
       }
     },
-    async modifyCrew({state}, payload) {
+    ///////////////////////////Crew Info/////////////////////////////////
+    async getCrewInfo({ commit, state }, crew_pk) {
+      try {
+        const instance = await axios.get(api.crew.crewInfo(crew_pk), {
+          headers: {
+            Authorization: `Bearer ${state.Token}`,
+          },
+        });
+        commit("SET_CREW_INFO", instance.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async registcrew({ state }, crewData) {
+      try {
+        await axios.post(api.crew.crew(), crewData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${state.Token}`,
+          },
+        });
+        console.log("전송");
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async modifyCrew({ state }, payload) {
       console.log("payload", payload);
       console.log(payload.crew_pk);
       console.log(payload.crew);
@@ -138,24 +132,48 @@ export default {
           headers: {
             Authorization: `Bearer ${state.Token}`,
           },
-        })
+        });
       } catch (error) {
         console.log(error);
       }
     },
-    async deleteCrew({state}, crew_pk) {
+    async deleteCrew({ state }, crew_pk) {
       console.log(crew_pk);
       try {
         await axios.delete(api.crew.crewInfo(crew_pk), {
           headers: {
             Authorization: `Bearer ${state.Token}`,
           },
-        })
+        });
         alert("삭제가 완료되었습니다.");
       } catch (error) {
         console.log(error);
       }
-    }
+    },
+    async allcrewlist({ commit, state }) {
+      try {
+        const instance = await axios.get(api.crew.crew(), {
+          headers: {
+            Authorization: `Bearer ${state.Token}`,
+          },
+        });
+        commit("GET_ALL_CREWS", instance.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getCrewMembers({ commit, state }, crew_pk) {
+      try {
+        const instance = await axios.get(api.crew.members(crew_pk), {
+          headers: {
+            Authorization: `Bearer ${state.Token}`,
+          },
+        });
+        commit("GET_CREW_MEMBERS", instance.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   getters: {},
 };

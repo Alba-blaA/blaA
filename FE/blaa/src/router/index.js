@@ -21,7 +21,7 @@ import ReviewForm from "@/pages/review/ReviewForm.vue";
 import ReviewDetail from "@/pages/review/ReviewDetail.vue";
 import ReviewCommentDetail from "@/pages/review/ReviewCommentDetail.vue";
 import Chatroom from "@/pages/chat/ChatroomView.vue";
-import SearchAllUsers from "@/pages/crew/SearchAllUsersView.vue"
+import SearchAllUsers from "@/pages/crew/SearchAllUsersView.vue";
 
 import ProfileMain from "@/pages/profile/ProfileMainView.vue";
 import UpdateUserInfo from "@/pages/profile/UpdateUserInfoView.vue";
@@ -100,14 +100,14 @@ const router = createRouter({
         {
           path: "regist",
           name: "crewregistview",
-          redirect: { name:"crewregist" },
+          redirect: { name: "crewregist" },
           component: () => import("@/components/crew/manage/CrewRegistView.vue"),
           children: [
             {
               path: "",
               name: "crewregist",
               component: () => import("@/components/crew/manage/CrewRegistInput.vue"),
-            }
+            },
           ],
         },
         {
@@ -185,6 +185,11 @@ const router = createRouter({
               //   },
               // ],
             },
+            {
+              path: "",
+              name: "crewmember",
+              component: () => import("@/components/crew/member/CrewMemberList.vue"),
+            },
           ],
         },
       ],
@@ -205,9 +210,9 @@ const router = createRouter({
           component: ReviewForm,
         },
         {
-          path: ':store_pk/:store_name',
-          name: 'detailReview',
-          component: ReviewDetail
+          path: ":store_pk/:store_name",
+          name: "detailReview",
+          component: ReviewDetail,
         },
         {
           path: ":store_pk/:review_pk",
@@ -240,8 +245,8 @@ const router = createRouter({
           path: "mystory/:user_pk",
           name: "mystory",
           component: MyStory,
-        }
-      ]
+        },
+      ],
     },
     {
       path: "/chatroom",
@@ -251,8 +256,8 @@ const router = createRouter({
     {
       path: "/searchusers",
       name: "searchusers",
-      component: SearchAllUsers
-    }
+      component: SearchAllUsers,
+    },
   ],
 });
 
