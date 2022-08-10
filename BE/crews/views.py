@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 from crews.serializer.article import CrewArticleRUDSerializer, CrewArticleSerializer
 from crews.serializer.comment import CrewCommentSerializer
-from crews.serializer.crew import CrewCreateSerializer, CrewInviteListSerializer, CrewListSerializer, CrewSerializer, UserInviteListSerializer
+from crews.serializer.crew import CrewCreateSerializer, CrewInviteListSerializer, CrewListSerializer, CrewSerializer, CrewUserListSerializer, UserInviteListSerializer
 from rest_framework.decorators import api_view
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
@@ -312,6 +312,25 @@ def crew_schedule_work_list(request,crew_id, schedule):
 
     return Response(serializer.data,status=status.HTTP_200_OK)
     
+
+
+
+class CrewUserAPIView(ListAPIView) :
+    lookup_field = 'crew_pk' 
+    queryset = Crew.objects.all()
+    serializer_class = CrewUserListSerializer
+
+    def list(self, request, *args, **kwargs):
+        crew = self.get_object()
+        queryset = User.objects.filter(crews=crew)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 #크루장이 초대할 때 
 @api_view(['POST'])

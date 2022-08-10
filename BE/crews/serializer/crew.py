@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from accounts.models import User
 
 from crews.models import Crew, CrewInvite
 
@@ -43,4 +44,13 @@ class UserInviteListSerializer(serializers.ModelSerializer) :
         model = CrewInvite
         fields= '__all__'
         read_only_fields = ('crew','user')
+
+class CrewUserListSerializer(serializers.ModelSerializer) :
+    # crew_member_count = serializers.IntegerField(source='crew.crew_member.count', read_only=True)
+    # nickname = serializers.CharField(source='crew.crew_member.nickname', read_only=True)
+    # image = serializers.ImageField(source='crew.crew_member.image', read_only=True)
+    class Meta: 
+        model = User
+        fields= ('user_pk','nickname','image')
+        # read_only_fields = ('crew','user')
 
