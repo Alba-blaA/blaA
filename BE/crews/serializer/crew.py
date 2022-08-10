@@ -23,9 +23,10 @@ class CrewListSerializer(serializers.ModelSerializer) :
 
 class CrewSerializer(serializers.ModelSerializer) :
     crew_member_count = serializers.IntegerField(source='crew_member.count', read_only=True)
+    crew_leader = serializers.CharField(source='crew_leader.nickname')
     class Meta: 
         model = Crew
-        fields= ('crew_pk','crew_name','crew_explain','crew_region','crew_img','crew_member_count','created_at')
+        fields= ('crew_pk','crew_name','crew_leader','crew_explain','crew_region','crew_img','crew_member_count','created_at')
 
 class CrewInviteListSerializer(serializers.ModelSerializer) :
     nickname = serializers.CharField(source='user.nickname', read_only=True)
