@@ -60,7 +60,7 @@ export default {
     host: () => HOST,
     story: () => HOST + STORY,
     detail: (story_pk) => HOST + STORY + story_pk + '/',
-    like: (story_pk) => HOST + STORY + 'like/' + story_pk,
+    like: (story_pk) => HOST + STORY + 'like/' + story_pk + '/',
     comment:(story_pk) => HOST + STORY + COMMENT + story_pk +'/',
     commentChange: (comment_pk) => HOST + STORY + COMMENT + 'ud/' + comment_pk,
     myStory: (user_pk) => HOST + STORY + "mystory/" + user_pk + "/",
@@ -69,7 +69,7 @@ export default {
     store: () => HOST + REVIEW + STORE,
     review: (store_pk) => HOST + REVIEW + store_pk + '/',
     reviewDetail: (review_pk) => HOST + REVIEW + 'detail/' + review_pk + '/',
-    like: (review_pk) => HOST + REVIEW + 'like/' + review_pk
+    like: (review_pk) => HOST + REVIEW + 'like/' + review_pk + '/',
   },
   crew: {
     myCrew: (user_pk) => HOST + CREW + user_pk + "/",

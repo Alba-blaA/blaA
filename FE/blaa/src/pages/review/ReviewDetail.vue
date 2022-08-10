@@ -3,7 +3,7 @@
     <router-link :to="{name: 'review'}">뒤로</router-link><h2>{{store_name}}</h2>
     <!-- 별점  -->
     <div class="star">
-      <p>전체 리뷰 평균 ({{review.length}} 명)</p>
+      <p>전체 리뷰 평균 ({{person}} 명)</p>
       <span>{{star}} 점</span>
       <div class="star-ratings">
         <div 
@@ -20,22 +20,20 @@
     </div>
     <br>
     <!-- 버튼식 리뷰 -->
-    <div v-for="(value, name) of types" :key="name.id">
+    <div v-for="(value, name) of types.value" :key="name.id">
       <p style="margin: 0;">{{name}}</p>
       <div style="display: flex;">
-        <div class="processBar" style="
+        <div style="
           background: #6BC098;
           padding: 0;
           position: absolute;
           z-index: 1;
           display: flex;
-          top: 0;
-          left: 0;
           overflow: hidden;
           border-radius: 20px;
           height:15px;"
 
-          :style="{width: (value * 100/64) + '%'}"
+          :style="{width: (value * 64/100) + '%'}"
           >
           
         </div>
@@ -45,7 +43,8 @@
           height:15px;
           width: 64%
           z-index: 0;
-          padding: 0;"
+          padding: 0;
+          margin-right: 20px;"
           >
         </div>
         <span>{{value}}%</span>
@@ -56,21 +55,10 @@
     <br>
     <!-- 한줄평 -->
     <h3>한줄평</h3>
-    <div>
-      <div class="userReview" v-for="userReview in review" :key="userReview.review_pk">
-        <!-- d-flex 행렬로 -->
-        <div style="cursor:pointer" @click="moveToDetailPage(userReview.review_pk)">
-          <div>{{ userReview.oneline_review}}</div>
-          <div>
-            <span>{{userReview.like_user_count}}</span>
-            <span :class="currentUser in userReview.like_users? activate : deactivate" 
-            @click="likeOneReview(userReview.review_pk)"
-            style="cursor:pointer">♥</span> 
-          </div>
-          <div class="user_info"><span>{{userReview.user.nickname}}</span> <span>작성일: {{userReview.created_at}} </span></div> 
-        </div>
-      </div>
+    <div v-if="review">
+      <CommentDetail class="userReview" v-for="userReview in review.value" :key="userReview.review_pk" :review="userReview" :isDetail="false" @update="update"/>
     </div>
+    <p v-else>아직 리뷰가 없어요</p>
   </div>
   
   
@@ -80,13 +68,15 @@
 <script>
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import { onMounted, ref } from 'vue'
-import { dataChange } from '@/hooks/dateChange'
+import { computed, onMounted, ref } from 'vue'
+import CommentDetail from '@/components/review/CommentDetail.vue'
 // import $ from 'jquery'
 
 export default {
+  components: {
+    CommentDetail
+  },
   setup() {
-    const router = useRouter()
     const route = useRoute()
     const store = useStore()
     const review = ref([])
@@ -95,52 +85,20 @@ export default {
     const store_name = route.params.store_name
     const score = ref(0)
     const like = ref(false)
-    const {
-      yyyyMMdd
-    } = dataChange()
+    const user_pk = store.state.account.userInfo.user_pk
+    const person = ref(0)
 
     // 처음 시작될 때 실행
-    onMounted( async() => {
+    onMounted(async() => {
       await store.dispatch('review/getReview', route.params.store_pk)
-      review.value = store.state.review.review
+      review.value = computed(() => {return store.state.review.review})
       // 별점, 버튼, 날짜 변환
-      star.value = review.value.splice(-1, 1)[0].review_star_static
-      types.value =  review.value.splice(-1, 1)[0].review_button_static
-
-      review.value.forEach(ele => {
-        ele.created_at = yyyyMMdd(ele.created_at)
-        // 현재 유저가 좋아요를 눌렀는지 확인
-        // 현재 유저 정보를 불어와야됨
-        // if (ele.like_users)
-      })
-      // 버튼 점수의 비율 계산
-      if (review.value.length) {
-        for (let type in types.value) {
-          types.value[type] = (types.value[type] / review.value.length)
-        }
-      }
-      score.value = (star.value * 20) + 1.5
+      star.value = computed(() => {return store.state.review.reviewStar})
+      types.value = computed(() => {return store.state.review.reviewBtn})
+      score.value = (star.value.value * 20) + 1.5
+      person.value = computed(() => {return review.value.value.length})
     })
 
-    const likeOneReview = async(review_pk) => {
-      // 좋아요 로직, 
-      await store.dispatch('review/likeOneReview', review_pk)
-    }
-
-    // 날짜 변환 함수
-    
-
-    const moveToDetailPage = (review_pk) => {
-      router.push({
-        name: 'detailComment',
-        params: {
-          store_pk: route.params.store_pk,
-          store_name: route.params.store_name,
-          review_pk: review_pk
-        }
-      })
-    }
-    
 
     return {
       like,
@@ -149,8 +107,8 @@ export default {
       review,
       store_name,
       score,
-      likeOneReview,
-      moveToDetailPage
+      user_pk,
+      person
     }
   }
 }
@@ -162,6 +120,7 @@ export default {
   background-color: lightgray;
   border-radius: 20px;
   padding: 5px;
+  z-index: 1;
 }
 /* 별점 css */
 .star-ratings {
@@ -193,6 +152,11 @@ export default {
 }
 
 /* 하트 css */
+.heart { 
+  z-index: 10;
+  height: 25px;
+  width: 25px;
+}
 .activate {
   background-color: red;
 }

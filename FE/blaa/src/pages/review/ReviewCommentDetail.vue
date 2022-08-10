@@ -1,20 +1,9 @@
 <template>
   <span style="cursor:pointer" @click="moveToPrevious">X</span> <h3>{{store_name}}</h3>
-    <div class="userReview">
-      <div class="userOnelineReview">
-        <div>{{ review.oneline_review}}</div>
-        <div>
-          <span>{{review.like_user_count}}</span>
-          <span :class="review.like_users? activate : deactivate" 
-          @click="likeOneReview(review.review_pk)"
-          style="cursor:pointer">♥</span> 
-        </div>
-      </div>
-      <div class="user_info"><span>{{review.user.nickname}}</span> <span>작성일: {{review.created_at}} </span></div> 
-    </div>
+      <CommentDetail class="userReview" :review="review.value" :isDetail="true"/>
     <br>
     <div>
-      <p>{{review.user.nickname}} 님은이렇게 평가했어요.</p>
+      <p>{{review.value.user.nickname}} 님은이렇게 평가했어요.</p>
     </div>
     <br>
     <div class="userReviewDetail">
@@ -30,23 +19,24 @@
             <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
           </div>
         </div>
-        <span>{{review.star}} 점</span>
+        <span>{{review.value.star}} 점</span>
       </div>
-      <div v-for="(value, name) of review.button" :key="name.id">
+      <div v-for="(value, name) of review.value.button" :key="name.id">
         <div v-if="value == 1" class="buttonReview" >{{name}}</div>
       </div>
     </div>
 </template>
 
 <script>
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, ref, computed } from 'vue'
 import { useStore } from 'vuex'
-import api from '@/api/api'
 import { useRoute, useRouter } from 'vue-router'
-import axios from 'axios'
-import {dataChange} from '@/hooks/dateChange'
+import CommentDetail from '@/components/review/CommentDetail.vue'
 
 export default {
+  components: {
+    CommentDetail
+  },
   setup() {
     const route = useRoute()
     const router = useRouter()
@@ -56,26 +46,18 @@ export default {
     const store_name = route.params.store_name
     const score = ref(0)
     const review = ref([])
-
-    const {
-      yyyyMMdd
-    } = dataChange()
-
+    const user_pk = store.state.account.userInfo.user_pk
 
     onBeforeMount(async() => {
-      try {
-        const res = await axios.get(api.review.reviewDetail(review_pk), {
-          headers: {
-            Authorization: `Bearer ${store.state.review.Token}`
-          }
-        })
-        review.value = res.data
-        review.value['created_at'] = yyyyMMdd(review.value['created_at'])
-        score.value = (review.value.star * 20) + 1.5
-      } catch (error) {
-        console.error(error)
-      }
+      await store.dispatch('review/getDetailReview', review_pk)
+      review.value = computed(() => {return store.state.review.detailReview})
+      score.value = (review.value.value.star * 20) + 1.5
     })
+
+    const update = () => {
+      review.value = computed(() => {return store.state.review.detailReview})
+    }
+
 
     const moveToPrevious =() => {
       console.log('이동')
@@ -92,7 +74,9 @@ export default {
       review,
       moveToPrevious,
       score,
-      store_name
+      store_name,
+      user_pk,
+      update
     } 
   }
 }

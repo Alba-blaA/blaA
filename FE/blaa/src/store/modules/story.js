@@ -20,6 +20,9 @@ export default {
     DELETE_CURRENT_STORY(state) {
       state.currentStory = null
     },
+    LIKE_CURRNET_STORY(state, payload) {
+      state.currentStory
+    },
     CREATE_COMMENT(state, payload) {
       // 작성자, 내용, 날짜가 객체로 들어감
       state.comments.push(payload)
@@ -65,6 +68,18 @@ export default {
           }
         })
         commit('DELETE_CURRENT_STORY')
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    async likeStory({commit, state}, story_pk) {
+      try {
+        const res = await axios.post(api.story.like(story_pk), {
+          headers: {
+            Authorization: `Bearer ${state.Token}`
+          }
+        })
+        console.log(res.data)
       } catch (error) {
         console.error(error)
       }
