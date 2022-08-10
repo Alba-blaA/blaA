@@ -30,6 +30,25 @@ class CrewSerializer(serializers.ModelSerializer) :
         fields= ('crew_pk','crew_name','crew_leader','crew_explain','crew_region','crew_img','crew_member_count','created_at')
         read_only_fields = ('crew_pk','crew_leader',)
 
+    def update(self, instance, validated_data):
+       
+        instance.crew_name = validated_data.get('crew_name', instance.crew_name)
+        instance.crew_explain = validated_data.get('crew_explain', instance.crew_explain)
+        instance.crew_region = validated_data.get('crew_region', instance.crew_region)
+        # instance.crew_pin = validated_data.get('crew_pin', instance.crew_pin)
+        print(self.context['request'].FILES 
+        )
+        try:
+            images_data = self.context['request'].FILES.get('crew_img')
+        except:
+            images_data = None
+        # print(validated_data.get())
+        if images_data is not None:
+            instance.crew_img = images_data
+
+        instance.save()
+
+        return instance
 
 class CrewInviteListSerializer(serializers.ModelSerializer) :
     nickname = serializers.CharField(source='user.nickname', read_only=True)
