@@ -3,7 +3,7 @@
   <router-link class="btn btn-primary" :to="{name: 'createReview'}">리뷰 생성</router-link>
   <div v-if="reviews"> 
     <ReviewList v-for="review in reviews" :key="review.store_pk" :review="review"/>
-    <PaginationBar :currentPage="currentPage" :numberOfPages="numberOfPages" @click="searchReview"/>
+    <PaginationBar :currentPage="currentPage" :numberOfPages="numberOfPages" :idx="idx" @click="getReviews"/>
   </div>
   <p v-else>아직 리뷰가 없어요 ㅠㅠ</p>
   
@@ -27,26 +27,33 @@ export default {
     const currentPage = ref(1)
     const total = ref(0)
 
+    // 데이터를 가져오는 함수
+    const getReviews = async(page = currentPage.value) => {
+      await store.dispatch('review/getReviews', page)
+      reviews.value = store.state.review.reviews
+      currentPage.value = page
+    }
+
+    // DOM에 가져오기 전에 데이터 가져오기
     onBeforeMount(async() => {
-      await store.dispatch('review/getReviews')
-      // 페이지네이션 처리      
-      reviews.value = store.state.review.reviews.slice((currentPage.value - 1)* 5 + 1, currentPage.value*5 + 1)
-      total.value = store.state.review.reviews.length
+      await getReviews()
+      total.value = store.state.review.total_reviews
     })
 
     const numberOfPages = computed(() => {
-      return 2
-      // Math.ceil(total.value / 5)
+      return Math.ceil(total.value / 5)
     })
 
-    const searchReview = (page = currentPage.value) => {
-      reviews.value = store.state.review.reviews.slice((page - 1)* 5 + 1, page * 5 + 1)
-    }
+    const idx = computed(() => {
+      return parseInt((currentPage.value -1) /5)
+    })
 
     return {
       reviews,
-      searchReview,
-      numberOfPages
+      numberOfPages,
+      currentPage,
+      getReviews,
+      idx
     }
   }
 }

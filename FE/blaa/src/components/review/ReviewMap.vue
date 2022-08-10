@@ -7,9 +7,9 @@
           <input type="text" v-model="searchWord" @keypress.enter="firstSearchStore">
           <input type="checkbox" v-model="isStore" id="store" @click="switchIsStore"><label for="store">가게추가하기</label>
         </div>
-        <div v-if="searchList">
+        <div v-if="searchList.length">
           <ReviewMapList :isStore="isStore" v-for="searchChild in searchList" :key="searchChild.id" :searchChild="searchChild" @select-store="selectStore"/>
-          <PaginationBar :currentPage="currentPage" :numberOfPages="numberOfPages" @click="searchStore"/>
+          <PaginationBar :currentPage="currentPage" :numberOfPages="numberOfPages" :idx="idx" @click="searchStore"/>
         </div>
         <p v-else>검색결과가 없습니다.</p>
       </div>
@@ -88,7 +88,7 @@ export default {
             }
           })
           searchList.value = res.data.documents
-          totalCount.value = res.data.meta.total_count
+          totalCount.value = res.data.meta.pageable_count
           currentPage.value = page
         } catch(error) {
           console.error(error)
@@ -125,11 +125,16 @@ export default {
       return Math.ceil(totalCount.value / 5)
     })
 
+    // 5개씩 쪼개서 페이지네이션을 하기위한 인덱스
+    const idx = computed(() => {
+      return Math.floor((currentPage.value -1)/5)
+    })
+
     // 상점 선택 결과 전송
     const selectStore = (data) => {
       data = {
         ...data,
-        // 상점 생성 유무를 전송 false x / true 생성해야됨ㄴ
+        // 상점 생성 유무를 전송 false x / true 생성해야됨
         isStore: isStore.value
       }
       emit('select-store', data)
@@ -144,7 +149,8 @@ export default {
       numberOfPages,
       selectStore,
       firstSearchStore,
-      switchIsStore
+      switchIsStore,
+      idx
     }
   }
 }

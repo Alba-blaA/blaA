@@ -5,6 +5,7 @@ export default {
   namespaced: true,
   state: {
     reviews: [],
+    total_reviews: 0,
     review: [],
     searchStores: [],
     Token: sessionStorage.getItem('token')
@@ -21,16 +22,23 @@ export default {
       // 해당값으로 리뷰를 갱신
       state.review[review_pk-1].like_users = payload.like_users
       state.review[review_pk-1].like_user_count = payload.like_user_count
+    },
+    UPDATE_TOTAL_REVIEWS(state, payload) {
+      state.total_reviews = payload
     }
   },
   actions: {
-    async getReviews({commit, state}) {
+    async getReviews({commit, state}, page) {
       try {
         const res = await axios.get(api.review.store(), {
           headers: {
             Authorization: `Bearer ${state.Token}`
+          },
+          params: {
+            page: page
           }
         })
+        commit('UPDATE_TOTAL_REVIEWS', res.data.count)
         commit('GET_REVIEWS', res.data.results)
       } catch(error) {
         console.error(error)
