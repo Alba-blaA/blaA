@@ -27,8 +27,6 @@ export default {
     currentUserInfo: () => HOST + ACCOUNTS + "user/",
     // username으로 프로필 제공
     profile: (username) => HOST + ACCOUNTS + "profile/" + username,
-    myInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
-    myFollower: (user_pk) => HOST + ACCOUNTS + "followlist/" + user_pk + "/",
   },
 
   categorys: {
@@ -64,7 +62,6 @@ export default {
     like: (story_pk) => HOST + STORY + "like/" + story_pk,
     comment: (story_pk) => HOST + STORY + COMMENT + story_pk + "/",
     commentChange: (comment_pk) => HOST + STORY + COMMENT + "ud/" + comment_pk,
-    myStory: (user_pk) => HOST + STORY + "mystory/" + user_pk + "/",
   },
   review: {
     store: () => HOST + REVIEW + STORE,
@@ -72,7 +69,12 @@ export default {
     reviewDetail: (review_pk) => HOST + REVIEW + "detail/" + review_pk + "/",
     like: (review_pk) => HOST + REVIEW + "like/" + review_pk,
   },
-  crew: {
-    myCrew: (user_pk) => HOST + CREW + user_pk + "/",
-  },
+  profile: {
+    updateInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
+    myFollow: (user_pk) => HOST + ACCOUNTS + "followlist/" + user_pk + "/",
+    myStory: (user_pk) => HOST + STORY + "mystory/" + user_pk + "/",
+    myReview: (user_pk) => HOST + ACCOUNTS + "review/" + user_pk + "/",
+    myCrew: (user_pk) => HOST + ACCOUNTS + CREW + user_pk + "/",
+    myInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
+  }
 };

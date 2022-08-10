@@ -36,7 +36,7 @@ export default {
     ];
 
     axios
-      .get(api.story.myStory(route.params.user_pk), {
+      .get(api.profile.myStory(route.params.user_pk), {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -45,7 +45,7 @@ export default {
         console.log(response);
         console.log(response.data);
 
-        const myStoryArray = response.data;
+        // const myStoryArray = response.data;
 
         for (var i = 0; i < response.data.length; i++) {
           console.log(response.data[i].story_pk);

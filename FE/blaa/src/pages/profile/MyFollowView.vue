@@ -16,7 +16,7 @@ export default {
     const token = sessionStorage.getItem("token");
 
     axios
-      .get(api.accounts.myFollower(route.params.user_pk), {
+      .get(api.accounts.myFollow(route.params.user_pk), {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -94,11 +94,13 @@ export default {
 
     const myReview = () => {
       console.log("내 리뷰 조회");
+      router.push({name: "myreview", params: {user_pk: userInfo.user_pk}})
     };
 
     const myGroup = () => {
-      console.log("내 그룹 조회");
+      console.log("내 크루 조회");
       console.log(userInfo.user_pk);
+      router.push({name: "mycrew", params: {user_pk: userInfo.user_pk}});
       axios
         .get(api.crew.myCrew(userInfo.user_pk))
         .then((data) => {
@@ -111,6 +113,7 @@ export default {
 
     const myInfo = () => {
       console.log("회원정보 조회");
+      router.push({name: "myinfo", params: {user_pk: userInfo.user_pk}});
       axios
         .get(api.accounts.myInfo(userInfo.user_pk))
         .then((data) => {

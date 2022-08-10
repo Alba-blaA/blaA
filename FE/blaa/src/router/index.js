@@ -25,8 +25,12 @@ import SearchAllUsers from "@/pages/crew/SearchAllUsers.vue";
 
 import ProfileMain from "@/pages/profile/ProfileMainView.vue";
 import UpdateUserInfo from "@/pages/profile/UpdateUserInfoView.vue";
-import MyStory from "@/pages/profile/MyStoryView.vue";
 import MyFollow from "@/pages/profile/MyFollowView.vue";
+import MyStory from "@/pages/profile/MyStoryView.vue";
+import MyReview from "@/pages/profile/MyReviewView.vue";
+import MyCrew from "@/pages/profile/MyCrewView.vue";
+import MyInfo from "@/pages/profile/MyInfoView.vue";
+
 
 const router = createRouter({
   history: createWebHistory(),
@@ -139,25 +143,40 @@ const router = createRouter({
           component: MyProfile,
         },
         {
-          path: "update/:user_pk",
+          path: ":user_pk/update",
           name: "updateInfo",
           component: UpdateUserInfo,
         },
         {
-          path: "follower/:user_pk",
+          path: ":user_pk/follower",
           name: "myfollower",
           component: MyFollow,
         },
         {
-          path: "following/:user_pk",
+          path: ":user_pk/followingk",
           name: "myfollowing",
           component: MyFollow,
         },
         {
-          path: "mystory/:user_pk",
+          path: ":user_pk/mystory",
           name: "mystory",
           component: MyStory,
         },
+        {
+          path: ":user_pk/myreview",
+          name: "myreview",
+          component: MyReview,
+        },
+        {
+          path: ":user_pk/mycrew",
+          name: "mycrew",
+          component: MyCrew,
+        },
+        {
+          path: ":user_pk/myinfo",
+          name: "myinfo",
+          component: MyInfo,
+        }
       ],
     },
     {
