@@ -11,6 +11,11 @@
     <p class="form-input">가게주소 : {{storeAddress}}</p>
     <p v-if="storeError" class="error">가게를 검색해주세요</p>
   </div>
+  <div v-if="isStore">
+    <label for="store_picture">가게 사진 등록</label>
+    <input class="store_picture" id="store_picture" type="file" @change="previewFile"/><br />
+    <img class="img_test" src="" height="200" alt="이미지 미리보기..." />
+  </div>
   <!-- 별점 -->
   <span>별점 : </span>
   <form id="myform" class="mb-3" @click="checkStar">
@@ -45,7 +50,7 @@
 
 <script>
 import ReviewMap from '@/components/review/ReviewMap.vue'
-import { onMounted, ref, onBeforeMount } from 'vue'
+import { onMounted, ref, onBeforeMount, watch } from 'vue'
 import $ from 'jquery'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -69,6 +74,8 @@ export default {
     const starError = ref(false)
     const isStore = ref(true)
     const store_pk = ref(0)
+    const store_picture = ref(null)
+    const image_url = ref('')
 
     onBeforeMount(() => {
       storeButton.value = [0,0,0,0,0,0]
@@ -78,9 +85,46 @@ export default {
     const selectStore = (data) => {
       store_pk.value = data.store_pk
       isStore.value = data.isStore
+      console.log(isStore.value)
       storeName.value = data.name
       storeAddress.value = data.region
       isModalOpen.value = false
+    }
+
+    // 사진 등록하기
+    const previewFile = (e) => {
+      const preview = document.querySelector('.img_test')
+      if (e.target.files[0]) {
+        store_picture.value = e.target.files[0]
+        const reader = new FileReader();
+
+        // 파일명을 가져와서 소문자로 변환
+        let fileName = store_picture.value.name.substring(
+          store_picture.value.name.lastIndexOf(".") + 1
+        )
+        fileName = fileName.toLowerCase()
+
+        // 파일 형식과 3MB의 파일크기 확인
+        if (
+          ["jpeg", "png", "gif", "bmp"].includes(fileName) && store_picture.value.size <= 25165824
+        ) {
+          reader.onload = e => {
+            preview.src = e.target.result
+            image_url.value = e.target.result
+          }
+          reader.readAsDataURL(store_picture.value)
+        } else if (store_picture.value.size <= 25165824) {
+          preview.src = null
+        } else {
+          alert('파일을 다시 선택해 주세요')
+          store_picture.value = null
+          preview.src = null
+        }
+      // 파일을 선택하지 않았을 떄
+      } else {
+        store_picture.value = null
+        preview.src = null
+      }
     }
 
     // 별점 가져오기
@@ -115,8 +159,15 @@ export default {
             buttonType.push(String(idx+1))
           }
         }
-        console.log(buttonType)
+        // 이미지 전달
+        const form = new FormData()
+
+        form.append('image', store_picture.value)
+        form.append('name', storeName.value)
+        form.append('region', storeAddress.value)
+
         const data = {
+          form: form,
           // 값을 생성하는지 아닌지 여부를 확인하기위해서
           isStore: isStore.value,
           store_pk: store_pk.value,
@@ -151,7 +202,9 @@ export default {
       sumbitReview,
       starError,
       storeError,
-      oneReviewError
+      oneReviewError,
+      previewFile,
+      isStore
     }
   }
 }

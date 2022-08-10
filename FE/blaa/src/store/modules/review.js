@@ -126,8 +126,7 @@ export default {
     async makeReviews({state}, data) {
       const isStore = data.isStore
       const store = {
-        name: data.name,
-        region: data.region,
+        form: data.form,
         store_pk: data.store_pk
       }
       const review = {
@@ -138,20 +137,22 @@ export default {
       // 스토어 정보가 없어 새로 생성시
       if (isStore) {
         try {
+          console.log(data.name)
           // 한번 더 스토어 정보가 있나 확인
           const res = await axios.get(api.review.store(), {
             headers: {
               Authorization: `Bearer ${state.Token}`
             },
             params: {
-              search: store.name
+              search: data.name
             }
           })
           // 그래도 없으면 생성 진행
           if (res.data.count == 0) {
             try {
-              const res = await axios.post(api.review.store(), store, {
+              const res = await axios.post(api.review.store(), store.form, {
                 headers: {
+                  "Content-Type": "multipart/form-data",
                   Authorization: `Bearer ${state.Token}`
                 }
               })
