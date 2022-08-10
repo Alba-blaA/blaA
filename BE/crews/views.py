@@ -338,9 +338,10 @@ class CrewUserAPIView(ListAPIView) :
         return Response(serializer.data)
 
 #크루장이 초대할 때 
+# invite/<int:crew_pk>/<int:user_pk>/ 이 주소로 보내면 일단 크루장이 초대를 하는거야 
 @api_view(['POST'])
 def CrewInviteView(request,crew_pk,user_pk) :
-
+#  크루장이 초대를 하는 로직인데 
     crew = Crew.objects.get(crew_pk=crew_pk) 
     user = User.objects.get(user_pk=user_pk)
     

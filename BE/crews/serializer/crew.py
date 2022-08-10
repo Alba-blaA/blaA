@@ -28,7 +28,7 @@ class CrewNonImageSerializer(serializers.ModelSerializer) :
     # crew_img = serializers.ImageField(required=False)
     class Meta: 
         model = Crew
-        fields= ('crew_pk','crew_name','crew_leader','crew_explain','crew_region','crew_member_count','created_at')
+        fields= ('crew_pk','crew_name','crew_leader','crew_explain','crew_region','crew_img','crew_member_count','created_at')
         read_only_fields = ('crew_pk','crew_leader','crew_img')
 
 class CrewSerializer(serializers.ModelSerializer) :
@@ -44,7 +44,7 @@ class CrewSerializer(serializers.ModelSerializer) :
         instance.crew_name = validated_data.get('crew_name', instance.crew_name)
         instance.crew_explain = validated_data.get('crew_explain', instance.crew_explain)
         instance.crew_region = validated_data.get('crew_region', instance.crew_region)
-        
+
         try:
             images_data = self.context['request'].FILES.get('crew_img')
         except:

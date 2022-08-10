@@ -57,6 +57,11 @@ class CrewSchedule(models.Model) :
     crew_starthour = models.TimeField()
     crew_endhour = models.TimeField()
     
+class CrewChat(TrackingModel,models.Model) :
+    chat_pk = models.AutoField(primary_key=True)
+    crew = models.ForeignKey(Crew,on_delete=models.CASCADE)
+    user =models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    content = models.TextField()
 
     
 
