@@ -78,7 +78,4 @@ export default {
     reviewDetail: (review_pk) => HOST + REVIEW + "detail/" + review_pk + "/",
     like: (review_pk) => HOST + REVIEW + "like/" + review_pk,
   },
-  crew: {
-    myCrew: (user_pk) => HOST + CREW + user_pk + "/",
-  },
 };
