@@ -161,6 +161,106 @@ def follow(request, user_pk):
     return redirect('accounts:login')
 
 
+
+
+
+
+class EmailUniqueCheck(CreateAPIView):
+    authentication_classes=[]
+    serializer_class = EmailUniqueCheckSerializer
+
+    def post(self, request, format=None):
+        serializer = self.get_serializer(data=request.data, context={'request': request})
+
+        if serializer.is_valid():
+            return Response(data={'detail':['You can use this email']}, status=status.HTTP_200_OK)
+        else:
+            # detail = dict()
+            # detail['detail'] = serializer.errors['email']
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+class NicknameUniqueCheck(CreateAPIView):
+    authentication_classes=[]
+    serializer_class = NicknameUniqueCheckSerializer
+
+    def post(self, request, format=None):
+        serializer = self.get_serializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            return Response(data={'detail':['You can use this nickname']}, status=status.HTTP_200_OK)
+        else:
+            detail = dict()
+            detail['detail'] = serializer.errors['nickname']
+            return Response(data=detail, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class UserCrewAPIView(ListAPIView) :
+    serializer_class = UserCrewSerializer 
+    lookup_field = 'user_pk'
+
+    def list(self, request,user_pk, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset(user_pk))
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def get_queryset(self,user_pk):
+        # print(self.request.user)
+        return User.objects.filter(user_pk=user_pk)
+
+class UserReviewAPIView(ListAPIView) :
+    serializer_class = UserReviewSerializer 
+    lookup_field = 'user_pk'
+
+    def list(self, request,user_pk, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset(user_pk))
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+        
+    def get_queryset(self,user_pk):
+        # print(self.request.user)
+        return User.objects.filter(user_pk=user_pk)
+
+
+class FollowAPIView(ListAPIView) :
+
+    serializer_class = UserListSerializer
+    lookup_field = 'user_pk'
+    queryset = User.objects.all()
+    
+    def list(self, request, *args, **kwargs):
+        user = self.get_object()
+        type = request.GET.get('type', None)
+        print(type)
+        #내가 팔로우 하는 유저
+        if type == 'follow' :
+            queryset = User.objects.filter(followers=user)
+        
+        #나를 팔로잉 하는 유저 
+        elif type == 'following' :
+            queryset = User.objects.filter(followings=user)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+
 class KakaoSignInView(View):
     def get(self, request):
         client_id = "0f5982ee3aa76733f951e5add93878c1"
@@ -258,7 +358,6 @@ class KakaoSignInCallbackView(View):
     def get(self, request):
 
         try:
-            print(request.GET)
             code = request.GET.get("code")                                       
             client_id = "0f5982ee3aa76733f951e5add93878c1"
             redirect_uri = "http://127.0.0.1:8000/account/sign-in/kakao/callback"
@@ -269,14 +368,13 @@ class KakaoSignInCallbackView(View):
             )
 
             token_json = token_request.json()                                    
-            print(token_json)
+
             error = token_json.get("error",None)
 
             if error is not None :
                 return JsonResponse({"message": "INVALID_CODE"}, status = 400)
 
             access_token = token_json.get("access_token")
-            print(access_token)
             
                                     
 
@@ -287,78 +385,3 @@ class KakaoSignInCallbackView(View):
             return JsonResponse({"message" : "INVALID_TOKEN"}, status = 400)
     
         
-class EmailUniqueCheck(CreateAPIView):
-    authentication_classes=[]
-    serializer_class = EmailUniqueCheckSerializer
-
-    def post(self, request, format=None):
-        serializer = self.get_serializer(data=request.data, context={'request': request})
-
-        if serializer.is_valid():
-            return Response(data={'detail':['You can use this email']}, status=status.HTTP_200_OK)
-        else:
-            # detail = dict()
-            # detail['detail'] = serializer.errors['email']
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-class NicknameUniqueCheck(CreateAPIView):
-    authentication_classes=[]
-    serializer_class = NicknameUniqueCheckSerializer
-
-    def post(self, request, format=None):
-        serializer = self.get_serializer(data=request.data, context={'request': request})
-        if serializer.is_valid():
-            return Response(data={'detail':['You can use this nickname']}, status=status.HTTP_200_OK)
-        else:
-            detail = dict()
-            detail['detail'] = serializer.errors['nickname']
-            return Response(data=detail, status=status.HTTP_400_BAD_REQUEST)
-
-
-
-# class UserCrewAPIView(ListAPIView) :
-#     serializer_class = UserCrewSerializer 
-#     lookup_field = 'user_pk'
-
-#     def get_queryset(self):
-#         print(self.request.user)
-#         return User.objects.filter(email=self.request.user)
-
-
-class UserCrewAPIView(ListAPIView) :
-    serializer_class = UserCrewSerializer 
-    lookup_field = 'user_pk'
-
-    def list(self, request,user_pk, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset(user_pk))
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def get_queryset(self,user_pk):
-        # print(self.request.user)
-        return User.objects.filter(user_pk=user_pk)
-
-class UserReviewAPIView(ListAPIView) :
-    serializer_class = UserReviewSerializer 
-    lookup_field = 'user_pk'
-
-    def list(self, request,user_pk, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset(user_pk))
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-        
-    def get_queryset(self,user_pk):
-        # print(self.request.user)
-        return User.objects.filter(user_pk=user_pk)
