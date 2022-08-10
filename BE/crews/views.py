@@ -2,6 +2,7 @@ import json
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView,ListAPIView,CreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
+from crews.serializer.schedule import CrewScheduleListSerializer
 from crews.models import Crew, CrewArticle, CrewArticleComment, CrewSchedule
 from rest_framework import filters
 from django.http import Http404
@@ -258,11 +259,11 @@ def crew_schedule_list_or_create(request, crew_id):
     
     def schedule_list():
         schedule = CrewSchedule.objects.filter(Q(crew_id=crew_id))
-        serializer = CrewScheduleSerializer(schedule, many = True)
+        serializer = CrewScheduleListSerializer(schedule, many = True)
         return Response(serializer.data)
     
     def schedule_create():
-        serializer = CrewScheduleSerializer(data=request.data)
+        serializer = CrewScheduleListSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(crew_id=crew_id)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -278,7 +279,7 @@ def crew_schedule_update_or_delete(request, crew_schedule_pk):
     schedule = CrewSchedule.objects.get(crew_schedule_pk=crew_schedule_pk)
     
     def schedule_update():
-        serializer = CrewScheduleSerializer(instance=schedule, data=request.data)
+        serializer = CrewScheduleListSerializer(instance=schedule, data=request.data)
         if serializer.is_valid(raise_exception=True):
                 serializer.save(crew_id=schedule.crew_id)
                 return Response(serializer.data)
@@ -292,14 +293,13 @@ def crew_schedule_update_or_delete(request, crew_schedule_pk):
     elif request.method == 'DELETE':
         return schedule_delete()
 
+
+
 @api_view(['GET'])
-def crew_schedule_work_list(request, crew_schedule_pk):
-    schedule = CrewSchedule.objects.get(crew_schedule_pk=crew_schedule_pk)
-    print(schedule.crew_day)
-    tmp = CrewSchedule.objects.filter(crew_day=schedule.crew_day)
-    print(tmp)
-    print(len(tmp))
-    for tm in len(tmp):
-        print(tm.get('user_id'))
-    
+def crew_schedule_work_list(request, schedule):
+
+    schedule = CrewSchedule.objects.filter(crew_day=schedule)
+
+    serializer = CrewScheduleSerializer(schedule, many = True)
+    return Response(serializer.data,status=status.HTTP_200_OK)
     
