@@ -50,6 +50,7 @@ urlpatterns = [
     # path('account/',include('accounts.urls')),
     path('api/v1/blacklist/', include('blacklists.urls')),
     path('api/v1/crews/',include('crews.urls')),
+    path('api/v1/notifications/',include('notifications.urls')),
     #--------------------swagger--------------
     path('api/v1/swagger.json', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     # path('swagger(?P<format>\.json|\.yaml)$/', schema_view.without_ui(cache_timeout=0), name='swagger'),
