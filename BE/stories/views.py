@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Hashtag, Story,Comment
 from accounts.models import User
-from .serializers.story import StorySerializer,StoryDetailSerializer
+from .serializers.story import StoryLikeSerializer, StorySerializer,StoryDetailSerializer
 from .serializers.comment import CommentSerializer
 from .serializers.hashtag import HashtagSerializer
 from django.db.models import Q
@@ -218,15 +218,11 @@ def like_story(request, story_pk):
     user = request.user
     if story.like_user.filter(user_pk=user.pk).exists():
         story.like_user.remove(user)
-        context = {
-                'result' : f'{request.user.nickname}님이 좋아요 취소'
-        }
+        serializer = StoryLikeSerializer(story)
     else:
         story.like_user.add(user)
-        context = {
-                    'result' : f'{request.user.nickname}님이 좋아요 누름'
-                }
-    return Response(context)
+        serializer = StoryLikeSerializer(story)
+    return Response(serializer.data)
 
 @api_view(['GET'])   
 def story_region_filter(request):

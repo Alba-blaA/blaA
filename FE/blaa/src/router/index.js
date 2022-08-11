@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/pages/home/HomeView.vue";
 import Chat from "@/pages/chat/ChatView.vue";
-import MyProfile from "@/pages/profile/ProfileView.vue";
+import MyProfile from "@/pages/profile/MyProfileView.vue";
 import Login from "@/pages/account/LoginView.vue";
 import KakaoLogin from "@/pages/account/KakaoLoginView.vue";
 import Signup from "@/pages/account/signup/SignupView.vue";
@@ -23,16 +23,15 @@ import ReviewForm from "@/pages/review/ReviewForm.vue";
 import ReviewDetail from "@/pages/review/ReviewDetail.vue";
 import ReviewCommentDetail from "@/pages/review/ReviewCommentDetail.vue";
 import Chatroom from "@/pages/chat/ChatroomView.vue";
-import SearchAllUsers from "@/pages/crew/SearchAllUsersView.vue"
+import SearchAllUsers from "@/pages/crew/SearchAllUsersView.vue";
 
 import ProfileMain from "@/pages/profile/ProfileMainView.vue";
 import UpdateUserInfo from "@/pages/profile/UpdateUserInfoView.vue";
-import MyFollow from "@/pages/profile/MyFollowView.vue";
+import FollowList from "@/pages/profile/FollowListView.vue";
 import MyStory from "@/pages/profile/MyStoryView.vue";
 import MyReview from "@/pages/profile/MyReviewView.vue";
 import MyCrew from "@/pages/profile/MyCrewView.vue";
 import MyInfo from "@/pages/profile/MyInfoView.vue";
-
 
 const router = createRouter({
   history: createWebHistory(),
@@ -111,18 +110,14 @@ const router = createRouter({
       children: [
         {
           path: "regist",
-          name: "crewregist",
-          component: () => import("@/components/crew/register/CrewRegistView.vue"),
+          name: "crewregistview",
+          redirect: { name: "crewregist" },
+          component: () => import("@/components/crew/manage/CrewRegistView.vue"),
           children: [
             {
-              path: "business",
-              name: "businesscrew",
-              component: () => import("@/components/crew/register/CrewRegistBusiness.vue"),
-            },
-            {
-              path: "friendship",
-              name: "friendshipcrew",
-              component: () => import("@/components/crew/register/CrewRegistFriendship.vue"),
+              path: "",
+              name: "crewregist",
+              component: () => import("@/components/crew/manage/CrewRegistInput.vue"),
             },
           ],
         },
@@ -144,6 +139,21 @@ const router = createRouter({
           ],
         },
         {
+          path: "modify/:crew_pk",
+          name: "crewmodify",
+          component: () => import("@/components/crew/manage/CrewModify.vue"),
+        },
+        {
+          path: "delete/:crew_pk",
+          name: "crewdelete",
+          component: () => import("@/components/crew/manage/CrewDelete.vue"),
+        },
+        {
+          path: "detail/:crew_pk",
+          name: "crewdetail",
+          component: () => import("@/components/crew/manage/CrewDetail.vue"),
+        },
+        {
           path: ":crew_pk",
           name: "crewboard",
           redirect: { name: "articlelist" },
@@ -152,32 +162,38 @@ const router = createRouter({
             {
               path: "list",
               name: "articlelist",
-              component: () => import("@/components/crew/article/ArticleList.vue"),
+              component: () =>
+                import("@/components/crew/article/ArticleList.vue"),
             },
             {
               path: "regist",
               name: "articleregist",
-              component: () => import("@/components/crew/article/ArticleRegist.vue"),
+              component: () =>
+                import("@/components/crew/article/ArticleRegist.vue"),
             },
             {
               path: ":crew_article_pk",
               name: "articledetail",
-              component: () => import("@/components/crew/article/ArticleDetail.vue"),
+              component: () =>
+                import("@/components/crew/article/ArticleDetail.vue"),
             },
             {
               path: ":crew_article_pk",
               name: "articlemodify",
-              component: () => import("@/components/crew/article/ArticleModify.vue"),
+              component: () =>
+                import("@/components/crew/article/ArticleModify.vue"),
             },
             {
               path: ":crew_article_pk",
               name: "articledelete",
-              component: () => import("@/components/crew/article/ArticleDelete.vue"),
+              component: () =>
+                import("@/components/crew/article/ArticleDelete.vue"),
             },
             {
               path: "schedule",
               name: "schedule",
-              component: () => import("@/components/crew/schedule/ScheduleView.vue"),
+              component: () =>
+                import("@/components/crew/schedule/ScheduleView.vue"),
               // children: [
               //   {
               //     path: "calendar",
@@ -186,7 +202,17 @@ const router = createRouter({
               //   },
               // ],
             },
+            {
+              path: "",
+              name: "crewmember",
+              component: () => import("@/components/crew/member/CrewMemberList.vue"),
+            },
           ],
+        },
+        {
+          path: "request",
+          name: "crewmemberrequestlist",
+          component: () => import("@/components/crew/member/CrewMemberRequestList.vue"),
         },
       ],
     },
@@ -238,14 +264,9 @@ const router = createRouter({
           component: UpdateUserInfo,
         },
         {
-          path: ":user_pk/follower",
-          name: "myfollower",
-          component: MyFollow,
-        },
-        {
-          path: ":user_pk/followingk",
-          name: "myfollowing",
-          component: MyFollow,
+          path: ":user_pk/:followType",
+          name: "followList",
+          component: FollowList,
         },
         {
           path: ":user_pk/mystory",
@@ -266,7 +287,7 @@ const router = createRouter({
           path: ":user_pk/myinfo",
           name: "myinfo",
           component: MyInfo,
-        }
+        },
       ],
     },
     {

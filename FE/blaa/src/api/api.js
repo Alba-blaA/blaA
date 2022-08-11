@@ -1,5 +1,5 @@
 // 기본 url
-const HOST = "http://localhost:8000/api/v1/";
+const HOST = "http://127.0.0.1:8000/api/v1/";
 
 // ===================================
 // 세부 url
@@ -25,43 +25,24 @@ export default {
     // username으로 프로필 제공
     profile: (username) => HOST + ACCOUNTS + "profile/" + username,
     myInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
-    searchallusers: () => HOST + ACCOUNTS + "users/"
+    searchallusers: () => HOST + ACCOUNTS + "users/",
   },
 
   crew: {
     crew: () => HOST + CREW,
-    crewInfo: (crew_pk) => HOST + CREW + crew_pk,
-    articles: (crew_pk) => HOST + CREW + "article/" + crew_pk + "/",
+    crewInfo: (crew_pk) => HOST + CREW + crew_pk + "/",
     article: (crew_article_pk) => HOST + CREW + "article/edit/" + crew_article_pk + "/",
+    articles: (crew_pk) => HOST + CREW + "article/" + crew_pk + "/",
+    members: (crew_pk) => HOST + CREW + "user/" + crew_pk + "/",
+    sign: (crew_pk) => HOST + CREW + "sign/" + crew_pk + "/",
+    invitelist: (crew_pk, type) => HOST + CREW + "invitelist/" + crew_pk + "/?type=" + type,
+    accept: (crew_pk, user_pk) => HOST + CREW + "accept_user/" + crew_pk + "/" + user_pk + "/",
     // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
   },
   categorys: {
     job: () => HOST + CATEGORYS + "job/",
     region: () => HOST + CATEGORYS + "region/",
   },
-
-  // 예시
-  // movies: {
-  //   // /articles/
-  //   movies: () => HOST + MOVIES,
-  //   // /articles/1/
-  //   movie: moviePk => HOST + MOVIES + ${moviePk},
-  //   reviews: moviePk => HOST + MOVIES + ${moviePk}/ + REVIEWS,
-  //   recommendations: moviePk => HOST2 + ${moviePk}/ + RECOMMENDATIONS + "?api_key=87931dd6e8327ea04518e5e2a6836196&language=ko",
-  //   search: value => HOST3 + ${value}& + "api_key=87931dd6e8327ea04518e5e2a6836196&language=ko",
-  //   review: (moviePk, reviewPk) =>
-  //     HOST + MOVIES + ${moviePk}/ + REVIEWS + ${reviewPk}/,
-  // },
-  // articles: {
-  //   // /articles/
-  //   articles: () => HOST + ARTICLES,
-  //   // /articles/1/
-  //   article: articlePk => HOST + ARTICLES + ${articlePk}/,
-  //   likeArticle: articlePk => HOST + ARTICLES + ${articlePk}/ + 'like/',
-  //   comments: articlePk => HOST + ARTICLES + ${articlePk}/ + COMMENTS,
-  //   comment: (articlePk, commentPk) =>
-  //     HOST + ARTICLES + ${articlePk}/ + COMMENTS + ${commentPk}/,
-  // },
   story: {
     host: () => HOST,
     story: () => HOST + STORY,
@@ -78,11 +59,13 @@ export default {
     like: (review_pk) => HOST + REVIEW + 'like/' + review_pk + '/',
   },
   profile: {
-    updateInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
+    updateMyInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
+    updateMyPW: (user_pk) =>
+      HOST + ACCOUNTS + "change_password/" + user_pk + "/",
     myFollow: (user_pk) => HOST + ACCOUNTS + "followlist/" + user_pk + "/",
     myStory: (user_pk) => HOST + STORY + "mystory/" + user_pk + "/",
     myReview: (user_pk) => HOST + ACCOUNTS + "review/" + user_pk + "/",
-    myCrew: (user_pk) => HOST + ACCOUNTS + CREW + user_pk + "/",
+    myCrew: (user_pk) => HOST + ACCOUNTS + "crew/" + user_pk + "/",
     myInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
-  }
+  },
 };
