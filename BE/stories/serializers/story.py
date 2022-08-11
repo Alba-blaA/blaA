@@ -37,9 +37,15 @@ class StoryDetailSerializer(serializers.ModelSerializer) :
     comment_set = CommentSerializer(read_only=True,many=True)
     hashtag_set = HashtagSerializer(read_only=True,many=True)
     # comment = get_object_or_404(Comment)
-            
+    like_user_count = serializers.IntegerField(source='like_user.count', read_only=True)
     class Meta :
         model = Story
-        fields= ('story_pk','user_pk','story_title','story_picture','created_at','comment_set', 'hashtag_set')
+        fields= ('story_pk','user_pk','story_title','story_picture','like_user','like_user_count','created_at','comment_set', 'hashtag_set')
         
+class StoryLikeSerializer(serializers.ModelSerializer) :
+    like_user_count = serializers.IntegerField(source='like_user.count', read_only=True)
+
+    class Meta: 
+        model = Story 
+        fields = ('like_user','like_user_count')
 
