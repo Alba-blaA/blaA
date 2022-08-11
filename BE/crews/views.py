@@ -1,7 +1,9 @@
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView,ListAPIView,CreateAPIView, DestroyAPIView,RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
-from crews.serializer.crew import CrewNonImageSerializer,CrewChatSerializer,CrewNoneImageCreateSerializer,CrewCreateSerializer, CrewInviteListSerializer, CrewListSerializer, CrewSerializer, CrewUserListSerializer, UserInviteListSerializer
+from crews.serializer.crew import (CrewNonImageSerializer,CrewChatSerializer,CrewNoneImageCreateSerializer,
+                                        CrewCreateSerializer, CrewInviteListSerializer, CrewListSerializer, CrewSerializer, 
+                                        CrewUserListSerializer, UserInviteListSerializer,GetRequestSerializer)
 from crews.serializer.schedule import CrewScheduleListSerializer,UserScheduleSerializer,CrewScheduleSerializer
 from crews.models import Crew, CrewArticle, CrewArticleComment, CrewInvite, CrewSchedule,CrewChat
 from rest_framework import filters
@@ -13,6 +15,7 @@ from crews.serializer.comment import CrewCommentSerializer
 from rest_framework.decorators import api_view
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
+from drf_yasg.utils import swagger_auto_schema
 #리뷰를 작성할 가게 검색 or 가게 추가
 class CrewListCreateAPIView(ListCreateAPIView):
     # authentication_classes=[]
@@ -265,14 +268,14 @@ class CrewCommentUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-@api_view(['GET', 'POST'])    
+@api_view(['GET', 'POST'])  
 def crew_schedule_list_or_create(request, crew_id):
     
     def schedule_list():
         schedule = CrewSchedule.objects.filter(Q(crew_id=crew_id))
         serializer = CrewScheduleListSerializer(schedule, many = True)
         return Response(serializer.data)
-    
+    @swagger_auto_schema(method='POST', request_body=CrewScheduleListSerializer)  
     def schedule_create():
         serializer = CrewScheduleListSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -393,7 +396,9 @@ def CrewSignView(request,crew_pk) :
 #크루에 초대한 유저 리스트
 #유저의 가입승인을 기다리고 있는 리스트
 #크루 가입신청 승인 
+from drf_yasg  import openapi 
 @api_view(['GET'])
+@swagger_auto_schema(tags=['데이터를 검색합니다.'],query_serializer=GetRequestSerializer,responses={200: 'Success'})  
 def InviteSignListCrewView(request,crew_pk) :
     crew = Crew.objects.get(crew_pk=crew_pk)
     user = request.user
@@ -401,7 +406,7 @@ def InviteSignListCrewView(request,crew_pk) :
         return Response({'message':"The request is not authorized."},status=status.HTTP_401_UNAUTHORIZED)   
 
     type = request.GET.get('type', None)
-
+    query = CrewInvite.objects.filter(crew=crew)
     #크루에 초대한 유저 리스트
     if type == 'invite' :
         query = CrewInvite.objects.filter(crew=crew,user_accept=False)
@@ -438,14 +443,36 @@ def AcceptUserView(request,crew_pk,user_pk) :
         'message':f"{user.nickname}님이 {crew.crew_name}에 가입하셨습니다."
     }
     return JsonResponse(data)
+#크루장이 유저의 가입 요청 거절하기
+@api_view(['POST'])
+def DenyUserView(request,crew_pk,user_pk) :
+    crew = Crew.objects.get(crew_pk=crew_pk)
+    user = User.objects.get(user_pk=user_pk)
 
+    #크루리더가 아니면 리턴 
+    if request.user != crew.crew_leader :
+        return Response({'message':"The request is not authorized."},status=status.HTTP_401_UNAUTHORIZED)   
+
+    #이미 크루에 있는 유저면 리턴 
+    if crew.crew_member.filter(user_pk=user.user_pk).exists() :
+
+        return JsonResponse({'message':"You are already a registered user."},status=status.HTTP_400_BAD_REQUEST)
+
+    #둘다 아니면 가입 테이블 삭제
+    obj = CrewInvite.objects.get(crew=crew,user=user) 
+    obj.delete() 
+    data = {
+        'message':f"{user.nickname}님의 {crew.crew_name} 크루 가입을 거절하셨습니다."
+    }
+    return JsonResponse(data)
 
 #유저에게 가입신청 보낸 크루 리스트
 #유저가 가입신청한 크루 리스트 
 @api_view(['GET'])
+@swagger_auto_schema(method='GET')
 def InviteSignListUserView(request) :
     user = request.user
-
+    query = CrewInvite.objects.filter(user=user)
     type = request.GET.get('type', None)
     #유저에게 가입신청 보낸 크루 리스트
     if type == 'invite' :
@@ -475,6 +502,25 @@ def AcceptCrewView(request,crew_pk) :
     obj.delete() 
     data = {
         'message':f"{user.nickname}님이 {crew.crew_name}에 가입하셨습니다."
+    }
+    return JsonResponse(data)
+
+#유저가 크루 초대 거절하기
+@api_view(['POST'])
+def DenyCrewView(request,crew_pk) :
+    crew = Crew.objects.get(crew_pk=crew_pk)
+    user = request.user
+
+    #크루에 이미 가입되어 있으면 
+    if crew.crew_member.filter(user_pk=user.user_pk).exists() :
+        return JsonResponse({'message':"You are already a member of the crew."},status=status.HTTP_400_BAD_REQUEST)
+
+    # 아니면 크루 요청 거절 
+    # crew.crew_member.add(user) 
+    obj = CrewInvite.objects.get(crew=crew,user=user) 
+    obj.delete() 
+    data = {
+        'message':f"{user.nickname}님이 {crew.crew_name}의 가입 요청을 거절했습니다."
     }
     return JsonResponse(data)
 
