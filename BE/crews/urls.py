@@ -20,4 +20,5 @@ urlpatterns=[
     path('accept_crew/<int:crew_pk>/', views.AcceptCrewView),
     path('accept_user/<int:crew_pk>/<int:user_pk>/', views.AcceptUserView),
     path('leave/<int:crew_pk>/', views.CrewLeaveAPIView),
+    path('chat/<int:crew_pk>/', views.CrewChatApiView.as_view()),
     ] 

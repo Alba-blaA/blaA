@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from accounts.models import User
 
-from crews.models import Crew, CrewInvite
+from crews.models import Crew, CrewInvite,CrewChat
 
 
 class CrewCreateSerializer(serializers.ModelSerializer) :
@@ -90,3 +90,11 @@ class CrewUserListSerializer(serializers.ModelSerializer) :
         fields= ('user_pk','nickname','image')
         # read_only_fields = ('crew','user')
 
+
+class CrewChatSerializer(serializers.ModelSerializer) :
+    nickname = serializers.CharField(source='user.nickname', read_only=True)
+    image = serializers.ImageField(source='user.image', read_only=True)
+    class Meta: 
+        model = CrewChat 
+        fields = ('chat_pk','user','crew','nickname','image','content','created_at')
+        read_only_fields = ('crew','user')
