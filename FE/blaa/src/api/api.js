@@ -33,6 +33,9 @@ export default {
     article: (crew_article_pk) => HOST + CREW + "article/edit/" + crew_article_pk + "/",
     articles: (crew_pk) => HOST + CREW + "article/" + crew_pk + "/",
     members: (crew_pk) => HOST + CREW + "user/" + crew_pk + "/",
+    sign: (crew_pk) => HOST + CREW + "sign/" + crew_pk + "/",
+    invitelist: (crew_pk, type) => HOST + CREW + "invitelist/" + crew_pk + "/?type=" + type,
+    accept: (crew_pk, user_pk) => HOST + CREW + "accept_user/" + crew_pk + "/" + user_pk + "/",
     // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
   },
   categorys: {

@@ -8,6 +8,7 @@
     <button @click="moveToCalendar">Calendar</button>
     <button @click="moveToDetail">크루 정보</button>
     <button @click="moveToMember">사용자</button>
+    <button @click="crewJoin(crewInfo.crew_pk)">가입하기</button>
     <router-view></router-view>
   </div>
 </template>
@@ -36,6 +37,10 @@ export default {
       Object.assign(crewInfo, store.state.crew.crewInfo);
     };
 
+    const crewJoin = async (crew_pk) => {
+      await store.dispatch("crew/crewJoin", crew_pk);
+    };
+
     const moveToArticle = () => {
       router.push({ name: "articlelist" });
     };
@@ -61,6 +66,7 @@ export default {
       moveToCalendar,
       moveToDetail,
       moveToMember,
+      crewJoin,
     };
   },
 };

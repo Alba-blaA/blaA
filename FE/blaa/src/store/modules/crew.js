@@ -1,5 +1,6 @@
-import axios from "axios";
+import axios from "@/api/axios.js";
 import api from "@/api/api";
+import router from "@/router/index";
 
 export default {
   namespaced: true,
@@ -10,7 +11,7 @@ export default {
     article: [],
     crewInfo: [],
     members: [],
-    success: false,
+    requestlist: [],
   },
   mutations: {
     GET_ALL_CREWS(state, payload) {
@@ -31,16 +32,15 @@ export default {
     GET_CREW_MEMBERS(state, payload) {
       state.members = payload;
     },
+    GET_REQUEST_LIST(state, payload) {
+      state.requestlist = payload;
+    },
   },
   actions: {
     ///////////////////////////Crew Article/////////////////////////////////
     async getCrewArticle({ commit, state }, crew_pk) {
       try {
-        const instance = await axios.get(api.crew.articles(crew_pk), {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
-        });
+        const instance = await axios.get(api.crew.articles(crew_pk));
         commit("GET_CREW_ARTICLES", instance.data);
       } catch (error) {
         console.log(error);
@@ -48,12 +48,7 @@ export default {
     },
     async getArtileDetail({ commit, state }, crew_article_pk) {
       try {
-        const instance = await axios.get(api.crew.article(crew_article_pk), {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
-        });
-        state.success = true;
+        const instance = await axios.get(api.crew.article(crew_article_pk));
         commit("GET_ARTICLE_DETAIL", instance.data);
       } catch (error) {
         console.log(error);
@@ -63,22 +58,14 @@ export default {
       // console.log(payload.crew_pk);
       // console.log(payload.article);
       try {
-        await axios.post(api.crew.articles(payload.crew_pk), payload.article, {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
-        });
+        await axios.post(api.crew.articles(payload.crew_pk), payload.article);
       } catch (error) {
         console.log(error);
       }
     },
     async modifyArticle({ state }, payload) {
       try {
-        await axios.put(api.crew.article(payload.crew_article_pk), payload.article, {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
-        });
+        await axios.put(api.crew.article(payload.crew_article_pk), payload.article);
       } catch (error) {
         console.log(error);
       }
@@ -87,11 +74,7 @@ export default {
       console.log(crew_article_pk, "번째 글 삭제");
       console.log(state.Token);
       try {
-        await axios.delete(api.crew.article(crew_article_pk), {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
-        });
+        await axios.delete(api.crew.article(crew_article_pk));
         alert("삭제가 완료되었습니다.");
       } catch (error) {
         console.log(error);
@@ -100,11 +83,7 @@ export default {
     ///////////////////////////Crew Info/////////////////////////////////
     async getCrewInfo({ commit, state }, crew_pk) {
       try {
-        const instance = await axios.get(api.crew.crewInfo(crew_pk), {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
-        });
+        const instance = await axios.get(api.crew.crewInfo(crew_pk));
         commit("SET_CREW_INFO", instance.data);
       } catch (error) {
         console.log(error);
@@ -115,7 +94,6 @@ export default {
         await axios.post(api.crew.crew(), crewData, {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${state.Token}`,
           },
         });
         console.log("전송");
@@ -128,11 +106,7 @@ export default {
       console.log(payload.crew_pk);
       console.log(payload.crew);
       try {
-        await axios.put(api.crew.crewInfo(payload.crew_pk), payload.crew, {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
-        });
+        await axios.put(api.crew.crewInfo(payload.crew_pk), payload.crew);
       } catch (error) {
         console.log(error);
       }
@@ -140,11 +114,7 @@ export default {
     async deleteCrew({ state }, crew_pk) {
       console.log(crew_pk);
       try {
-        await axios.delete(api.crew.crewInfo(crew_pk), {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
-        });
+        await axios.delete(api.crew.crewInfo(crew_pk));
         alert("삭제가 완료되었습니다.");
       } catch (error) {
         console.log(error);
@@ -152,11 +122,7 @@ export default {
     },
     async allcrewlist({ commit, state }) {
       try {
-        const instance = await axios.get(api.crew.crew(), {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
-        });
+        const instance = await axios.get(api.crew.crew());
         commit("GET_ALL_CREWS", instance.data);
       } catch (error) {
         console.log(error);
@@ -164,12 +130,45 @@ export default {
     },
     async getCrewMembers({ commit, state }, crew_pk) {
       try {
-        const instance = await axios.get(api.crew.members(crew_pk), {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
-        });
+        const instance = await axios.get(api.crew.members(crew_pk));
         commit("GET_CREW_MEMBERS", instance.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    ///////////////////////////Crew Join/////////////////////////////////
+    async crewJoin({ state }, crew_pk) {
+      try {
+        const instance = await axios.post(api.crew.sign(crew_pk), {});
+        if (instance.status == 201 || instance.status == 200) {
+          alert("가입 신청이 완료되었습니다.");
+        }
+      } catch (error) {
+        console.log(error.response.data.message);
+        console.log(error.response.status);
+        if (error.response.status == 409) {
+          alert("이미 가입된 크루입니다.");
+        } else if (error.response.status == 400) {
+          alert("가입 승인 처리중입니다.");
+        }
+      }
+    },
+    async getRequestList({ commit, state }, payload) {
+      try {
+        const instance = await axios.get(api.crew.invitelist(payload.crew_pk, payload.type));
+        commit("GET_REQUEST_LIST", instance.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async acceptRequest({ state }, payload) {
+      console.log(payload);
+      try {
+        const instance = await axios.post(api.crew.accept(payload.crew_pk, payload.user_pk));
+        console.log(instance);
+        if (instance.status == 200) {
+          alert("가입 처리가 완료되었습니다.");
+        }
       } catch (error) {
         console.log(error);
       }

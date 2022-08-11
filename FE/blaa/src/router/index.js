@@ -192,6 +192,11 @@ const router = createRouter({
             },
           ],
         },
+        {
+          path: "request",
+          name: "crewmemberrequestlist",
+          component: () => import("@/components/crew/member/CrewMemberRequestList.vue"),
+        },
       ],
     },
     {
