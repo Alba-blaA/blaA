@@ -1,14 +1,16 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/pages/home/HomeView.vue";
 import Chat from "@/pages/chat/ChatView.vue";
-import MyProfile from "@/pages/profile/ProfileView.vue";
+import MyProfile from "@/pages/profile/MyProfileView.vue";
 import Login from "@/pages/account/LoginView.vue";
 import KakaoLogin from "@/pages/account/KakaoLoginView.vue";
 import Signup from "@/pages/account/signup/SignupView.vue";
 import SignupChoice from "@/pages/account/signup/FirstSignupView.vue";
 import SignupForm from "@/pages/account/signup/SecondSignupView.vue";
 import SignupCategory from "@/pages/account/signup/ThirdSignupView.vue";
+
 import Story from "@/pages/story/StoryView.vue";
+import StoryFollow from '@/pages/story/StoryFollowView.vue'
 import StoryMain from "@/pages/story/StoryMain.vue";
 import StoryForm from "@/pages/story/StoryForm.vue";
 import StoryDetailView from "@/pages/story/StoryDetailView.vue";
@@ -25,7 +27,11 @@ import SearchAllUsers from "@/pages/crew/SearchAllUsersView.vue";
 
 import ProfileMain from "@/pages/profile/ProfileMainView.vue";
 import UpdateUserInfo from "@/pages/profile/UpdateUserInfoView.vue";
+import FollowList from "@/pages/profile/FollowListView.vue";
 import MyStory from "@/pages/profile/MyStoryView.vue";
+import MyReview from "@/pages/profile/MyReviewView.vue";
+import MyCrew from "@/pages/profile/MyCrewView.vue";
+import MyInfo from "@/pages/profile/MyInfoView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -77,6 +83,11 @@ const router = createRouter({
           path: "",
           name: "story",
           component: Story,
+        },
+        {
+          path: "follow",
+          name: "followStory",
+          component: StoryFollow,
         },
         {
           path: "create",
@@ -151,32 +162,38 @@ const router = createRouter({
             {
               path: "list",
               name: "articlelist",
-              component: () => import("@/components/crew/article/ArticleList.vue"),
+              component: () =>
+                import("@/components/crew/article/ArticleList.vue"),
             },
             {
               path: "regist",
               name: "articleregist",
-              component: () => import("@/components/crew/article/ArticleRegist.vue"),
+              component: () =>
+                import("@/components/crew/article/ArticleRegist.vue"),
             },
             {
               path: ":crew_article_pk",
               name: "articledetail",
-              component: () => import("@/components/crew/article/ArticleDetail.vue"),
+              component: () =>
+                import("@/components/crew/article/ArticleDetail.vue"),
             },
             {
               path: ":crew_article_pk",
               name: "articlemodify",
-              component: () => import("@/components/crew/article/ArticleModify.vue"),
+              component: () =>
+                import("@/components/crew/article/ArticleModify.vue"),
             },
             {
               path: ":crew_article_pk",
               name: "articledelete",
-              component: () => import("@/components/crew/article/ArticleDelete.vue"),
+              component: () =>
+                import("@/components/crew/article/ArticleDelete.vue"),
             },
             {
               path: "schedule",
               name: "schedule",
-              component: () => import("@/components/crew/schedule/ScheduleView.vue"),
+              component: () =>
+                import("@/components/crew/schedule/ScheduleView.vue"),
               // children: [
               //   {
               //     path: "calendar",
@@ -220,7 +237,7 @@ const router = createRouter({
           component: ReviewDetail,
         },
         {
-          path: ":store_pk/:review_pk",
+          path: ":store_pk/:store_name/:review_pk",
           name: "detailComment",
           component: ReviewCommentDetail,
         },
@@ -242,14 +259,34 @@ const router = createRouter({
           component: MyProfile,
         },
         {
-          path: "update/:user_pk",
+          path: ":user_pk/update",
           name: "updateInfo",
           component: UpdateUserInfo,
         },
         {
-          path: "mystory/:user_pk",
+          path: ":user_pk/:followType",
+          name: "followList",
+          component: FollowList,
+        },
+        {
+          path: ":user_pk/mystory",
           name: "mystory",
           component: MyStory,
+        },
+        {
+          path: ":user_pk/myreview",
+          name: "myreview",
+          component: MyReview,
+        },
+        {
+          path: ":user_pk/mycrew",
+          name: "mycrew",
+          component: MyCrew,
+        },
+        {
+          path: ":user_pk/myinfo",
+          name: "myinfo",
+          component: MyInfo,
         },
       ],
     },

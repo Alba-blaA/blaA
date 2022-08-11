@@ -23,7 +23,6 @@
     <!-- 해시태그는 추후에 작성-->
     <HashTagForm/>
   </div>
-  
 </form>
   
 
@@ -51,7 +50,7 @@ export default {
     const image_url = ref('')
 
     // 업로드 된 이미지를 미리 확인하는 함수
-    function previewFile(e) {
+    const previewFile = (e) => {
       const preview = document.querySelector('.img_test')
       if (e.target.files[0]) {
         story_picture.value = e.target.files[0]

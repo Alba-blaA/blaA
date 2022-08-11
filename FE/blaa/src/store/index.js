@@ -5,6 +5,7 @@ import crew from "./modules/crew";
 import story from "./modules/story";
 import account from "./modules/account";
 import review from "./modules/review";
+import profile from "./modules/profile";
 
 export default createStore({
   modules: {
@@ -15,5 +16,6 @@ export default createStore({
     story,
     account,
     review,
+    profile,
   },
 });

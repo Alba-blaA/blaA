@@ -1,6 +1,6 @@
 <template>
   <div class="store" @click="moveToDetail">
-    <img :src="review.image" alt="이미지">
+    <img :src="replaceUrl.value" alt="이미지">
     <br>
     <p>{{review.name}}</p>
   </div>
@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import { computed } from '@vue/runtime-core'
 import { useRouter } from 'vue-router'
 export default {
   props: {
@@ -17,6 +18,11 @@ export default {
   },
   setup(props) {
     const router = useRouter()
+    const replaceUrl = computed(() => {
+      return props.review.image.replace('media/', 'api/v1/')
+    })
+
+    console.log(replaceUrl.value)
     
     const moveToDetail = () => {
       router.push({
@@ -29,6 +35,7 @@ export default {
     }
     return {
       moveToDetail,
+      replaceUrl
     }
   }
 }
