@@ -185,6 +185,22 @@ export default {
         console.log(error);
       }
     },
+    async denyRequest({ state }, payload) {
+      console.log(payload);
+      try {
+        const instance = await axios.post(api.crew.deny(payload.crew_pk, payload.user_pk));
+        console.log(instance);
+        if (instance.status == 200) {
+          alert("가입 신청이 거절되었습니다.");
+          router.go({
+            name: "crewmemberrequestlist",
+            query: { crew_pk: payload.crew_pk },
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   getters: {},
 };

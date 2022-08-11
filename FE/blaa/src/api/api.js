@@ -37,6 +37,8 @@ export default {
     sign: (crew_pk) => HOST + CREW + "sign/" + crew_pk + "/",
     invitelist: (crew_pk, type) => HOST + CREW + "invitelist/" + crew_pk + "/?type=" + type,
     accept: (crew_pk, user_pk) => HOST + CREW + "accept_user/" + crew_pk + "/" + user_pk + "/",
+    deny: (crew_pk, user_pk) => HOST + CREW + "deny_user/" + crew_pk + "/" + user_pk + "/",
+
     // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
   },
   categorys: {
@@ -46,22 +48,21 @@ export default {
   story: {
     host: () => HOST,
     story: () => HOST + STORY,
-    detail: (story_pk) => HOST + STORY + story_pk + '/',
-    like: (story_pk) => HOST + STORY + 'like/' + story_pk + '/',
-    comment:(story_pk) => HOST + STORY + COMMENT + story_pk +'/',
-    commentChange: (comment_pk) => HOST + STORY + COMMENT + 'ud/' + comment_pk +'/',
+    detail: (story_pk) => HOST + STORY + story_pk + "/",
+    like: (story_pk) => HOST + STORY + "like/" + story_pk + "/",
+    comment: (story_pk) => HOST + STORY + COMMENT + story_pk + "/",
+    commentChange: (comment_pk) => HOST + STORY + COMMENT + "ud/" + comment_pk + "/",
     myStory: (user_pk) => HOST + STORY + "mystory/" + user_pk + "/",
   },
   review: {
     store: () => HOST + REVIEW + STORE,
-    review: (store_pk) => HOST + REVIEW + store_pk + '/',
-    reviewDetail: (review_pk) => HOST + REVIEW + 'detail/' + review_pk + '/',
-    like: (review_pk) => HOST + REVIEW + 'like/' + review_pk + '/',
+    review: (store_pk) => HOST + REVIEW + store_pk + "/",
+    reviewDetail: (review_pk) => HOST + REVIEW + "detail/" + review_pk + "/",
+    like: (review_pk) => HOST + REVIEW + "like/" + review_pk + "/",
   },
   profile: {
     updateMyInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
-    updateMyPW: (user_pk) =>
-      HOST + ACCOUNTS + "change_password/" + user_pk + "/",
+    updateMyPW: (user_pk) => HOST + ACCOUNTS + "change_password/" + user_pk + "/",
     myFollow: (user_pk) => HOST + ACCOUNTS + "followlist/" + user_pk + "/",
     myStory: (user_pk) => HOST + STORY + "mystory/" + user_pk + "/",
     myReview: (user_pk) => HOST + ACCOUNTS + "review/" + user_pk + "/",
