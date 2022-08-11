@@ -1,6 +1,7 @@
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView,ListAPIView,CreateAPIView, DestroyAPIView,RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
+from notifications.models import Notification
 from crews.serializer.crew import (CrewNonImageSerializer,CrewChatSerializer,CrewNoneImageCreateSerializer,
                                         CrewCreateSerializer, CrewInviteListSerializer, CrewListSerializer, CrewSerializer, 
                                         CrewUserListSerializer, UserInviteListSerializer,GetRequestSerializer)
@@ -368,6 +369,7 @@ def CrewInviteView(request,crew_pk,user_pk) :
     
     #둘다 아니면 초대목록에 추가 
     CrewInvite.objects.create(crew=crew,user=user,crew_leader_accept=True,user_accept=False)
+    Notification.objects.create(type='crew_invite',user=user,content=f'{crew.crew_name}크루에서 {user.nickname}을 초대했습니다.',redirect_pk=crew_pk)
     return Response({'message':" You have been successfully invited."},status=status.HTTP_201_CREATED)
 
 #유저가 가입신청할 때 
@@ -439,6 +441,7 @@ def AcceptUserView(request,crew_pk,user_pk) :
     crew.crew_member.add(user) 
     obj = CrewInvite.objects.get(crew=crew,user=user) 
     obj.delete() 
+    Notification.objects.create(type='crew',user=user,content=f'{user.nickname}이 {crew.crew_name}크루에 가입되었습니다.',redirect_pk=crew_pk)
     data = {
         'message':f"{user.nickname}님이 {crew.crew_name}에 가입하셨습니다."
     }
@@ -500,6 +503,7 @@ def AcceptCrewView(request,crew_pk) :
     crew.crew_member.add(user) 
     obj = CrewInvite.objects.get(crew=crew,user=user) 
     obj.delete() 
+    Notification.objects.create(type='crew',user=user,content=f'{user.nickname}이 {crew.crew_name}크루에 가입되었습니다.',redirect_pk=crew_pk)
     data = {
         'message':f"{user.nickname}님이 {crew.crew_name}에 가입하셨습니다."
     }

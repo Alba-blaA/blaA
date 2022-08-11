@@ -2,6 +2,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render,get_object_or_404
 from django.views import View
 from rest_framework.generics import GenericAPIView,UpdateAPIView,CreateAPIView,ListAPIView
+from notifications.models import Notification
 from accounts.models import User
 from rest_framework.decorators import api_view,permission_classes
 from accounts.serializers import  (RegisterSerializer,LoginSerializer, UserCrewSerializer, UserListSerializer, UserReviewSerializer,
@@ -154,6 +155,7 @@ def follow(request, user_pk):
                 }
             else:
                 person.followers.add(user)
+                Notification.objects.create(type='follow',user=person,content=f'{request.user.nickname}님이 {person.nickname}을 Follow 했습니다.',redirect_pk=request.user.pk)
                 context = {
                     'result' : f'{request.user.nickname}님이 {person.nickname}을 Follow'
                 }
