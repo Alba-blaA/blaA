@@ -32,7 +32,8 @@ export default {
     crewInfo: (crew_pk) => HOST + CREW + crew_pk,
     articles: (crew_pk) => HOST + CREW + "article/" + crew_pk + "/",
     article: (crew_article_pk) => HOST + CREW + "article/edit/" + crew_article_pk + "/",
-    crewmemebers : (crew_pk) => HOST + CREW + "user/" +crew_pk 
+    crewmemebers : (crew_pk) => HOST + CREW + "user/" +crew_pk ,
+    inviteuser : (crew_pk, user_pk) => HOST + CREW + "invite/" + crew_pk + "/" + user_pk + "/"
     // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
   },
   categorys: {

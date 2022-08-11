@@ -8,10 +8,9 @@
             <ul class="mylist">
                 <li v-for="user in filteredUsers" :key="user.user_pk">                  
                         {{user.nickname}} 
-                        <button>초대하기</button>                     
-                        <button @click="gochat(user.user_pk)">채팅하기</button>                                                
-                    
-                 </li>                
+                        <button @click="inviteuser(crew_pk, user.user_pk)">초대하기</button>                     
+                        <button @click="gochat(user.user_pk)">채팅하기</button>                                              
+                </li>                
             </ul>
         </div>
     </div>
@@ -21,14 +20,17 @@
 import axios from "axios";
 import api from "@/api/api.js";
 import { useStore } from "vuex";
-import { onBeforeMount, reactive , ref, computed } from "vue";
+import { onMounted, reactive , ref, computed } from "vue";
 import router from '@/router';
+import { useRoute } from 'vue-router'
 
 
 export default {
     setup () {
         const store = useStore();
+        const route = useRoute();
         const userInfo = store.state.account.userInfo;
+        const crew_pk = route.params.crew_pk
         const gochat = (from_userpk) => {
         router.push({ name: 'chat',
         params: {
@@ -48,15 +50,17 @@ export default {
             return user.nickname.includes("!@#$%")
         });
         });        
+
         const state = reactive({      
             users: [],    
         })
-        onBeforeMount(() => {
+
+        onMounted(() => {
             if(userInfo){                
-                let token = store.state.chat.token
+                console.log("search용토큰", store.state.chat.token);
                 axios.get(api.accounts.searchallusers(),
                  {
-                  headers : {"Authorization": `Bearer ${token}`}
+                  headers : {"Authorization": `Bearer ${store.state.chat.token}`}
                 }).then((response) =>                        
                 state.users = response.data.results            
                 )
@@ -64,6 +68,19 @@ export default {
             }
 
         })
+        
+        const inviteuser = (invitingcrew_pk, inviteduser_pk) => {
+            const token = store.state.story.Token
+            console.log("inviteuser용토큰", token);            
+            axios.post(api.crew.inviteuser(invitingcrew_pk, inviteduser_pk),
+            {
+                headers: {
+                "Authorization": `Bearer ${token}` 
+                }
+            }).then((response) => {
+                console.log(response.data);
+            })
+        }
 
 
         return {
@@ -72,6 +89,8 @@ export default {
             gochat,
             filteredUsers,
             userInfo,
+            crew_pk,
+            inviteuser
         }
 
         }
