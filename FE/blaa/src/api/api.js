@@ -70,7 +70,7 @@ export default {
   },
   profile: {
     updateMyInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
-    updateMyPW: (user_pk) =>
+    updateMyPW: (user_pk) => 
       HOST + ACCOUNTS + "change_password/" + user_pk + "/",
     myFollowList: (user_pk) => HOST + ACCOUNTS + "followlist/" + user_pk + "/",
     myStory: (user_pk) => HOST + STORY + "mystory/" + user_pk + "/",
