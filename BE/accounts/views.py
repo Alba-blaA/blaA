@@ -243,14 +243,15 @@ class FollowAPIView(ListAPIView) :
     
     def list(self, request, *args, **kwargs):
         user = self.get_object()
+        queryset = User.objects.all()
         type = request.GET.get('type', None)
         print(type)
         #내가 팔로우 하는 유저
-        if type == 'follow' :
+        if type == 'following' :
             queryset = User.objects.filter(followers=user)
         
         #나를 팔로잉 하는 유저 
-        elif type == 'following' :
+        elif type == 'follower' :
             queryset = User.objects.filter(followings=user)
 
         page = self.paginate_queryset(queryset)
