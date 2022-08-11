@@ -89,14 +89,18 @@ export default {
         console.log(error);
       }
     },
-    async registcrew({ state }, crewData) {
+    async registcrew({ commit }, crewData) {
       try {
-        await axios.post(api.crew.crew(), crewData, {
+        const instance = await axios.post(api.crew.crew(), crewData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
-        console.log("전송");
+        console.log(instance);
+        if (instance.status == 201 || instance.status == 200) {
+          alert("크루 생성이 완료되었습니다.");
+          router.push({ name: "crewboard", params: { crew_pk: instance.data.crew_pk } });
+        }
       } catch (error) {
         console.log(error);
       }
@@ -106,7 +110,15 @@ export default {
       console.log(payload.crew_pk);
       console.log(payload.crew);
       try {
-        await axios.put(api.crew.crewInfo(payload.crew_pk), payload.crew);
+        const instance = await axios.patch(api.crew.crewInfo(payload.crew_pk), payload.crew, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        if (instance.status == 200 || instance.status == 201) {
+          alert("수정이 완료되었습니다.");
+          router.push({ name: "crewdetail", params: { crew_pk: payload.crew_pk } });
+        }
       } catch (error) {
         console.log(error);
       }
