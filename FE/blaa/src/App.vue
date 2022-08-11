@@ -1,5 +1,6 @@
 <template>
   <h1>메인페이지</h1>
+  
   <div v-if="userInfo">
     <div v-if="isKakaoLogin">
       <p style="float: left">{{ userInfo.nickname }} 님</p>

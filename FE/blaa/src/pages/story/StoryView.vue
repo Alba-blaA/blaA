@@ -7,8 +7,6 @@
   </button>
   <button class="btn m-1" @click="onCategory" :class="{ activate: isCategory, deactivate: !isCategory}">관심업종</button>
   <button class="btn m-1" @click="onRegion" :class="{ activate: isRegion, deactivate: !isRegion}">근무지</button>
-
-
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -16,7 +14,7 @@
         <div class="modal-body">
           <HashTagForm @search-hash-tag="searchHastTag"/>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-          <button type="button" class="btn btn-primary">검색</button>
+          <button type="button" class="btn btn-primary" @click="searchStoryHashTag">검색</button>
         </div>
       </div>
     </div>
@@ -42,10 +40,14 @@ export default {
     const images = ref(null)
     const isCategory = ref(false)
     const isRegion = ref(false)
+    const hashTag = ref([])
 
     const getPure = () => {
       store.dispatch('story/getImages').then(() => {
-      images.value = store.state.story.images          
+      images.value = store.state.story.images
+      for (const key in images.value.keys()) {
+        console.log(key)
+      }          
     })
     }
 
@@ -54,10 +56,15 @@ export default {
       getPure()
     })
 
-    const searchHastTag = (hastTag) => {
-      // 검색 기능 구현
-      hastTag
+    // 해시태그 검색
+    const searchHastTag = (hashTag) => {
+      hashTag.value = hashTag
     }
+
+    const searchStoryHashTag = () => {
+
+    }
+
 
     const onCategory = async() => {
       isCategory.value = !isCategory.value
@@ -89,7 +96,8 @@ export default {
       onCategory,
       onRegion,
       isRegion,
-      isCategory
+      isCategory,
+      searchStoryHashTag
     }
   }
 }
