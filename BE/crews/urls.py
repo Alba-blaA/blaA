@@ -18,7 +18,9 @@ urlpatterns=[
     path('invitelist/<int:crew_pk>/', views.InviteSignListCrewView),
     path('signlist/', views.InviteSignListUserView),
     path('accept_crew/<int:crew_pk>/', views.AcceptCrewView),
+    path('deny_crew/<int:crew_pk>/', views.DenyCrewView),
     path('accept_user/<int:crew_pk>/<int:user_pk>/', views.AcceptUserView),
+    path('deny_user/<int:crew_pk>/<int:user_pk>/', views.DenyUserView),
     path('leave/<int:crew_pk>/', views.CrewLeaveAPIView),
     path('chat/<int:crew_pk>/', views.CrewChatApiView.as_view()),
     ] 

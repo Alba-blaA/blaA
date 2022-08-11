@@ -98,3 +98,7 @@ class CrewChatSerializer(serializers.ModelSerializer) :
         model = CrewChat 
         fields = ('chat_pk','user','crew','nickname','image','content','created_at')
         read_only_fields = ('crew','user')
+
+
+class GetRequestSerializer(serializers.Serializer):
+    type = serializers.CharField(max_length=10)
