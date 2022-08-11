@@ -47,8 +47,8 @@
   </div>
 
   <hr />
-  <div @click="myGroup">
-    <h5><b>내 그룹</b></h5>
+  <div @click="myCrew">
+    <h5><b>내 크루</b></h5>
   </div>
 
   <hr />
@@ -109,16 +109,18 @@ export default {
       });
     };
 
-    const follower = () => {
+    const follower = async () => {
       console.log("팔로워 조회");
+      await store.dispatch("profile/getFollowerList", userInfo.user_pk);
       router.push({
         name: "followList",
         params: { user_pk: userInfo.user_pk, followType: "follower" },
       });
     };
 
-    const following = () => {
+    const following = async () => {
       console.log("팔로잉 조회");
+      await store.dispatch("profile/getFollowingList", userInfo.user_pk);
       router.push({
         name: "followList",
         params: { user_pk: userInfo.user_pk, followType: "following" },
@@ -132,7 +134,7 @@ export default {
       console.log("스토리 조회 페이지 이동");
     };
 
-    const myReview = () => {
+    const myCrew = () => {
       console.log("내 리뷰 조회");
       router.push({ name: "myreview", params: { user_pk: userInfo.user_pk } });
     };
@@ -165,7 +167,7 @@ export default {
       following,
       HOST,
       myStory,
-      myReview,
+      myCrew,
       myGroup,
       myInfo,
     };
