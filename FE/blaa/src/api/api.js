@@ -68,7 +68,7 @@ export default {
     detail: (story_pk) => HOST + STORY + story_pk + '/',
     like: (story_pk) => HOST + STORY + 'like/' + story_pk + '/',
     comment:(story_pk) => HOST + STORY + COMMENT + story_pk +'/',
-    commentChange: (comment_pk) => HOST + STORY + COMMENT + 'ud/' + comment_pk,
+    commentChange: (comment_pk) => HOST + STORY + COMMENT + 'ud/' + comment_pk +'/',
     myStory: (user_pk) => HOST + STORY + "mystory/" + user_pk + "/",
   },
   review: {
