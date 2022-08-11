@@ -9,7 +9,7 @@ class Crew(TrackingModel,models.Model) :
     is_business = models.BooleanField()
     crew_name = models.CharField(max_length=50,unique=True)
     crew_img = models.ImageField(upload_to='crew/image',
-                default='media/crew/image/상점기본.png',
+                default='crew/image/상점기본.png',
                 null=True,blank=True)
     crew_explain = models.TextField()
     crew_region = models.TextField(null=True,blank=True)
