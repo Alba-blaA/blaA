@@ -57,7 +57,7 @@ export default {
 
         onMounted(() => {
             if(userInfo){                
-                console.log("search용토큰", store.state.chat.token);
+                store.state.chat.token
                 axios.get(api.accounts.searchallusers(),
                  {
                   headers : {"Authorization": `Bearer ${store.state.chat.token}`}
@@ -69,18 +69,19 @@ export default {
 
         })
         
-        const inviteuser = (invitingcrew_pk, inviteduser_pk) => {
-            const token = store.state.story.Token
-            console.log("inviteuser용토큰", token);            
-            axios.post(api.crew.inviteuser(invitingcrew_pk, inviteduser_pk),
-            {
-                headers: {
-                "Authorization": `Bearer ${token}` 
-                }
-            }).then((response) => {
-                console.log(response.data);
-            })
-        }
+        const inviteuser = async (invitingcrew_pk, inviteduser_pk) => {
+            const token = sessionStorage.getItem('token')           
+            try {
+                const result = await axios.post(api.crew.inviteuser(invitingcrew_pk, inviteduser_pk),{},{
+                    headers : {
+                        "Authorization": `Bearer ${token}`
+                    }
+                })
+                alert(result.data.message);
+            } catch(error) {                
+                alert(error.response.data.message)
+            }
+            }    
 
 
         return {
@@ -90,7 +91,7 @@ export default {
             filteredUsers,
             userInfo,
             crew_pk,
-            inviteuser
+            inviteuser,
         }
 
         }

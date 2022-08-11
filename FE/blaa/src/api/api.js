@@ -10,6 +10,7 @@ const COMMENT = "comment/";
 const REVIEW = "reviews/";
 const STORE = "store/";
 const CREW = "crews/";
+const NOTIFICATION = "notifications/"
 // const CHAT = 'chat/'
 
 export default {
@@ -33,8 +34,9 @@ export default {
     articles: (crew_pk) => HOST + CREW + "article/" + crew_pk + "/",
     article: (crew_article_pk) => HOST + CREW + "article/edit/" + crew_article_pk + "/",
     crewmemebers : (crew_pk) => HOST + CREW + "user/" +crew_pk ,
-    inviteuser : (crew_pk, user_pk) => HOST + CREW + "invite/" + crew_pk + "/" + user_pk + "/"
+    inviteuser : (crew_pk, user_pk) => HOST + CREW + "invite/" + crew_pk + "/" + user_pk + "/",
     // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
+    acceptcrew : (crew_pk) => HOST + CREW + "accept_crew/" + crew_pk + "/"
   },
   categorys: {
     job: () => HOST + CATEGORYS + "job/",
@@ -79,4 +81,9 @@ export default {
     reviewDetail: (review_pk) => HOST + REVIEW + "detail/" + review_pk + "/",
     like: (review_pk) => HOST + REVIEW + "like/" + review_pk,
   },
+
+  notification : {
+    getnotifications : () => HOST + NOTIFICATION,
+    getinvitedcrewlist : () => HOST + CREW + "signlist/"
+  }
 };

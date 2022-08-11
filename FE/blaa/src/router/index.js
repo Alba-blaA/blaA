@@ -27,6 +27,7 @@ import ProfileMain from "@/pages/profile/ProfileMainView.vue";
 import UpdateUserInfo from "@/pages/profile/UpdateUserInfoView.vue";
 import MyStory from "@/pages/profile/MyStoryView.vue";
 import SearchAllUsers from "@/pages/crew/SearchAllUsersView.vue"
+import InvitedCrew from "@/pages/profile/InvitedCrewView.vue"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -252,6 +253,11 @@ const router = createRouter({
       path: "/searchusers",
       name: "searchallusers",
       component: SearchAllUsers
+    },
+    {
+      path: "/invitedcrewlist",
+      name : "invitedcrewlist",
+      component : InvitedCrew
     }
   ],
 });
