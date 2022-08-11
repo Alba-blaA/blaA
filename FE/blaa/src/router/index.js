@@ -24,7 +24,6 @@ import ReviewDetail from "@/pages/review/ReviewDetail.vue";
 import ReviewCommentDetail from "@/pages/review/ReviewCommentDetail.vue";
 import Chatroom from "@/pages/chat/ChatroomView.vue";
 import SearchCrewUsers from "@/pages/crew/SearchCrewUsersView.vue"
-import SearchAllUsers from "@/pages/crew/SearchAllUsersView.vue";
 import ProfileMain from "@/pages/profile/ProfileMainView.vue";
 import UpdateUserInfo from "@/pages/profile/UpdateUserInfoView.vue";
 import FollowList from "@/pages/profile/FollowListView.vue";
