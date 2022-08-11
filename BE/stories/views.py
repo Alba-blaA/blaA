@@ -3,6 +3,8 @@ from django.shortcuts import get_list_or_404, get_object_or_404, render
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from collections import deque
+from notifications.models import Notification
 from .models import Hashtag, Story,Comment
 from accounts.models import User
 from .serializers.story import StoryLikeSerializer, StorySerializer,StoryDetailSerializer
@@ -86,8 +88,10 @@ def comment_list_or_create(request, story_pk):
     def comment_create():
         story = get_object_or_404(Story, story_pk = story_pk)
         serializer = CommentSerializer(data=request.data)
+        story_user = story.user_pk
         if serializer.is_valid(raise_exception=True):
             serializer.save(user_pk = request.user, story_pk = story)
+            Notification.objects.create(type='story',user=story_user,content=f'{request.user.nickname}님이 {story_user.nickname}의 게시글에 댓글을 남겼습니다.',redirect_pk=story_pk)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     if request.method == 'GET':
@@ -201,16 +205,23 @@ def hashtag_update_or_delete(request, hashtag_pk):
         
 @api_view(['GET'])        
 def follow_story_list(request):
-    print(request.user.user_pk)
     tmp = request.user.followings.all()
-    print(tmp)
-    story = Story.objects.filter(user_pk=tmp[0])
-    for user in range(1,len(tmp)) :
-        story_res = story | Story.objects.filter(user_pk=tmp[user])
-        story=story_res
-    print(story)
-    serializer = StorySerializer(story, many=True)
-    return Response(serializer.data)
+    if tmp :
+        print(tmp)
+        story = Story.objects.filter(user_pk=tmp[0])
+        for user in range(1,len(tmp)) :
+            story_res = story | Story.objects.filter(user_pk=tmp[user])
+            story=story_res
+            
+        serializer = StorySerializer(story, many=True)
+        return Response(serializer.data)
+    
+    else :
+        story = Story.objects.filter(~Q(user_pk=request.user.user_pk))
+        serializer = StorySerializer(story, many=True)
+        response_data = serializer.data
+        response_data.insert(0,{"message" : f"{request.user.nickname} doesn't follow any users yet."})
+    return Response(response_data)
    
 @api_view(['POST'])     
 def like_story(request, story_pk):
