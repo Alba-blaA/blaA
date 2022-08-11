@@ -38,6 +38,7 @@ export default {
     invitelist: (crew_pk, type) => HOST + CREW + "invitelist/" + crew_pk + "/?type=" + type,
     accept: (crew_pk, user_pk) => HOST + CREW + "accept_user/" + crew_pk + "/" + user_pk + "/",
     deny: (crew_pk, user_pk) => HOST + CREW + "deny_user/" + crew_pk + "/" + user_pk + "/",
+    leave: (crew_pk) => HOST + CREW + "leave/" + crew_pk + "/",
 
     // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
   },

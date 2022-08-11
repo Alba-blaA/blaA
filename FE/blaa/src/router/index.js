@@ -10,7 +10,7 @@ import SignupForm from "@/pages/account/signup/SecondSignupView.vue";
 import SignupCategory from "@/pages/account/signup/ThirdSignupView.vue";
 
 import Story from "@/pages/story/StoryView.vue";
-import StoryFollow from '@/pages/story/StoryFollowView.vue'
+import StoryFollow from "@/pages/story/StoryFollowView.vue";
 import StoryMain from "@/pages/story/StoryMain.vue";
 import StoryForm from "@/pages/story/StoryForm.vue";
 import StoryDetailView from "@/pages/story/StoryDetailView.vue";
@@ -154,6 +154,11 @@ const router = createRouter({
           component: () => import("@/components/crew/manage/CrewDetail.vue"),
         },
         {
+          path: "leave/:crew_pk",
+          name: "crewleave",
+          component: () => import("@/components/crew/member/CrewMemberLeave.vue"),
+        },
+        {
           path: ":crew_pk",
           name: "crewboard",
           redirect: { name: "articlelist" },
@@ -162,38 +167,32 @@ const router = createRouter({
             {
               path: "list",
               name: "articlelist",
-              component: () =>
-                import("@/components/crew/article/ArticleList.vue"),
+              component: () => import("@/components/crew/article/ArticleList.vue"),
             },
             {
               path: "regist",
               name: "articleregist",
-              component: () =>
-                import("@/components/crew/article/ArticleRegist.vue"),
+              component: () => import("@/components/crew/article/ArticleRegist.vue"),
             },
             {
               path: ":crew_article_pk",
               name: "articledetail",
-              component: () =>
-                import("@/components/crew/article/ArticleDetail.vue"),
+              component: () => import("@/components/crew/article/ArticleDetail.vue"),
             },
             {
               path: ":crew_article_pk",
               name: "articlemodify",
-              component: () =>
-                import("@/components/crew/article/ArticleModify.vue"),
+              component: () => import("@/components/crew/article/ArticleModify.vue"),
             },
             {
               path: ":crew_article_pk",
               name: "articledelete",
-              component: () =>
-                import("@/components/crew/article/ArticleDelete.vue"),
+              component: () => import("@/components/crew/article/ArticleDelete.vue"),
             },
             {
               path: "schedule",
               name: "schedule",
-              component: () =>
-                import("@/components/crew/schedule/ScheduleView.vue"),
+              component: () => import("@/components/crew/schedule/ScheduleView.vue"),
               // children: [
               //   {
               //     path: "calendar",

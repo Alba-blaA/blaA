@@ -201,6 +201,15 @@ export default {
         console.log(error);
       }
     },
+    async leaveCrew({ state }, crew_pk) {
+      console.log(crew_pk);
+      try {
+        const instance = await axios.post(api.crew.leave(crew_pk));
+        console.log(instance.status);
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   getters: {},
 };
