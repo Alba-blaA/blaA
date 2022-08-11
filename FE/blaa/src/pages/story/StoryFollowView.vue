@@ -27,13 +27,13 @@ export default {
 
     onBeforeMount( async() => {
       await getPure()
+      console.log()
       if (images.value.length == 1){
-        for (const key in images.value.keys()) {
-          console.log(key)
-          if (key == 'message') {
-            isFollow.value = false
-            break
-          }
+          // 메세지 하나밖에 없으면
+        if (images.value[0].length == 1) {
+          isFollow.value = false
+        } else {
+          isFollow.value = true
         }
       } else {
         console.log('데이터가 있음')

@@ -23,12 +23,14 @@ import ReviewForm from "@/pages/review/ReviewForm.vue";
 import ReviewDetail from "@/pages/review/ReviewDetail.vue";
 import ReviewCommentDetail from "@/pages/review/ReviewCommentDetail.vue";
 import Chatroom from "@/pages/chat/ChatroomView.vue";
+import SearchCrewUsers from "@/pages/crew/SearchCrewUsersView.vue"
 import SearchAllUsers from "@/pages/crew/SearchAllUsersView.vue";
-
 import ProfileMain from "@/pages/profile/ProfileMainView.vue";
 import UpdateUserInfo from "@/pages/profile/UpdateUserInfoView.vue";
 import FollowList from "@/pages/profile/FollowListView.vue";
 import MyStory from "@/pages/profile/MyStoryView.vue";
+import SearchAllUsers from "@/pages/crew/SearchAllUsersView.vue"
+import InvitedCrew from "@/pages/profile/InvitedCrewView.vue"
 import MyReview from "@/pages/profile/MyReviewView.vue";
 import MyCrew from "@/pages/profile/MyCrewView.vue";
 import MyInfo from "@/pages/profile/MyInfoView.vue";
@@ -203,8 +205,13 @@ const router = createRouter({
               // ],
             },
             {
-              path: "",
+              path: "crewmember",
               name: "crewmember",
+              component: () => import("@/components/crew/crewmember/CrewMemberView.vue")
+            },
+            {
+              path: "",
+              name: "crewmemberlist",
               component: () => import("@/components/crew/member/CrewMemberList.vue"),
             },
           ],
@@ -296,10 +303,20 @@ const router = createRouter({
       component: Chatroom,
     },
     {
-      path: "/searchusers",
-      name: "searchusers",
-      component: SearchAllUsers,
+      path: "/searchusers/:crew_pk",
+      name: "searchcrewusers",
+      component: SearchCrewUsers
     },
+    {
+      path: "/searchusers",
+      name: "searchallusers",
+      component: SearchAllUsers
+    },
+    {
+      path: "/invitedcrewlist",
+      name : "invitedcrewlist",
+      component : InvitedCrew
+    }
   ],
 });
 

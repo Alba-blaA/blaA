@@ -1,22 +1,17 @@
 <template>
   <div v-if="userInfo">
-    <div>여기는 유저검색페이지입니다!</div>
     <div class="search">
       <input v-model="searchText" type="text" placeholder="닉네임 검색" />
     </div>
-    <div>
-      <ul class="mylist">
-        <li v-for="user in filteredUsers" :key="user.user_pk">
-          {{ user.nickname }}
-
-          <button>초대하기</button>
-          <button @click="gochat(user.user_pk)">채팅하기</button>
-        </li>
-      </ul>
-    </div>
+    <div v-for="user in filteredUsers" :key="user.user_pk">
+      <!-- <img :src= "user.image" alt="#"> -->
+      <div>{{ user.nickname }}</div>   
+      <button @click="gochat(user.user_pk)">채팅하기</button>
+    </div>  
   </div>
   <div v-else>로그인이 필요합니다.</div>
 </template>
+
 <script>
 import axios from "axios";
 import api from "@/api/api.js";

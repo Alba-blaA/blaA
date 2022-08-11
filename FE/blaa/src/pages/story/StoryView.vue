@@ -42,13 +42,9 @@ export default {
     const isRegion = ref(false)
     const hashTag = ref([])
 
-    const getPure = () => {
-      store.dispatch('story/getImages').then(() => {
-      images.value = store.state.story.images
-      for (const key in images.value.keys()) {
-        console.log(key)
-      }          
-    })
+    const getPure = async() => {
+      await store.dispatch('story/getImages')
+      images.value = store.state.story.images 
     }
 
     // 시작할 떄
