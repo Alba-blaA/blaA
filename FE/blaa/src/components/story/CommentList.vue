@@ -3,9 +3,10 @@
     댓글 : {{ comments.length }}
   </div>
   <hr>
-  <ul>
-    <CommentListItem v-for="comment in comments" :key="comment.comment_pk" :comment="comment"/>
+  <ul v-if="comments.length">
+    <CommentListItem  v-for="comment in comments" :key="comment.comment_pk" :comment="comment"/>
   </ul>
+  <p v-else>댓글이 아직 없어요!</p>
 </template>
 
 <script>

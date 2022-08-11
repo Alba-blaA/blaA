@@ -86,7 +86,7 @@ const router = createRouter({
           component: Story,
         },
         {
-          path: "/follow",
+          path: "follow",
           name: "followStory",
           component: StoryFollow,
         },
