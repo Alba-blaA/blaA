@@ -81,8 +81,6 @@ export default {
     };
 
     const goMyProfile = async () => {
-      await store.dispatch("profile/getMyFollower", userInfo.value.user_pk);
-      await store.dispatch("profile/getMyFollowing", userInfo.value.user_pk);
       router.push({ path: "/profile" });
     };
 
