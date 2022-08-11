@@ -25,43 +25,21 @@ export default {
     // username으로 프로필 제공
     profile: (username) => HOST + ACCOUNTS + "profile/" + username,
     myInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
-    searchallusers: () => HOST + ACCOUNTS + "users/"
+    searchallusers: () => HOST + ACCOUNTS + "users/",
   },
 
   crew: {
     crew: () => HOST + CREW,
     crewInfo: (crew_pk) => HOST + CREW + crew_pk,
     articles: (crew_pk) => HOST + CREW + "article/" + crew_pk + "/",
-    article: (crew_article_pk) => HOST + CREW + "article/edit/" + crew_article_pk + "/",
+    article: (crew_article_pk) =>
+      HOST + CREW + "article/edit/" + crew_article_pk + "/",
     // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
   },
   categorys: {
     job: () => HOST + CATEGORYS + "job/",
     region: () => HOST + CATEGORYS + "region/",
   },
-
-  // 예시
-  // movies: {
-  //   // /articles/
-  //   movies: () => HOST + MOVIES,
-  //   // /articles/1/
-  //   movie: moviePk => HOST + MOVIES + ${moviePk},
-  //   reviews: moviePk => HOST + MOVIES + ${moviePk}/ + REVIEWS,
-  //   recommendations: moviePk => HOST2 + ${moviePk}/ + RECOMMENDATIONS + "?api_key=87931dd6e8327ea04518e5e2a6836196&language=ko",
-  //   search: value => HOST3 + ${value}& + "api_key=87931dd6e8327ea04518e5e2a6836196&language=ko",
-  //   review: (moviePk, reviewPk) =>
-  //     HOST + MOVIES + ${moviePk}/ + REVIEWS + ${reviewPk}/,
-  // },
-  // articles: {
-  //   // /articles/
-  //   articles: () => HOST + ARTICLES,
-  //   // /articles/1/
-  //   article: articlePk => HOST + ARTICLES + ${articlePk}/,
-  //   likeArticle: articlePk => HOST + ARTICLES + ${articlePk}/ + 'like/',
-  //   comments: articlePk => HOST + ARTICLES + ${articlePk}/ + COMMENTS,
-  //   comment: (articlePk, commentPk) =>
-  //     HOST + ARTICLES + ${articlePk}/ + COMMENTS + ${commentPk}/,
-  // },
   story: {
     host: () => HOST,
     story: () => HOST + STORY,
@@ -77,11 +55,13 @@ export default {
     like: (review_pk) => HOST + REVIEW + "like/" + review_pk,
   },
   profile: {
-    updateInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
+    updateMyInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
+    updateMyPW: (user_pk) =>
+      HOST + ACCOUNTS + "change_password/" + user_pk + "/",
     myFollow: (user_pk) => HOST + ACCOUNTS + "followlist/" + user_pk + "/",
     myStory: (user_pk) => HOST + STORY + "mystory/" + user_pk + "/",
     myReview: (user_pk) => HOST + ACCOUNTS + "review/" + user_pk + "/",
-    myCrew: (user_pk) => HOST + ACCOUNTS + CREW + user_pk + "/",
+    myCrew: (user_pk) => HOST + ACCOUNTS + "crew/" + user_pk + "/",
     myInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
-  }
+  },
 };
