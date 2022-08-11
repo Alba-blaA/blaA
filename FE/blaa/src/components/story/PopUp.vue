@@ -26,8 +26,7 @@ export default {
   }
   /* 모달이 떳을 떄 뒤에 배경화면을 안보이게 */
   .overlay {
-    opacity: 0.5;
-    background-color:black;
+    background-color:rgba(255,255,255,0.5);
   }
 
   .modal-card {

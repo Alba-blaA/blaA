@@ -204,7 +204,7 @@ const router = createRouter({
           component: ReviewDetail,
         },
         {
-          path: ":store_pk/:review_pk",
+          path: ":store_pk/:store_name/:review_pk",
           name: "detailComment",
           component: ReviewCommentDetail,
         },
