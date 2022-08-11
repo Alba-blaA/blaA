@@ -15,6 +15,7 @@
     <button @click.prevent="gochatroom">채팅하러가기</button>
     <button @click.prevent="gostory">오출완가기</button>
     <button @click.prevent="gosearch">유저정보검색하기</button>
+    <button @click.prevent="goMyProfile">마이프로필</button>
   </div>
 
   <div v-else>
@@ -33,7 +34,7 @@
 import { useStore } from "vuex";
 import { computed, onMounted } from "vue";
 // import router from "@/router/index.js";
-import {useRouter} from "vue-router"
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
@@ -77,6 +78,12 @@ export default {
       router.push({ path: "/crew" });
     };
 
+    const goMyProfile = async () => {
+      await store.dispatch("profile/getMyFollower", userInfo.value.user_pk);
+      await store.dispatch("profile/getMyFollowing", userInfo.value.user_pk);
+      router.push({ path: "/profile" });
+    };
+
     const kakaoLogin = () => {
       const params = {
         redirectUri: "http://localhost:8080/kakao",
@@ -109,6 +116,7 @@ export default {
       gostory,
       gosearch,
       gocrew,
+      goMyProfile,
     };
   },
 };
