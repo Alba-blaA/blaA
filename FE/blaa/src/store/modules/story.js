@@ -95,6 +95,20 @@ export default {
         console.log(error)
       }
     },
+    async getFollow({commit, state}) {
+      try {
+        const res = await axios.get(api.story.story() + 'follow/', {
+          headers: {
+            Authorization: `Bearer ${state.Token}`
+          }
+        })
+        console.log(res.data)
+        commit('GET_IMAGES',res.data)
+      } catch(error) {
+        // 에러 발생시
+        console.log(error)
+      }
+    },
     async getCurrentStory({commit, state}, story_pk) {
       try {
         const res = await axios.get(api.story.detail(story_pk), {

@@ -85,7 +85,7 @@ const router = createRouter({
           component: Story,
         },
         {
-          path: "/follow",
+          path: "follow",
           name: "followStory",
           component: StoryFollow,
         },
@@ -110,21 +110,14 @@ const router = createRouter({
       children: [
         {
           path: "regist",
-          name: "crewregist",
-          component: () =>
-            import("@/components/crew/register/CrewRegistView.vue"),
+          name: "crewregistview",
+          redirect: { name: "crewregist" },
+          component: () => import("@/components/crew/manage/CrewRegistView.vue"),
           children: [
             {
-              path: "business",
-              name: "businesscrew",
-              component: () =>
-                import("@/components/crew/register/CrewRegistBusiness.vue"),
-            },
-            {
-              path: "friendship",
-              name: "friendshipcrew",
-              component: () =>
-                import("@/components/crew/register/CrewRegistFriendship.vue"),
+              path: "",
+              name: "crewregist",
+              component: () => import("@/components/crew/manage/CrewRegistInput.vue"),
             },
           ],
         },
@@ -144,6 +137,21 @@ const router = createRouter({
               component: () => import("@/components/crew/list/CrewListMy.vue"),
             },
           ],
+        },
+        {
+          path: "modify/:crew_pk",
+          name: "crewmodify",
+          component: () => import("@/components/crew/manage/CrewModify.vue"),
+        },
+        {
+          path: "delete/:crew_pk",
+          name: "crewdelete",
+          component: () => import("@/components/crew/manage/CrewDelete.vue"),
+        },
+        {
+          path: "detail/:crew_pk",
+          name: "crewdetail",
+          component: () => import("@/components/crew/manage/CrewDetail.vue"),
         },
         {
           path: ":crew_pk",
@@ -194,7 +202,17 @@ const router = createRouter({
               //   },
               // ],
             },
+            {
+              path: "",
+              name: "crewmember",
+              component: () => import("@/components/crew/member/CrewMemberList.vue"),
+            },
           ],
+        },
+        {
+          path: "request",
+          name: "crewmemberrequestlist",
+          component: () => import("@/components/crew/member/CrewMemberRequestList.vue"),
         },
       ],
     },

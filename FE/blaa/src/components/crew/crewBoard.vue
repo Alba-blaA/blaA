@@ -1,11 +1,15 @@
 <template>
   <div>
-    {{ crewInfo.crew_name }} 의 게시판입니다.<br /><br />
+    <h2>{{ crewInfo.crew_name }} 의 게시판입니다.</h2>
+    <br />
+    <p>{{ crewInfo.crew_member_count }} 명 참여중</p>
+    <br />
     <button @click="moveToArticle">Article</button>
     <button @click="moveToCalendar">Calendar</button>
+    <button @click="moveToDetail">크루 정보</button>
+    <button @click="moveToMember">사용자</button>
+    <button @click="crewJoin(crewInfo.crew_pk)">가입하기</button>
     <router-view></router-view>
-    <button @click="modifyCrew">크루 수정</button>
-    <button @click="deleteCrew">크루 삭제</button>
   </div>
 </template>
 
@@ -23,7 +27,7 @@ export default {
       crew_name: "",
       crew_explain: "",
       crew_region: "",
-      crew_img: "",
+      // crew_img: "",
       crew_member_count: "",
       created_at: "",
     });
@@ -31,6 +35,10 @@ export default {
     const getCrewInfo = async () => {
       await store.dispatch("crew/getCrewInfo", route.params.crew_pk);
       Object.assign(crewInfo, store.state.crew.crewInfo);
+    };
+
+    const crewJoin = async (crew_pk) => {
+      await store.dispatch("crew/crewJoin", crew_pk);
     };
 
     const moveToArticle = () => {
@@ -41,6 +49,14 @@ export default {
       router.push({ name: "schedule" });
     };
 
+    const moveToDetail = () => {
+      router.push({ name: "crewdetail", params: { crew_pk: crewInfo.crew_pk } });
+    };
+
+    const moveToMember = () => {
+      router.push({ name: "crewmember", params: { crew_pk: crewInfo.crew_pk } });
+    };
+
     getCrewInfo();
 
     return {
@@ -48,6 +64,9 @@ export default {
       getCrewInfo,
       moveToArticle,
       moveToCalendar,
+      moveToDetail,
+      moveToMember,
+      crewJoin,
     };
   },
 };
