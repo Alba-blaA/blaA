@@ -4,14 +4,15 @@
     <div class="white-bg" ref="modal">
       <h4>알림창임</h4>
       <div v-for="(notification, i) in state.notifications" :key="i">        
-          <b-card >       
-            <b-card-text>
+          <b-card  @click="clicknotification(notification), isModalOpen = false" >       
+            <b-card-text> 
               <!-- <div>
                 {{notification}}
               </div> -->
-              <div @click="clicknotification(notification)">
+              <div>
                 {{ notification.content }}
               </div>
+              <div @click="deletenotification(notification.id)">X</div>
               <div v-if= notification.view>읽음</div>
               <div v-else>안 읽음</div>
             </b-card-text>
@@ -37,7 +38,7 @@ import { onClickOutside } from '@vueuse/core'
 export default { 
   
   setup () {
-    const isModalOpen = ref(false)
+    let isModalOpen = ref(false)
     const modal = ref(null)   
     const store = useStore()
     
@@ -62,14 +63,22 @@ export default {
 
     const clicknotification = ((notification) => {
       if (notification.type == "crew_invite") {
-        router.push({name : 'invitedcrewlist'})
-        
+        router.push({name : 'invitedcrewlist'})        
       } else if (notification.type == "follow") {
         console.log("this is follow");
       } else if (notification.type == "story") {
-        console.log("this is story");
-      } else if (notification.type == "accept_crew"){
-        console.log("accepted crew invite");
+        router.push({name : 'detailStory', 
+          params: {
+            story_pk: notification.redirect_pk,
+        }
+        })        
+      } else if (notification.type == "crew"){
+        console.log("accpet_crew");
+        router.push({name : 'crewboard',
+          params : {
+            crew_pk: notification.redirect_pk
+          }
+        })
       }
 
     })
