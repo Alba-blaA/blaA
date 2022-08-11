@@ -8,7 +8,9 @@ import Signup from "@/pages/account/signup/SignupView.vue";
 import SignupChoice from "@/pages/account/signup/FirstSignupView.vue";
 import SignupForm from "@/pages/account/signup/SecondSignupView.vue";
 import SignupCategory from "@/pages/account/signup/ThirdSignupView.vue";
+
 import Story from "@/pages/story/StoryView.vue";
+import StoryFollow from '@/pages/story/StoryFollowView.vue'
 import StoryMain from "@/pages/story/StoryMain.vue";
 import StoryForm from "@/pages/story/StoryForm.vue";
 import StoryDetailView from "@/pages/story/StoryDetailView.vue";
@@ -82,6 +84,11 @@ const router = createRouter({
           path: "",
           name: "story",
           component: Story,
+        },
+        {
+          path: "/follow",
+          name: "followStory",
+          component: StoryFollow,
         },
         {
           path: "create",

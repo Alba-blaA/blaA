@@ -60,14 +60,15 @@ export default {
     }
   },
   actions: {
-    async getReviews({commit, state}, page) {
+    async getReviews({commit, state}, data) {
       try {
         const res = await axios.get(api.review.store(), {
           headers: {
             Authorization: `Bearer ${state.Token}`
           },
           params: {
-            page: page
+            page: data.page,
+            search: data.searchText
           }
         })
         commit('UPDATE_TOTAL_REVIEWS', res.data.count)

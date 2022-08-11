@@ -15,9 +15,11 @@
     <div class="d-flex justify-content-between">
       <h2>{{ story.story_title }}</h2>
       <!-- 좋아요 기능 구현 -->
-      <span>{{story.like_user_count}}</span>
-      <i class="fa fa-solid fa-heart" :class="isLike? activate : deactivate" 
-        @click="likeStory" style="cursor:pointer"></i>
+      <div class="like">
+        <span>{{story.like_user_count}}</span>
+        <i class="fa fa-solid fa-heart" :class="{activate: isLike, deactivate: !isLike}" 
+        @click="likeStory" style="cursor:pointer; maring-left: 5px;"></i>
+      </div>
     </div>
     <div class="story-content">
       <img :src="host + story.story_picture" alt="이미지 영역입니다." style="width:100%">
@@ -105,4 +107,20 @@ export default {
 </script>
 
 <style scoped>
+ .my-modal {
+    overflow: hidden;
+  }
+
+.activate {
+  color: pink;
+}
+
+.deactivate {
+  color: gray;
+}
+
+.like {
+  font-size: 24px;
+  text-align: center;
+}
 </style>
