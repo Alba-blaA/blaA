@@ -21,7 +21,7 @@
   </div>
   <div>
     <!-- 해시태그는 추후에 작성-->
-    <HashTagForm/>
+    <HashTagForm @@search-hash-tag="searchHastTag"/>
   </div>
 </form>
   
@@ -48,6 +48,7 @@ export default {
     const isPictureVaild = ref(false)
     const isTitleVaild = ref(false)
     const image_url = ref('')
+    const hashTag = ref([])
 
     // 업로드 된 이미지를 미리 확인하는 함수
     const previewFile = (e) => {
@@ -97,7 +98,6 @@ export default {
         //   story_picture: story_picture.value,
         //   story_title: story_title.value
         // })
-        console.log(form)
         try {
           const token = store.state.story.Token
           const res = await axios.post(api.story.story(), form
@@ -107,15 +107,32 @@ export default {
               "Authorization": `Bearer ${token}`
             },
           })
-          console.log(res.data)
           const index = res.data.story_pk
-          // 작성 후 상세페이지로 이동
-          router.push({
-            name: 'story',
-            params: {
-              index
-            }
+          const hashtag_content = ref('')
+          hashTag.value.forEach(ele => {
+            hashtag_content.value += ele
+            hashtag_content.value += ' '
           })
+          try {
+            const res = await axios.post(api.story.story() + 'hashtag/' + index + '/', 
+            { data: {
+              hashtag_content: hashtag_content.value
+              }}, {
+              headers: {
+                "Authorization": `Bearer ${token}`
+              }
+            })
+            // 작성 후 상세페이지로 이동
+            router.push({
+              name: 'story',
+              params: {
+                index
+              }
+            })
+          } catch(error) {
+            console.error(error)
+            console.log('해시태그 생성 오류')
+          }
         } catch(error) {
           console.log(error)
         }
@@ -127,13 +144,18 @@ export default {
       
     }
 
+    const searchHastTag = (hashTag) => {
+      hashTag.value = hashTag
+    }
+
     return {
       Sumbit,
       isPictureVaild,
       isTitleVaild,
       story_picture,
       story_title,
-      previewFile
+      previewFile,
+      searchHastTag
     }
   }
 

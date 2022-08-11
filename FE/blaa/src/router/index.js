@@ -29,7 +29,6 @@ import ProfileMain from "@/pages/profile/ProfileMainView.vue";
 import UpdateUserInfo from "@/pages/profile/UpdateUserInfoView.vue";
 import FollowList from "@/pages/profile/FollowListView.vue";
 import MyStory from "@/pages/profile/MyStoryView.vue";
-import SearchAllUsers from "@/pages/crew/SearchAllUsersView.vue"
 import InvitedCrew from "@/pages/profile/InvitedCrewView.vue"
 import MyReview from "@/pages/profile/MyReviewView.vue";
 import MyCrew from "@/pages/profile/MyCrewView.vue";
