@@ -1,6 +1,6 @@
 <template>
   <h1>메인페이지</h1>
-  
+
   <div v-if="userInfo">
     <div v-if="isKakaoLogin">
       <p style="float: left">{{ userInfo.nickname }} 님</p>
@@ -17,6 +17,7 @@
     <button @click.prevent="gostory">오출완가기</button>
     <button @click.prevent="gosearch">유저정보검색하기</button>
     <button @click.prevent="goMyProfile">마이프로필</button>
+    <button @click.prevent="gocrew">크루가기</button>
   </div>
 
   <div v-else>
