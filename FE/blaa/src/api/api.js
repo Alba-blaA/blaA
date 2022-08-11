@@ -1,5 +1,5 @@
 // 기본 url
-const HOST = "http://localhost:8000/api/v1/";
+const HOST = "http://127.0.0.1:8000/api/v1/";
 
 // ===================================
 // 세부 url
@@ -30,10 +30,13 @@ export default {
 
   crew: {
     crew: () => HOST + CREW,
-    crewInfo: (crew_pk) => HOST + CREW + crew_pk,
+    crewInfo: (crew_pk) => HOST + CREW + crew_pk + "/",
+    article: (crew_article_pk) => HOST + CREW + "article/edit/" + crew_article_pk + "/",
     articles: (crew_pk) => HOST + CREW + "article/" + crew_pk + "/",
-    article: (crew_article_pk) =>
-      HOST + CREW + "article/edit/" + crew_article_pk + "/",
+    members: (crew_pk) => HOST + CREW + "user/" + crew_pk + "/",
+    sign: (crew_pk) => HOST + CREW + "sign/" + crew_pk + "/",
+    invitelist: (crew_pk, type) => HOST + CREW + "invitelist/" + crew_pk + "/?type=" + type,
+    accept: (crew_pk, user_pk) => HOST + CREW + "accept_user/" + crew_pk + "/" + user_pk + "/",
     // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
   },
   categorys: {
