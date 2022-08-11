@@ -18,4 +18,5 @@ urlpatterns=[
     path('unique/nickname/', views.NicknameUniqueCheck.as_view(), name='uniquecheck_nickname'),
     path('crew/<int:user_pk>/', views.UserCrewAPIView.as_view(), name='user_crew'),
     path('review/<int:user_pk>/', views.UserReviewAPIView.as_view(), name='user_review'),
+    path('followlist/<int:user_pk>/', views.FollowAPIView.as_view(), name='user_review'),
 ]
