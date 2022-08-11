@@ -1,5 +1,4 @@
 <template>
-
 <body>
     <div v-if="userInfo">
       <div class="chat_list_wrap">

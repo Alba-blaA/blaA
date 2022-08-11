@@ -10,6 +10,7 @@ const COMMENT = "comment/";
 const REVIEW = "reviews/";
 const STORE = "store/";
 const CREW = "crews/";
+const NOTIFICATION = "notifications/"
 // const CHAT = 'chat/'
 
 export default {
@@ -32,12 +33,15 @@ export default {
     crew: () => HOST + CREW,
     crewInfo: (crew_pk) => HOST + CREW + crew_pk + "/",
     article: (crew_article_pk) => HOST + CREW + "article/edit/" + crew_article_pk + "/",
+    crewmemebers : (crew_pk) => HOST + CREW + "user/" +crew_pk ,
+    inviteuser : (crew_pk, user_pk) => HOST + CREW + "invite/" + crew_pk + "/" + user_pk + "/",
     articles: (crew_pk) => HOST + CREW + "article/" + crew_pk + "/",
     members: (crew_pk) => HOST + CREW + "user/" + crew_pk + "/",
     sign: (crew_pk) => HOST + CREW + "sign/" + crew_pk + "/",
     invitelist: (crew_pk, type) => HOST + CREW + "invitelist/" + crew_pk + "/?type=" + type,
     accept: (crew_pk, user_pk) => HOST + CREW + "accept_user/" + crew_pk + "/" + user_pk + "/",
     // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
+    acceptcrew : (crew_pk) => HOST + CREW + "accept_crew/" + crew_pk + "/"
   },
   categorys: {
     job: () => HOST + CATEGORYS + "job/",
@@ -68,4 +72,9 @@ export default {
     myCrew: (user_pk) => HOST + ACCOUNTS + "crew/" + user_pk + "/",
     myInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
   },
+
+  notification : {
+    getnotifications : () => HOST + NOTIFICATION,
+    getinvitedcrewlist : () => HOST + CREW + "signlist/"
+  }
 };
