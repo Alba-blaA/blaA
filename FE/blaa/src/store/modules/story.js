@@ -127,7 +127,11 @@ export default {
             id: hashtag,
           }
         })
-        commit('GET_IMAGES', res.data.story_pk)
+        const data = [] 
+        for (const ele in res.data) {
+          data.push(res.data[ele].story_pk)
+        }
+        commit('GET_IMAGES', data)
       } catch(error) {
         console.log(error)
       }

@@ -10,8 +10,8 @@
   <!-- Modal -->
   <PopUp v-if="isPopUp">
     <HashTagForm @search-hash-tag="searchHastTag"/>
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="[isPopUp=false, getPure()]">닫기</button>
-    <button type="button" class="btn btn-primary">검색</button>
+    <button type="button" class="btn btn-secondary" @click="[isPopUp=false, getPure()]">닫기</button>
+    <button type="button" class="btn btn-primary" @click="searchHastTagStory">검색</button>
   </PopUp>   
   <StoryImageCardList :images="images"/>
 </div>
@@ -53,8 +53,10 @@ export default {
     // 해시태그 검색
     const searchHastTag = async(hash) => {
       hashTag.value = hash
+    }
 
-      hashtag_content.value = ''
+    const searchHastTagStory = async() => {
+       hashtag_content.value = ''
       if(hashTag.value.length) {
         for (let i = 0; i < hashTag.value.length; i++) {
           hashtag_content.value += hashTag.value[i]
@@ -63,6 +65,7 @@ export default {
           }
         }
         await store.dispatch('story/getHashtag', hashtag_content.value)
+        console.log(store.state.story.images)
         images.value = store.state.story.images
       } else {
         getPure()
@@ -101,7 +104,8 @@ export default {
       isRegion,
       isCategory,
       getPure,
-      isPopUp
+      isPopUp,
+      searchHastTagStory
     }
   }
 }

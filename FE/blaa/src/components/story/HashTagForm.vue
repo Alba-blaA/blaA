@@ -15,15 +15,20 @@
 
 <script>
 import $ from 'jquery'
-import { ref, onMounted } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 
 
 export default {
+  props: {
+    isHashTag: Boolean
+  },
   setup(props, {emit}) {
     const tag = ref([])
     
-    onMounted(() => {
+    onBeforeMount(() => {
+      // 값 초기화
       tag.value = []
+      $('#tag-list').empty()
     })
     
     // 문서가 준비되었으면 해당 함수를 실행
