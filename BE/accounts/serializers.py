@@ -97,10 +97,12 @@ class UserCrewSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer) :
-    store = serializers.CharField(source='store.name')
+    store_pk = serializers.IntegerField(source='store.store_pk')
+    store_name = serializers.CharField(source='store.name')
+    store_image = serializers.ImageField(source='store.image')
     class Meta: 
         model = Review
-        fields = ('review_pk','user','star','store')
+        fields = ('review_pk','user','star','store_pk','store_name','store_image')
         
 
 class UserReviewSerializer(serializers.ModelSerializer):
