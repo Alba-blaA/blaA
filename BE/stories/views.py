@@ -9,7 +9,7 @@ from .models import Hashtag, Story,Comment
 from accounts.models import User
 from .serializers.story import StoryLikeSerializer, StorySerializer,StoryDetailSerializer
 from .serializers.comment import CommentSerializer
-from .serializers.hashtag import HashtagSerializer
+from .serializers.hashtag import HashtagSerializer,HashtagFilterSerializer
 from django.db.models import Q
 # Create your views here.
 
@@ -262,3 +262,10 @@ def mystory_list(request,user_pk):
     serializer = StorySerializer(story, many=True)
     return Response(serializer.data)
     
+@api_view(['GET'])   
+def hashtag_filter(request):
+    tmp = request.GET.get('id',"")
+    tmp3 = tmp.split(" ")
+    story = Hashtag.objects.filter(Q(hashtag_content__in = tmp3))
+    serializer = HashtagFilterSerializer(story, many=True)
+    return Response(serializer.data)
