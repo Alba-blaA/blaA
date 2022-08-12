@@ -9,6 +9,7 @@ import { getKakaoToken, getKakaoUserInfo } from "@/hooks/kakaologin.js";
 import { useRoute } from "vue-router";
 import { useCookies } from "vue3-cookies";
 import { useStore } from "vuex";
+import { computed } from "vue";
 import router from "@/router/index.js";
 import axios from "axios";
 import api from "@/api/api.js";
@@ -34,6 +35,8 @@ export default {
 
       const emailCheck = { email: store.state.account.kakaoUserInfo.email };
 
+
+
       axios
         .post(api.accounts.emailCheck(), emailCheck)
         .then(() => {
@@ -41,6 +44,37 @@ export default {
           router.push({ name: "choice" });
         })
         .catch(() => {
+
+          console.log("email : ", store.state.account.kakaoUserInfo.email);
+          axios
+            .post(api.accounts.kakaoLogin(), emailCheck)
+            .then((response) => {
+              if (response.status === 200) {
+                console.log("accounts/kakao 성공 : ", response);
+
+                const token = response.data.token;
+                console.log("kakao token : ", token);
+                store.commit("account/LOGIN", true);
+                store.commit("account/LOGIN_ERROR", false);
+                sessionStorage.setItem("token", token);
+                store.commit("account/SET_LOGIN_TOKEN", token);
+                console.log("로그인 성공");
+                alert("카카오 로그인 완료!");
+                store.dispatch("account/getUserInfo", token);
+              } else {
+                store.commit("account/LOGIN", false);
+                store.commit("account/LOGIN_ERROR", true);
+                console.log("로그인 실패");
+              }
+            })
+            .catch((err) => {
+              console.log("accounts/kakao 실패 : ", err);
+              if (err.response.status === 401) {
+                alert("아이디 또는 비밀번호가 틀립니다.");
+              }
+            });
+
+
           alert("카카오 로그인 완료!");
           router.replace("/");
         });
@@ -57,6 +91,14 @@ export default {
       store.commit("account/SET_KAKAO_USER_INFO", kakaoUserInfo);
     };
 
+    const isLogin = computed(() => {
+      return store.state.account.isLogin;
+    });
+
+    const isLoginError = computed(() => {
+      return store.state.account.isLoginError;
+    });
+
     if (route.query.code) {
       setKakaoToken();
     }
@@ -64,6 +106,8 @@ export default {
     return {
       setKakaoToken,
       setUserInfo,
+      isLogin,
+      isLoginError,
     };
   },
 };
