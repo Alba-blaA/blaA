@@ -174,9 +174,24 @@ export default {
       });
     };
 
-    const userCrew = () => {};
+    const userCrew = async () => {
+      await store.dispatch("profile/getCrewList", userProfile.value.user_pk);
+      router.push({
+        name: "crewList",
+        params: {
+          user_pk: userProfile.value.user_pk,
+        },
+      });
+    };
 
-    const setBlackList = () => {};
+    const setBlackList = () => {
+      router.push({
+        name: "setBlackList",
+        params: {
+          user_pk: userProfile.value.user_pk,
+        },
+      });
+    };
 
     return {
       HOST,

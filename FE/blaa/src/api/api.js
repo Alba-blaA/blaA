@@ -78,6 +78,7 @@ export default {
     myCrew: (user_pk) => HOST + ACCOUNTS + "crew/" + user_pk + "/",
     myInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
     follow: (user_pk) => HOST + ACCOUNTS + "follow/" + user_pk + "/",
+    setBlackList: () => HOST + "blacklist/",
   },
 
   notification: {

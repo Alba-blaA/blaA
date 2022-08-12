@@ -34,6 +34,8 @@ import ReviewList from "@/pages/profile/ReviewListView.vue";
 import CrewList from "@/pages/profile/CrewListView.vue";
 import MyInfo from "@/pages/profile/MyInfoView.vue";
 import UserProfile from "@/pages/profile/UserProfileView.vue";
+import SetBlackList from "@/pages/profile/BlackListView.vue";
+import DeleteAccount from "@/pages/profile/DeleteAccountView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -301,9 +303,19 @@ const router = createRouter({
           component: MyInfo,
         },
         {
+          path: ":user_pk/delete",
+          name: "deleteAccount",
+          component: DeleteAccount,
+        },
+        {
           path: ":user_pk",
           name: "userProfile",
           component: UserProfile,
+        },
+        {
+          path: "blacklist/:user_pk",
+          name: "setBlackList",
+          component: SetBlackList,
         },
       ],
     },
