@@ -5,38 +5,38 @@ const profileStore = {
   namespaced: true,
   state: {
     updateMyInfo: [],
-    myFollower: [],
-    myFollowing: [],
+    followerList: [],
+    followingList: [],
     myStory: [],
-    myReview: [],
-    myCrew: [],
+    reviewList: [],
+    crewList: [],
     myInfo: [],
   },
   mutations: {
     UPDATE_MY_INFO: (state, myInfo) => {
       state.myInfo = myInfo;
     },
-    GET_MY_FOLLOWER: (state, myFollower) => {
-      state.myFollower = myFollower;
+    GET_FOLLOWER_LIST: (state, followerList) => {
+      state.followerList = followerList;
     },
-    GET_MY_FOLLOWING: (state, myFollowing) => {
-      state.myFollowing = myFollowing;
+    GET_FOLLOWING_LIST: (state, followingList) => {
+      state.followingList = followingList;
     },
     GET_MY_STORY: (state, myStory) => {
-      state.myStory.push(myStory);
+      state.myStory = myStory;
     },
-    GET_MY_REVIEW: (state, myReview) => {
-      state.myReview = myReview;
+    GET_REVIEW_LIST: (state, reviewList) => {
+      state.reviewList = reviewList;
     },
-    GET_MY_CREW: (state, myCrew) => {
-      state.myCrew = myCrew;
+    GET_CREW_LIST: (state, crewList) => {
+      state.crewList = crewList;
     },
     GET_MY_INFO: (state, myInfo) => {
       state.myInfo = myInfo;
     },
   },
   actions: {
-    updateMyInfo(context, user_pk) {
+    async updateMyInfo(context, user_pk) {
       axios
         .put(api.profile.updateMyInfo(user_pk))
         .then((response) => {
@@ -44,11 +44,11 @@ const profileStore = {
         })
         .catch((err) => {});
     },
-    getMyFollower(context, user_pk) {
-      axios
-        .get(api.profile.myFollow(user_pk), {
+    async getFollowerList(context, user_pk) {
+      await axios
+        .get(api.profile.myFollowList(user_pk), {
           params: {
-            type: "follow",
+            type: "follower",
           },
         })
         .then((response) => {
@@ -66,15 +66,15 @@ const profileStore = {
           followerData.previous = response.data.previous;
           followerData.results = response.data.results;
 
-          context.commit("GET_MY_FOLLOWER", followerData);
+          context.commit("GET_FOLLOWER_LIST", followerData);
         })
         .catch((err) => {
           console.log("팔로우 err : ", err);
         });
     },
-    getMyFollowing(context, user_pk) {
-      axios
-        .get(api.profile.myFollow(user_pk), {
+    async getFollowingList(context, user_pk) {
+      await axios
+        .get(api.profile.myFollowList(user_pk), {
           params: {
             type: "following",
           },
@@ -94,7 +94,7 @@ const profileStore = {
           followingData.previous = response.data.previous;
           followingData.results = response.data.results;
 
-          context.commit("GET_MY_FOLLOWING", followingData);
+          context.commit("GET_FOLLOWING_LIST", followingData);
           console.log(response);
         })
         .catch((err) => {
@@ -110,22 +110,23 @@ const profileStore = {
         console.log("state myStory", context.state.myStory);
       });
     },
-    getMyReview(context, user_pk) {
-      axios
+    async getReviewList(context, user_pk) {
+      await axios
         .get(api.profile.myReview(user_pk))
         .then((response) => {
-          console.log(response);
+          console.log("review response :  ", response);
+          context.commit("GET_REVIEW_LIST", response.data);
         })
         .catch((err) => {
-          console.log(err);
+          console.log("review err : ", err);
         });
     },
-    getMyCrew(context, user_pk) {
-      axios
+    async getCrewList(context, user_pk) {
+      await axios
         .get(api.profile.myCrew(user_pk), {})
         .then((response) => {
           console.log("crew response", response);
-          context.commit("GET_MY_CREW", response.data);
+          context.commit("GET_CREW_LIST", response.data);
         })
         .catch((err) => {
           console.log("crew error : ", err);
