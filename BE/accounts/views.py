@@ -218,6 +218,7 @@ class UserCrewAPIView(ListAPIView) :
 
 class UserReviewAPIView(ListAPIView) :
     serializer_class = UserReviewSerializer 
+    pagination_class = CustomPageNumberPagination
     lookup_field = 'user_pk'
 
     def list(self, request,user_pk, *args, **kwargs):
