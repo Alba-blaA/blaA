@@ -7,7 +7,7 @@
                 <div> {{ crew.crew_name }}크루에서 초대를 보내셨습니다. 수락하시겠습니까? </div>
             </b-card-text> 
     <button @click="acceptinvitation(crew.crew)">수락하기</button>
-    <button>거절하기</button>
+    <button @click="refuseinvitation(crew.crew)">거절하기</button>
   </b-card>
   </div>
 </template>
@@ -60,11 +60,16 @@ export default {
             }
         refreshAll()
         })
+
+        const refuseinvitation = ((crew_pk) => {
+            console.log(crew_pk);
+        })
         
         return {
             state,
             acceptinvitation,
-            refreshAll
+            refreshAll,
+            refuseinvitation
 
         }   
     }
