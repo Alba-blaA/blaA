@@ -40,7 +40,7 @@ class UserSerializer(serializers.ModelSerializer):
     followings = serializers.IntegerField(source = 'followings.count',read_only=True)
     class Meta:
         model = User
-        fields= ['user_pk','email','name','nickname','region','category','is_alba','image','followers','followings']
+        fields= ['user_pk','email','name','nickname','region','category','is_alba','image','followers','followings','tel']
         read_only_fields = ['email']
         
 

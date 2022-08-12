@@ -48,6 +48,7 @@ class UserListAPIView(ListAPIView) :
     #요청한 유저를 가져와서, serializer에 넣음 
     serializer_class = UserListSerializer
     queryset = User.objects.all()
+    pagination_class = None
 
 #회원가입 API (POST)
 class RegisterAPIView(GenericAPIView) :
