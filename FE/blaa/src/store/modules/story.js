@@ -53,10 +53,8 @@ export default {
       state.comments = payload
     },
     FIX_COMMENT(state, payload) {
-      const idx = state.comments.findIndex(ele => {
-        ele.comment_pk == payload.comment_pk
-      })
-      state.comments[idx] = payload.story_comment
+      const idx = state.comments.findIndex(ele => ele.comment_pk == payload.comment_pk)
+      state.comments[idx].story_comment = payload.story_comment
     },
     DELETE_COMMENT(state, payload) {
       const idx = state.comments.findIndex(ele => ele.comment_pk == payload)
@@ -116,6 +114,21 @@ export default {
         commit('GET_IMAGES',res.data)
       } catch(error) {
         // 에러 발생시
+        console.log(error)
+      }
+    },
+    async getHashtag({commit,state}, hashtag) {
+      try {
+        const res = await axios.get(api.story.hashtag(), {
+          headers: {
+            Authorization: `Bearer ${state.Token}`
+          },
+          params: {
+            id: hashtag,
+          }
+        })
+        commit('GET_IMAGES', res.data.story_pk)
+      } catch(error) {
         console.log(error)
       }
     },

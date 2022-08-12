@@ -6,7 +6,7 @@
   <!-- <router-view></router-view> -->
   <div v-show="!check">
     <p>Crew 등록</p>
-    <form @submit.prevent ="submitForm" enctype="multipart/form-data">
+    <form @submit.prevent="submitForm" enctype="multipart/form-data">
       <label for="crew_name">크루명</label><br />
       <input type="text" id="crew_name" name="crew_name" v-model="crew_name" /><br />
       <label for="crew_explain">크루 설명</label><br />
@@ -28,7 +28,7 @@
 <script>
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { ref } from 'vue';
+import { ref } from "vue";
 export default {
   setup() {
     const router = useRouter();
@@ -51,8 +51,8 @@ export default {
     };
 
     const back = () => {
-      check.value=true;
-    }
+      check.value = true;
+    };
 
     const submitForm = () => {
       let error = true;
@@ -70,13 +70,12 @@ export default {
       if (e.target.files[0]) {
         crew_img.value = e.target.files[0];
       } else {
-        alert('파일을 다시 선택해 주세요')
+        alert("파일을 다시 선택해 주세요");
         crew_img.value = null;
       }
-    }
+    };
 
     const crewRegist = async () => {
-      console.log(crew_name.value);
       const crewData = new FormData();
       crewData.append("crew_name", crew_name.value);
       crewData.append("crew_explain", crew_explain.value);
@@ -84,38 +83,17 @@ export default {
       crewData.append("crew_img", crew_img.value);
       crewData.append("is_business", is_business.value);
 
-      for (var value of crewData.values()) {
-        console.log(value);
-      }
-
       try {
-        const token = store.state.crew.Token;
-        console.log(token);
+        console.log(crewData);
         await store.dispatch("crew/registcrew", crewData);
-        // if (!store.state.crew.success) alert("등록에 실패하였습니다.");
-        // else {
-        //   alert("등록에 성공하였습니다.");
-        //   moveList();
-        // }
-        console.log(store.state.crew.success);
       } catch (error) {
         console.log(error);
       }
-
-        
-        // console.log(crewData.keys());
-        //await store.dispatch("crew/registcrew", crewData);
-        //let msg = "등록이 완료되었습니다.";
-        //alert(msg);
-        //moveList();
-
-      
     };
 
     const moveList = () => {
       router.push({ name: "allcrewlist" });
     };
-
 
     return {
       moveToBusiness,

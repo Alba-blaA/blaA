@@ -103,6 +103,7 @@ export default {
     },
     async likeOneReview({commit, state}, data) {
       const review_pk = data.review_pk
+      const isDetail = data.isDetail
       try {
         const res = await axios.post(api.review.like(review_pk), {}, {
           headers: {
@@ -114,8 +115,7 @@ export default {
           like_users: res.data.like_users,
           like_user_count: res.data.like_user_count
         }
-        if (data.isDetail) {
-          console.log(state.detailReview)
+        if (isDetail) {
           commit('LIKE_DETAIL_REVIEW',data)
         } else {
           commit('LIKE_ONE_REIVEW', data)
@@ -126,9 +126,10 @@ export default {
     },
     async makeReviews({state}, data) {
       const isStore = data.isStore
+      
       const store = {
         form: data.form,
-        store_pk: data.store_pk
+        store_pk: data.store_pk,
       }
       const review = {
         oneline_review: data.oneline_review,
