@@ -15,14 +15,20 @@
 
 <script>
 import $ from 'jquery'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+
 
 export default {
   setup(props, {emit}) {
+    const tag = ref([])
+    
+    onMounted(() => {
+      tag.value = []
+    })
+    
     // 문서가 준비되었으면 해당 함수를 실행
     $(document).ready(function() {
       // 해시태그가 Array 형태로 저장되어 있음
-      const tag = ref([])
       const counter = ref(0)
 
       function addTag (value) {
@@ -64,6 +70,7 @@ export default {
               $('#tag-list').append("<li class='tag-item' style='display: inline; margin-left: 5px; background-color:greenyellow; border-radius: 5px; padding: 0px 5px 0px 5px;'>" + tagValue + "<span class='del-btn' style='cursor:pointer' idx='"+counter.value+"'>x</span></li>")
               addTag(tagValue)
               self.val("")
+              emit('search-hash-tag', tag.value)
             } else {
               alert("태그값이 중복됩니다.")
             }
@@ -72,6 +79,7 @@ export default {
           e.preventDefault()
         }
       })
+      
       // 삭제
       $(document).on('click', '.del-btn', function() {
         const index = $(this).attr('idx')
@@ -79,8 +87,8 @@ export default {
         tag.value.splice(index, 1)
         // del 버튼이 속해있는 li 태그를 삭제
         $(this).parent().remove()
+        emit('search-hash-tag', tag.value)
       })
-      emit('search-hash-tag', tag.value)
     }) 
   }
 }

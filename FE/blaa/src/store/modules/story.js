@@ -31,6 +31,12 @@ export default {
       state.currentStory.like_user_count = payload.like_user_count
     },
     CREATE_COMMENT(state, payload) {
+      const {
+        yyyyMMdd
+      } = dataChange()
+
+      // 날짜 변환
+      payload.created_at = yyyyMMdd(payload.created_at)
       // 작성자, 내용, 날짜가 객체로 들어감
       state.comments.push(payload)
     },
@@ -46,10 +52,14 @@ export default {
 
       state.comments = payload
     },
-    DELETE_COMMENT(state, payload) {
-      const idx = state.comments.findIndexOf(ele => {
-        ele.comment_pk == payload
+    FIX_COMMENT(state, payload) {
+      const idx = state.comments.findIndex(ele => {
+        ele.comment_pk == payload.comment_pk
       })
+      state.comments[idx] = payload.story_comment
+    },
+    DELETE_COMMENT(state, payload) {
+      const idx = state.comments.findIndex(ele => ele.comment_pk == payload)
       state.comments.splice(idx, 1)
     }
   },
@@ -177,11 +187,26 @@ export default {
         console.log(error)
       }
     },
+    async fixComment({commit, state}, data){
+      const story_comment = data.story_comment
+      try {
+        const res = await axios.put(api.story.commentChange(data.comment_pk),{
+          story_comment: story_comment
+        }, {
+          headers: {
+            Authorization: `Bearer ${state.Token}`
+          }
+        })
+        commit('FIX_COMMENT', res.data)
+      } catch (error) {
+        console.error(error)
+      }
+    },
     async deleteComment({commit, state}, comment_pk){
       try {
-        await axios.delete(api.story.commentChange(comment_pk), {data: {}}, {
+        await axios.delete(api.story.commentChange(comment_pk), {
           headers: {
-            Authorization: `Bearer ${state.token}`
+            Authorization: `Bearer ${state.Token}`
           }
         })
         commit('DELETE_COMMENT', comment_pk)

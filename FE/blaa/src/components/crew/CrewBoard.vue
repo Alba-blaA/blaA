@@ -51,6 +51,14 @@ export default {
 
     getCrewInfo();
 
+    const crewMember = (crew_pk) => {
+      router.push({ name: "crewmember"}, {
+        params : {
+          crew_pk : crew_pk
+        }
+      })
+    }
+
     return {
       crewInfo,
       getCrewInfo,

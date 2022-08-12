@@ -9,7 +9,7 @@ class Crew(TrackingModel,models.Model) :
     is_business = models.BooleanField()
     crew_name = models.CharField(max_length=50,unique=True)
     crew_img = models.ImageField(upload_to='crew/image',
-                default='media/crew/image/상점기본.png',
+                default='crew/image/상점기본.png',
                 null=True,blank=True)
     crew_explain = models.TextField()
     crew_region = models.TextField(null=True,blank=True)
@@ -57,6 +57,11 @@ class CrewSchedule(models.Model) :
     crew_starthour = models.TimeField()
     crew_endhour = models.TimeField()
     
+class CrewChat(TrackingModel,models.Model) :
+    chat_pk = models.AutoField(primary_key=True)
+    crew = models.ForeignKey(Crew,on_delete=models.CASCADE)
+    user =models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    content = models.TextField()
 
     
 

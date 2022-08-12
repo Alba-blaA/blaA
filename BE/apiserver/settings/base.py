@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'reviews',
     'stories',
     'crews',
-
+    'notifications',
     #3rd-party
     'django_extensions',
     'corsheaders',

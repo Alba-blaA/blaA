@@ -6,7 +6,7 @@
           <span>{{ comment.user_pk.nickname }}</span> <span>작성일: {{ comment.created_at }}</span> 
         </div>
         <div v-if="user_pk == comment.user_pk.user_pk">
-          <span style="display:inline-block; margin-right:10px; cursor:pointer" @click="fixComment">수정</span>
+          <span style="display:inline-block; margin-right:10px; cursor:pointer" @click="isFix=true">수정</span>
           <span style="display:inline-block; cursor:pointer" @click="commnetDelete">X</span>
           <PopUp v-if="popUpOpen" @close-modal="popUpOpen=false">
             <div class="modal-content">
@@ -17,7 +17,10 @@
           </PopUp>  
         </div>
       </div>
-      <div>{{ comment.story_comment }}</div>
+      <div v-if="!isFix">{{ comment.story_comment }}</div>
+      <div v-else>
+        <input type="text" v-model="changeComment" @keyup.enter="commentFix"> <button @click="commentFix">제출</button>
+      </div>
     </li>
 </template>
 
@@ -40,16 +43,31 @@ export default {
     const store = useStore()
     const popUpOpen = ref(true)
     const user_pk = store.state.account.userInfo.user_pk
+    const isFix = ref(false)
+    const changeComment = String(props.comment.story_comment)
 
     const commnetDelete = async() => {
       const comment_pk = props.comment.comment_pk
       await store.dispatch('story/deleteComment', comment_pk)
     }
 
+    const commentFix = async() => {
+      console.log(changeComment)
+      const data = {
+        comment_pk: props.comment.comment_pk,
+        story_comment: changeComment
+      }
+      await store.dispatch('story/fixComment', data)
+      isFix.value = false
+    }
+
     return {
       user_pk,
       popUpOpen,
       commnetDelete,
+      commentFix,
+      isFix,
+      changeComment
     }
   }
 }

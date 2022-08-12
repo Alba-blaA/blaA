@@ -1,5 +1,6 @@
 // 기본 url
-const HOST = "http://127.0.0.1:8000/api/v1/";
+// const HOST = process.env.VUE_APP_API_URL;
+const HOST = "http://localhost:8000/api/v1/";
 
 // ===================================
 // 세부 url
@@ -10,6 +11,7 @@ const COMMENT = "comment/";
 const REVIEW = "reviews/";
 const STORE = "store/";
 const CREW = "crews/";
+const NOTIFICATION = "notifications/";
 // const CHAT = 'chat/'
 
 export default {
@@ -31,7 +33,11 @@ export default {
   crew: {
     crew: () => HOST + CREW,
     crewInfo: (crew_pk) => HOST + CREW + crew_pk + "/",
-    article: (crew_article_pk) => HOST + CREW + "article/edit/" + crew_article_pk + "/",
+    article: (crew_article_pk) =>
+      HOST + CREW + "article/edit/" + crew_article_pk + "/",
+    crewmemebers: (crew_pk) => HOST + CREW + "user/" + crew_pk,
+    inviteuser: (crew_pk, user_pk) =>
+      HOST + CREW + "invite/" + crew_pk + "/" + user_pk + "/",
     articles: (crew_pk) => HOST + CREW + "article/" + crew_pk + "/",
     members: (crew_pk) => HOST + CREW + "user/" + crew_pk + "/",
     sign: (crew_pk) => HOST + CREW + "sign/" + crew_pk + "/",
@@ -43,6 +49,7 @@ export default {
     commentUpdate: (crew_comment_pk) => HOST + CREW + "comment/update/" + crew_comment_pk + "/",
 
     // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
+    acceptcrew: (crew_pk) => HOST + CREW + "accept_crew/" + crew_pk + "/",
   },
   categorys: {
     job: () => HOST + CATEGORYS + "job/",
@@ -71,5 +78,12 @@ export default {
     myReview: (user_pk) => HOST + ACCOUNTS + "review/" + user_pk + "/",
     myCrew: (user_pk) => HOST + ACCOUNTS + "crew/" + user_pk + "/",
     myInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
+    follow: (user_pk) => HOST + ACCOUNTS + "follow/" + user_pk + "/",
+    setBlackList: () => HOST + "blacklist/",
+  },
+
+  notification: {
+    getnotifications: () => HOST + NOTIFICATION,
+    getinvitedcrewlist: () => HOST + CREW + "signlist/",
   },
 };

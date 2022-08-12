@@ -20,6 +20,7 @@ export default {
         story_pk: route.params.story_pk
       }
       store.dispatch('story/createComment', content)
+      comment.value = ''
     }
 
     return {
