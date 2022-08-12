@@ -28,6 +28,7 @@ export default {
     onMounted(async () => {
         await store.dispatch('story/getComment', route.params.story_pk).then(() => {
           comments.value = store.state.story.comments
+          console.log(comments.value)
         })
       })
     

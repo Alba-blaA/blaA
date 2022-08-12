@@ -55,9 +55,13 @@ export default {
       state.detailReview.like_users = payload.like_users
       state.detailReview.like_user_count = payload.like_user_count
     },
+    DELETE_REVIEW(state, payload) {
+      const idx = state.review.findIndex(ele => ele.review_pk == payload)
+      state.review.splice(idx, 1)
+    },
     UPDATE_TOTAL_REVIEWS(state, payload) {
       state.total_reviews = payload
-    }
+    },
   },
   actions: {
     async getReviews({commit, state}, data) {
@@ -180,8 +184,15 @@ export default {
       } catch(error) {
         console.error(error)
       }
-    }
-      
+    },
+    async deleteReview({commit, state}, review_pk) {
+      await axios.delete(api.review.reviewDetail(review_pk), {
+        headers: {
+          Authorization: `Bearer ${state.Token}`
+        }
+      })      
+      commit('DELETE_REVIEW', review_pk)
+    },
   },
   getters: {},
 };

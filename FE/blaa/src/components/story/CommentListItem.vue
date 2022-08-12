@@ -3,6 +3,9 @@
       <br>
       <div class="comment-info">
         <div>
+          <img :src="comment.user_pk.image" alt="프로필 이미지">
+        </div>
+        <div>
           <span>{{ comment.user_pk.nickname }}</span> <span>작성일: {{ comment.created_at }}</span> 
         </div>
         <div v-if="user_pk == comment.user_pk.user_pk">
@@ -60,6 +63,8 @@ export default {
       await store.dispatch('story/fixComment', data)
       isFix.value = false
     }
+
+    
 
     return {
       user_pk,

@@ -4,8 +4,10 @@
     <div class="form-group">
       <input type="hidden" value="" name="tag" id="rdTag" />
     </div>
-
-    <ul id="tag-list"></ul>
+    <div>
+      <button @click="reset">초기화</button>
+      <ul id="tag-list"></ul>
+    </div>
                 
     <div class="form-group">
       <input type="text" id="tag" size="7" placeholder="엔터로 해시태그를 등록해주세요." style="width: 300px;"/>
@@ -22,6 +24,7 @@ export default {
   props: {
     isHashTag: Boolean
   },
+  emits: ['search-hash-tag'],
   setup(props, {emit}) {
     const tag = ref([])
     
@@ -30,6 +33,12 @@ export default {
       tag.value = []
       $('#tag-list').empty()
     })
+
+    const reset = () => {
+      $('#tag-list').empty()
+      tag.value = []
+      emit('search-hash-tag', tag.value)
+    }
     
     // 문서가 준비되었으면 해당 함수를 실행
     $(document).ready(function() {
@@ -95,6 +104,9 @@ export default {
         emit('search-hash-tag', tag.value)
       })
     }) 
+    return {
+      reset
+    }
   }
 }
 </script>

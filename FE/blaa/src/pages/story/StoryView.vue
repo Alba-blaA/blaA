@@ -9,11 +9,15 @@
   <button class="btn m-1" @click="onRegion" :class="{ activate: isRegion, deactivate: !isRegion}">근무지</button>
   <!-- Modal -->
   <PopUp v-if="isPopUp">
-    <HashTagForm @search-hash-tag="searchHastTag"/>
+    <HashTagForm @search-hash-tag="searchHastTag" @closeModal="[isPopUp=false, getPure()]"/>
     <button type="button" class="btn btn-secondary" @click="[isPopUp=false, getPure()]">닫기</button>
     <button type="button" class="btn btn-primary" @click="searchHastTagStory">검색</button>
-  </PopUp>   
-  <StoryImageCardList :images="images"/>
+  </PopUp>
+  <div v-if="images.value">
+    <StoryImageCardList :images="images.value"/>
+  </div>
+  <p v-else>아직 불러오는 중이에요
+  </p>
 </div>
 </template>
 
@@ -22,7 +26,7 @@ import StoryImageCardList from '@/components/story/StoryImageCardList.vue'
 import HashTagForm from '@/components/story/HashTagForm.vue'
 import PopUp from '@/components/story/PopUp.vue'
 import { useStore } from 'vuex'
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, ref, computed } from 'vue'
 // import axios from 'axios'
 
 export default {
@@ -41,8 +45,10 @@ export default {
     const isPopUp = ref(false)
 
     const getPure = async() => {
-      await store.dispatch('story/getImages')
-      images.value = store.state.story.images 
+      if (!hashTag.value.length) {
+        await store.dispatch('story/getImages')
+        images.value = computed(() => {return store.state.story.images})
+      }
     }
 
     // 시작할 떄
@@ -65,8 +71,8 @@ export default {
           }
         }
         await store.dispatch('story/getHashtag', hashtag_content.value)
-        console.log(store.state.story.images)
-        images.value = store.state.story.images
+        images.value = computed(() => {return store.state.story.images})
+        isPopUp.value = false
       } else {
         getPure()
       }
@@ -78,7 +84,7 @@ export default {
       // 관심업종이 커져있으면 해당 업종 검색
       if (isCategory.value) {
         await store.dispatch('story/getCategory')
-        images.value = store.state.story.images
+        images.value = computed(() => {return store.state.story.images})
       } else {
         getPure()
       }
@@ -90,7 +96,7 @@ export default {
       // 관심업종이 커져있으면 해당 업종 검색
       if (isRegion.value) {
         await store.dispatch('story/getRegion')
-        images.value = store.state.story.images
+        images.value = computed(() => {return store.state.story.images})
       } else {
         getPure()
       }
