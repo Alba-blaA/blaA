@@ -59,13 +59,16 @@ export default {
       }
     },
     async registArticle({ state }, payload) {
+      console.log("전송되는 데이터: ", payload.article);
       // console.log(payload.crew_pk);
-      // console.log(payload.article);
+      // // console.log(payload.article);
+      // for (var value of payload.article.values()) {
+      //   console.log("밸류: ", value);
+      // }
       try {
         const instance = await axios.post(api.crew.articles(payload.crew_pk), payload.article);
         if (instance.status == 200 || instance.status == 201) {
           alert("새 글이 등록되었습니다.");
-          console.log(instance);
           router.push({ name: "articledetail", params: { crew_article_pk: instance.data.crew_article_pk } });
         }
       } catch (error) {
@@ -108,7 +111,6 @@ export default {
       }
     },
     async registcrew({ commit }, crewData) {
-      console.log(crewData);
       try {
         const instance = await axios.post(api.crew.crew(), crewData, {
           headers: {
