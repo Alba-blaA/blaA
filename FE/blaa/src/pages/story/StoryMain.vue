@@ -19,9 +19,9 @@
             </b-card-text>
             <b-card-text>
               <div v-if="notification.type == 'crew_invite'">
-                <button @click="acceptinvitation(notification.redirect_pk)">수락하기</button>
-                <button @click="refuseinvitation(notification.redirect_pk)">거절하기</button>
-              </div>      
+                <button @click="acceptinvitation(notification.redirect_pk), deleteclicknotification(notification.pk)">수락하기</button>
+                <button @click="refuseinvitation(notification.redirect_pk), deleteclicknotification(notification.pk)">거절하기</button>
+              </div>    
 
             </b-card-text>
           </b-card>
@@ -59,7 +59,6 @@ export default {
 
     onMounted(() => {
           if(userInfo){                
-              const token = store.state.story.Token
                     axios.get(api.notification.getnotifications()).then((response) => {
                       state.notifications = response.data.results
                       for (let index = 0; index < state.notifications.length; index++) {
@@ -103,12 +102,8 @@ export default {
 
     })
 
-    const deleteclicknotification = (notification_pk) => {
-      const token = store.state.story.Token
-      axios.delete(api.notification.deletenotification(notification_pk),{
-                    headers : {
-                      "Authorization": `Bearer ${token}`
-                    }})
+    const deleteclicknotification = (notification_pk) => {      
+      axios.delete(api.notification.deletenotification(notification_pk))
     }
 
     const makeviewtrue = () => {
@@ -128,15 +123,25 @@ export default {
       refreshAll()
       })
 
-    const refuseinvitation = ((crew_pk) => {
-        console.log(crew_pk);
-    })
-
+    
     const refreshAll= (() => {
             // 새로고침
             router.push({
                 path: '/crew/list/alllist'
             })
+        })
+
+    const refuseinvitation = ( async(crew_pk) => {            
+            try {
+                await axios.post(api.crew.refusecrew(crew_pk),{}).then(
+                    axios.get(api.notification.getinvitedcrewlist()).then((response) =>                        
+                    state.crews = response.data          
+                )                    
+                )
+                    
+            } catch(error){
+                alert("가입거절에 성공하셨습니다.")
+            }
         })
     
     
@@ -149,7 +154,7 @@ export default {
       deleteclicknotification,
       makeviewtrue,
       acceptinvitation,
-      refuseinvitation      
+      refuseinvitation,      
     }
     
   }

@@ -50,6 +50,7 @@ export default {
 
     // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
     acceptcrew: (crew_pk) => HOST + CREW + "accept_crew/" + crew_pk + "/",
+    refusecrew: (crew_pk) => HOST + CREW + "deny_crew/" + crew_pk + "/",
   },
   categorys: {
     job: () => HOST + CATEGORYS + "job/",

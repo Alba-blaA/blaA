@@ -51,7 +51,7 @@ export default {
         let token = store.state.chat.token;
         axios
           .get(api.accounts.searchallusers())
-          .then((response) => (state.users = response.data.results));
+          .then((response) => (state.users = response.data));
         console.log(state.users);
       }
     });

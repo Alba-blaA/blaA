@@ -33,8 +33,7 @@ export default {
             crews: [],    
         })
         onMounted(() => {
-            if(userInfo){      
-                let token = store.state.chat.token        
+            if(userInfo){              
                 axios.get(api.notification.getinvitedcrewlist()
                  ).then((response) =>                        
                     state.crews = response.data          
@@ -44,7 +43,6 @@ export default {
         })
 
         const acceptinvitation =  ((crew_pk) => {
-            let token = store.state.chat.token
             console.log("들어간크루pk", crew_pk);
             try {
                 axios.post(api.crew.acceptcrew(crew_pk),{})                  
@@ -57,8 +55,25 @@ export default {
         refreshAll()
         })
 
-        const refuseinvitation = ((crew_pk) => {
-            console.log(crew_pk);
+        const refuseinvitation = ( async(crew_pk) => {
+            // for (let index = 0; index < state.crews.length; index++) {
+            //     if(state.crews[index].crew == crew_pk){
+            //         state.crews.splice(index)
+            //         break
+            //     }
+            //     break               
+            // }
+            try {
+                await axios.post(api.crew.refusecrew(crew_pk),{}).then(
+                    axios.get(api.notification.getinvitedcrewlist()).then((response) =>                        
+                    state.crews = response.data          
+                )   
+                 
+                )
+                    
+            } catch(error){
+                alert("가입거절에 성공하셨습니다.")
+            }
         })
         
         return {
