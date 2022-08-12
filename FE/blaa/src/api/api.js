@@ -70,7 +70,7 @@ export default {
   },
   profile: {
     updateMyInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
-    updateMyPW: (user_pk) =>
+    updateMyPW: (user_pk) => 
       HOST + ACCOUNTS + "change_password/" + user_pk + "/",
     myFollowList: (user_pk) => HOST + ACCOUNTS + "followlist/" + user_pk + "/",
     myStory: (user_pk) => HOST + STORY + "mystory/" + user_pk + "/",
@@ -78,6 +78,7 @@ export default {
     myCrew: (user_pk) => HOST + ACCOUNTS + "crew/" + user_pk + "/",
     myInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
     follow: (user_pk) => HOST + ACCOUNTS + "follow/" + user_pk + "/",
+    setBlackList: () => HOST + "blacklist/",
   },
 
   notification: {

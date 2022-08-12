@@ -58,8 +58,6 @@
 </template>
 
 <script>
-import axios from "axios";
-import api from "@/api/api.js";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { ref, computed } from "vue";
