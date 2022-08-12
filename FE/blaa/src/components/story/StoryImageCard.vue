@@ -20,7 +20,7 @@
 import { ref } from "vue";
 import { round } from "mathjs";
 import { useRouter } from "vue-router";
-// import api from '@/api/api'
+import api from '@/api/api'
 
 export default {
   props: {
@@ -33,7 +33,9 @@ export default {
     const router = useRouter();
     const tH = ref(null);
     const gap = ref(null);
-    const host = ref("http://localhost:8000");
+    // 로컬에서는 해당 형식으로 작동
+    const host = ref('http://localhost:8000');
+    // const host = ref(api.story.host());
 
     tH.value = round(props.image.height / (props.image.width / 200)) + 30;
     gap.value = round(tH.value / 10);

@@ -49,6 +49,7 @@ export default {
     })
     
     const Onclick = (page) => {
+      console.log(page)
       emit('click', page)
     }
     return {

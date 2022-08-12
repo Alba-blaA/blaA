@@ -98,6 +98,7 @@ export default {
     
     // 가게를 검색하는 함수
     const searchStore = async(page = currentPage.value) => {
+      currentPage.value = page
       if (!isStore.value) {
         try {
           const res = await axios.get(api.review.store(), {

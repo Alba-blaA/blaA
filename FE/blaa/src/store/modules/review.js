@@ -126,9 +126,10 @@ export default {
     },
     async makeReviews({state}, data) {
       const isStore = data.isStore
+      
       const store = {
         form: data.form,
-        store_pk: data.store_pk
+        store_pk: data.store_pk,
       }
       const review = {
         oneline_review: data.oneline_review,

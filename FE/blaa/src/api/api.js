@@ -1,5 +1,5 @@
 // 기본 url
-// const HOST = process.env.VUE_APP_API_URL;
+// const HOST = process.env.VUE_APP_API_URL + '/api/v1';
 const HOST = "http://localhost:8000/api/v1/";
 
 // ===================================
@@ -58,6 +58,7 @@ export default {
   story: {
     host: () => HOST,
     story: () => HOST + STORY,
+    hashtag: () => HOST + STORY + 'hashtag/filter/',
     detail: (story_pk) => HOST + STORY + story_pk + "/",
     like: (story_pk) => HOST + STORY + "like/" + story_pk + "/",
     comment: (story_pk) => HOST + STORY + COMMENT + story_pk + "/",

@@ -63,6 +63,7 @@ export default {
     const userInfo = store.state.account.userInfo;
 
     const searchText = ref('');
+    
     const filteredMessages = computed(() => {
       if (searchText.value) {
         return state.messages.filter( message => {
