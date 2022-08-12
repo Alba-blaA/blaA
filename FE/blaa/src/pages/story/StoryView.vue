@@ -58,7 +58,7 @@ export default {
     }
 
     const searchStoryHashTag = () => {
-
+      console.log(hashTag.value)
     }
 
 
