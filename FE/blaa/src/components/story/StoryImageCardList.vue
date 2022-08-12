@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" :style="{ gridTemplateColumns: grid.value}">
     <div class="cards" v-if="images">
       <StroyImageCard v-for="image in images" :key="image.story_pk" :image="image" />
     </div>
@@ -10,6 +10,7 @@
 <script>
 // import { useStore } from 'vuex'
 import StroyImageCard from '@/components/story/StoryImageCard.vue'
+import {computed, ref} from 'vue'
 
 export default {
   components: {
@@ -22,6 +23,14 @@ export default {
       }
   },
   setup() {
+    const windowWidth = window.innerWidth / 2 - 10
+    
+    const grid = computed(() => {
+      return `repeat(${2}, ${windowWidth}px)`
+    })
+    return {
+      grid
+    }
   }
 }
 </script>
@@ -33,7 +42,7 @@ export default {
   column-gap: 10px;
   row-gap: 7px;
   /* 행 갯수와 크기 설정, 추후에 모바일 크기에 따라서 조정 or 반응형으로 설정하면 될듯 */
-  grid-template-columns: repeat(2, 200px);
+  grid-template-columns: repeat(2, );
   justify-content: center;
   max-width: var(--card-container-width);
 }

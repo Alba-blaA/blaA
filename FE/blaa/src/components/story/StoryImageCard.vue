@@ -11,7 +11,7 @@
         <img :src="host + image.story_picture" class="image"  :style="{ width: '100%', borderRadius:'10px' }" />
       </div>
     <div class="storyInfo">
-      <img :src="host + image.user_pk.image" alt="프로필">
+      <img :src="host + image.user_pk.image" alt="프로필" @click="moveToProfile" style="cursor: pointer">
       <div>
         <p>{{ image.story_title }}</p>
         <!-- created at 현재 시간이랑 비교 -->
@@ -61,6 +61,15 @@ export default {
         })
       })
     
+    const moveToProfile = () => {
+      router.push({
+        name: 'userProfile',
+        params: {
+          user_pk: props.image.user_pk.user_pk
+        }
+      })
+    }
+
     const moveToDetail = () => {
       console.log(props.image);
       router.push({
@@ -76,6 +85,7 @@ export default {
       gap,
       moveToDetail,
       host,
+      moveToProfile
     };
   },
 };
