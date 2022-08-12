@@ -48,9 +48,12 @@ export default {
       // console.log(myCrews.crews[0].crews.length);
     });
 
-    // function useEffect(() => {
-    //   if (myCrews && )
-    // });
+    // console.log(myCrews.crews);
+    const useEffect = () => {
+      if (myCrews.crews && myCrews.crews.data.count != 0) {
+        // console.log(myCrews.crews[0].crews.length);
+      }
+    };
 
     return {
       myCrews,

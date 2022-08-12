@@ -18,9 +18,9 @@ export default {
     const moveAllList = () => {
       router.push({ name: "allcrewlist" });
     };
-    const moveMyList = () => {
-      router.push({ name: "mycrewlist" });
-    };
+    // const moveMyList = () => {
+    //   router.push({ name: "mycrewlist" });
+    // };
 
     const moveListSearch = () => {
       router.push({ name: "crewsearch" });
@@ -29,7 +29,7 @@ export default {
     return {
       createCrew,
       moveAllList,
-      moveMyList,
+      // moveMyList,
       moveListSearch,
     };
   },
