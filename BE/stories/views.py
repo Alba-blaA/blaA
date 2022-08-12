@@ -17,7 +17,7 @@ from django.db.models import Q
 def story_list_or_create(request):
     
     def story_list():
-        story = Story.objects.all()
+        story = Story.objects.all().order_by('-created_at')
         serializer = StorySerializer(story, many=True)
         return Response(serializer.data)
     
@@ -142,7 +142,7 @@ def comment_update_or_delete(request, comment_pk):
 def hashtag_list_or_create(request, story_pk):
     
     def hashtag_list():
-        story = get_object_or_404(Story, story_pk = story_pk)
+        story = get_object_or_404(Story, story_pk = story_pk).order_by('-created_at')
         print(story)
         hashtags = get_list_or_404(Hashtag,story_pk=story)
         serializer = HashtagSerializer(hashtags, many= True)
@@ -208,7 +208,7 @@ def follow_story_list(request):
     tmp = request.user.followings.all()
     if tmp :
         print(tmp)
-        story = Story.objects.filter(user_pk=tmp[0])
+        story = Story.objects.filter(user_pk=tmp[0]).order_by('-created_at')
         for user in range(1,len(tmp)) :
             story_res = story | Story.objects.filter(user_pk=tmp[user])
             story=story_res
@@ -217,7 +217,7 @@ def follow_story_list(request):
         return Response(serializer.data)
     
     else :
-        story = Story.objects.filter(~Q(user_pk=request.user.user_pk))
+        story = Story.objects.filter(~Q(user_pk=request.user.user_pk)).order_by('-created_at')
         serializer = StorySerializer(story, many=True)
         response_data = serializer.data
         response_data.insert(0,{"message" : f"{request.user.nickname} doesn't follow any users yet."})
