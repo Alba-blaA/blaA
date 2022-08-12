@@ -27,6 +27,7 @@ import HashTagForm from '@/components/story/HashTagForm.vue'
 import PopUp from '@/components/story/PopUp.vue'
 import { useStore } from 'vuex'
 import { onBeforeMount, ref, computed } from 'vue'
+import { dataChange } from '@/hooks/dateChange'
 // import axios from 'axios'
 
 export default {
@@ -44,10 +45,17 @@ export default {
     const hashtag_content = ref('')
     const isPopUp = ref(false)
 
+    const {
+      howNow
+    } = dataChange()
+
     const getPure = async() => {
       if (!hashTag.value.length) {
         await store.dispatch('story/getImages')
         images.value = computed(() => {return store.state.story.images})
+        images.value.value.forEach(ele => {
+          ele.created_at = howNow(ele.created_at)
+        })
       }
     }
 

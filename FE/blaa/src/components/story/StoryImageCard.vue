@@ -5,21 +5,30 @@
     :style="{
       height: tH + 'px',
       gridRowEnd: gap,
-      backgroundColor: 'gray',
-      borderRadius: '10px',
     }"
   >
-    <div class="image" @click="moveToDetail" style="cursor: pointer">
-      <img :src="host + image.story_picture" class="image" :style="{ width: '100%' }" />
-      <span>{{ image.user_pk.nickname }}</span>
+      <div @click="moveToDetail" style="cursor: pointer">
+        <img :src="host + image.story_picture" class="image"  :style="{ width: '100%', borderRadius:'10px' }" />
+      </div>
+    <div class="storyInfo">
+      <img :src="host + image.user_pk.image" alt="프로필">
+      <div>
+        <p>{{ image.story_title }}</p>
+        <!-- created at 현재 시간이랑 비교 -->
+        <div class="userInfo">
+          <div>{{ image.user_pk.nickname }}</div> <div>{{ image.created_at }}</div>
+        </div>
+      </div>
     </div>
-  </div>
+</div>
+  
 </template>
 
 <script>
 import { ref } from "vue";
 import { round } from "mathjs";
 import { useRouter } from "vue-router";
+import $ from 'jquery'
 import api from '@/api/api'
 
 export default {
@@ -35,12 +44,23 @@ export default {
     const gap = ref(null);
     // 로컬에서는 해당 형식으로 작동
     const host = ref('http://localhost:8000');
+    const time = ref('')
     // const host = ref(api.story.host());
 
-    tH.value = round(props.image.height / (props.image.width / 200)) + 30;
-    gap.value = round(tH.value / 10);
-    gap.value = `span ${gap.value}`;
 
+    // 이미지 크기 설정
+    $(document).ready(function() {
+      $("<img/>").attr('src', host.value + props.image.story_picture)
+      .on('load', function() {
+          const width = this.naturalWidth
+          const height = this.naturalHeight
+
+          tH.value = round(height / (width / 200) + 70)
+          gap.value = round(tH.value / 10);
+          gap.value = `span ${gap.value}`;
+        })
+      })
+    
     const moveToDetail = () => {
       console.log(props.image);
       router.push({
@@ -61,4 +81,20 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.storyInfo {
+  display: flex;
+  grid-template-columns: 25% auto;
+}
+
+p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.userInfo {
+  display: flex;
+  justify-content: space-between;
+}
+</style>
