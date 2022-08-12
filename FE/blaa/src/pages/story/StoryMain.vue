@@ -1,5 +1,5 @@
 <template>
-<div v-if="state.notifications">
+<!-- <div v-if="state.notifications">
   <div v-if="state.isUnread">
     <button @click="isModalOpen = true">안읽은 알림있음</button>
   </div >
@@ -29,9 +29,13 @@
       <button @click="isModalOpen = false" class="close-btn">close</button>
     </div>
 
-  </div>
-
-
+  </div> -->
+  <div v-if="state.isUnread">
+    <button @click="gotonotification">안읽은 알림있음</button>
+  </div >
+  <div v-else>
+    <button @click="gotonotification">안읽은 알림 없음</button>
+  </div>    
   <router-view></router-view>
 
 </template>
@@ -106,10 +110,6 @@ export default {
       axios.delete(api.notification.deletenotification(notification_pk))
     }
 
-    const makeviewtrue = () => {
-
-    }
-
     const acceptinvitation =  ((crew_pk) => {
           console.log("들어간크루pk", crew_pk);
           try {
@@ -143,6 +143,10 @@ export default {
                 alert("가입거절에 성공하셨습니다.")
             }
         })
+
+    const gotonotification = () => {
+      router.push({ name : 'notifications'})
+    }
     
     
     return {
@@ -152,9 +156,9 @@ export default {
       state,
       clicknotification,
       deleteclicknotification,
-      makeviewtrue,
       acceptinvitation,
-      refuseinvitation,      
+      refuseinvitation,
+      gotonotification,      
     }
     
   }
@@ -163,23 +167,4 @@ export default {
 </script>
 
 <style>
-body {
-  margin: 0
-}
-div {
-  box-sizing: border-box;
-}
-.black-bg {
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5);
-  position: fixed; padding:20px;
-
-}
-.white-bg {
-  width: 100%; background: white;
-  border-radius: 8px;
-  padding: 20px;
-}
-
-
 </style>
