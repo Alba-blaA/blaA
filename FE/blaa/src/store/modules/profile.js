@@ -36,7 +36,7 @@ const profileStore = {
     },
   },
   actions: {
-    updateMyInfo(context, user_pk) {
+    async updateMyInfo(context, user_pk) {
       axios
         .put(api.profile.updateMyInfo(user_pk))
         .then((response) => {
@@ -121,8 +121,8 @@ const profileStore = {
           console.log("review err : ", err);
         });
     },
-    getCrewList(context, user_pk) {
-      axios
+    async getCrewList(context, user_pk) {
+      await axios
         .get(api.profile.myCrew(user_pk), {})
         .then((response) => {
           console.log("crew response", response);

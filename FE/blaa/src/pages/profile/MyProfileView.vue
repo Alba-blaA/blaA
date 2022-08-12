@@ -57,7 +57,7 @@
   </div>
 
   <hr />
-  <div>
+  <div @click="deleteAccount">
     <h5><b>회원탈퇴</b></h5>
   </div>
   <hr />
@@ -134,28 +134,31 @@ export default {
       console.log("스토리 조회 페이지 이동");
     };
 
-    const myCrew = () => {
+    const myReview = async () => {
       console.log("내 리뷰 조회");
-      router.push({ name: "myreview", params: { user_pk: userInfo.user_pk } });
+      await store.dispatch("profile/getReviewList", userInfo.user_pk);
+      router.push({
+        name: "reviewList",
+        params: { user_pk: userInfo.user_pk },
+      });
     };
 
-    const myGroup = () => {
+    const myCrew = async () => {
       console.log("내 크루 조회");
-      console.log(userInfo.user_pk);
-      router.push({ name: "mycrew", params: { user_pk: userInfo.user_pk } });
+      await store.dispatch("profile/getCrewList", userInfo.user_pk);
+      router.push({ name: "crewList", params: { user_pk: userInfo.user_pk } });
     };
 
     const myInfo = () => {
       console.log("회원정보 조회");
       router.push({ name: "myinfo", params: { user_pk: userInfo.user_pk } });
-      axios
-        .get(api.accounts.myInfo(userInfo.user_pk))
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    };
+
+    const deleteAccount = () => {
+      router.push({
+        name: "deleteAccount",
+        params: { user_pk: userInfo.user_pk },
+      });
     };
 
     return {
@@ -167,9 +170,10 @@ export default {
       following,
       HOST,
       myStory,
+      myReview,
       myCrew,
-      myGroup,
       myInfo,
+      deleteAccount,
     };
   },
 };
