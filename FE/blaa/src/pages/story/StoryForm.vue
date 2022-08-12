@@ -21,7 +21,7 @@
   </div>
   <div>
     <!-- 해시태그는 추후에 작성-->
-    <HashTagForm @@search-hash-tag="searchHastTag"/>
+    <HashTagForm @search-hash-tag="searchHashTag"/>
   </div>
 </form>
   
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { ref} from 'vue'
+import { onMounted, ref} from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import axios from 'axios'
@@ -49,6 +49,11 @@ export default {
     const isTitleVaild = ref(false)
     const image_url = ref('')
     const hashTag = ref([])
+    const hashtag_content = ref('')
+
+    onMounted(() => {
+      hashTag.value = []
+    })
 
     // 업로드 된 이미지를 미리 확인하는 함수
     const previewFile = (e) => {
@@ -86,6 +91,20 @@ export default {
       }
     }
 
+    // 해시태그 값
+    const searchHashTag = (hashTag) => {
+      hashTag.value = hashTag
+      hashtag_content.value = ''
+      for (let i = 0; i < hashTag.value.length; i++) {
+        hashtag_content.value += hashTag.value[i]
+        if (i < hashTag.value.length - 1){
+          hashtag_content.value += ' '
+        }
+      }
+      // // 마지막 띄어쓰기 제거
+      // hashtag_content.value.splice(-1,1)
+      // console.log(hashtag_content.value)
+    }
 
     // 제출하는 함수
     const Sumbit = async() => {
@@ -108,16 +127,13 @@ export default {
             },
           })
           const index = res.data.story_pk
-          const hashtag_content = ref('')
-          hashTag.value.forEach(ele => {
-            hashtag_content.value += ele
-            hashtag_content.value += ' '
-          })
+          // 왜 갑자기 NaN???
+          console.log(hashtag_content.value)
           try {
             const res = await axios.post(api.story.story() + 'hashtag/' + index + '/', 
-            { data: {
+              {
               hashtag_content: hashtag_content.value
-              }}, {
+              }, {
               headers: {
                 "Authorization": `Bearer ${token}`
               }
@@ -144,10 +160,6 @@ export default {
       
     }
 
-    const searchHastTag = (hashTag) => {
-      hashTag.value = hashTag
-    }
-
     return {
       Sumbit,
       isPictureVaild,
@@ -155,7 +167,7 @@ export default {
       story_picture,
       story_title,
       previewFile,
-      searchHastTag
+      searchHashTag
     }
   }
 
