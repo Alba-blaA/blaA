@@ -1,6 +1,7 @@
 import axios from "@/api/axios.js";
 import api from "@/api/api";
 import router from "@/router/index";
+import { dataChange } from "@/hooks/dateChange";
 
 export default {
   namespaced: true,
@@ -38,6 +39,13 @@ export default {
     },
     GET_COMMENTS(state, payload) {
       state.comments = payload;
+    },
+    SET_COMMENTS(state, payload) {
+      const { yyyyMMdd } = dataChange();
+      // 날짜 변환
+      payload.created_at = yyyyMMdd(payload.created_at);
+      // 작성자, 내용, 날짜가 객체로 들어감
+      state.comments.push(payload);
     },
   },
   actions: {
@@ -232,10 +240,14 @@ export default {
       }
     },
     /////////////////////Crew Article Comment/////////////////////
-    async createComment({ state }, payload) {
+    async createComment({ commit }, payload) {
       console.log(payload);
+      console.log(payload.comment_content);
       try {
-        const instance = await axios.post(api.crew.comment(payload.crew_article_pk), payload.comment_content);
+        const instance = await axios.post(api.crew.comment(payload.crew_article_pk), {
+          comment_content: payload.comment_content,
+        });
+        commit("SET_COMMENTS", instance.data);
         console.log(instance);
       } catch (error) {
         console.log(error);
@@ -244,8 +256,8 @@ export default {
     async getComment({ commit }, crew_article_pk) {
       try {
         const instance = await axios.get(api.crew.comment(crew_article_pk));
-        console.log(instance);
-        commit("GET_COMMENTS", instance.data);
+        console.log(instance.data);
+        commit("GET_COMMENTS", instance.data.results);
       } catch (error) {
         console.log(error);
       }
