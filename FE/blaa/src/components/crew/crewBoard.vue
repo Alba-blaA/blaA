@@ -22,15 +22,7 @@ export default {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
-    const crewInfo = reactive({
-      crew_pk: "",
-      crew_name: "",
-      crew_explain: "",
-      crew_region: "",
-      // crew_img: "",
-      crew_member_count: "",
-      created_at: "",
-    });
+    const crewInfo = reactive({});
 
     const getCrewInfo = async () => {
       await store.dispatch("crew/getCrewInfo", route.params.crew_pk);

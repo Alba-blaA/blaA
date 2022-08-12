@@ -19,7 +19,7 @@ export default {
       router.push({ name: "allcrewlist" });
     };
     const moveMyList = () => {
-      //router.push("/crew/list/mylist/" + this.user_pk);
+      router.push({ name: "mycrewlist" });
     };
 
     const moveListSearch = () => {

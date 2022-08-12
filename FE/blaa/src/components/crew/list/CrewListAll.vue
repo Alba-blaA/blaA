@@ -1,10 +1,10 @@
 <template>
   <hr />
-  <div>
+  <!-- <div>
     <button @click="business = true">업무용</button>
     <button @click="business = false">친목용</button>
     {{ business }}
-  </div>
+  </div> -->
 
   <table>
     <thead>
@@ -18,7 +18,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(crew, i) in filtered" :key="i" v-bind="crew">
+      <tr v-for="(crew, i) in AllCrews.crews" :key="i" v-bind="crew">
         <td>{{ crew.crew_pk }}</td>
         <td>
           <router-link :to="{ name: 'crewboard', params: { crew_pk: crew.crew_pk } }">{{ crew.crew_name }}</router-link>
@@ -40,26 +40,23 @@ export default {
     let AllCrews = reactive({
       crews: [],
     });
-    const AllMembers = reactive({
-      members: [],
-    });
     let business = ref(true);
 
     const start = async () => {
       await store.dispatch("crew/allcrewlist");
       AllCrews.crews = store.state.crew.AllCrews.results;
     };
-    const filtered = computed(() => {
-      return AllCrews.crews.filter((item) => {
-        return item.is_business === business.value;
-      });
-    });
+    // const filtered = computed(() => {
+    //   return AllCrews.crews.filter((item) => {
+    //     return item.is_business === business.value;
+    //   });
+    // });
 
     start();
     return {
       AllCrews,
       business,
-      filtered,
+      // filtered,
     };
   },
 };

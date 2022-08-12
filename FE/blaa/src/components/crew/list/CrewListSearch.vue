@@ -3,6 +3,12 @@
   <label id="search">크루 검색</label>
   <input type="text" id="crew_search" name="crew_search" v-model="crew_search" />
 
+  <div>
+    <button @click="business = true">업무용</button>
+    <button @click="business = false">친목용</button>
+    {{ business }}
+  </div>
+
   <div v-for="(crew, i) in filtered" :key="i" v-bind="crew">
     <div @click="moveToCrew(crew.crew_pk)">{{ crew.crew_name }}</div>
   </div>
@@ -21,6 +27,7 @@ export default {
       crews: [],
     });
     const crew_search = ref("");
+    let business = ref(true);
 
     onMounted(() => {
       AllCrews.crews = store.state.crew.AllCrews.results;
@@ -29,12 +36,12 @@ export default {
     console.log(crew_search);
 
     const filtered = computed(() => {
-      if (crew_search.value) {
-        return AllCrews.crews.filter((item) => {
+      return AllCrews.crews.filter((item) => {
+        if (crew_search.value) {
           return item.crew_name.includes(crew_search.value);
-        });
-      }
-      return AllCrews.crews;
+        }
+        return item.is_business === business.value;
+      });
     });
 
     const moveToCrew = (crew_pk) => {
@@ -46,6 +53,7 @@ export default {
       filtered,
       crew_search,
       moveToCrew,
+      business,
     };
   },
 };

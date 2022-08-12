@@ -132,7 +132,7 @@ const router = createRouter({
               component: () => import("@/components/crew/list/CrewListAll.vue"),
             },
             {
-              path: "mylist/:user_pk",
+              path: "mylist",
               name: "mycrewlist",
               component: () => import("@/components/crew/list/CrewListMy.vue"),
             },
