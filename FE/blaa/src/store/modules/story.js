@@ -53,10 +53,8 @@ export default {
       state.comments = payload
     },
     FIX_COMMENT(state, payload) {
-      const idx = state.comments.findIndex(ele => {
-        ele.comment_pk == payload.comment_pk
-      })
-      state.comments[idx] = payload.story_comment
+      const idx = state.comments.findIndex(ele => ele.comment_pk == payload.comment_pk)
+      state.comments[idx].story_comment = payload.story_comment
     },
     DELETE_COMMENT(state, payload) {
       const idx = state.comments.findIndex(ele => ele.comment_pk == payload)

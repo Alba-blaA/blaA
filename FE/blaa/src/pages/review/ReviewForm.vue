@@ -31,7 +31,7 @@
   <p v-if="starError" class="error">별점을 입력해주세요</p>
   <hr>
   <!-- 버튼식 -->
-  <form @click="checkBtn">
+  <form @click="checkBtn" id="buttonReview">
     <label for="kind" class="btn"><input type="checkbox" name="reviewBtn" vlaue="1" id="kind" class="checkList" >친절한 사장님</label>
     <label for="clean" class="btn"><input type="checkbox" name="reviewBtn" value="2" id="clean" class="checkList">깨끗한 매장</label>
     <label for="short" class="btn"><input type="checkbox" name="reviewBtn" value="3" id="short" class="checkList">교통 접근성</label>
@@ -50,7 +50,7 @@
 
 <script>
 import ReviewMap from '@/components/review/ReviewMap.vue'
-import { onMounted, ref, onBeforeMount, watch } from 'vue'
+import { onMounted, ref, onBeforeMount, watch, onUnmounted } from 'vue'
 import $ from 'jquery'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -78,7 +78,12 @@ export default {
     const image_url = ref('')
 
     onBeforeMount(() => {
+      $('#buttonReview>label').removeClass("selected")
+    })
+    onUnmounted(() => {
       storeButton.value = [0,0,0,0,0,0]
+      $('#buttonReview>label').removeClass("selected")
+      console.log('언마운트')
     })
 
     // 상점 선택하기
