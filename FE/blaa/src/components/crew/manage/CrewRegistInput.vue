@@ -76,7 +76,6 @@ export default {
     };
 
     const crewRegist = async () => {
-      console.log(crew_name.value);
       const crewData = new FormData();
       crewData.append("crew_name", crew_name.value);
       crewData.append("crew_explain", crew_explain.value);
@@ -85,6 +84,7 @@ export default {
       crewData.append("is_business", is_business.value);
 
       try {
+        console.log(crewData);
         await store.dispatch("crew/registcrew", crewData);
       } catch (error) {
         console.log(error);

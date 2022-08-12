@@ -39,6 +39,8 @@ export default {
     accept: (crew_pk, user_pk) => HOST + CREW + "accept_user/" + crew_pk + "/" + user_pk + "/",
     deny: (crew_pk, user_pk) => HOST + CREW + "deny_user/" + crew_pk + "/" + user_pk + "/",
     leave: (crew_pk) => HOST + CREW + "leave/" + crew_pk + "/",
+    comment: (crew_article_pk) => HOST + CREW + "comment/" + crew_article_pk + "/",
+    commentUpdate: (crew_comment_pk) => HOST + CREW + "comment/update/" + crew_comment_pk + "/",
 
     // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
   },

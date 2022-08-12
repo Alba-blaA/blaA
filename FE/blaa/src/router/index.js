@@ -139,6 +139,11 @@ const router = createRouter({
           ],
         },
         {
+          path: "search",
+          name: "crewsearch",
+          component: () => import("@/components/crew/list/CrewListSearch.vue"),
+        },
+        {
           path: "modify/:crew_pk",
           name: "crewmodify",
           component: () => import("@/components/crew/manage/CrewModify.vue"),

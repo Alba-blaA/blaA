@@ -12,6 +12,7 @@ export default {
     crewInfo: [],
     members: [],
     requestlist: [],
+    comments: [],
   },
   mutations: {
     GET_ALL_CREWS(state, payload) {
@@ -34,6 +35,9 @@ export default {
     },
     GET_REQUEST_LIST(state, payload) {
       state.requestlist = payload;
+    },
+    GET_COMMENTS(state, payload) {
+      state.comments = payload;
     },
   },
   actions: {
@@ -58,24 +62,38 @@ export default {
       // console.log(payload.crew_pk);
       // console.log(payload.article);
       try {
-        await axios.post(api.crew.articles(payload.crew_pk), payload.article);
+        const instance = await axios.post(api.crew.articles(payload.crew_pk), payload.article);
+        if (instance.status == 200 || instance.status == 201) {
+          alert("새 글이 등록되었습니다.");
+          console.log(instance);
+          router.push({ name: "articledetail", params: { crew_article_pk: instance.data.crew_article_pk } });
+        }
       } catch (error) {
         console.log(error);
       }
     },
     async modifyArticle({ state }, payload) {
       try {
-        await axios.put(api.crew.article(payload.crew_article_pk), payload.article);
+        const instance = await axios.put(api.crew.article(payload.crew_article_pk), payload.article);
+        if (instance.status == 200 || instance.status == 201) {
+          alert("수정이 완료되었습니다.");
+          router.push({ name: "articledetail", params: { crew_article_pk: instance.data.crew_article_pk } });
+        }
       } catch (error) {
         console.log(error);
       }
     },
-    async deleteArticle({ state }, crew_article_pk) {
-      console.log(crew_article_pk, "번째 글 삭제");
+    async deleteArticle({ state }, payload) {
+      console.log(payload);
+      console.log(payload.crew_article_pk, "번째 글 삭제");
       console.log(state.Token);
       try {
-        await axios.delete(api.crew.article(crew_article_pk));
-        alert("삭제가 완료되었습니다.");
+        const instance = await axios.delete(api.crew.article(payload.crew_article_pk));
+        console.log(instance);
+        if (instance.status == 200 || instance.status == 201 || instance.status == 204) {
+          alert("삭제가 완료되었습니다.");
+          router.push({ name: "crewboard", params: { crew_pk: payload.crew_pk } });
+        }
       } catch (error) {
         console.log(error);
       }
@@ -90,6 +108,7 @@ export default {
       }
     },
     async registcrew({ commit }, crewData) {
+      console.log(crewData);
       try {
         const instance = await axios.post(api.crew.crew(), crewData, {
           headers: {
@@ -206,6 +225,25 @@ export default {
       try {
         const instance = await axios.post(api.crew.leave(crew_pk));
         console.log(instance.status);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    /////////////////////Crew Article Comment/////////////////////
+    async createComment({ state }, payload) {
+      console.log(payload);
+      try {
+        const instance = await axios.post(api.crew.comment(payload.crew_article_pk), payload.comment_content);
+        console.log(instance);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getComment({ commit }, crew_article_pk) {
+      try {
+        const instance = await axios.get(api.crew.comment(crew_article_pk));
+        console.log(instance);
+        commit("GET_COMMENTS", instance.data);
       } catch (error) {
         console.log(error);
       }
