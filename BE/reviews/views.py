@@ -22,7 +22,7 @@ class StoreListCreateAPIView(ListCreateAPIView):
     # authentication_classes=[]
     serializer_class = StoreListCreateSerializer
     filter_backends = [filters.SearchFilter]
-    queryset=Store.objects.all()
+    queryset=Store.objects.all().order_by('-store_pk')
     search_fields = ['name']
 
 
