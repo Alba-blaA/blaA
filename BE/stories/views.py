@@ -266,6 +266,6 @@ def mystory_list(request,user_pk):
 def hashtag_filter(request):
     tmp = request.GET.get('id',"")
     tmp3 = tmp.split(" ")
-    story = Hashtag.objects.filter(Q(hashtag_content__in = tmp3))
+    story = Hashtag.objects.distinct().filter(Q(hashtag_content__in = tmp3))
     serializer = HashtagFilterSerializer(story, many=True)
     return Response(serializer.data)
