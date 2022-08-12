@@ -1,20 +1,22 @@
 <template>
-  <button @click="isModalOpen = true">임시알림버튼</button>
+<div v-if="state.notifications">
+  <div v-if="state.isUnread">
+    <button @click="isModalOpen = true">안읽은 알림있음</button>
+  </div >
+  <div v-else>
+    <button @click="isModalOpen = true">안읽은 알림 없음</button>
+  </div>  
+</div>
   <div class="black-bg" v-if="isModalOpen">
     <div class="white-bg" ref="modal">
       <h4>알림창임</h4>
       <div v-for="(notification, i) in state.notifications" :key="i">        
-          <b-card  @click="clicknotification(notification), isModalOpen = false" >       
+          <b-card  @click="clicknotification(notification), isModalOpen = false, deleteclicknotification(notification.pk)" >       
             <b-card-text> 
-              <!-- <div>
-                {{notification}}
-              </div> -->
-              <div>
+              <div >
                 {{ notification.content }}
-              </div>
-              <div @click="deletenotification(notification.id)">X</div>
-              <div v-if= notification.view>읽음</div>
-              <div v-else>안 읽음</div>
+              </div>       
+             
             </b-card-text>
           </b-card>
       </div>
@@ -44,7 +46,8 @@ export default {
     
     const userInfo = store.state.account.userInfo;
     const state = reactive({      
-            notifications: [],    
+            notifications: [],
+            isUnread : "",    
         })
     onClickOutside(modal, () => (isModalOpen.value = false))    
 
@@ -54,8 +57,18 @@ export default {
                     axios.get(api.notification.getnotifications(),{
                     headers : {
                       "Authorization": `Bearer ${token}`
-                    }}).then((response) =>                        
-                    state.notifications = response.data.results                    
+                    }}).then((response) => {
+                      state.notifications = response.data.results
+                      for (let index = 0; index < state.notifications.length; index++) {
+                        const element = state.notifications[index];
+                        if (element.view == false) {
+                          state.isUnread = true
+                          break
+                        }
+                       
+                      }
+                    }                       
+                                     
               )  
                        
           }
@@ -65,7 +78,11 @@ export default {
       if (notification.type == "crew_invite") {
         router.push({name : 'invitedcrewlist'})        
       } else if (notification.type == "follow") {
-        console.log("this is follow");
+        router.push({ name : 'userProfile', 
+          params : {
+            user_pk : notification.redirect_pk
+          }
+        })
       } else if (notification.type == "story") {
         router.push({name : 'detailStory', 
           params: {
@@ -83,6 +100,17 @@ export default {
 
     })
 
+    const deleteclicknotification = (notification_pk) => {
+      const token = store.state.story.Token
+      axios.delete(api.notification.deletenotification(notification_pk),{
+                    headers : {
+                      "Authorization": `Bearer ${token}`
+                    }})
+    }
+
+    const makeviewtrue = () => {
+
+    }
     
     
     return {
@@ -90,7 +118,9 @@ export default {
       modal,
       onClickOutside,
       state,
-      clicknotification
+      clicknotification,
+      deleteclicknotification,
+      makeviewtrue
       
     }
     
