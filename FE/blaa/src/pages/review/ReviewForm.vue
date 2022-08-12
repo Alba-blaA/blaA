@@ -77,12 +77,14 @@ export default {
     const store_picture = ref(null)
     const image_url = ref('')
 
-    onBeforeMount(() => {
-      $('#buttonReview>label').removeClass("selected")
-    })
     onUnmounted(() => {
       storeButton.value = [0,0,0,0,0,0]
-      $('#buttonReview>label').removeClass("selected")
+      console.log($('#buttonReview'))
+      console.log($('#buttonReview').find('.selected'))
+      $('#buttonReview').find('.selected').each( function() {
+        console.log($(this))
+        $(this).removeClass("selected")
+      })
       console.log('언마운트')
     })
 
@@ -164,15 +166,8 @@ export default {
             buttonType.push(String(idx+1))
           }
         }
-        // 이미지 전달
-        const form = new FormData()
 
-        form.append('image', store_picture.value)
-        form.append('name', storeName.value)
-        form.append('region', storeAddress.value)
-
-        const data = {
-          form: form,
+        let data = {
           // 값을 생성하는지 아닌지 여부를 확인하기위해서
           isStore: isStore.value,
           store_pk: store_pk.value,
@@ -182,6 +177,33 @@ export default {
           oneline_review: oneReview.value,
           type: buttonType
         }
+
+        // 이미지 전달
+        if (store_picture.value) {
+          const form = new FormData()
+
+          form.append('image', store_picture.value)
+          form.append('name', storeName.value)
+          form.append('region', storeAddress.value)
+          
+          data = {
+            ...data,
+            form: form,
+          }
+
+        } else {
+          const form = new FormData()
+
+          form.append('name', storeName.value)
+          form.append('region', storeAddress.value)
+          
+          data = {
+            ...data,
+            form: form,
+          }
+        }
+        
+
         await store.dispatch('review/makeReviews', data).then(
           router.push({
             name: 'review'

@@ -2,7 +2,7 @@
   <h1>여기는 리뷰 페이지입니다!</h1>
   <router-link class="btn btn-primary" :to="{name: 'createReview'}">리뷰 생성</router-link>
   <ReviewSearchBar @search-store="searchStore"/>
-  <div v-if="reviews"> 
+  <div v-if="reviews.length"> 
     <ReviewList v-for="review in reviews" :key="review.store_pk" :review="review"/>
     <PaginationBar :currentPage="currentPage" :numberOfPages="numberOfPages" :idx="idx" @click="getReviews"/>
   </div>

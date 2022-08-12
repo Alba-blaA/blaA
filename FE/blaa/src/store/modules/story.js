@@ -117,6 +117,21 @@ export default {
         console.log(error)
       }
     },
+    async getHashtag({commit,state}, hashtag) {
+      try {
+        const res = await axios.get(api.story.hashtag(), {
+          headers: {
+            Authorization: `Bearer ${state.Token}`
+          },
+          params: {
+            id: hashtag,
+          }
+        })
+        commit('GET_IMAGES', res.data.story_pk)
+      } catch(error) {
+        console.log(error)
+      }
+    },
     async getCurrentStory({commit, state}, story_pk) {
       try {
         const res = await axios.get(api.story.detail(story_pk), {
