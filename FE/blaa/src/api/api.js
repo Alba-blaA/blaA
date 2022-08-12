@@ -83,5 +83,6 @@ export default {
   notification: {
     getnotifications: () => HOST + NOTIFICATION,
     getinvitedcrewlist: () => HOST + CREW + "signlist/",
+    deletenotification : (notification_pk) => HOST + NOTIFICATION + notification_pk 
   },
 };

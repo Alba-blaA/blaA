@@ -1,6 +1,7 @@
 <template>
   <br /><br />
   <button type="button" @click="myChat">내 채팅목록</button>
+  <button @click="showinvitedcrewlist">나를초대한크루리스트</button>
 
   <div id="profile">
     <img id="imgProfile" :src="HOST + userInfo.image" />
@@ -98,7 +99,7 @@ export default {
       });
 
     const myChat = () => {
-      console.log("내 채팅목록 페이지");
+      router.push({ path: "/chatroom" });
     };
 
     const updateMyInfo = () => {
@@ -158,6 +159,10 @@ export default {
         });
     };
 
+    const showinvitedcrewlist = () =>{
+      router.push({name : 'invitedcrewlist'})
+    }
+
     return {
       myChat,
       userInfo,
@@ -170,6 +175,7 @@ export default {
       myCrew,
       myGroup,
       myInfo,
+      showinvitedcrewlist
     };
   },
 };
