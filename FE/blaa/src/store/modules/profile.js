@@ -46,7 +46,7 @@ const profileStore = {
     },
     async getFollowerList(context, user_pk) {
       await axios
-        .get(api.profile.myFollowList(user_pk), {
+        .get(api.profile.myFollow(user_pk), {
           params: {
             type: "follower",
           },
@@ -74,7 +74,7 @@ const profileStore = {
     },
     async getFollowingList(context, user_pk) {
       await axios
-        .get(api.profile.myFollowList(user_pk), {
+        .get(api.profile.myFollow(user_pk), {
           params: {
             type: "following",
           },
