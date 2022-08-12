@@ -4,18 +4,19 @@
   <hr />
 
   <table
-    v-for="crew in crewList.results"
-    :key="crew.results.crews.crew_pk"
+    v-for="crew in crews"
+    :key="crew.crew_pk"
     style="width: 100%"
+    @click.prevent="crewDetail(crew.crew_pk)"
   >
-    <tr @click="crewDetail(crew.results.crews.crew_pk)">
+    <tr>
       <td width="10px"></td>
       <td id="crew">
-        <img id="imgCrew" :src="crew.crews.crew_img" />
+        <img id="imgCrew" :src="crew.crew_img" />
       </td>
       <td width="20px"></td>
       <td>
-        <b>{{ crew.crews.crew_name }}</b>
+        <b>{{ crew.crew_name }}</b>
       </td>
     </tr>
     <tr>
@@ -27,6 +28,7 @@
 <script>
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { ref } from "vue";
 import axios from "axios";
 import api from "@/api/api.js";
 
@@ -36,9 +38,20 @@ export default {
     const router = useRouter();
     const store = useStore();
 
-    const crewDeatil = (crew_pk) => {
+    const crewList = store.state.profile.crewList.results;
+    const user_pk = ref(-1);
+    for (var i = 0; i < crewList.length; i++) {
+      if (crewList[i].user_pk == route.params.user_pk) {
+        user_pk.value = i;
+        console.log("i : ", user_pk.value);
+      }
+    }
+
+    const crews = store.state.profile.crewList.results[user_pk.value].crews;
+
+    const crewDetail = (crew_pk) => {
       router.push({
-        name: "crewdetail",
+        name: "crewboard",
         params: {
           crew_pk: crew_pk,
         },
@@ -46,7 +59,9 @@ export default {
     };
 
     return {
-      crewDeatil,
+      crewList,
+      crews,
+      crewDetail,
     };
   },
 };
