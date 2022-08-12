@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "@/api/axios.js";
 import api from "@/api/api.js";
 import { useStore } from "vuex";
 import router from '@/router';
@@ -35,10 +35,8 @@ export default {
         onMounted(() => {
             if(userInfo){      
                 let token = store.state.chat.token        
-                axios.get(api.notification.getinvitedcrewlist(),
-                 {
-                  headers : {"Authorization": `Bearer ${token}`}
-                }).then((response) =>                        
+                axios.get(api.notification.getinvitedcrewlist()
+                 ).then((response) =>                        
                     state.crews = response.data          
                 )                
             }
@@ -49,9 +47,7 @@ export default {
             let token = store.state.chat.token
             console.log("들어간크루pk", crew_pk);
             try {
-                axios.post(api.crew.acceptcrew(crew_pk),{},{
-                      headers : {"Authorization": `Bearer ${token}`}
-                    })                  
+                axios.post(api.crew.acceptcrew(crew_pk),{})                  
                     alert("가입이 완료되었습니다! 크루원님의 활발한 활동을 응원합니다")                  
                 
             } catch(error) {

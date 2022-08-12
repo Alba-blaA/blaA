@@ -11,12 +11,18 @@
     <div class="white-bg" ref="modal">
       <h4>알림창임</h4>
       <div v-for="(notification, i) in state.notifications" :key="i">        
-          <b-card  @click="clicknotification(notification), isModalOpen = false, deleteclicknotification(notification.pk)" >       
-            <b-card-text> 
+          <b-card >       
+            <b-card-text  @click="clicknotification(notification), isModalOpen = false, deleteclicknotification(notification.pk)"> 
               <div >
                 {{ notification.content }}
-              </div>       
-             
+              </div>             
+            </b-card-text>
+            <b-card-text>
+              <div v-if="notification.type == 'crew_invite'">
+                <button @click="acceptinvitation(notification.redirect_pk)">수락하기</button>
+                <button @click="refuseinvitation(notification.redirect_pk)">거절하기</button>
+              </div>      
+
             </b-card-text>
           </b-card>
       </div>
@@ -33,7 +39,7 @@
 <script>
 import { onMounted, reactive , ref } from 'vue'
 import { useStore } from 'vuex'
-import axios from "axios";
+import axios from "@/api/axios.js";
 import api from "@/api/api.js";
 import router from '@/router';
 import { onClickOutside } from '@vueuse/core'
@@ -54,10 +60,7 @@ export default {
     onMounted(() => {
           if(userInfo){                
               const token = store.state.story.Token
-                    axios.get(api.notification.getnotifications(),{
-                    headers : {
-                      "Authorization": `Bearer ${token}`
-                    }}).then((response) => {
+                    axios.get(api.notification.getnotifications()).then((response) => {
                       state.notifications = response.data.results
                       for (let index = 0; index < state.notifications.length; index++) {
                         const element = state.notifications[index];
@@ -111,6 +114,30 @@ export default {
     const makeviewtrue = () => {
 
     }
+
+    const acceptinvitation =  ((crew_pk) => {
+          console.log("들어간크루pk", crew_pk);
+          try {
+              axios.post(api.crew.acceptcrew(crew_pk),{})                  
+                  alert("가입이 완료되었습니다! 크루원님의 활발한 활동을 응원합니다")                  
+              
+          } catch(error) {
+              alert("가입에 실패하셨습니다.")
+              
+          }
+      refreshAll()
+      })
+
+    const refuseinvitation = ((crew_pk) => {
+        console.log(crew_pk);
+    })
+
+    const refreshAll= (() => {
+            // 새로고침
+            router.push({
+                path: '/crew/list/alllist'
+            })
+        })
     
     
     return {
@@ -120,8 +147,9 @@ export default {
       state,
       clicknotification,
       deleteclicknotification,
-      makeviewtrue
-      
+      makeviewtrue,
+      acceptinvitation,
+      refuseinvitation      
     }
     
   }
