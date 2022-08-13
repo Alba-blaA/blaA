@@ -35,8 +35,6 @@ export default {
 
       const emailCheck = { email: store.state.account.kakaoUserInfo.email };
 
-
-
       axios
         .post(api.accounts.emailCheck(), emailCheck)
         .then(() => {
@@ -44,7 +42,6 @@ export default {
           router.push({ name: "choice" });
         })
         .catch(() => {
-
           console.log("email : ", store.state.account.kakaoUserInfo.email);
           axios
             .post(api.accounts.kakaoLogin(), emailCheck)
@@ -74,8 +71,6 @@ export default {
               }
             });
 
-
-          alert("카카오 로그인 완료!");
           router.replace("/");
         });
     };
