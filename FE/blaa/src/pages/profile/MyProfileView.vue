@@ -1,7 +1,5 @@
 <template>
-  <br /><br />
-  <button type="button" @click="myChat">내 채팅목록</button>
-  <button @click="showinvitedcrewlist">나를초대한크루리스트</button>
+  <br /><br />  
 
   <div id="profile">
     <img class="imgProfile" :src="HOST + userInfo.image" />
@@ -44,6 +42,12 @@
     </table>
   </div>
 
+  <!-- <button @click.prevent="gochatroom">채팅하러가기</button> -->
+  <!-- <button @click="showinvitedcrewlist">나를초대한크루리스트</button> -->
+  <hr />
+  <div @click.prevent="gochatroom">
+    <h5><b>채팅하러가기</b></h5>
+  </div>
   <hr />
   <div @click="myStory">
     <h5><b>내 스토리</b></h5>
@@ -57,6 +61,11 @@
   <hr />
   <div @click="myCrew">
     <h5><b>내 크루</b></h5>
+  </div>
+
+   <hr />
+  <div  @click="showinvitedcrewlist">
+    <h5><b>나를초대한크루리스트</b></h5>
   </div>
 
   <hr />
@@ -89,6 +98,9 @@ export default {
     console.log("nickname : ", userInfo.nickname);
     console.log("image : ", userInfo.image);
 
+    const gochatroom = () => {
+      router.push({ path: "/chatroom" });
+    };
     const follow = ref({
       followers: null,
       followings: null,
@@ -105,9 +117,7 @@ export default {
         console.log("유저정보 에러 : ", err);
       });
 
-    const myChat = () => {
-      router.push({ path: "/chatroom" });
-    };
+    
 
     const profileImg = ref(null);
     const imgURL = ref("");
@@ -216,7 +226,6 @@ export default {
     };
 
     return {
-      myChat,
       userInfo,
       follow,
       profileImg,
@@ -232,6 +241,7 @@ export default {
       myInfo,
       showinvitedcrewlist,
       deleteAccount,
+      gochatroom
     };
   },
 };

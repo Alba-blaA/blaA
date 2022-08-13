@@ -30,6 +30,7 @@
     </div>
 
   </div> -->
+  <hr>
   <div v-if="state.isUnread">
     <button @click="gotonotification">안읽은 알림있음</button>
   </div >

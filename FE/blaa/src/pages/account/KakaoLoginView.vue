@@ -71,7 +71,7 @@ export default {
               }
             });
 
-          router.replace("/");
+          router.replace("/story");
         });
     };
 
