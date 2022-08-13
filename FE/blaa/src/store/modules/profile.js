@@ -101,8 +101,8 @@ const profileStore = {
           console.log(err);
         });
     },
-    getMyStory(context, user_pk) {
-      axios.get(api.profile.myStory(user_pk)).then((response) => {
+    async getMyStory(context, user_pk) {
+      await axios.get(api.profile.myStory(user_pk)).then((response) => {
         console.log("response : ", response);
         console.log("response data : ", response.data);
 

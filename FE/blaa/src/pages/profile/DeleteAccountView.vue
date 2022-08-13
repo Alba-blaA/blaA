@@ -14,9 +14,11 @@ export default {
 
     var result = confirm("정말로 탈퇴하시겠습니까?");
     if (result) {
+      console.log(api.profile.myInfo(route.params.user_pk));
       axios
-        .delete(api.profile.myInfo(route.params.user_pk), route.params.user_pk)
+        .delete(api.profile.myInfo(route.params.user_pk))
         .then((response) => {
+          console.log("response : ", response);
           alert("탈퇴가 완료되었습니다.");
         })
         .catch((err) => {

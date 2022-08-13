@@ -86,12 +86,12 @@ export default {
     };
 
     const goReview = () => {
-      router.push({ path: '/review'})
-    }
+      router.push({ path: "/review" });
+    };
 
     const kakaoLogin = () => {
       const params = {
-        redirectUri: "http://localhost:8080/kakao",
+        redirectUri: "http://localhost:3000/kakao",
         // redirectUri: "http://127.0.0.1:8000/account/sign-in/kakao/callback",
       };
       window.Kakao.Auth.authorize(params);
@@ -122,7 +122,7 @@ export default {
       gosearch,
       gocrew,
       goMyProfile,
-      goReview
+      goReview,
     };
   },
 };

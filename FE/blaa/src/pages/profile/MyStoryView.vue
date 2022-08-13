@@ -1,16 +1,21 @@
 <template>
   <h3>내 스토리</h3>
 
-  <div v-for="story in mystory" :key="story.story_pk">
+  <div v-for="myStory in myStoryList" :key="myStory.story_pk">
     <hr />
     <h5>
-      <b>{{ story.created_at }}</b>
+      <b>{{ myStory.created_at }}</b>
     </h5>
+    <img
+      id="imgStory"
+      :src="HOST + myStory.story_picture"
+      @click="storyDetail(myStory.story_pk)"
+    />
   </div>
 </template>
 
 <script>
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import axios from "@/api/axios.js";
 import api from "@/api/api.js";
@@ -18,16 +23,35 @@ import api from "@/api/api.js";
 export default {
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const store = useStore();
 
-    const myStory = store.state.profile.myStory;
-    console.log("myStory : ", myStory);
+    const HOST = "http://localhost:8000";
+
+    const myStoryList = store.state.profile.myStory;
+    console.log("myStory : ", myStoryList);
+
+    const storyDetail = (story_pk) => {
+      router.push({
+        name: "detailStory",
+        params: {
+          story_pk: story_pk,
+        },
+      });
+    };
 
     return {
-      myStory,
+      HOST,
+      myStoryList,
+      storyDetail,
     };
   },
 };
 </script>
 
-<style></style>
+<style>
+#imgStory {
+  width: 100px;
+  height: 80px;
+}
+</style>
