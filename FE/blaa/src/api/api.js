@@ -48,6 +48,7 @@ export default {
 
     // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
     acceptcrew: (crew_pk) => HOST + CREW + "accept_crew/" + crew_pk + "/",
+    refusecrew: (crew_pk) => HOST + CREW + "deny_crew/" + crew_pk + "/",
   },
   categorys: {
     job: () => HOST + CATEGORYS + "job/",
@@ -84,6 +85,7 @@ export default {
   notification: {
     getnotifications: () => HOST + NOTIFICATION,
     getinvitedcrewlist: () => HOST + CREW + "signlist/",
-    deletenotification: (notification_pk) => HOST + NOTIFICATION + notification_pk,
+    deletenotification : (notification_pk) => HOST + NOTIFICATION + notification_pk ,
+    makeviewtrue : (notification_pk) => HOST + NOTIFICATION + notification_pk
   },
 };

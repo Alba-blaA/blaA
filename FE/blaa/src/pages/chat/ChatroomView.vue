@@ -46,7 +46,7 @@ import db from '@/db'
 import { reactive, onMounted, ref, computed } from 'vue';
 import { useStore } from "vuex";
 import api from "@/api/api.js"
-import axios from 'axios'
+import axios from "@/api/axios.js";
 
 export default {
   setup () {
@@ -102,13 +102,10 @@ export default {
           )          
           let arrayUniqueByKey = [...new Map(messages.map(item =>
           [item['from_userpk'], item])).values()];
-          let token = sessionStorage.getItem("token");
-
+          
           for (let index = 0; index < arrayUniqueByKey.length; index++)  {                         
             axios.get(api.accounts.myInfo(arrayUniqueByKey[index]['from_userpk']),
-            {
-              headers : {"Authorization": `Bearer ${token}`}
-            }).then(response => {                          
+           ).then(response => {                          
               arrayUniqueByKey[index]['to_usernickname'] = response.data.nickname,
               arrayUniqueByKey[index]['to_userprofileurl'] = response.data.image                                            
             })                 

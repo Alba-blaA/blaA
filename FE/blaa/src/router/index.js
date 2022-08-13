@@ -36,6 +36,7 @@ import MyInfo from "@/pages/profile/MyInfoView.vue";
 import UserProfile from "@/pages/profile/UserProfileView.vue";
 import SetBlackList from "@/pages/profile/BlackListView.vue";
 import DeleteAccount from "@/pages/profile/DeleteAccountView.vue";
+import Notification from "@/pages/notification/NotificationView.vue"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -339,6 +340,12 @@ const router = createRouter({
       name: "invitedcrewlist",
       component: InvitedCrew,
     },
+    {
+      path: "/notifications",
+      name : "notifications",
+      component : Notification,
+    }
+    
   ],
 });
 
