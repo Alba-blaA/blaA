@@ -40,10 +40,8 @@
           type="submit" 
           value="Send" />     
       </form>
-    </footer>
-    
+    </footer>    
   </div>
-
   <div v-else>
     <h1>로그인이 필요합니다.</h1>    
   </div>

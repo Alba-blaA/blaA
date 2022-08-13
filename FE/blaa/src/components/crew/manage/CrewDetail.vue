@@ -7,13 +7,13 @@
       <li>크루 소개 : {{ crewInfo.crew_explain }}</li>
       <li>크루 인원수 : {{ crewInfo.crew_member_count }}</li>
       <li>크루 지역 : {{ crewInfo.crew_region }}</li>
-      <li>크루장</li>
-      <div @click="modcrew">
-        <li style="color: blue">크루 정보 수정</li>
-      </div>
-      <div @click="delcrew">
-        <li style="color: red">크루 삭제</li>
-      </div>
+      <li>크루장: {{ crewInfo.crew_leader }}</li>
+      <li @click="leaveCrew" style="color: red">크루 탈퇴</li>
+      <hr />
+      <p>크루장만 접근 가능</p>
+      <li @click="modiCrew" style="color: blue">크루 정보 수정</li>
+      <li @click="delCrew" style="color: red">크루 삭제</li>
+      <hr />
     </div>
   </div>
 </template>
@@ -44,7 +44,7 @@ export default {
       Object.assign(crewInfo, store.state.crew.crewInfo);
     };
 
-    const delcrew = () => {
+    const delCrew = () => {
       if (confirm("크루를 삭제하시겠습니까?")) {
         router.replace({
           name: "crewdelete",
@@ -52,7 +52,17 @@ export default {
         });
       }
     };
-    const modcrew = () => {
+
+    const leaveCrew = () => {
+      if (confirm("크루를 탈퇴하시겠습니까?")) {
+        router.replace({
+          name: "crewleave",
+          params: { crew_pk: crewInfo.crew_pk },
+        });
+      }
+    };
+
+    const modiCrew = () => {
       router.push({ name: "crewmodify", params: { crew_pk: crewInfo.crew_pk } });
     };
 
@@ -61,8 +71,9 @@ export default {
     return {
       getCrew,
       crewInfo,
-      delcrew,
-      modcrew,
+      delCrew,
+      modiCrew,
+      leaveCrew,
     };
   },
 };

@@ -2,23 +2,17 @@
 <div>
   <h1>여기는 오출완 페이지입니다!</h1>
   <router-link class="btn btn-primary m-1" style="maring-left:5px" :to="{name: 'createStory'}">+</router-link>
-  <button type="button" class="btn btn-primary m-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  <button class="btn" @click="isPopUp=true">
     검색
   </button>
   <button class="btn m-1" @click="onCategory" :class="{ activate: isCategory, deactivate: !isCategory}">관심업종</button>
   <button class="btn m-1" @click="onRegion" :class="{ activate: isRegion, deactivate: !isRegion}">근무지</button>
   <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-body">
-          <HashTagForm @search-hash-tag="searchHastTag"/>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-          <button type="button" class="btn btn-primary" @click="searchStoryHashTag">검색</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <PopUp v-if="isPopUp">
+    <HashTagForm @search-hash-tag="searchHastTag"/>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="[isPopUp=false, getPure()]">닫기</button>
+    <button type="button" class="btn btn-primary">검색</button>
+  </PopUp>   
   <StoryImageCardList :images="images"/>
 </div>
 </template>
@@ -26,6 +20,7 @@
 <script>
 import StoryImageCardList from '@/components/story/StoryImageCardList.vue'
 import HashTagForm from '@/components/story/HashTagForm.vue'
+import PopUp from '@/components/story/PopUp.vue'
 import { useStore } from 'vuex'
 import { onBeforeMount, ref } from 'vue'
 // import axios from 'axios'
@@ -33,14 +28,17 @@ import { onBeforeMount, ref } from 'vue'
 export default {
   components: {
     StoryImageCardList,
-    HashTagForm
+    HashTagForm,
+    PopUp
   },
   setup() {
     const store = useStore()
-    const images = ref(null)
+    const images = ref([])
     const isCategory = ref(false)
     const isRegion = ref(false)
     const hashTag = ref([])
+    const hashtag_content = ref('')
+    const isPopUp = ref(false)
 
     const getPure = async() => {
       await store.dispatch('story/getImages')
@@ -53,14 +51,23 @@ export default {
     })
 
     // 해시태그 검색
-    const searchHastTag = (hashTag) => {
-      hashTag.value = hashTag
+    const searchHastTag = async(hash) => {
+      hashTag.value = hash
+
+      hashtag_content.value = ''
+      if(hashTag.value.length) {
+        for (let i = 0; i < hashTag.value.length; i++) {
+          hashtag_content.value += hashTag.value[i]
+          if (i < hashTag.value.length - 1){
+            hashtag_content.value += ' '
+          }
+        }
+        await store.dispatch('story/getHashtag', hashtag_content.value)
+        images.value = store.state.story.images
+      } else {
+        getPure()
+      }
     }
-
-    const searchStoryHashTag = () => {
-
-    }
-
 
     const onCategory = async() => {
       isCategory.value = !isCategory.value
@@ -93,7 +100,8 @@ export default {
       onRegion,
       isRegion,
       isCategory,
-      searchStoryHashTag
+      getPure,
+      isPopUp
     }
   }
 }

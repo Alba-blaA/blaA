@@ -1,14 +1,20 @@
 <template>
-  <br /><br />
-  <button type="button" @click="myChat">내 채팅목록</button>
+  <br /><br />  
 
   <div id="profile">
-    <img id="imgProfile" :src="HOST + userInfo.image" />
+    <img class="imgProfile" :src="HOST + userInfo.image" />
   </div>
 
   <div>
     <h3 style="float: left">{{ userInfo.nickname }}</h3>
     &nbsp;
+    <!-- <label for="update-profileImg">프로필 사진 수정</label> -->
+    <input
+      id="update-profileImg"
+      class="update-profileImg"
+      type="file"
+      @change="updateProfileImg"
+    />
     <button type="button" @click="updateMyInfo">회원정보 수정</button>
   </div>
 
@@ -36,6 +42,12 @@
     </table>
   </div>
 
+  <!-- <button @click.prevent="gochatroom">채팅하러가기</button> -->
+  <!-- <button @click="showinvitedcrewlist">나를초대한크루리스트</button> -->
+  <hr />
+  <div @click.prevent="gochatroom">
+    <h5><b>채팅하러가기</b></h5>
+  </div>
   <hr />
   <div @click="myStory">
     <h5><b>내 스토리</b></h5>
@@ -49,6 +61,11 @@
   <hr />
   <div @click="myCrew">
     <h5><b>내 크루</b></h5>
+  </div>
+
+   <hr />
+  <div  @click="showinvitedcrewlist">
+    <h5><b>나를초대한크루리스트</b></h5>
   </div>
 
   <hr />
@@ -81,6 +98,9 @@ export default {
     console.log("nickname : ", userInfo.nickname);
     console.log("image : ", userInfo.image);
 
+    const gochatroom = () => {
+      router.push({ path: "/chatroom" });
+    };
     const follow = ref({
       followers: null,
       followings: null,
@@ -97,8 +117,48 @@ export default {
         console.log("유저정보 에러 : ", err);
       });
 
-    const myChat = () => {
-      console.log("내 채팅목록 페이지");
+    
+
+    const profileImg = ref(null);
+    const imgURL = ref("");
+
+    // 업로드 된 이미지를 미리 확인하는 함수
+    const updateProfileImg = (e) => {
+      const preview = document.querySelector(".imgProfile");
+      if (e.target.files[0]) {
+        profileImg.value = e.target.files[0];
+        const reader = new FileReader();
+
+        // 파일명을 가져와서 소문자로 변환
+        let fileName = profileImg.value.name.substring(
+          profileImg.value.name.lastIndexOf(".") + 1
+        );
+        fileName = fileName.toLowerCase();
+
+        // 파일 형식과 3MB의 파일크기 확인
+        if (
+          ["jpeg", "png", "gif", "bmp"].includes(fileName) &&
+          profileImg.value.size <= 25165824
+        ) {
+          reader.onload = (e) => {
+            preview.src = e.target.result;
+            imgURL.value = e.target.result;
+          };
+          reader.readAsDataURL(profileImg.value);
+
+          // 파일 업데이트 요청 보내기
+        } else if (profileImg.value.size <= 25165824) {
+          preview.src = null;
+        } else {
+          alert("파일을 다시 선택해 주세요");
+          profileImg.value = null;
+          preview.src = null;
+        }
+        // 파일을 선택하지 않았을 떄
+      } else {
+        profileImg.value = null;
+        preview.src = null;
+      }
     };
 
     const updateMyInfo = () => {
@@ -127,10 +187,10 @@ export default {
       });
     };
 
-    const myStory = () => {
+    const myStory = async () => {
       console.log("내 스토리 조회");
+      await store.dispatch("profile/getMyStory", userInfo.user_pk);
       router.push({ name: "mystory", params: { user_pk: userInfo.user_pk } });
-      store.dispatch("profile/getMyStory", userInfo.user_pk);
       console.log("스토리 조회 페이지 이동");
     };
 
@@ -161,10 +221,16 @@ export default {
       });
     };
 
+    const showinvitedcrewlist = () => {
+      router.push({ name: "invitedcrewlist" });
+    };
+
     return {
-      myChat,
       userInfo,
       follow,
+      profileImg,
+      imgURL,
+      updateProfileImg,
       updateMyInfo,
       follower,
       following,
@@ -173,7 +239,9 @@ export default {
       myReview,
       myCrew,
       myInfo,
+      showinvitedcrewlist,
       deleteAccount,
+      gochatroom
     };
   },
 };
@@ -187,7 +255,7 @@ export default {
   overflow: hidden;
 }
 
-#imgProfile {
+.imgProfile {
   width: 100%;
   height: 100%;
   object-fit: cover;

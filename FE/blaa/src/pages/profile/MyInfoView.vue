@@ -14,21 +14,32 @@
     ><br />
     <b>지역 : {{ myInfo.region }}</b
     ><br />
+    <button @click.prevent="logout">로그아웃</button>
   </div>
 </template>
 
 <script>
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
     const store = useStore();
+    const router = useRouter();
+    const logout = () => {
+      store.commit("account/LOGIN", false);
+      store.commit("account/USER_INFO", null);
+      sessionStorage.removeItem("token");
+      store.commit("account/RESET_STORAGE");
+      router.replace("/");
+    };
 
     const myInfo = store.state.account.userInfo;
     console.log("myInfo : ", myInfo);
     console.log("is_alba: ", myInfo.is_alba);
     return {
       myInfo,
+      logout,
     };
   },
 };

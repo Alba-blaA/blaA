@@ -31,7 +31,7 @@
   <p v-if="starError" class="error">별점을 입력해주세요</p>
   <hr>
   <!-- 버튼식 -->
-  <form @click="checkBtn">
+  <form @click="checkBtn" id="buttonReview">
     <label for="kind" class="btn"><input type="checkbox" name="reviewBtn" vlaue="1" id="kind" class="checkList" >친절한 사장님</label>
     <label for="clean" class="btn"><input type="checkbox" name="reviewBtn" value="2" id="clean" class="checkList">깨끗한 매장</label>
     <label for="short" class="btn"><input type="checkbox" name="reviewBtn" value="3" id="short" class="checkList">교통 접근성</label>
@@ -50,7 +50,7 @@
 
 <script>
 import ReviewMap from '@/components/review/ReviewMap.vue'
-import { onMounted, ref, onBeforeMount, watch } from 'vue'
+import { onMounted, ref, onBeforeMount, watch, onUnmounted } from 'vue'
 import $ from 'jquery'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -77,8 +77,15 @@ export default {
     const store_picture = ref(null)
     const image_url = ref('')
 
-    onBeforeMount(() => {
+    onUnmounted(() => {
       storeButton.value = [0,0,0,0,0,0]
+      console.log($('#buttonReview'))
+      console.log($('#buttonReview').find('.selected'))
+      $('#buttonReview').find('.selected').each( function() {
+        console.log($(this))
+        $(this).removeClass("selected")
+      })
+      console.log('언마운트')
     })
 
     // 상점 선택하기
@@ -159,15 +166,8 @@ export default {
             buttonType.push(String(idx+1))
           }
         }
-        // 이미지 전달
-        const form = new FormData()
 
-        form.append('image', store_picture.value)
-        form.append('name', storeName.value)
-        form.append('region', storeAddress.value)
-
-        const data = {
-          form: form,
+        let data = {
           // 값을 생성하는지 아닌지 여부를 확인하기위해서
           isStore: isStore.value,
           store_pk: store_pk.value,
@@ -177,6 +177,33 @@ export default {
           oneline_review: oneReview.value,
           type: buttonType
         }
+
+        // 이미지 전달
+        if (store_picture.value) {
+          const form = new FormData()
+
+          form.append('image', store_picture.value)
+          form.append('name', storeName.value)
+          form.append('region', storeAddress.value)
+          
+          data = {
+            ...data,
+            form: form,
+          }
+
+        } else {
+          const form = new FormData()
+
+          form.append('name', storeName.value)
+          form.append('region', storeAddress.value)
+          
+          data = {
+            ...data,
+            form: form,
+          }
+        }
+        
+
         await store.dispatch('review/makeReviews', data).then(
           router.push({
             name: 'review'

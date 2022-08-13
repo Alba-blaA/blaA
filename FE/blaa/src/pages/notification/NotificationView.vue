@@ -1,0 +1,90 @@
+<template>
+  <h4>알림창임</h4>
+      <div v-for="(notification, i) in state.notifications" :key="i"> 
+      <div>{{notification}}</div>       
+          <b-card >       
+            <b-card-text  @click="clicknotification(notification), isModalOpen = false, deleteclicknotification(notification.pk)"> 
+              <div >
+                {{ notification.content }}
+              </div>             
+            </b-card-text>
+          </b-card>
+      </div>
+  
+</template>
+
+<script>
+import { onMounted, reactive } from 'vue'
+import { useStore } from 'vuex'
+import axios from "@/api/axios.js";
+import api from "@/api/api.js";
+import router from '@/router';
+export default { 
+  
+  setup () { 
+    const store = useStore()    
+    const userInfo = store.state.account.userInfo;
+    const state = reactive({      
+            notifications: [],
+            isUnread : "",    
+        })      
+    onMounted(async () => {
+          if(userInfo){                
+                    await axios.get(api.notification.getnotifications()).then((response) => {
+                      state.notifications = response.data.results
+                      for (let index = 0; index < state.notifications.length; index++) {
+                        const element = state.notifications[index];
+                        axios.put(api.notification.makeviewtrue(element.pk),{
+                            view : true
+                        })                     
+                      }
+                    }                 
+                      
+              )  
+                       
+          }
+      })
+    const clicknotification = ((notification) => {
+      if (notification.type == "crew_invite") {
+        router.push({name : 'invitedcrewlist'})        
+      } else if (notification.type == "follow") {
+        router.push({ name : 'userProfile', 
+          params : {
+            user_pk : notification.redirect_pk
+          }
+        })
+      } else if (notification.type == "story") {
+        router.push({name : 'detailStory', 
+          params: {
+            story_pk: notification.redirect_pk,
+        }
+        })        
+      } else if (notification.type == "crew"){
+        console.log("accpet_crew");
+        router.push({name : 'crewboard',
+          params : {
+            crew_pk: notification.redirect_pk
+          }
+        })
+      }
+
+    })
+
+    const deleteclicknotification = (notification_pk) => {      
+      axios.delete(api.notification.deletenotification(notification_pk))
+    }       
+    
+    return {
+      state,
+      clicknotification,
+      deleteclicknotification,          
+    }
+    
+  }
+
+}
+</script>
+
+<style>
+
+</style>

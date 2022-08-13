@@ -1,6 +1,6 @@
 <template>
   <span style="cursor:pointer" @click="moveToPrevious">X</span> <h3>{{store_name}}</h3>
-      <CommentDetail class="userReview" :review="review.value" :isDetail="true"/>
+      <CommentDetail class="userReview" :review="review.value" :isDetail="true" @update="update"/>
     <br>
     <div>
       <p>{{review.value.user.nickname}} 님은이렇게 평가했어요.</p>

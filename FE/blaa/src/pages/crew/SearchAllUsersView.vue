@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "@/api/axios.js";
 import api from "@/api/api.js";
 import { useStore } from "vuex";
 import { onBeforeMount, reactive, ref, computed } from "vue";
@@ -50,10 +50,8 @@ export default {
       if (userInfo) {
         let token = store.state.chat.token;
         axios
-          .get(api.accounts.searchallusers(), {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .then((response) => (state.users = response.data.results));
+          .get(api.accounts.searchallusers())
+          .then((response) => (state.users = response.data));
         console.log(state.users);
       }
     });
