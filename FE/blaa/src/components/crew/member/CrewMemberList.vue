@@ -10,17 +10,19 @@
         <tr v-for="(member, i) in All.members" :key="i" v-bind="member">
           <td>{{ member.user_pk }}</td>
           <td>{{ member.nickname }}</td>
+          <button @click="gochat(member.user_pk)">채팅하기</button>
         </tr>
       </tbody>
     </table>
     <button v-show="leader" @click="moveToRequestList">신청 목록</button>
+    <button @click.prevent="gosearch">크루원 초대하기</button>
   </div>
 </template>
 
 <script>
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 export default {
   setup() {
     const store = useStore();
@@ -30,6 +32,11 @@ export default {
       members: [],
     });
     let leader = ref(null);
+
+    onMounted(async () => {
+      await store.dispatch("crew/getCrewMembers", route.params.crew_pk);
+      All.members = store.state.crew.members.results;
+    });
 
     const getMembers = async () => {
       await store.dispatch("crew/getCrewMembers", route.params.crew_pk);
@@ -49,7 +56,23 @@ export default {
       if (leader_pk == user_pk) leader = true;
     };
 
-    getMembers();
+    const gosearch = () => {
+      router.push({
+        name: "searchcrewusers",
+        params: { crew_pk: route.params.crew_pk },
+      });
+    };
+
+    const gochat = (from_userpk) => {
+      router.push({
+        name: "chat",
+        params: {
+          from_userpk: from_userpk,
+        },
+      });
+    };
+
+    // getMembers();
     isLeader();
 
     console.log(All);
@@ -58,6 +81,8 @@ export default {
       moveToRequestList,
       isLeader,
       leader,
+      gochat,
+      gosearch,
     };
   },
 };
