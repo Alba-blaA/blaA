@@ -1,7 +1,7 @@
 <template>
   <hr />
   {{ myCrews.crews }}
-  <!-- <table>
+  <table>
     <thead>
       <tr>
         <th>순번</th>
@@ -12,10 +12,10 @@
       </tr>
     </thead>
     <tbody>
-      <template v-if="myCrewCnt == null">
+      <!-- <template v-if="myCrewCnt == null">
         <p>가입된 크루가 없습니다.</p>
-      </template>
-      <template v-else>
+      </template> -->
+      <template>
         <tr v-for="(crew, i) in myCrews" :key="i" v-bind="crew">
           <td>{{ crew.crew_pk }}</td>
           <td>{{ crew.is_business }}</td>
@@ -25,7 +25,7 @@
         </tr>
       </template>
     </tbody>
-  </table> -->
+  </table>
 </template>
 
 <script>
@@ -34,9 +34,16 @@ import { onMounted, reactive, ref } from "vue";
 export default {
   setup() {
     const store = useStore();
-    const myCrews = reactive({
-      crews: [],
-    });
+    const myCrews = store.state.profile.crewList.results;
+    const user_pk = ref(null);
+
+    // for (var i = 0; i < myCrews.length; i++) {
+    //   if (myCrews[i].user_pk == route.params.user_pk) {
+    //     user_pk.value = i;
+    //     c(user_pk.value);
+    //   }
+    // }
+
     // console.log(store.state.account.userInfo.user_pk);
     const myCrewCnt = ref(null);
 

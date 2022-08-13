@@ -1,5 +1,5 @@
 // 기본 url
-// const HOST = process.env.VUE_APP_API_URL + '/api/v1';
+// const HOST = process.env.VUE_APP_API_URL + "/api/v1";
 const HOST = "http://localhost:8000/api/v1/";
 
 // ===================================
@@ -33,11 +33,9 @@ export default {
   crew: {
     crew: () => HOST + CREW,
     crewInfo: (crew_pk) => HOST + CREW + crew_pk + "/",
-    article: (crew_article_pk) =>
-      HOST + CREW + "article/edit/" + crew_article_pk + "/",
+    article: (crew_article_pk) => HOST + CREW + "article/edit/" + crew_article_pk + "/",
     crewmemebers: (crew_pk) => HOST + CREW + "user/" + crew_pk,
-    inviteuser: (crew_pk, user_pk) =>
-      HOST + CREW + "invite/" + crew_pk + "/" + user_pk + "/",
+    inviteuser: (crew_pk, user_pk) => HOST + CREW + "invite/" + crew_pk + "/" + user_pk + "/",
     articles: (crew_pk) => HOST + CREW + "article/" + crew_pk + "/",
     members: (crew_pk) => HOST + CREW + "user/" + crew_pk + "/",
     sign: (crew_pk) => HOST + CREW + "sign/" + crew_pk + "/",
@@ -58,7 +56,7 @@ export default {
   story: {
     host: () => HOST,
     story: () => HOST + STORY,
-    hashtag: () => HOST + STORY + 'hashtag/filter/',
+    hashtag: () => HOST + STORY + "hashtag/filter/",
     detail: (story_pk) => HOST + STORY + story_pk + "/",
     like: (story_pk) => HOST + STORY + "like/" + story_pk + "/",
     comment: (story_pk) => HOST + STORY + COMMENT + story_pk + "/",
@@ -86,6 +84,6 @@ export default {
   notification: {
     getnotifications: () => HOST + NOTIFICATION,
     getinvitedcrewlist: () => HOST + CREW + "signlist/",
-    deletenotification : (notification_pk) => HOST + NOTIFICATION + notification_pk 
+    deletenotification: (notification_pk) => HOST + NOTIFICATION + notification_pk,
   },
 };
