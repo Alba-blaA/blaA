@@ -1,6 +1,7 @@
 import axios from "@/api/axios.js";
 import api from "@/api/api";
 import router from "@/router/index";
+import { dataChange } from "@/hooks/dateChange";
 
 export default {
   namespaced: true,
@@ -39,6 +40,13 @@ export default {
     GET_COMMENTS(state, payload) {
       state.comments = payload;
     },
+    SET_COMMENTS(state, payload) {
+      const { yyyyMMdd } = dataChange();
+      // 날짜 변환
+      payload.created_at = yyyyMMdd(payload.created_at);
+      // 작성자, 내용, 날짜가 객체로 들어감
+      state.comments.push(payload);
+    },
   },
   actions: {
     ///////////////////////////Crew Article/////////////////////////////////
@@ -59,13 +67,16 @@ export default {
       }
     },
     async registArticle({ state }, payload) {
+      console.log("전송되는 데이터: ", payload.article);
       // console.log(payload.crew_pk);
-      // console.log(payload.article);
+      // // console.log(payload.article);
+      // for (var value of payload.article.values()) {
+      //   console.log("밸류: ", value);
+      // }
       try {
         const instance = await axios.post(api.crew.articles(payload.crew_pk), payload.article);
         if (instance.status == 200 || instance.status == 201) {
           alert("새 글이 등록되었습니다.");
-          console.log(instance);
           router.push({ name: "articledetail", params: { crew_article_pk: instance.data.crew_article_pk } });
         }
       } catch (error) {
@@ -108,7 +119,6 @@ export default {
       }
     },
     async registcrew({ commit }, crewData) {
-      console.log(crewData);
       try {
         const instance = await axios.post(api.crew.crew(), crewData, {
           headers: {
@@ -230,10 +240,14 @@ export default {
       }
     },
     /////////////////////Crew Article Comment/////////////////////
-    async createComment({ state }, payload) {
+    async createComment({ commit }, payload) {
       console.log(payload);
+      console.log(payload.comment_content);
       try {
-        const instance = await axios.post(api.crew.comment(payload.crew_article_pk), payload.comment_content);
+        const instance = await axios.post(api.crew.comment(payload.crew_article_pk), {
+          comment_content: payload.comment_content,
+        });
+        commit("SET_COMMENTS", instance.data);
         console.log(instance);
       } catch (error) {
         console.log(error);
@@ -242,8 +256,8 @@ export default {
     async getComment({ commit }, crew_article_pk) {
       try {
         const instance = await axios.get(api.crew.comment(crew_article_pk));
-        console.log(instance);
-        commit("GET_COMMENTS", instance.data);
+        console.log(instance.data);
+        commit("GET_COMMENTS", instance.data.results);
       } catch (error) {
         console.log(error);
       }

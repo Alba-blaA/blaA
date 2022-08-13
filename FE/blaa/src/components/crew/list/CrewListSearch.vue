@@ -38,7 +38,7 @@ export default {
     const filtered = computed(() => {
       return AllCrews.crews.filter((item) => {
         if (crew_search.value) {
-          return item.crew_name.includes(crew_search.value);
+          return (item.is_business === business.value) && (item.crew_name.includes(crew_search.value));
         }
         return item.is_business === business.value;
       });

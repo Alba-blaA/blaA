@@ -36,6 +36,7 @@ import MyInfo from "@/pages/profile/MyInfoView.vue";
 import UserProfile from "@/pages/profile/UserProfileView.vue";
 import SetBlackList from "@/pages/profile/BlackListView.vue";
 import DeleteAccount from "@/pages/profile/DeleteAccountView.vue";
+import Notification from "@/pages/notification/NotificationView.vue"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -116,14 +117,12 @@ const router = createRouter({
           path: "regist",
           name: "crewregistview",
           redirect: { name: "crewregist" },
-          component: () =>
-            import("@/components/crew/manage/CrewRegistView.vue"),
+          component: () => import("@/components/crew/manage/CrewRegistView.vue"),
           children: [
             {
               path: "",
               name: "crewregist",
-              component: () =>
-                import("@/components/crew/manage/CrewRegistInput.vue"),
+              component: () => import("@/components/crew/manage/CrewRegistInput.vue"),
             },
           ],
         },
@@ -212,25 +211,23 @@ const router = createRouter({
               //   },
               // ],
             },
-            {
-              path: "crewmember",
-              name: "crewmember",
-              component: () =>
-                import("@/components/crew/crewmember/CrewMemberView.vue"),
-            },
+            // {
+            //   path: "crewmember",
+            //   name: "crewmember",
+            //   component: () =>
+            //     import("@/components/crew/crewmember/CrewMemberView.vue"),
+            // },
             {
               path: "",
               name: "crewmemberlist",
-              component: () =>
-                import("@/components/crew/member/CrewMemberList.vue"),
+              component: () => import("@/components/crew/member/CrewMemberList.vue"),
             },
           ],
         },
         {
           path: "request",
           name: "crewmemberrequestlist",
-          component: () =>
-            import("@/components/crew/member/CrewMemberRequestList.vue"),
+          component: () => import("@/components/crew/member/CrewMemberRequestList.vue"),
         },
       ],
     },
@@ -343,6 +340,12 @@ const router = createRouter({
       name: "invitedcrewlist",
       component: InvitedCrew,
     },
+    {
+      path: "/notifications",
+      name : "notifications",
+      component : Notification,
+    }
+    
   ],
 });
 
