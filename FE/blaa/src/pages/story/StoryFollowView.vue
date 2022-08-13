@@ -1,24 +1,29 @@
 <template>
+  <StoryTopNavbar :isStory="isStory" :isFollow="FollowTap" :isFilter="isFilter" @change="change"/>
   <StoryImageCardList :images="images" v-if="isFollow"/>
   <div v-else>
     <p>팔로우 한 사람이 없어요!</p>
-    <router-link :to="{name: 'story'}">오출완으로 돌아가기</router-link>
   </div>
 </template>
 
 <script>
 import StoryImageCardList from '@/components/story/StoryImageCardList.vue'
+import StoryTopNavbar from '@/components/story/StoryTopNavbar.vue'
 import { useStore } from 'vuex'
 import { onBeforeMount, ref } from 'vue'
 
 export default {
   components: {
-    StoryImageCardList
+    StoryImageCardList,
+    StoryTopNavbar
   },
   setup() {
     const store = useStore()
     const images = ref(null)
+    const isStory = ref(false)
     const isFollow = ref(false)
+    const isFilter = ref(false)
+    const FollowTap = ref(true)
 
     const getPure = async() => {
       await store.dispatch('story/getFollow')
@@ -42,7 +47,10 @@ export default {
     })
 
     return {
-      images
+      images,
+      isStory,
+      isFilter,
+      FollowTap
     }
   }
 }

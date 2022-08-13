@@ -1,12 +1,11 @@
 <template>
 <div>
-  <h1>여기는 오출완 페이지입니다!</h1>
-  <router-link class="btn btn-primary m-1" style="maring-left:5px" :to="{name: 'createStory'}">+</router-link>
-  <button class="btn" @click="isPopUp=true">
-    검색
-  </button>
-  <button class="btn m-1" @click="onCategory" :class="{ activate: isCategory, deactivate: !isCategory}">관심업종</button>
-  <button class="btn m-1" @click="onRegion" :class="{ activate: isRegion, deactivate: !isRegion}">근무지</button>
+  <StoryTopNavbar :isStory="isStory" :isFollow="isFollow" :isFilter="isFilter" @change="change"/>
+  <div v-if="isFilter">
+    <button class="btn" @click="isPopUp=true">검색</button>
+    <button class="btn m-1" @click="onCategory" :class="{ activate: isCategory, deactivate: !isCategory}">관심업종</button>
+    <button class="btn m-1" @click="onRegion" :class="{ activate: isRegion, deactivate: !isRegion}">근무지</button>
+  </div>
   <!-- Modal -->
   <PopUp v-if="isPopUp">
     <HashTagForm @search-hash-tag="searchHastTag" @closeModal="[isPopUp=false, getPure()]"/>
@@ -22,6 +21,7 @@
 </template>
 
 <script>
+import StoryTopNavbar from '@/components/story/StoryTopNavbar.vue'
 import StoryImageCardList from '@/components/story/StoryImageCardList.vue'
 import HashTagForm from '@/components/story/HashTagForm.vue'
 import PopUp from '@/components/story/PopUp.vue'
@@ -34,7 +34,8 @@ export default {
   components: {
     StoryImageCardList,
     HashTagForm,
-    PopUp
+    PopUp,
+    StoryTopNavbar
   },
   setup() {
     const store = useStore()
@@ -44,6 +45,9 @@ export default {
     const hashTag = ref([])
     const hashtag_content = ref('')
     const isPopUp = ref(false)
+    const isStory = ref(true)
+    const isFollow = ref(false)
+    const isFilter = ref(false)
 
     const {
       howNow
@@ -71,6 +75,7 @@ export default {
 
     const searchHastTagStory = async() => {
        hashtag_content.value = ''
+
       if(hashTag.value.length) {
         for (let i = 0; i < hashTag.value.length; i++) {
           hashtag_content.value += hashTag.value[i]
@@ -110,6 +115,10 @@ export default {
       }
     }
 
+    const change =  () => {
+      isFilter.value = !isFilter.value
+    }
+
     return {
       images,
       searchHastTag,
@@ -119,7 +128,11 @@ export default {
       isCategory,
       getPure,
       isPopUp,
-      searchHastTagStory
+      searchHastTagStory,
+      isStory,
+      isFollow,
+      isFilter,
+      change
     }
   }
 }

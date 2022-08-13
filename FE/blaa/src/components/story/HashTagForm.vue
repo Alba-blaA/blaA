@@ -32,6 +32,7 @@ export default {
       // 값 초기화
       tag.value = []
       $('#tag-list').empty()
+      emit('search-hash-tag', tag.value)
     })
 
     const reset = () => {

@@ -3,8 +3,8 @@
   <div
     class="grid-item"
     :style="{
-      height: tH + 'px',
-      gridRowEnd: gap,
+      height: tH.value + 'px',
+      gridRowEnd: gap.value,
     }"
   >
       <div @click="moveToDetail" style="cursor: pointer">
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref,computed } from "vue";
 import { round } from "mathjs";
 import { useRouter } from "vue-router";
 import $ from 'jquery'
@@ -40,8 +40,10 @@ export default {
   },
   setup(props) {
     const router = useRouter();
-    const tH = ref(null);
-    const gap = ref(null);
+    const tH = ref(0);
+    const gap = ref('');
+    const width = ref(0);
+    const height = ref(0);
     // 로컬에서는 해당 형식으로 작동
     const host = ref('http://localhost:8000');
     const time = ref('')
@@ -52,14 +54,35 @@ export default {
     $(document).ready(function() {
       $("<img/>").attr('src', host.value + props.image.story_picture)
       .on('load', function() {
-          const width = this.naturalWidth
-          const height = this.naturalHeight
+          width.value = this.naturalWidth
+          height.value =  this.naturalHeight  
+          
+          const windowWidth = window.innerWidth / (20/9)
 
-          tH.value = round(height / (width / 200) + 70)
-          gap.value = round(tH.value / 10);
-          gap.value = `span ${gap.value}`;
+          tH.value = computed(() => {
+            return round(height.value / (width.value / windowWidth) + 48)
+          })
+
+          gap.value = computed(() => {
+            return `span ${round(tH.value.value / 10)}` 
+          })
         })
       })
+
+    $(window).resize(function() {
+      const windowWidth = window.innerWidth / (20/9)
+
+      tH.value = computed(() => {
+        return round(height.value / (width.value / windowWidth) + 48)
+      })
+
+      gap.value = computed(() => {
+        return `span ${round(tH.value.value / 10)}` 
+      })
+    })
+
+    
+    
     
     const moveToProfile = () => {
       router.push({

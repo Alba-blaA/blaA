@@ -127,28 +127,29 @@ export default {
             },
           })
           const index = res.data.story_pk
-          // 왜 갑자기 NaN???
-          console.log(hashtag_content.value)
-          try {
-            const res = await axios.post(api.story.story() + 'hashtag/' + index + '/', 
-              {
-              hashtag_content: hashtag_content.value
-              }, {
-              headers: {
-                "Authorization": `Bearer ${token}`
-              }
-            })
-            // 작성 후 상세페이지로 이동
-            router.push({
-              name: 'story',
-              params: {
-                index
-              }
-            })
-          } catch(error) {
-            console.error(error)
-            console.log('해시태그 생성 오류')
+          // 해시태그 값이 있다면 생성
+          if (hashtag_content.value) {
+            try {
+              await axios.post(api.story.story() + 'hashtag/' + index + '/', 
+                {
+                hashtag_content: hashtag_content.value
+                }, {
+                headers: {
+                  "Authorization": `Bearer ${token}`
+                }
+              })
+            } catch(error) {
+              console.error(error)
+              console.log('해시태그 생성 오류')
+            }
           }
+          // 작성 후 상세페이지로 이동
+          router.push({
+            name: 'detailStory',
+            params: {
+              story_pk: index
+            }
+          })
         } catch(error) {
           console.log(error)
         }
