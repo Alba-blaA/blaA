@@ -11,7 +11,8 @@ class RegisterSerializer(serializers.ModelSerializer) :
     token = serializers.CharField(max_length=255, read_only=True)
     class Meta() :
         model=User
-        fields= ('user_pk','email','password','tel','name','nickname','region','category','is_alba','token')
+        fields= ('user_pk','email','password','tel','name','nickname','region','category','is_alba','token','image')
+        read_only_fields = ['image']
     def create(create,validated_data) :
 
         return User.objects.create_user(**validated_data)
@@ -27,11 +28,19 @@ class LoginSerializer(serializers.ModelSerializer) :
         
         read_only_fields = ['token']
 
+class UserListSerializer(serializers.ModelSerializer) :
+        
+    class Meta :
+        model=User
+        fields = ('user_pk','image','nickname')
+        
+
 class UserSerializer(serializers.ModelSerializer):
-    
+    followers = serializers.IntegerField(source = 'followers.count',read_only=True)
+    followings = serializers.IntegerField(source = 'followings.count',read_only=True)
     class Meta:
         model = User
-        fields= ['email','name','nickname','region','category','is_alba','image']
+        fields= ['user_pk','email','name','nickname','region','category','is_alba','image','followers','followings','tel']
         read_only_fields = ['email']
         
 
@@ -88,10 +97,12 @@ class UserCrewSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer) :
-    store = serializers.CharField(source='store.name')
+    store_pk = serializers.IntegerField(source='store.store_pk')
+    store_name = serializers.CharField(source='store.name')
+    store_image = serializers.ImageField(source='store.image')
     class Meta: 
         model = Review
-        fields = ('review_pk','user','star','store')
+        fields = ('review_pk','user','star','store_pk','store_name','store_image')
         
 
 class UserReviewSerializer(serializers.ModelSerializer):

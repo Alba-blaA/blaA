@@ -1,5 +1,5 @@
 <template>
-  <h1>여기는 프로필 페이지입니다!</h1>
+  <div>크루 탈퇴 페이지</div>
 </template>
 
 <script>

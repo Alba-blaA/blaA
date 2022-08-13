@@ -22,7 +22,7 @@ class StoreListCreateAPIView(ListCreateAPIView):
     # authentication_classes=[]
     serializer_class = StoreListCreateSerializer
     filter_backends = [filters.SearchFilter]
-    queryset=Store.objects.all()
+    queryset=Store.objects.all().order_by('-store_pk')
     search_fields = ['name']
 
 
@@ -30,7 +30,7 @@ class ReviewListAPIView(ListAPIView) :
     authentication_classes=[]
     serializer_class = ReviewListCreateSerializer
     filter_backends = [filters.SearchFilter]
-    queryset = Review.objects.all()
+    queryset = Review.objects.all().order_by('-created_at')
 
 
 #가게에 달린 리뷰 전체조회 및 리뷰 생성
@@ -60,28 +60,31 @@ class StoreReviewListCreateAPIView(ListCreateAPIView) :
     def review_button_aggregate(self,store_pk) :
         store = get_object_or_404(Store,store_pk=store_pk)
         cnt = store.review.count()
-
         tmp = {'친절한 사장님': 0,'깨끗한 매장':0 ,'좋은 분위기':0,'교통 접근성':0,'칼퇴근 가능':0,'유니폼 제공':0}
-        for button_review in store.storebuttonreview_set.all() :
-            tmp[button_review.button.type] += 1 
+        if cnt :
+            for button_review in store.storebuttonreview_set.all() :
+                tmp[button_review.button.type] += 1 
 
-        for btn in tmp :
-            tmp[btn] = int(round(tmp[btn]/cnt,2)*100)
-
+            for btn in tmp :
+                tmp[btn] = int(round(tmp[btn]/cnt,2)*100)
         return tmp
 
     def review_star_aggregate(self,store_pk) :
         store = get_object_or_404(Store,store_pk=store_pk)
         cnt = store.review.count()
-        review = Review.objects.filter(store=store).aggregate(Sum('star'))
-        # sum = Store.objects.all().aggregate(Sum('star'))
-        print(cnt,review)
-        return round(review['star__sum']/cnt,1)
+
+        if cnt :
+            review = Review.objects.filter(store=store).aggregate(Sum('star'))
+            # sum = Store.objects.all().aggregate(Sum('star'))
+            print(cnt,review)
+            return round(review['star__sum']/cnt,1)
+        else :
+            return 0
 
 
     def list(self, request,store_pk):
         # print(request.query_params['ordering'])
-        queryset = self.filter_queryset(Review.objects.filter(store=self.get_object(store_pk)))
+        queryset = self.filter_queryset(Review.objects.filter(store=self.get_object(store_pk))).order_by('-created_at')
         queryset = queryset.annotate(like_user_count=Count('like_users'))
         if request.query_params :
             if request.query_params['ordering'] == '-like_user_count':

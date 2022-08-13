@@ -2,11 +2,17 @@
   <div id="login">
     <br />
     <form>
-      <input id="login-id" v-model="user.email" placeholder="Enter email" />
+      <input
+        id="login-id"
+        type="email"
+        v-model="user.email"
+        placeholder="Enter email"
+      />
       <br />
       <input
         id="login-userpw"
         type="password"
+        autocomplete="off"
         v-model="user.password"
         placeholder="Enter Password"
       />
