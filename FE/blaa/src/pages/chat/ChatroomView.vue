@@ -33,7 +33,9 @@
               </ul>
           </div>
       </div>
+      <button @click.prevent="gosearch">유저정보검색하기</button>
     </div>
+    
     <div v-else>
       <div>로그인이 필요함</div>
     </div>
@@ -46,7 +48,7 @@ import db from '@/db'
 import { reactive, onMounted, ref, computed } from 'vue';
 import { useStore } from "vuex";
 import api from "@/api/api.js"
-import axios from 'axios'
+import axios from "@/api/axios.js";
 
 export default {
   setup () {
@@ -63,6 +65,11 @@ export default {
     const userInfo = store.state.account.userInfo;
 
     const searchText = ref('');
+
+    const gosearch = () => {
+      router.push({ path: "/searchusers" });
+    };
+    
     const filteredMessages = computed(() => {
       if (searchText.value) {
         return state.messages.filter( message => {
@@ -101,13 +108,10 @@ export default {
           )          
           let arrayUniqueByKey = [...new Map(messages.map(item =>
           [item['from_userpk'], item])).values()];
-          let token = sessionStorage.getItem("token");
-
+          
           for (let index = 0; index < arrayUniqueByKey.length; index++)  {                         
             axios.get(api.accounts.myInfo(arrayUniqueByKey[index]['from_userpk']),
-            {
-              headers : {"Authorization": `Bearer ${token}`}
-            }).then(response => {                          
+           ).then(response => {                          
               arrayUniqueByKey[index]['to_usernickname'] = response.data.nickname,
               arrayUniqueByKey[index]['to_userprofileurl'] = response.data.image                                            
             })                 
@@ -128,7 +132,8 @@ export default {
       userInfo,
       state,
       filteredMessages,
-      searchText
+      searchText,
+      gosearch
 
     }
   }

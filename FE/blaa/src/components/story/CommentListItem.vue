@@ -44,7 +44,8 @@ export default {
     const popUpOpen = ref(true)
     const user_pk = store.state.account.userInfo.user_pk
     const isFix = ref(false)
-    const changeComment = String(props.comment.story_comment)
+    const changeComment = ref('')
+    changeComment.value += String(props.comment.story_comment)
 
     const commnetDelete = async() => {
       const comment_pk = props.comment.comment_pk
@@ -52,10 +53,9 @@ export default {
     }
 
     const commentFix = async() => {
-      console.log(changeComment)
       const data = {
         comment_pk: props.comment.comment_pk,
-        story_comment: changeComment
+        story_comment: changeComment.value
       }
       await store.dispatch('story/fixComment', data)
       isFix.value = false

@@ -17,7 +17,7 @@
     <div v-else>로그인이 필요합니다.</div>
 </template>
 <script>
-import axios from "axios";
+import axios from "@/api/axios.js";
 import api from "@/api/api.js";
 import { useStore } from "vuex";
 import { onMounted, reactive , ref, computed } from "vue";
@@ -56,27 +56,25 @@ export default {
         })
 
         onMounted(() => {
-            if(userInfo){                
-                store.state.chat.token
+            if(userInfo){               
+               
                 axios.get(api.accounts.searchallusers(),
-                 {
-                  headers : {"Authorization": `Bearer ${store.state.chat.token}`}
-                }).then((response) =>                        
-                state.users = response.data.results            
+                 ).then((response) =>{
+                    
+                     state.users = response.data
+                            
+
+                 }                        
                 )
-                console.log(state.users);
+                
             }
 
         })
         
         const inviteuser = async (invitingcrew_pk, inviteduser_pk) => {
-            const token = sessionStorage.getItem('token')           
+                   
             try {
-                const result = await axios.post(api.crew.inviteuser(invitingcrew_pk, inviteduser_pk),{},{
-                    headers : {
-                        "Authorization": `Bearer ${token}`
-                    }
-                })
+                const result = await axios.post(api.crew.inviteuser(invitingcrew_pk, inviteduser_pk),{})
                 alert(result.data.message);
             } catch(error) {                
                 alert(error.response.data.message)

@@ -53,7 +53,7 @@ export default {
       if (isLogin.value) {
         await store.dispatch("account/getUserInfo", token);
         console.log("로그인 성공!!!!!");
-        router.push("/");
+        router.push("/story");
       } else {
         console.log("isLogin : ", store.state.account.isLogin);
         console.log("isLoginError : ", store.state.account.isLoginError);

@@ -1,5 +1,6 @@
 <template>
   <hr />
+  {{ myCrews.crews }}
   <table>
     <thead>
       <tr>
@@ -11,16 +12,16 @@
       </tr>
     </thead>
     <tbody>
-      <template v-if="mycrews.length == 0">
+      <!-- <template v-if="myCrewCnt == null">
         <p>가입된 크루가 없습니다.</p>
-      </template>
-      <template v-else>
-        <tr v-for="(mycrew, i) in mycrews" :key="i" v-bind="mycrew">
-          <td>{{ mycrew.crew_pk }}</td>
-          <td>{{ mycrew.is_business }}</td>
-          <td>{{ mycrew.crew_name }}</td>
-          <td>{{ mycrew.crew_explain }}</td>
-          <td>{{ mycrew.crew_leader }}</td>
+      </template> -->
+      <template>
+        <tr v-for="(crew, i) in myCrews" :key="i" v-bind="crew">
+          <td>{{ crew.crew_pk }}</td>
+          <td>{{ crew.is_business }}</td>
+          <td>{{ crew.crew_name }}</td>
+          <td>{{ crew.crew_explain }}</td>
+          <td>{{ crew.crew_leader }}</td>
         </tr>
       </template>
     </tbody>
@@ -28,22 +29,43 @@
 </template>
 
 <script>
-import axios from "axios";
-const url = "https://63136029-bc5c-4b91-b1d9-202db7d1ad44.mock.pstmn.io/mycrewlist";
+import { useStore } from "vuex";
+import { onMounted, reactive, ref } from "vue";
 export default {
-  data() {
-    return {
-      mycrews: [],
-    };
-  },
-  created() {
-    axios.get(url).then((response) => {
-      console.log(response.data[0].mycrewlist);
-      this.mycrews = response.data[0].mycrewlist;
+  setup() {
+    const store = useStore();
+    const myCrews = store.state.profile.crewList.results;
+    const user_pk = ref(null);
+
+    // for (var i = 0; i < myCrews.length; i++) {
+    //   if (myCrews[i].user_pk == route.params.user_pk) {
+    //     user_pk.value = i;
+    //     c(user_pk.value);
+    //   }
+    // }
+
+    // console.log(store.state.account.userInfo.user_pk);
+    const myCrewCnt = ref(null);
+
+    onMounted(() => {
+      store.dispatch("profile/getMyCrew", store.state.account.userInfo.user_pk);
+      myCrews.crews = store.state.profile.myCrew.results;
+      // myCrewCnt.value = myCrews.crews.keys("crews").length;
+      // console.log(myCrews.crews);
+      // console.log(myCrews.crews[0].crews.length);
     });
-  },
-  props: {
-    user_pk: Number,
+
+    // console.log(myCrews.crews);
+    const useEffect = () => {
+      if (myCrews.crews && myCrews.crews.data.count != 0) {
+        // console.log(myCrews.crews[0].crews.length);
+      }
+    };
+
+    return {
+      myCrews,
+      myCrewCnt,
+    };
   },
 };
 </script>

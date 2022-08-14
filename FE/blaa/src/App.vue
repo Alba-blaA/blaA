@@ -12,12 +12,13 @@
     </div>
     <br />
 
-    <button @click.prevent="logout">로그아웃</button>
-    <button @click.prevent="gochatroom">채팅하러가기</button>
+    <!-- <button @click.prevent="logout">로그아웃</button> -->
+    <!-- <button @click.prevent="gochatroom">채팅하러가기</button> -->
     <button @click.prevent="gostory">오출완가기</button>
-    <button @click.prevent="gosearch">유저정보검색하기</button>
+    <!-- <button @click.prevent="gosearch">유저정보검색하기</button> -->
     <button @click.prevent="goMyProfile">마이프로필</button>
     <button @click.prevent="gocrew">크루가기</button>
+    <button @click.prevent="goReview">리뷰가기</button>
   </div>
 
   <div v-else>
@@ -84,21 +85,25 @@ export default {
       router.push({ path: "/profile" });
     };
 
+    const goReview = () => {
+      router.push({ path: "/review" });
+    };
+
     const kakaoLogin = () => {
       const params = {
-        redirectUri: "http://localhost:8080/kakao",
+        redirectUri: "http://localhost:3000/kakao",
         // redirectUri: "http://127.0.0.1:8000/account/sign-in/kakao/callback",
       };
       window.Kakao.Auth.authorize(params);
     };
 
-    const logout = () => {
-      store.commit("account/LOGIN", false);
-      store.commit("account/USER_INFO", null);
-      sessionStorage.removeItem("token");
-      store.commit("account/RESET_STORAGE");
-      router.replace("/");
-    };
+    // const logout = () => {
+    //   store.commit("account/LOGIN", false);
+    //   store.commit("account/USER_INFO", null);
+    //   sessionStorage.removeItem("token");
+    //   store.commit("account/RESET_STORAGE");
+    //   router.replace("/");
+    // };
 
     const register = () => {
       router.push({ name: "signup" });
@@ -110,13 +115,13 @@ export default {
       userInfo,
       login,
       kakaoLogin,
-      logout,
+      
       register,
       gochatroom,
       gostory,
-      gosearch,
       gocrew,
       goMyProfile,
+      goReview,
     };
   },
 };

@@ -16,26 +16,22 @@
 <script>
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { reactive } from "vue";
+import { onMounted, reactive } from "vue";
 export default {
   setup() {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
-    const crewInfo = reactive({
-      crew_pk: "",
-      crew_name: "",
-      crew_explain: "",
-      crew_region: "",
-      // crew_img: "",
-      crew_member_count: "",
-      created_at: "",
-    });
+    const crewInfo = reactive({});
 
-    const getCrewInfo = async () => {
+    // const getCrewInfo = async () => {
+    //   await store.dispatch("crew/getCrewInfo", route.params.crew_pk);
+    //   Object.assign(crewInfo, store.state.crew.crewInfo);
+    // };
+    onMounted(async () => {
       await store.dispatch("crew/getCrewInfo", route.params.crew_pk);
       Object.assign(crewInfo, store.state.crew.crewInfo);
-    };
+    });
 
     const crewJoin = async (crew_pk) => {
       await store.dispatch("crew/crewJoin", crew_pk);
@@ -54,22 +50,25 @@ export default {
     };
 
     const moveToMember = () => {
-      router.push({ name: "crewmember", params: { crew_pk: crewInfo.crew_pk } });
+      router.push({ name: "crewmemberlist", params: { crew_pk: crewInfo.crew_pk } });
     };
 
-    getCrewInfo();
+    // getCrewInfo();
 
-    const crewMember = (crew_pk) => {
-      router.push({ name: "crewmember"}, {
-        params : {
-          crew_pk : crew_pk
-        }
-      })
-    }
+    // const crewMember = (crew_pk) => {
+    //   router.push(
+    //     { name: "crewmember" },
+    //     {
+    //       params: {
+    //         crew_pk: crew_pk,
+    //       },
+    //     }
+    //   );
+    // };
 
     return {
       crewInfo,
-      getCrewInfo,
+      // getCrewInfo,
       moveToArticle,
       moveToCalendar,
       moveToDetail,
