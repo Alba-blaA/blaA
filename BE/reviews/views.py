@@ -22,7 +22,7 @@ class StoreListCreateAPIView(ListCreateAPIView):
     # authentication_classes=[]
     serializer_class = StoreListCreateSerializer
     filter_backends = [filters.SearchFilter]
-    queryset=Store.objects.all().order_by('-store_pk')
+    queryset=Store.objects.all()
     search_fields = ['name']
 
     def list(self, request, *args, **kwargs):
@@ -40,7 +40,7 @@ class ReviewListAPIView(ListAPIView) :
     authentication_classes=[]
     serializer_class = ReviewListCreateSerializer
     filter_backends = [filters.SearchFilter]
-    queryset = Review.objects.all().order_by('-created_at')
+    queryset = Review.objects.all()
 
 
 #가게에 달린 리뷰 전체조회 및 리뷰 생성
@@ -94,7 +94,7 @@ class StoreReviewListCreateAPIView(ListCreateAPIView) :
 
     def list(self, request,store_pk):
         # print(request.query_params['ordering'])
-        queryset = self.filter_queryset(Review.objects.filter(store=self.get_object(store_pk))).order_by('-created_at')
+        queryset = self.filter_queryset(Review.objects.filter(store=self.get_object(store_pk)))
         queryset = queryset.annotate(like_user_count=Count('like_users'))
         if request.query_params :
             if request.query_params['ordering'] == '-like_user_count':
