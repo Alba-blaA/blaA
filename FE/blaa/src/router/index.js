@@ -203,13 +203,13 @@ const router = createRouter({
               path: "schedule",
               name: "schedule",
               component: () => import("@/components/crew/schedule/ScheduleView.vue"),
-              // children: [
-              //   {
-              //     path: "calendar",
-              //     name: "calendar",
-              //     component: () => import("@/components/crew/schedule/ScheduleView.vue"),
-              //   },
-              // ],
+              
+            },
+            {
+              path: "scheduleregister",
+              name: "scheduleregister",
+              component: () => import("@/components/crew/schedule/ScheduleRegisterView.vue"),
+              
             },
             // {
             //   path: "crewmember",
