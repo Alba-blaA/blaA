@@ -9,26 +9,38 @@
         </div>
     </PopUp>
     <div>
-      <router-link class="btn btn-primary" :to="{name: 'story'}">뒤로</router-link>
-      <button class="btn btn-danger ml-3" @click="popUpOpen=true">삭제</button>
+      <router-link :to="{name: 'story'}"><i class="fa fa-solid fa-arrow-left-long"></i>뒤로</router-link>
     </div>
-    <div class="d-flex justify-content-between">
-      <h2>{{ story.story_title }}</h2>
-      <!-- 좋아요 기능 구현 -->
-      <div class="like">
-        <span>{{story.like_user_count}}</span>
-        <i class="fa fa-solid fa-heart" :class="{activate: isLike, deactivate: !isLike}" 
-        @click="likeStory" style="cursor:pointer; maring-left: 5px;"></i>
+    <div id="story"> 
+      <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-between" style="width:90%">
+          <h2 class="m-0">{{ story.story_title }}</h2>
+          <!-- 좋아요 기능 구현 -->
+          <div class="like">
+            <span>{{story.like_user_count}}</span>
+            <div>
+              <i class="fa fa-solid fa-heart" :class="{activate: isLike, deactivate: !isLike}" 
+              @click="likeStory" style="cursor:pointer; maring-left: 5px;"></i>
+            </div>
+            <div style="margin-left:10px;"><i class="fa fa-solid fa-trash" @click="popUpOpen=true"></i></div>
+          </div>
+        </div>
       </div>
+      <hr>
+      <div class="story-content">
+        <div id="image">
+          <img :src="host + story.story_picture" alt="이미지 영역입니다." style="width:100%">
+        </div>
+        <div id="story-info">
+          <span>작성자 : {{ story.user_pk }} </span>
+          <span>작성일 :{{ story.created_at }}</span>
+        </div>
+      </div>
+      <br>
+        <CommentList/>
+        <hr>
+        <CommentForm/>
     </div>
-    <div class="story-content">
-      <img :src="host + story.story_picture" alt="이미지 영역입니다." style="width:100%">
-      <span>작성자 : {{ story.user_pk }} </span>
-      <span>작성일 :{{ story.created_at }}</span>
-    </div>
-    <CommentList/>
-    <hr>
-    <CommentForm/>
   </div>
   <div v-else>
     <h2>오류가 발생하였습니다. 다시 시도해주세요</h2>
@@ -107,9 +119,32 @@ export default {
 </script>
 
 <style scoped>
- .my-modal {
-    overflow: hidden;
-  }
+.my-modal {
+  overflow: hidden;
+}
+
+#story {
+  width:100%,
+}
+
+.story-content {
+  display: grid;
+  place-items: center;
+}
+
+#image{
+  width: 90%;
+  display: flex;
+  justify-content: center;
+}
+
+#story-info {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+}
+
+
 
 .activate {
   color: pink;
@@ -120,6 +155,7 @@ export default {
 }
 
 .like {
+  display: flex;
   font-size: 24px;
   text-align: center;
 }

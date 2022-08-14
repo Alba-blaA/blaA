@@ -1,12 +1,19 @@
 <template>
-  <div>
-    댓글 : {{ comments.length }}
+<div>
+  <div class="d-flex justify-content-center">
+    <div style="width: 90%">
+      댓글 : {{ comments.length }}
+    </div>
   </div>
   <hr>
-  <ul v-if="comments.length">
-    <CommentListItem  v-for="comment in comments" :key="comment.comment_pk" :comment="comment"/>
-  </ul>
-  <p v-else>댓글이 아직 없어요!</p>
+  <div class="d-flex justify-content-center">
+    <ul v-if="comments.length" style="width:90%; padding: 0;">
+      <CommentListItem  v-for="comment in comments" :key="comment.comment_pk" :comment="comment"/>
+    </ul>
+    <p v-else class="m-0" style="width:90%">댓글이 아직 없어요!</p>
+  </div>
+</div>
+  
 </template>
 
 <script>

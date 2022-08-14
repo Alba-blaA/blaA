@@ -1,6 +1,6 @@
 <template>
   <div class="tr_hashTag_area">
-    <p><strong>해시태그 구현</strong></p>
+    <p><strong>해시태그</strong></p>
     <div class="form-group">
       <input type="hidden" value="" name="tag" id="rdTag" />
     </div>
@@ -10,7 +10,7 @@
     </div>
                 
     <div class="form-group">
-      <input type="text" id="tag" size="7" placeholder="엔터로 해시태그를 등록해주세요." style="width: 300px;"/>
+      <input type="text" id="tag" size="7" placeholder="#은 제외하고 작성해주세요" style="width: 100%;"/>
     </div>
   </div>
 </template>
@@ -38,7 +38,7 @@ export default {
     const reset = () => {
       $('#tag-list').empty()
       tag.value = []
-      emit('search-hash-tag', tag.value)
+      emit('reset')
     }
     
     // 문서가 준비되었으면 해당 함수를 실행
@@ -82,7 +82,7 @@ export default {
             // 태그 중복방지 (바로 전것과 비교)
             if (result.length == 0){
               // 태그 추가 및 개별 css 적용
-              $('#tag-list').append("<li class='tag-item' style='display: inline; margin-left: 5px; background-color:greenyellow; border-radius: 5px; padding: 0px 5px 0px 5px;'>" + tagValue + "<span class='del-btn' style='cursor:pointer' idx='"+counter.value+"'>x</span></li>")
+              $('#tag-list').append("<li class='tag-item' style='display: inline; margin-left: 5px; background-color:greenyellow; border-radius: 5px; padding: 5px; '>" + tagValue + "<span class='del-btn' style='cursor:pointer; margin:0px 3px;' idx='"+counter.value+"'>x</span></li>")
               addTag(tagValue)
               self.val("")
               emit('search-hash-tag', tag.value)
@@ -120,5 +120,10 @@ ul {
 .tag-item {
   background-color: greenyellow;
   border-radius: 50%;
+}
+#tag {
+  border: 1px solid #C5C6CC;
+  border-radius: 12px;
+  padding: 8px;
 }
 </style>

@@ -11,12 +11,12 @@
         <img :src="host + image.story_picture" class="image"  :style="{ width: '100%', borderRadius:'10px' }" />
       </div>
     <div class="storyInfo">
-      <img :src="host + image.user_pk.image" alt="프로필" @click="moveToProfile" style="cursor: pointer">
-      <div>
+      <img :src="host + image.user_pk.image" alt="프로필" @click="moveToProfile" style="cursor: pointer; border-radius:50%">
+      <div style="margin-left:5px; width:100%">
         <p>{{ image.story_title }}</p>
         <!-- created at 현재 시간이랑 비교 -->
         <div class="userInfo">
-          <div>{{ image.user_pk.nickname }}</div> <div>{{ image.created_at }}</div>
+          <div>{{ image.user_pk.nickname }}</div> <div style="color:">{{ image.created_at }}</div>
         </div>
       </div>
     </div>
@@ -117,7 +117,8 @@ export default {
 <style scoped>
 .storyInfo {
   display: flex;
-  grid-template-columns: 25% auto;
+  grid-template-columns: 25% 75%;
+  margin-top: 5px;
 }
 
 p {
@@ -127,7 +128,9 @@ p {
 }
 
 .userInfo {
+  margin-top: 2px;
   display: flex;
   justify-content: space-between;
+  font-size: 12px;
 }
 </style>

@@ -28,7 +28,7 @@ export const dataChange = () => {
     const diffTime = (nowTime.getTime() - createTime) / (1000)
 
     if (diffTime < 60) {
-      return diffTime + '초 전'
+      return Math.floor(diffTime) + '초 전'
     } else if (diffTime < 3600) {
       return Math.floor(diffTime / 60) + '분 전'
     } else if (diffTime < 86400 ) {
