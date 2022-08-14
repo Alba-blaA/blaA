@@ -50,10 +50,12 @@ export default {
       await store.dispatch("account/userConfirm", user.value);
 
       let token = sessionStorage.getItem("token");
+      console.log("Login Token : ", token);
       if (isLogin.value) {
         await store.dispatch("account/getUserInfo", token);
+        // await store.commit("account/USER_INFO")
         console.log("로그인 성공!!!!!");
-        router.push("/");
+        router.push("/story");
       } else {
         console.log("isLogin : ", store.state.account.isLogin);
         console.log("isLoginError : ", store.state.account.isLoginError);

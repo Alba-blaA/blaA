@@ -14,21 +14,65 @@
     ><br />
     <b>지역 : {{ myInfo.region }}</b
     ><br />
+    <button @click.prevent="logout">로그아웃</button>
+    <button type="button" @click="updateMyInfo">회원정보 수정</button>
+    <button type="button" @click="updatePassword">비밀번호 변경</button>
+    <button type="button" @click="deleteAccount">회원탈퇴</button>
   </div>
 </template>
 
 <script>
 import { useStore } from "vuex";
+import { useRoute, useRouter } from "vue-router";
 
 export default {
   setup() {
     const store = useStore();
+    const route = useRoute();
+    const router = useRouter();
+
+    const logout = () => {
+      store.commit("account/LOGIN", false);
+      store.commit("account/USER_INFO", null);
+      sessionStorage.removeItem("token");
+      store.commit("account/RESET_STORAGE");
+      router.replace("/");
+    };
 
     const myInfo = store.state.account.userInfo;
     console.log("myInfo : ", myInfo);
     console.log("is_alba: ", myInfo.is_alba);
+
+    const updateMyInfo = () => {
+      console.log("회원정보 수정");
+      router.push({
+        name: "updateInfo",
+        params: { user_pk: route.params.user_pk },
+      });
+    };
+
+    const updatePassword = () => {
+      router.push({
+        name: "updatePassword",
+        params: {
+          user_pk: route.params.user_pk,
+        },
+      });
+    };
+
+    const deleteAccount = () => {
+      router.push({
+        name: "deleteAccount",
+        params: { user_pk: route.params.user_pk },
+      });
+    };
+
     return {
       myInfo,
+      logout,
+      updateMyInfo,
+      updatePassword,
+      deleteAccount,
     };
   },
 };

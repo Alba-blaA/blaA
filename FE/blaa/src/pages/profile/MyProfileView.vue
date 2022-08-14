@@ -1,7 +1,5 @@
 <template>
   <br /><br />
-  <button type="button" @click="myChat">내 채팅목록</button>
-  <button @click="showinvitedcrewlist">나를초대한크루리스트</button>
 
   <div id="profile">
     <img class="imgProfile" :src="HOST + userInfo.image" />
@@ -17,7 +15,6 @@
       type="file"
       @change="updateProfileImg"
     />
-    <button type="button" @click="updateMyInfo">회원정보 수정</button>
   </div>
 
   <br />
@@ -44,6 +41,12 @@
     </table>
   </div>
 
+  <!-- <button @click.prevent="gochatroom">채팅하러가기</button> -->
+  <!-- <button @click="showinvitedcrewlist">나를초대한크루리스트</button> -->
+  <hr />
+  <div @click.prevent="gochatroom">
+    <h5><b>채팅하러가기</b></h5>
+  </div>
   <hr />
   <div @click="myStory">
     <h5><b>내 스토리</b></h5>
@@ -60,27 +63,29 @@
   </div>
 
   <hr />
-  <div @click="myInfo">
-    <h5><b>회원정보</b></h5>
+  <div @click="showinvitedcrewlist">
+    <h5><b>나를초대한크루리스트</b></h5>
   </div>
 
   <hr />
-  <div @click="deleteAccount">
-    <h5><b>회원탈퇴</b></h5>
+  <div @click="myInfo">
+    <h5><b>회원정보</b></h5>
   </div>
   <hr />
 </template>
 
 <script>
 import { useStore } from "vuex";
+import { useRoute, useRouter } from "vue-router";
 import { ref } from "vue";
 import axios from "@/api/axios.js";
 import api from "@/api/api.js";
-import router from "@/router/index.js";
 
 export default {
   setup() {
     const store = useStore();
+    const route = useRoute();
+    const router = useRouter();
 
     const HOST = ref("http://localhost:8000");
 
@@ -89,6 +94,9 @@ export default {
     console.log("nickname : ", userInfo.nickname);
     console.log("image : ", userInfo.image);
 
+    const gochatroom = () => {
+      router.push({ path: "/chatroom" });
+    };
     const follow = ref({
       followers: null,
       followings: null,
@@ -104,10 +112,6 @@ export default {
       .catch((err) => {
         console.log("유저정보 에러 : ", err);
       });
-
-    const myChat = () => {
-      router.push({ path: "/chatroom" });
-    };
 
     const profileImg = ref(null);
     const imgURL = ref("");
@@ -136,6 +140,33 @@ export default {
           };
           reader.readAsDataURL(profileImg.value);
 
+          console.log("userInfo value : ", userInfo);
+          const updateImg = {
+            name: userInfo.name,
+            nickname: userInfo.nickname,
+            region: userInfo.region,
+            category: userInfo.category,
+            is_alba: userInfo.is_alba,
+            tel: userInfo.tel,
+            image: profileImg.value,
+          };
+
+          try {
+            axios
+              .put(api.profile.myInfo(userInfo.user_pk), updateImg, {
+                headers: {
+                  "Content-type": "multipart/form-data",
+                },
+              })
+              .then((response) => {
+                console.log("변경 후 data ", response.data);
+                store.commit("account/USER_INFO", response.data);
+                alert("사진 변경 완료");
+              });
+          } catch (err) {
+            console.log(err);
+          }
+
           // 파일 업데이트 요청 보내기
         } else if (profileImg.value.size <= 25165824) {
           preview.src = null;
@@ -151,20 +182,12 @@ export default {
       }
     };
 
-    const updateMyInfo = () => {
-      console.log("회원정보 수정");
-      router.push({
-        name: "updateInfo",
-        params: { user_pk: userInfo.user_pk },
-      });
-    };
-
     const follower = async () => {
       console.log("팔로워 조회");
       await store.dispatch("profile/getFollowerList", userInfo.user_pk);
       router.push({
         name: "followList",
-        params: { user_pk: userInfo.user_pk, followType: "follower" },
+        params: { user_pk: userInfo.user_pk, followType: "follower", page: 1 },
       });
     };
 
@@ -204,25 +227,16 @@ export default {
       router.push({ name: "myinfo", params: { user_pk: userInfo.user_pk } });
     };
 
-    const deleteAccount = () => {
-      router.push({
-        name: "deleteAccount",
-        params: { user_pk: userInfo.user_pk },
-      });
-    };
-
     const showinvitedcrewlist = () => {
       router.push({ name: "invitedcrewlist" });
     };
 
     return {
-      myChat,
       userInfo,
       follow,
       profileImg,
       imgURL,
       updateProfileImg,
-      updateMyInfo,
       follower,
       following,
       HOST,
@@ -231,7 +245,7 @@ export default {
       myCrew,
       myInfo,
       showinvitedcrewlist,
-      deleteAccount,
+      gochatroom,
     };
   },
 };

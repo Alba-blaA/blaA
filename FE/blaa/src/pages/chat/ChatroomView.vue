@@ -33,7 +33,9 @@
               </ul>
           </div>
       </div>
+      <button @click.prevent="gosearch">유저정보검색하기</button>
     </div>
+    
     <div v-else>
       <div>로그인이 필요함</div>
     </div>
@@ -63,6 +65,10 @@ export default {
     const userInfo = store.state.account.userInfo;
 
     const searchText = ref('');
+
+    const gosearch = () => {
+      router.push({ path: "/searchusers" });
+    };
     
     const filteredMessages = computed(() => {
       if (searchText.value) {
@@ -126,7 +132,8 @@ export default {
       userInfo,
       state,
       filteredMessages,
-      searchText
+      searchText,
+      gosearch
 
     }
   }
