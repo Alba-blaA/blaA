@@ -1,6 +1,8 @@
 <template>
   <div>게시판-view</div>
-  <router-view></router-view>
+  <div id="contents">
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
@@ -9,9 +11,15 @@ export default {
   components: {
     // BoardList,
   },
-}
+};
 </script>
 
 <style>
-
+#contents {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 6rem;
+}
 </style>

@@ -30,6 +30,7 @@
     <button @click="register">회원가입</button>
   </div>
   <router-view></router-view>
+  <footer-view></footer-view>
 </template>
 
 <script>
@@ -38,8 +39,11 @@ import { useStore } from "vuex";
 import { computed, onMounted } from "vue";
 // import router from "@/router/index.js";
 import { useRouter } from "vue-router";
+import footerview from "@/components/FooterView.vue";
+import FooterView from "@/components/FooterView.vue";
 
 export default {
+  components: { FooterView },
   setup() {
     // // vuex store 사용법 예제
     const store = useStore();
