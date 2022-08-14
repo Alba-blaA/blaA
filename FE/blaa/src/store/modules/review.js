@@ -16,7 +16,9 @@ export default {
   },
   mutations: {
     GET_REVIEWS(state, payload){
-      state.reviews = payload
+      for (let i=0; i<payload.length; i++){
+        state.reviews.push(payload[i])
+      }
     },
     GET_REVIEW(state, payload){
       const {

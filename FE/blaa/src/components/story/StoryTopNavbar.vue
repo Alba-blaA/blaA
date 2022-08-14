@@ -5,7 +5,7 @@
     <router-link :to="{name: 'story'}" :class="{activate: isStory, deactivate: isFollow}">오출완</router-link>
   </div>
   <div class="alpha-feature">
-    <div class="plus-btn" @click="change" v-if="isStory">검색</div>
+    <div class="plus-btn" @click="change" v-if="isStory"><span class="material-symbols-outlined" @click="isSearch=!isSearch">search</span></div>
     <router-link :to="{name: 'createStory'}"><i class="fa fa-regular fa-plus fa-2x"></i></router-link>
   </div>
 </div>
