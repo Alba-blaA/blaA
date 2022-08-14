@@ -8,7 +8,7 @@ from accounts.models import User
 from rest_framework.decorators import api_view,permission_classes
 from accounts.serializers import  (RegisterSerializer,LoginSerializer, UserCrewSerializer, UserListSerializer, UserReviewSerializer,
                                    UserSerializer,ChangePasswordSerializer,
-                                   NicknameUniqueCheckSerializer,EmailUniqueCheckSerializer)
+                                   NicknameUniqueCheckSerializer,EmailUniqueCheckSerializer,UserNoneImageSerializer)
 from rest_framework import response,status,permissions
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
@@ -126,7 +126,11 @@ class UserRetrieveUpdateDeleteAPIView(GenericAPIView):
         if request.user != user :
             return Response({'message':"You do not have permission to change the user's information,try again"},status=status.HTTP_400_BAD_REQUEST)
         #아니면 회원정보 수정 
-        serializer = UserSerializer(instance=user, data=request.data)
+
+        if request.FILES.get('image') :
+            serializer = UserSerializer(instance=user,data=request.data)
+        else : 
+            serializer = UserNoneImageSerializer(instance=user, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
