@@ -26,6 +26,10 @@
         <td colspan="100%"><hr /></td>
       </tr>
     </table>
+    <infinite-loading
+      @infinite="infiniteHandler"
+      spinner="waveDots"
+    ></infinite-loading>
   </div>
 
   <div v-else>
@@ -53,6 +57,10 @@
       <tr>
         <td colspan="100%"><hr /></td>
       </tr>
+      <infinite-loading
+        @infinite="infiniteHandler"
+        spinner="waveDots"
+      ></infinite-loading>
     </table>
   </div>
 </template>
@@ -61,14 +69,20 @@
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { ref, computed } from "vue";
+import axios from "@/api/axios.js";
+import api from "@/api/api.js";
+import InfiniteLoading from "v3-infinite-loading";
 
 export default {
+  components: {
+    InfiniteLoading,
+  },
   setup() {
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
 
-    const followerList = ref({});
+    const followerList = null;
     const followingList = ref({});
 
     if (route.params.followType === "follower") {
@@ -86,6 +100,36 @@ export default {
       return false;
     });
 
+    var page = ref(route.query.page) + 1;
+    const infiniteHandler = (state) => {
+      axios
+        .get(api.profile.myFollow(route.params.user_pk), {
+          params: {
+            type: "follower",
+            page: page.value,
+          },
+        })
+        .then((response) => {
+          setTimeout(() => {
+            // console.log("page : ", page);
+            console.log("followerList value : ", followerList);
+            followerList.value = followerList.concat(response.data.results);
+            console.log("페이지 추가 followerList", followerList.value);
+            state.loaded();
+            page.value += 1;
+            // if (response.data.next) {
+            //   state.complete();
+            // }
+          }, 1000);
+        })
+        .catch((error) => {
+          if (error.status == 404) {
+            state.complete();
+          }
+          console.log(error);
+        });
+    };
+
     const userProfile = (user_pk) => {
       console.log("다른 유저 프로필 페이지 이동");
       router.push({
@@ -100,6 +144,8 @@ export default {
       followerList,
       followingList,
       isFollower,
+      page,
+      infiniteHandler,
       userProfile,
     };
   },
