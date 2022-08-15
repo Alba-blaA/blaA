@@ -276,7 +276,7 @@ def crew_schedule_list_or_create(request, crew_id):
         schedule = CrewSchedule.objects.filter(Q(crew_id=crew_id))
         serializer = CrewScheduleListSerializer(schedule, many = True)
         return Response(serializer.data)
-    @swagger_auto_schema(method='POST', request_body=CrewScheduleListSerializer)  
+    # @swagger_auto_schema(method='POST', request_body=CrewScheduleListSerializer)  
     def schedule_create():
         serializer = CrewScheduleListSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
