@@ -4,8 +4,7 @@
 
   <div id="profile">
     <img id="imgProfile" :src="HOST + userProfile.image" />
-  </div>
-
+  </div>  
   <div>
     <h3 style="float: left">{{ userProfile.nickname }}</h3>
     &nbsp;

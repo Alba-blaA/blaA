@@ -14,18 +14,22 @@
       </div>
     </form>
   </div>   -->
+ 
   
   <div class="view chat"  v-if="userInfo">
-    <header>
-      <h1>{{ state.username }}'s Chatting Room</h1>      
+    <header class="d-flex justify-content-center">
+      <h1>{{ from_usernickname}}</h1>         
     </header>    
     <section class = "chat-box">
       <div 
         v-for="message in state.messages" 
         :key="message.key" 
         :class="(message.username == state.username ? 'message current-user' : 'message')">
-        <div class="message-inner">          
-          <div class="content">{{ message.content }}</div>
+        <div class="message-inner">
+          <div>
+            <img v-if="message.username != state.username" id = "chatprofile" class="imgProfile" :src="HOST + state.userprofile" alt="">             
+            <div class="content">{{ message.content }}</div>
+          </div>          
         </div>
       </div>
     </section>
@@ -64,6 +68,8 @@ import db from '@/db'
 import router from '@/router';
 import { useStore } from "vuex";
 import { useRoute } from 'vue-router'
+import api from "@/api/api.js"
+import axios from "@/api/axios.js";
 
 
 export default {
@@ -72,7 +78,9 @@ export default {
     const route = useRoute()
     const userInfo = store.state.account.userInfo; 
     const from_userpk = route.params.from_userpk 
-    const from_userprofile = ref("");
+    const from_usernickname = route.params.from_usernickname
+    
+    
     
     
 
@@ -89,15 +97,16 @@ export default {
     const state = reactive({
       username: "",
       messages: [],
+      userprofile : "",
     })
  
-
+    const HOST = ref("https://i7b209.p.ssafy.io");
     const Logout = () => {
       state.username = "익명";
     }
 
     const SendMessage = async () => {
-      console.log("Sendmessage");
+      console.log("Sendmessage");      
       const messageRef = db.database().ref("messages");
       if(inputMessage.value === "" || inputMessage.value === null){
         console.log("nothing");
@@ -124,7 +133,11 @@ export default {
     onMounted(() => {
       console.log(userInfo);
       if (userInfo) {
-        state.username = store.state.account.userInfo.nickname           
+        state.username = store.state.account.userInfo.nickname
+        axios.get(api.accounts.myInfo(from_userpk)).then((response) => {
+            console.log(response.data.image);
+            state.userprofile =  response.data.image
+          })           
         const messageRef = db.database().ref("messages");     
         messageRef.on('value', snapshot => {
           const data = snapshot.val();
@@ -160,8 +173,10 @@ export default {
       Logout,
       scrollToBottom,
       userInfo,
-      from_userpk,
-      from_userprofile
+      from_userpk,     
+      from_usernickname,
+      HOST
+      
     }
   }
 };
@@ -181,7 +196,7 @@ export default {
     display: flex;
     justify-content: center;
     min-height: 100vh;
-    background-color: #1a8e2a;
+    background-color: #498D6D;
   }
   .view.login {
     align-items: center;
@@ -288,7 +303,7 @@ export default {
   }
   .view.chat .chat-box .message {
     display: flex;
-    margin-bottom: 15px;
+    margin-bottom: 13px;
   }
   .view.chat .chat-box .message .message-inner .username {
     color: #888;
@@ -303,7 +318,7 @@ export default {
     background-color: #F3F3F3;
     border-radius: 999px;
     color: #333;
-    font-size: 18px;
+    font-size: 14px;
     line-height: 1.2em;
     text-align: left;
   }
@@ -368,5 +383,17 @@ export default {
     margin-right: 3px;
   }
   
+.imgProfile {
+  width: 30%;
+  height: 30%;
+  object-fit: cover;
+}
 
+#chatprofile {
+  width: 35px;
+  height: 35px;
+  border-radius: 70%;
+  overflow: hidden;
+  margin-right : 13px
+}
 </style>

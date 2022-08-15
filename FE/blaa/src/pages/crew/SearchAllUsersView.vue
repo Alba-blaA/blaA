@@ -47,11 +47,10 @@ export default {
       users: [],
     });
     onBeforeMount(() => {
-      if (userInfo) {
-        let token = store.state.chat.token;
+      if (userInfo) {        
         axios
           .get(api.accounts.searchallusers())
-          .then((response) => (state.users = response.data));
+          .then((response) => (state.users = response.data.results));
         console.log(state.users);
       }
     });

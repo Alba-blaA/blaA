@@ -10,7 +10,7 @@
           </div>
           <div class="list">
               <ul>
-                  <li @click="gochat(message.from_userpk)" v-for="message in filteredMessages" :key = "message.key">
+                  <li @click="gochat(message.from_userpk, message.username)" v-for="message in filteredMessages" :key = "message.key">
                       <table cellpadding="0" cellspacing="0">
                           <tr>
                               <td class="profile_td">
@@ -52,10 +52,11 @@ import axios from "@/api/axios.js";
 
 export default {
   setup () {
-    const gochat = (from_userpk) => {
+    const gochat = (from_userpk, from_usernickname) => {
       router.push({ name: 'chat',
       params: {
-        from_userpk: from_userpk
+        from_userpk: from_userpk,
+        from_usernickname : from_usernickname
       }}
       )
     }
