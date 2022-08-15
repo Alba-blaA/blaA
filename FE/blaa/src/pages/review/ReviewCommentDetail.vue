@@ -1,10 +1,14 @@
 <template>
-  <span style="cursor:pointer" @click="moveToPrevious">X</span> <h3>{{store_name}}</h3>
-      <CommentDetail class="userReview" :review="review.value" :isDetail="true" @update="update"/>
-    <br>
-    <div>
-      <p>{{review.value.user.nickname}} 님은이렇게 평가했어요.</p>
+<div class="d-flex justify-content-center">
+  <div style="width: 90%">
+    <div class="d-flex justify-content-between align-items-center">
+      <span class="material-symbols-outlined" style="color: black; font-size:36px;" @click="moveToPrevious">arrow_back</span>
+      <h2 style="margin:0; font-weight: 700;">{{store_name}}</h2>
+      <div style="width:36px"></div>
     </div>
+    <div style="background:black; height:1px; width:100%; margin: 10px 0;"></div>
+    <br>
+    <p class="nickname">{{review.value.user.nickname}} 님은이렇게 평가했어요.</p>
     <br>
     <div class="userReviewDetail">
       <div>
@@ -19,18 +23,30 @@
             <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
           </div>
         </div>
-        <span>{{review.value.star}} 점</span>
+        <span style="font-weight:600; font-size:24px;">{{review.value.star}}.0점</span>
       </div>
-      <div v-for="(value, name) of review.value.button" :key="name.id">
-        <div v-if="value == 1" class="buttonReview" >{{name}}</div>
+      <div class="buttonReview">
+        <div v-for="(value, name) of review.value.button" :key="name.id">
+          <div v-if="value == 1" class="buttonDetail" >{{name}}</div>
+        </div>
       </div>
     </div>
 
-    <button @click="deleteReview">삭제</button>
+    <br>
+    <CommentDetail class="userReview" :review="review.value" :isDetail="true" @update="update"/>
+
+    
+    <div class="updateButton" v-if="review.value.user.nickname == user_name"> 
+      <button class="deleteButton" @click="deleteReview">삭제</button>
+    </div>
+    
+  </div>
+</div>
+  
 </template>
 
 <script>
-import { onBeforeMount, ref, computed } from 'vue'
+import { onBeforeMount, ref, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import CommentDetail from '@/components/review/CommentDetail.vue'
@@ -49,12 +65,15 @@ export default {
     const score = ref(0)
     const review = ref([])
     const user_pk = store.state.account.userInfo.user_pk
+    const user_name = store.state.account.userInfo.nickname
 
-    onBeforeMount(async() => {
+    const start = async() => {
       await store.dispatch('review/getDetailReview', review_pk)
       review.value = computed(() => {return store.state.review.detailReview})
       score.value = (review.value.value.star * 20) + 1.5
-    })
+    }
+
+    start()
 
     const update = () => {
       review.value = computed(() => {return store.state.review.detailReview})
@@ -62,14 +81,7 @@ export default {
 
 
     const moveToPrevious =() => {
-      console.log('이동')
-      router.push({
-        name: 'detailReview',
-        params: {
-          store_pk: store_pk,
-          store_name: store_name
-        }
-      })
+      router.go(-1)
     }
 
     const deleteReview = async() => {
@@ -90,29 +102,31 @@ export default {
       store_name,
       user_pk,
       update,
-      deleteReview
+      deleteReview,
+      user_name
     } 
   }
 }
 </script>
 
 <style scoped>
+.nickname {
+  font-weight: 800;
+  font-size: 24px;
+}
 /* 유저 리뷰 css */
 .userReview {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 16px;
-  gap: 16px;
-
-  background: #F8F9FE;
-  border-radius: 16px;
+  background-color:  #F8F9FE;
+  border-radius: 20px;
+  padding: 20px;
+  z-index: 1;
 }
 
 .userOnelineReview {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding: 30px;
 }
 
 .user_info {
@@ -129,7 +143,12 @@ export default {
   margin-right: 20px;
   -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
   -webkit-text-stroke-width: 1.3px;
-  -webkit-text-stroke-color: greenyellow;
+  -webkit-text-stroke-color: #498D6D;
+}
+
+.star-ratings span {
+  font-size: 30px;
+  margin-left: 3px;
 }
  
 .star-ratings-fill {
@@ -141,7 +160,7 @@ export default {
   top: 0;
   left: 0;
   overflow: hidden;
-  -webkit-text-fill-color: greenyellow;
+  -webkit-text-fill-color: #498D6D;
 }
  
 .star-ratings-base {
@@ -168,8 +187,36 @@ export default {
   background: #F8F9FE;
   border-radius: 16px;
 }
+
 /* 버튼 css */
 .buttonReview {
-  
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+}
+
+.buttonDetail {
+  background-color: white;
+  color: #498D6D;
+  border-radius: 16px;
+  padding: 6px 10px;
+  margin: 0 8px;
+  font-weight: 600;
+}
+
+.updateButton{
+  position: fixed;
+  bottom: 30px;
+}
+
+.deleteButton {
+  border: 0;
+  background-color: #CB2A2A;
+  color: white;
+  width: 80px;
+  /* height: 30px; */
+  padding: 6px;
+  border-radius: 16px;
+  cursor: pointer;
 }
 </style>
