@@ -16,7 +16,7 @@ export const dataChange = () => {
       day = '0' + day
     }
   
-    return year + '-' + month + '-' + day
+    return year + '.' + month + '.' + day
   }
 
   const howNow = (value) => {

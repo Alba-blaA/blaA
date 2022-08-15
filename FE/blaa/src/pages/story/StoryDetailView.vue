@@ -8,12 +8,10 @@
           <button class="btn btn=danger" @click="storyDelete">삭제</button>
         </div>
     </PopUp>
-    <div>
-      <router-link :to="{name: 'story'}"><i class="fa fa-solid fa-arrow-left-long"></i>뒤로</router-link>
-    </div>
     <div id="story"> 
       <div class="d-flex justify-content-center">
         <div class="d-flex justify-content-between" style="width:90%">
+          <span class="material-symbols-outlined" style="color:black; cursor:pointer;" @click="goBack">arrow_back</span>
           <h2 class="m-0">{{ story.story_title }}</h2>
           <!-- 좋아요 기능 구현 -->
           <div class="like">
@@ -32,14 +30,17 @@
           <img :src="host + story.story_picture" alt="이미지 영역입니다." style="width:100%">
         </div>
         <div id="story-info">
-          <span>작성자 : {{ story.user_pk }} </span>
-          <span>작성일 :{{ story.created_at }}</span>
+          <img :src="host + story.user_pk.image" height="60" alt="">
+          <div class="d-flex justify-content-between" style="padding: 20px 0 0 10px;">
+            <span>{{ story.user_pk.nickname }} </span>
+            <span>{{ howNow(story.created_at) }}</span>
+          </div>
         </div>
       </div>
       <br>
-        <CommentList/>
-        <hr>
-        <CommentForm/>
+      <CommentList/>
+      <hr>
+      <CommentForm/>
     </div>
   </div>
   <div v-else>
@@ -49,13 +50,14 @@
 
 <script>
 // import axios from 'axios'
-import { computed, ref } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
 import CommentList from '@/components/story/CommentList.vue'
 import CommentForm from '@/components/story/CommentForm.vue'
 import PopUp from '@/components/story/PopUp.vue'
 // import api from '@/api/api'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
+import { dataChange } from "@/hooks/dateChange"
 
 export default {
   components: {
@@ -72,6 +74,7 @@ export default {
     const route = useRoute()
     const popUpOpen = ref(false)
     const user_pk = store.state.account.userInfo.user_pk
+    
     const isLike = computed(() => {
       if (story.value.like_user) {
         return story.value.like_user.includes(user_pk)
@@ -80,8 +83,12 @@ export default {
       }  
     })
 
+    const {
+      howNow
+    } = dataChange()
+
     // 데이터를 불러오는 함수
-    const start = async () => {
+    onBeforeMount(async() => {
       isError.value = false
       await store.dispatch('story/getCurrentStory', route.params.story_pk).then(() => {
         story.value = store.state.story.currentStory
@@ -90,15 +97,17 @@ export default {
         console.error(error)
         isError.value = true
       })  
-    }
-    
-    start()
+    })  
 
     const storyDelete = async () => {
       await store.dispatch('story/deleteCurrentStory', route.params.story_pk)
       router.push({
           name: 'story'
         })
+    }
+
+    const goBack = () => {
+      router.go(-1)
     }
 
     const likeStory = async () => {
@@ -112,7 +121,9 @@ export default {
       isError,
       storyDelete,
       isLike,
-      likeStory
+      likeStory,
+      goBack,
+      howNow
     }
   }
 }
@@ -140,8 +151,8 @@ export default {
 
 #story-info {
   width: 90%;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 15% auto;
 }
 
 

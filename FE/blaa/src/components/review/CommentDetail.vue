@@ -1,13 +1,15 @@
 <template>
   <div>
-      <div style="cursor:pointer" @click="moveToDetailPage" v-if="!isDetail">{{ review.oneline_review}}</div>
+    <div class="oneReview">
+      <div class="oneLine" @click="moveToDetailPage" v-if="!isDetail">{{ review.oneline_review}}</div>
       <div v-else>{{ review.oneline_review}}</div>
-    <div>
-      <span>{{review.like_user_count}}</span>
-      <i class="fa fa-solid fa-heart" :class="isLike? activate : deactivate" 
-      @click="likeOneReview" style="cursor:pointer"></i>
+      <div class="heart">
+        <span style="margin: 0 auto; margin-bottom:3px;">{{review.like_user_count}}</span>
+        <i  class="fa fa-solid fa-heart" :class="{activate: isLike, deactivate:!isLike}"
+        @click="likeOneReview" style="cursor:pointer; font-size:30px; margin: 0 auto;"></i>
+      </div>
     </div>
-    <div class="user_info"><span>{{review.user.nickname}}</span> <span>작성일: {{review.created_at}} </span></div> 
+    <div class="user_info"><span>{{review.user.nickname}}</span> <span>{{review.created_at}} </span></div> 
   </div>
 </template>
 
@@ -74,10 +76,34 @@ export default {
 </script>
 
 <style scoped>
+.oneReview {
+  display: grid;
+  grid-template-columns: 85% 15%;
+}
+
+.oneLine {
+  display:flex; 
+  cursor:pointer; 
+  align-items:center; 
+  font-weight:800; 
+  font-size:16px; 
+}
+
+.user_info {
+  display: flex;
+  justify-content: space-between;
+  color: #71727A;
+  margin-top:10px;
+}
+
+.heart {
+  display: flex;
+  flex-direction: column;
+}
 .activate {
-  background-color: red;
+  color: #f36e5d;
 }
 .deactivate {
-  background-color: gray;
+  color: #a1a1a1;
 }
 </style>

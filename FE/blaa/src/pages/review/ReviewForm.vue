@@ -185,7 +185,7 @@ export default {
 
 
     const sumbitReview = async() => {
-      if ( storeName.value && storeAddress.value && star.value && oneReview.value ){
+      if ( storeName.value && storeAddress.value && star.value ){
         // Array => [1,4,6] 선택한 인자만 넘어감
         const buttonType = []
         for (let idx = 0; idx < 6; idx++) {
@@ -229,13 +229,10 @@ export default {
             form: form,
           }
         }
-        
-
-        await store.dispatch('review/makeReviews', data).then(
-          router.push({
-            name: 'review'
+        await store.dispatch('review/makeReviews', data)
+        router.push({
+            name: 'review',
           })
-        )
       } else {
         // 에러 발생시 에러 문구 출력
         storeError.value = storeName.value == '' ? true : false
