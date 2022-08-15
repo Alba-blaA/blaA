@@ -2,7 +2,7 @@
   <br />
   <h3><b>리뷰</b></h3>
   <hr />
-
+  {{reviews}}
   <table v-for="review in reviews" :key="review.review_pk" style="width: 100%">
     <tr>
       <td width="10px"></td>
