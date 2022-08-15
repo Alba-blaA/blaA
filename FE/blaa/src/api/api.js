@@ -34,18 +34,25 @@ export default {
   crew: {
     crew: () => HOST + CREW,
     crewInfo: (crew_pk) => HOST + CREW + crew_pk + "/",
-    article: (crew_article_pk) => HOST + CREW + "article/edit/" + crew_article_pk + "/",
+    article: (crew_article_pk) =>
+      HOST + CREW + "article/edit/" + crew_article_pk + "/",
     crewmemebers: (crew_pk) => HOST + CREW + "user/" + crew_pk,
-    inviteuser: (crew_pk, user_pk) => HOST + CREW + "invite/" + crew_pk + "/" + user_pk + "/",
+    inviteuser: (crew_pk, user_pk) =>
+      HOST + CREW + "invite/" + crew_pk + "/" + user_pk + "/",
     articles: (crew_pk) => HOST + CREW + "article/" + crew_pk + "/",
     members: (crew_pk) => HOST + CREW + "user/" + crew_pk + "/",
     sign: (crew_pk) => HOST + CREW + "sign/" + crew_pk + "/",
-    invitelist: (crew_pk, type) => HOST + CREW + "invitelist/" + crew_pk + "/?type=" + type,
-    accept: (crew_pk, user_pk) => HOST + CREW + "accept_user/" + crew_pk + "/" + user_pk + "/",
-    deny: (crew_pk, user_pk) => HOST + CREW + "deny_user/" + crew_pk + "/" + user_pk + "/",
+    invitelist: (crew_pk, type) =>
+      HOST + CREW + "invitelist/" + crew_pk + "/?type=" + type,
+    accept: (crew_pk, user_pk) =>
+      HOST + CREW + "accept_user/" + crew_pk + "/" + user_pk + "/",
+    deny: (crew_pk, user_pk) =>
+      HOST + CREW + "deny_user/" + crew_pk + "/" + user_pk + "/",
     leave: (crew_pk) => HOST + CREW + "leave/" + crew_pk + "/",
-    comment: (crew_article_pk) => HOST + CREW + "comment/" + crew_article_pk + "/",
-    commentUpdate: (crew_comment_pk) => HOST + CREW + "comment/update/" + crew_comment_pk + "/",
+    comment: (crew_article_pk) =>
+      HOST + CREW + "comment/" + crew_article_pk + "/",
+    commentUpdate: (crew_comment_pk) =>
+      HOST + CREW + "comment/update/" + crew_comment_pk + "/",
 
     // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
     acceptcrew: (crew_pk) => HOST + CREW + "accept_crew/" + crew_pk + "/",
@@ -63,7 +70,8 @@ export default {
     detail: (story_pk) => HOST + STORY + story_pk + "/",
     like: (story_pk) => HOST + STORY + "like/" + story_pk + "/",
     comment: (story_pk) => HOST + STORY + COMMENT + story_pk + "/",
-    commentChange: (comment_pk) => HOST + STORY + COMMENT + "ud/" + comment_pk + "/",
+    commentChange: (comment_pk) =>
+      HOST + STORY + COMMENT + "ud/" + comment_pk + "/",
     myStory: (user_pk) => HOST + STORY + "mystory/" + user_pk + "/",
   },
   review: {
@@ -74,7 +82,8 @@ export default {
   },
   profile: {
     updateMyInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
-    updateMyPW: (user_pk) => HOST + ACCOUNTS + "change_password/" + user_pk + "/",
+    updateMyPW: (user_pk) =>
+      HOST + ACCOUNTS + "change_password/" + user_pk + "/",
     myFollow: (user_pk) => HOST + ACCOUNTS + "followlist/" + user_pk + "/",
     myStory: (user_pk) => HOST + STORY + "mystory/" + user_pk + "/",
     myReview: (user_pk) => HOST + ACCOUNTS + "review/" + user_pk + "/",
@@ -87,7 +96,8 @@ export default {
   notification: {
     getnotifications: () => HOST + NOTIFICATION,
     getinvitedcrewlist: () => HOST + CREW + "signlist/",
-    deletenotification : (notification_pk) => HOST + NOTIFICATION + notification_pk ,
-    makeviewtrue : (notification_pk) => HOST + NOTIFICATION + notification_pk
+    deletenotification: (notification_pk) =>
+      HOST + NOTIFICATION + notification_pk,
+    makeviewtrue: (notification_pk) => HOST + NOTIFICATION + notification_pk,
   },
 };
