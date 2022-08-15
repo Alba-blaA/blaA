@@ -1,29 +1,37 @@
 <template>
 <!-- enctype 파일 업로드에서 무조건 사용 -->
-<h1>오출완 작성</h1>
-<router-link :to="{name: 'story'}">뒤로</router-link>
-<form @submit.prevent="Sumbit" enctype="multipart/form-data">
-  <button type="submit">등록</button>
-  <div>
-    <label for="story_picture">사진 등록</label>
-    <input class="story_picture" id="story_picture" type="file" @change="previewFile"/><br />
-    <img class="img_test" src="" height="200" alt="이미지 미리보기..." />
-    <div v-if="isPictureVaild" style="color: red">
-      사진을 등록해주세요!
+<div class="d-flex justify-content-center">
+  <form @submit.prevent="Sumbit" enctype="multipart/form-data" style="width:90%">
+    <div id="top">
+      <router-link router-link :to="{name: 'story'}" style="font-size: 30px; text-decoration:none; color:black; cursor:pointer">X</router-link>
+      <h2 style="margin:0; font-weight:bold;">오출완 작성</h2>
+      <button id="sumbit-btn" type="submit">등록</button>
     </div>
-  </div>
-  <div>
-    <label for="story_title">제목 입력</label>
-    <input type="text" placeholder="제목을 입력하세요" v-model="story_title" id="story_title">
-    <div v-if="isTitleVaild" style="color: red">
-      제목을 입력해주세요!
+    <hr>
+    <div id="image">
+      <label for="story_picture">사진 등록</label>
+      <input class="story_picture" id="story_picture" type="file" @change="previewFile" style="display:none"/>
+      <div id="file-button" @click="fileUpload" style="z-index:1;">이미지 불러오기</div>
+      <img class="img_test" src="" height="200" @click="fileUpload" style="z-index: 10"/>
+      <div v-if="isPictureVaild" style="color: red">
+        사진을 등록해주세요!
+      </div>
     </div>
-  </div>
-  <div>
-    <!-- 해시태그는 추후에 작성-->
-    <HashTagForm @search-hash-tag="searchHashTag"/>
-  </div>
-</form>
+    <br>
+    <div id="title">
+      <label style="font-weight:bold; margin-bottom: 4px" for="story_title">문구 입력</label>
+      <textarea type="text" placeholder="제목을 입력하세요" v-model="story_title" id="story_title"></textarea>
+      <div v-if="isTitleVaild" style="color: red">
+        제목을 입력해주세요!
+      </div>
+    </div>
+    <br>
+    <div>
+      <HashTagForm @search-hash-tag="searchHashTag" @reset="reset"/>
+    </div>
+  </form>
+</div>
+
   
 
 </template>
@@ -34,6 +42,7 @@ import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import axios from 'axios'
 import api from '@/api/api'
+import $ from 'jquery'
 import HashTagForm from '@/components/story/HashTagForm.vue'
 
 export default {
@@ -53,11 +62,13 @@ export default {
 
     onMounted(() => {
       hashTag.value = []
+      const windowWidth = $(window).width() / 2.3 - 68
+      $('#file-button').css('left', `${windowWidth}px`)
     })
 
     // 업로드 된 이미지를 미리 확인하는 함수
     const previewFile = (e) => {
-      const preview = document.querySelector('.img_test')
+      let preview = document.querySelector('.img_test')
       if (e.target.files[0]) {
         story_picture.value = e.target.files[0]
         const reader = new FileReader();
@@ -70,14 +81,21 @@ export default {
 
         // 파일 형식과 3MB의 파일크기 확인
         if (
-          ["jpeg", "png", "gif", "bmp"].includes(fileName) && story_picture.value.size <= 25165824
+          ["jpeg", "png", "gif", "bmp", 'jpg'].includes(fileName) && story_picture.value.size <= 25165824
         ) {
           reader.onload = e => {
             preview.src = e.target.result
             image_url.value = e.target.result
           }
           reader.readAsDataURL(story_picture.value)
-        } else if (story_picture.value.size <= 25165824) {
+          // 들어오는 이미지에 따라 height 조절
+          let width = preview.naturalWidth
+          let height = preview.naturalHeight
+
+          console.log(width, height)
+          let img_height = height / (width / $(window).width() / (10/9))
+          preview.height = img_height
+        } else if (story_picture.value.size > 25165824) {
           preview.src = null
         } else {
           alert('파일을 다시 선택해 주세요')
@@ -90,6 +108,32 @@ export default {
         preview.src = null
       }
     }
+
+    // $(window).resize(function() {
+    //   const preview = document.querySelector('.img_test')
+
+    //   const width = preview.naturalWidth
+    //   const height = preview.naturalHeight
+
+    //   const img_height = height / (width / $(window).width() / (10/9))
+    //   preview.height = img_height
+    // })
+
+    // 초기화 버튼 클릭시
+    const reset = () => {
+      hashTag.value = []
+    }
+
+    // 파일버튼 교체
+    const fileUpload = (e) => {
+      e.preventDefault()
+      $('#story_picture').click()
+    }
+    
+    $(window).resize(function() {
+      const windowWidth = $(window).width() / 2.3 - 68
+      $('#file-button').css('left', `${windowWidth}px`)
+    })
 
     // 해시태그 값
     const searchHashTag = (hashTag) => {
@@ -127,28 +171,29 @@ export default {
             },
           })
           const index = res.data.story_pk
-          // 왜 갑자기 NaN???
-          console.log(hashtag_content.value)
-          try {
-            const res = await axios.post(api.story.story() + 'hashtag/' + index + '/', 
-              {
-              hashtag_content: hashtag_content.value
-              }, {
-              headers: {
-                "Authorization": `Bearer ${token}`
-              }
-            })
-            // 작성 후 상세페이지로 이동
-            router.push({
-              name: 'story',
-              params: {
-                index
-              }
-            })
-          } catch(error) {
-            console.error(error)
-            console.log('해시태그 생성 오류')
+          // 해시태그 값이 있다면 생성
+          if (hashtag_content.value) {
+            try {
+              await axios.post(api.story.story() + 'hashtag/' + index + '/', 
+                {
+                hashtag_content: hashtag_content.value
+                }, {
+                headers: {
+                  "Authorization": `Bearer ${token}`
+                }
+              })
+            } catch(error) {
+              console.error(error)
+              console.log('해시태그 생성 오류')
+            }
           }
+          // 작성 후 상세페이지로 이동
+          router.push({
+            name: 'detailStory',
+            params: {
+              story_pk: index
+            }
+          })
         } catch(error) {
           console.log(error)
         }
@@ -167,13 +212,72 @@ export default {
       story_picture,
       story_title,
       previewFile,
-      searchHashTag
+      searchHashTag,
+      reset,
+      fileUpload
     }
   }
 
 }
 </script>
 
-<style>
+<style scoped>
+label {
+  font-weight: bold;
+}
+
+#top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#sumbit-btn {
+  background: #498D6D;
+  width: 60px;
+  height: 40px;
+  border-radius: 20px;
+  border: 0px;
+  font-weight: bold;
+}
+
+#image {
+  display: flex;
+  flex-direction: column;
+  width: 100%
+}
+
+#file-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  border: 1px solid #CED4DA;
+  position:relative;
+  width: 136px;
+  height: 44px;
+  top: 112px;
+}
+
+.img_test {
+  border: 1px dotted black;
+  border-radius: 10px;
+  min-height: 200px;
+}
+
+#title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#story_title {
+  border: 1px solid #C5C6CC;
+  border-radius: 12px;
+  width: 100%;
+  height: 90px;
+  padding: 8px;
+}
 
 </style>

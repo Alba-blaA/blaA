@@ -12,8 +12,6 @@ class Story(models.Model) :
     category = models.CharField(max_length=20)
     
     like_user = models.ManyToManyField('accounts.User', related_name='like_story')
-    class Meta:
-        ordering = ['-created_at']
     
 class Comment(models.Model) :
     comment_pk = models.AutoField(primary_key=True)

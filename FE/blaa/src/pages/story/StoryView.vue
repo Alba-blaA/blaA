@@ -1,35 +1,41 @@
 <template>
 <div>
-  <h1>여기는 오출완 페이지입니다!</h1>
-  <router-link class="btn btn-primary m-1" style="maring-left:5px" :to="{name: 'createStory'}">+</router-link>
-  <button class="btn" @click="isPopUp=true">
-    검색
-  </button>
-  <button class="btn m-1" @click="onCategory" :class="{ activate: isCategory, deactivate: !isCategory}">관심업종</button>
-  <button class="btn m-1" @click="onRegion" :class="{ activate: isRegion, deactivate: !isRegion}">근무지</button>
+  <StoryTopNavbar :isStory="isStory" :isFollow="isFollow" :isFilter="isFilter" @change="change"/>
+  <div v-if="isFilter">
+    <button class="btn" @click="isPopUp=true">검색</button>
+    <button class="btn m-1" @click="onCategory" :class="{ activate: isCategory, deactivate: !isCategory}">관심업종</button>
+    <button class="btn m-1" @click="onRegion" :class="{ activate: isRegion, deactivate: !isRegion}">근무지</button>
+  </div>
   <!-- Modal -->
   <PopUp v-if="isPopUp">
-    <HashTagForm @search-hash-tag="searchHastTag"/>
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="[isPopUp=false, getPure()]">닫기</button>
-    <button type="button" class="btn btn-primary">검색</button>
-  </PopUp>   
-  <StoryImageCardList :images="images"/>
+    <HashTagForm @search-hash-tag="searchHastTag" @closeModal="[isPopUp=false, getPure()]"/>
+    <button type="button" class="btn btn-secondary" @click="[isPopUp=false, getPure()]">닫기</button>
+    <button type="button" class="btn btn-primary" @click="searchHastTagStory">검색</button>
+  </PopUp>
+  <div v-if="images.value">
+    <StoryImageCardList :images="images.value"/>
+  </div>
+  <p v-else>아직 불러오는 중이에요
+  </p>
 </div>
 </template>
 
 <script>
+import StoryTopNavbar from '@/components/story/StoryTopNavbar.vue'
 import StoryImageCardList from '@/components/story/StoryImageCardList.vue'
 import HashTagForm from '@/components/story/HashTagForm.vue'
 import PopUp from '@/components/story/PopUp.vue'
 import { useStore } from 'vuex'
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, ref, computed } from 'vue'
+import { dataChange } from '@/hooks/dateChange'
 // import axios from 'axios'
 
 export default {
   components: {
     StoryImageCardList,
     HashTagForm,
-    PopUp
+    PopUp,
+    StoryTopNavbar
   },
   setup() {
     const store = useStore()
@@ -39,10 +45,22 @@ export default {
     const hashTag = ref([])
     const hashtag_content = ref('')
     const isPopUp = ref(false)
+    const isStory = ref(true)
+    const isFollow = ref(false)
+    const isFilter = ref(false)
+
+    const {
+      howNow
+    } = dataChange()
 
     const getPure = async() => {
-      await store.dispatch('story/getImages')
-      images.value = store.state.story.images 
+      if (!hashTag.value.length) {
+        await store.dispatch('story/getImages')
+        images.value = computed(() => {return store.state.story.images})
+        images.value.value.forEach(ele => {
+          ele.created_at = howNow(ele.created_at)
+        })
+      }
     }
 
     // 시작할 떄
@@ -53,8 +71,11 @@ export default {
     // 해시태그 검색
     const searchHastTag = async(hash) => {
       hashTag.value = hash
+    }
 
-      hashtag_content.value = ''
+    const searchHastTagStory = async() => {
+       hashtag_content.value = ''
+
       if(hashTag.value.length) {
         for (let i = 0; i < hashTag.value.length; i++) {
           hashtag_content.value += hashTag.value[i]
@@ -63,7 +84,8 @@ export default {
           }
         }
         await store.dispatch('story/getHashtag', hashtag_content.value)
-        images.value = store.state.story.images
+        images.value = computed(() => {return store.state.story.images})
+        isPopUp.value = false
       } else {
         getPure()
       }
@@ -75,7 +97,7 @@ export default {
       // 관심업종이 커져있으면 해당 업종 검색
       if (isCategory.value) {
         await store.dispatch('story/getCategory')
-        images.value = store.state.story.images
+        images.value = computed(() => {return store.state.story.images})
       } else {
         getPure()
       }
@@ -87,10 +109,14 @@ export default {
       // 관심업종이 커져있으면 해당 업종 검색
       if (isRegion.value) {
         await store.dispatch('story/getRegion')
-        images.value = store.state.story.images
+        images.value = computed(() => {return store.state.story.images})
       } else {
         getPure()
       }
+    }
+
+    const change =  () => {
+      isFilter.value = !isFilter.value
     }
 
     return {
@@ -101,7 +127,12 @@ export default {
       isRegion,
       isCategory,
       getPure,
-      isPopUp
+      isPopUp,
+      searchHastTagStory,
+      isStory,
+      isFollow,
+      isFilter,
+      change
     }
   }
 }
