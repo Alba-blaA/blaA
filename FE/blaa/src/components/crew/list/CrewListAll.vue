@@ -9,7 +9,7 @@
   <div class="container">
     <div class="card" v-for="(crew, i) in AllCrews.crews" :key="i" v-bind="crew" @click="moveToDetail(crew.crew_pk)">
       <div class="col-4" style="text-align: center">
-        <img id="profile" :src="crew.crew_img" />
+        <img id="profile" :src="`https://i7b209.p.ssafy.io/` + crew.crew_img" />
       </div>
       <div class="col-8">
         <div class="row">

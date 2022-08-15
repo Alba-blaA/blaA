@@ -1,6 +1,6 @@
 // 기본 url
 // const HOST = process.env.VUE_APP_API_URL + "/api/v1";
-const HOST = "http://localhost:8000/api/v1/";
+const HOST = "https://i7b209.p.ssafy.io/api/v1/";
 
 // ===================================
 // 세부 url

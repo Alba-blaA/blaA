@@ -34,7 +34,7 @@ export default {
     const tH = ref(null);
     const gap = ref(null);
     // 로컬에서는 해당 형식으로 작동
-    const host = ref('http://localhost:8000');
+    const host = ref('https://i7b209.p.ssafy.io');
     // const host = ref(api.story.host());
 
     tH.value = round(props.image.height / (props.image.width / 200)) + 30;
