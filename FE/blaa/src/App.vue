@@ -14,7 +14,7 @@
 
     <!-- <button @click.prevent="logout">로그아웃</button> -->
     <!-- <button @click.prevent="gochatroom">채팅하러가기</button> -->
-    <button @click.prevent="gostory">오출완가기</button>
+    <button @click="gostory">오출완가기</button>
     <!-- <button @click.prevent="gosearch">유저정보검색하기</button> -->
     <button @click.prevent="goMyProfile">마이프로필</button>
     <button @click.prevent="gocrew">크루가기</button>

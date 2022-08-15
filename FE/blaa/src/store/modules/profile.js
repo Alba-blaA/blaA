@@ -44,11 +44,12 @@ const profileStore = {
         })
         .catch((err) => {});
     },
-    async getFollowerList(context, user_pk) {
+    async getFollowerList(context, user_pk, page) {
       await axios
         .get(api.profile.myFollow(user_pk), {
           params: {
             type: "follower",
+            page: page,
           },
         })
         .then((response) => {
