@@ -254,12 +254,7 @@ export default {
 </script>
 
 <style>
-#profile {
-  width: 150px;
-  height: 150px;
-  border-radius: 70%;
-  overflow: hidden;
-}
+
 
 .imgProfile {
   width: 9.6rem;

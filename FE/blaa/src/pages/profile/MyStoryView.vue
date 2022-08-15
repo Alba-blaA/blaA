@@ -5,7 +5,7 @@
     <div id="story"></div>
     <!-- <p>{{myStoryList}}</p> -->
   </div>
-
+  
 </template>
 
 <script>
@@ -34,12 +34,13 @@ export default {
       });
     };
     onMounted(() =>{
-
+      console.log(myStoryList)
       const storyDateList = []
     // const length_story = myStoryList.length()
       for (let story of myStoryList){
         
         if (storyDateList.includes(story.created_at.substr(0,10))){
+        
           const div = document.getElementsByClassName(`${story.created_at.substr(0,10).replaceAll('-','')}`)[0]
           const Img = document.createElement("img");
           Img.setAttribute('src',"https://i7b209.p.ssafy.io"+story.story_picture)
