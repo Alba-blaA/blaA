@@ -1,15 +1,34 @@
 <template>
   <div class="store" @click="moveToDetail">
-    <img :src="replaceUrl.value" alt="이미지">
-    <br>
-    <p>{{review.name}}</p>
+    <div class="storeInfo">
+      <img :src="replaceUrl.value" alt="이미지">
+      <p style="width: 100%">{{review.name}}</p>
+    </div>
+    <div class="star-ratings" :style="{ left : starWidth}">
+        <div 
+          class="star-ratings-fill space-x-2 text-lg"
+          :style="{ width: score + '%' }"
+        >
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        </div>
+        <div class="star-ratings-base space-x-2 text-lg">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        </div>
+      </div>
+      <div id="buttons">
+        <div v-for="button in high_button" :key="button.id">
+          <div class="high-button">{{button}}</div>
+        </div>
+      </div>
   </div>
   
 </template>
 
 <script>
+import { ref } from 'vue'
 import { computed } from '@vue/runtime-core'
 import { useRouter } from 'vue-router'
+import $ from 'jquery'
 export default {
   props: {
     review: {
@@ -18,11 +37,36 @@ export default {
   },
   setup(props) {
     const router = useRouter()
+    const url = String(props.review.image)
     const replaceUrl = computed(() => {
-      return props.review.image.replace('media/', 'api/v1/')
+      return url.replace('media/', 'api/v1/')
     })
 
-    console.log(replaceUrl.value)
+    // 버튼
+    const buttonType = ['친절한 사장님', '깨끗한 매장', '좋은 분위기', '교통 접근성', '칼퇴근 가능', '유니폼 제공']
+    const score = props.review.star * 20 + 1.5
+    const high_button = ref([])
+    for (let i=0; i < 3; i++){
+      let max_idx = 0
+      let max_value = 0
+      for (let j=0; j < 6; j++) {
+        if (props.review.button[buttonType[j]] > max_value && !high_button.value.includes(buttonType[j])) {
+          max_value = Number(props.review.button[buttonType[j]])
+          max_idx = j
+        }
+      }
+      if (max_value == 0) {
+        break
+      }
+      high_button.value.push(buttonType[max_idx])
+    }
+
+    high_button.value.forEach(ele => {
+      return props.review.button[ele]
+    })
+
+    // 별점 위치
+    let starWidth = (($(window).width() / (10/9))- 160) + 'px'
     
     const moveToDetail = () => {
       router.push({
@@ -35,7 +79,10 @@ export default {
     }
     return {
       moveToDetail,
-      replaceUrl
+      replaceUrl,
+      score,
+      high_button,
+      starWidth
     }
   }
 }
@@ -47,9 +94,80 @@ export default {
   padding: 5px;
   margin: 5px;
   border-radius: 10px;
-  background-color: rgb(202, 255, 197);
+  background-color: #F8F9FE;
 }
+
+.storeInfo {
+  display: flex;
+  grid-template-columns: 30% auto;
+  padding: 14px 0 0 12px;
+}
+
+img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
 p {
-  margin: 0
+  padding: 5px 0 0 10px;
+  font-weight: bold;
+  font-size: 20px;
 }
+
+span {
+  padding: 0 1px;
+  font-size: 20px;
+}
+
+/* 별점 css */
+.star-ratings {
+  color: #aaa9a9; 
+  position: relative;
+  display: inline-block;
+  unicode-bidi: bidi-override;
+  width: max-content;
+  margin-bottom: 10px;
+  /* margin-right: 20px; */
+  -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: 1.3px;
+  -webkit-text-stroke-color: #E58D1F;
+}
+ 
+.star-ratings-fill {
+  color: #fff58c;
+  padding: 0;
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  -webkit-text-fill-color: #E58D1F;
+}
+ 
+.star-ratings-base {
+  z-index: 0;
+  padding: 0;
+}
+
+#buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.high-button {
+  background-color: #F5F5F5;
+  text-align: center;
+  border-radius: 12px;
+  width: 115px;
+  height: 24px;
+  padding: 0px 4px;
+  margin-left: 4px;
+  font-weight: bold;
+  color: #E58D1F;
+}
+
 </style>

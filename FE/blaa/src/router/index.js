@@ -36,7 +36,7 @@ import MyInfo from "@/pages/profile/MyInfoView.vue";
 import UserProfile from "@/pages/profile/UserProfileView.vue";
 import SetBlackList from "@/pages/profile/BlackListView.vue";
 import DeleteAccount from "@/pages/profile/DeleteAccountView.vue";
-import Notification from "@/pages/notification/NotificationView.vue"
+import Notification from "@/pages/notification/NotificationView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -44,7 +44,7 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: Home,
+      component: () => import("@/pages/MainLoadingView.vue"),
     },
     {
       path: "/login",
@@ -117,12 +117,14 @@ const router = createRouter({
           path: "regist",
           name: "crewregistview",
           redirect: { name: "crewregist" },
-          component: () => import("@/components/crew/manage/CrewRegistView.vue"),
+          component: () =>
+            import("@/components/crew/manage/CrewRegistView.vue"),
           children: [
             {
               path: "",
               name: "crewregist",
-              component: () => import("@/components/crew/manage/CrewRegistInput.vue"),
+              component: () =>
+                import("@/components/crew/manage/CrewRegistInput.vue"),
             },
           ],
         },
@@ -166,50 +168,56 @@ const router = createRouter({
         {
           path: "leave/:crew_pk",
           name: "crewleave",
-          component: () => import("@/components/crew/member/CrewMemberLeave.vue"),
+          component: () =>
+            import("@/components/crew/member/CrewMemberLeave.vue"),
         },
         {
           path: ":crew_pk",
           name: "crewboard",
           redirect: { name: "articlelist" },
-          component: () => import("@/components/crew/CrewBoard.vue"),
+          component: () => import("@/components/crew/list/CrewBoard.vue"),
           children: [
             {
               path: "list",
               name: "articlelist",
-              component: () => import("@/components/crew/article/ArticleList.vue"),
+              component: () =>
+                import("@/components/crew/article/ArticleList.vue"),
             },
             {
               path: "regist",
               name: "articleregist",
-              component: () => import("@/components/crew/article/ArticleRegist.vue"),
+              component: () =>
+                import("@/components/crew/article/ArticleRegist.vue"),
             },
             {
               path: ":crew_article_pk",
               name: "articledetail",
-              component: () => import("@/components/crew/article/ArticleDetail.vue"),
+              component: () =>
+                import("@/components/crew/article/ArticleDetail.vue"),
             },
             {
               path: ":crew_article_pk",
               name: "articlemodify",
-              component: () => import("@/components/crew/article/ArticleModify.vue"),
+              component: () =>
+                import("@/components/crew/article/ArticleModify.vue"),
             },
             {
               path: ":crew_article_pk",
               name: "articledelete",
-              component: () => import("@/components/crew/article/ArticleDelete.vue"),
+              component: () =>
+                import("@/components/crew/article/ArticleDelete.vue"),
             },
             {
               path: "schedule",
               name: "schedule",
               component: () => import("@/components/crew/schedule/ScheduleView.vue"),
-              // children: [
-              //   {
-              //     path: "calendar",
-              //     name: "calendar",
-              //     component: () => import("@/components/crew/schedule/ScheduleView.vue"),
-              //   },
-              // ],
+              
+            },
+            {
+              path: "scheduleregister",
+              name: "scheduleregister",
+              component: () => import("@/components/crew/schedule/ScheduleRegisterView.vue"),
+              
             },
             // {
             //   path: "crewmember",
@@ -220,14 +228,16 @@ const router = createRouter({
             {
               path: "",
               name: "crewmemberlist",
-              component: () => import("@/components/crew/member/CrewMemberList.vue"),
+              component: () =>
+                import("@/components/crew/member/CrewMemberList.vue"),
             },
           ],
         },
         {
           path: "request",
           name: "crewmemberrequestlist",
-          component: () => import("@/components/crew/member/CrewMemberRequestList.vue"),
+          component: () =>
+            import("@/components/crew/member/CrewMemberRequestList.vue"),
         },
       ],
     },
@@ -277,6 +287,11 @@ const router = createRouter({
           path: ":user_pk/update",
           name: "updateInfo",
           component: UpdateUserInfo,
+        },
+        {
+          path: ":user_pk/updatePassword",
+          name: "updatePassword",
+          component: () => import("@/pages/profile/UpdatePasswordView.vue"),
         },
         {
           path: ":user_pk/:followType",
@@ -342,10 +357,9 @@ const router = createRouter({
     },
     {
       path: "/notifications",
-      name : "notifications",
-      component : Notification,
-    }
-    
+      name: "notifications",
+      component: Notification,
+    },
   ],
 });
 

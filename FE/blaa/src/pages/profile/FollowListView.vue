@@ -26,6 +26,10 @@
         <td colspan="100%"><hr /></td>
       </tr>
     </table>
+    <infinite-loading
+      @infinite="infiniteHandler"
+      spinner="waveDots"
+    ></infinite-loading>
   </div>
 
   <div v-else>
@@ -54,6 +58,10 @@
         <td colspan="100%"><hr /></td>
       </tr>
     </table>
+    <infinite-loading
+      @infinite="infiniteHandler"
+      spinner="waveDots"
+    ></infinite-loading>
   </div>
 </template>
 
@@ -61,15 +69,20 @@
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { ref, computed } from "vue";
+import axios from "@/api/axios.js";
+import InfiniteLoading from "v3-infinite-loading";
 
 export default {
+  components: {
+    InfiniteLoading,
+  },
   setup() {
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
 
-    const followerList = ref({});
-    const followingList = ref({});
+    const followerList = store.state.profile.followerList;
+    const followingList = store.state.profile.followingList;
 
     if (route.params.followType === "follower") {
       followerList.value = store.state.profile.followerList;
@@ -86,6 +99,30 @@ export default {
       return false;
     });
 
+    const infiniteHandler = async ($state) => {
+      if (store.state.profile.followerList.next) {
+        await axios
+          .get(store.state.profile.followerList.next)
+          .then((response) => {
+            console.log("추가 팔로워리스트 : ", response.data);
+            const followerData = ref({});
+            followerData.value = response.data;
+
+            store.commit("profile/GET_FOLLOWER_LIST", followerData);
+          });
+        setTimeout(() => {
+          console.log(
+            "페이지 추가 followerlist : ",
+            store.state.profile.followerList
+          );
+          followerList.value = store.state.profile.followerList.results;
+          $state.loaded();
+        }, 1000);
+      } else {
+        $state.complete();
+      }
+    };
+
     const userProfile = (user_pk) => {
       console.log("다른 유저 프로필 페이지 이동");
       router.push({
@@ -100,6 +137,7 @@ export default {
       followerList,
       followingList,
       isFollower,
+      infiniteHandler,
       userProfile,
     };
   },

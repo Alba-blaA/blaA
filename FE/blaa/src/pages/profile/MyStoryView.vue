@@ -26,7 +26,7 @@ export default {
     const router = useRouter();
     const store = useStore();
 
-    const HOST = "http://localhost:8000";
+    const HOST = "https://i7b209.p.ssafy.io";
 
     const myStoryList = store.state.profile.myStory;
     console.log("myStory : ", myStoryList);

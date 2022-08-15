@@ -163,8 +163,11 @@ const accountStore = {
         (response) => {
           if (response.status === 200) {
             console.log("response : ", response);
-            commit("USER_INFO", response.data.user);
-            console.log("userInfo : ", response.data.user);
+            var userInfo = response.data.user;
+            userInfo.token = userInfo.token.slice(2, -1);
+            console.log("변경된 userInfo", userInfo);
+            commit("USER_INFO", userInfo);
+            console.log("userInfo : ", userInfo);
             commit("SAVE_STATE_TO_STORAGE");
           } else {
             console.log("유저 정보 없음");

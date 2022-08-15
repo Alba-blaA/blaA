@@ -1,6 +1,6 @@
 // 기본 url
 // const HOST = process.env.VUE_APP_API_URL + "/api/v1";
-const HOST = "http://localhost:8000/api/v1/";
+const HOST = "https://i7b209.p.ssafy.io/api/v1/";
 
 // ===================================
 // 세부 url
@@ -12,6 +12,7 @@ const REVIEW = "reviews/";
 const STORE = "store/";
 const CREW = "crews/";
 const NOTIFICATION = "notifications/";
+const SCHEDULE = "schedule/"
 // const CHAT = 'chat/'
 
 export default {
@@ -49,6 +50,7 @@ export default {
     // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
     acceptcrew: (crew_pk) => HOST + CREW + "accept_crew/" + crew_pk + "/",
     refusecrew: (crew_pk) => HOST + CREW + "deny_crew/" + crew_pk + "/",
+    registercrewschedule: (crew_pk) => HOST + CREW + SCHEDULE + crew_pk + "/"
   },
   categorys: {
     job: () => HOST + CATEGORYS + "job/",
@@ -85,7 +87,7 @@ export default {
   notification: {
     getnotifications: () => HOST + NOTIFICATION,
     getinvitedcrewlist: () => HOST + CREW + "signlist/",
-    deletenotification : (notification_pk) => HOST + NOTIFICATION + notification_pk ,
-    makeviewtrue : (notification_pk) => HOST + NOTIFICATION + notification_pk
+    deletenotification: (notification_pk) => HOST + NOTIFICATION + notification_pk,
+    makeviewtrue: (notification_pk) => HOST + NOTIFICATION + notification_pk,
   },
 };

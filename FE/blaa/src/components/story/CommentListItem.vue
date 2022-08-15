@@ -3,11 +3,17 @@
       <br>
       <div class="comment-info">
         <div>
+          <img :src="comment.user_pk.image" alt="프로필 이미지">
+        </div>
+        <div>
           <span>{{ comment.user_pk.nickname }}</span> <span>작성일: {{ comment.created_at }}</span> 
         </div>
         <div v-if="user_pk == comment.user_pk.user_pk">
-          <span style="display:inline-block; margin-right:10px; cursor:pointer" @click="isFix=true">수정</span>
-          <span style="display:inline-block; cursor:pointer" @click="commnetDelete">X</span>
+          <i class="fa fa-solid fa-bars" @click="isUpdate=!isUpdate"></i>
+          <div v-if="isUpdate" id="update">
+            <div style="cursor:pointer" @click="[isFix=true, isUpdate=!isUpdate]">수정</div>
+            <div style="cursor:pointer" @click="[commnetDelete, isUpdate=!isUpdate]">X</div>
+          </div>
           <PopUp v-if="popUpOpen" @close-modal="popUpOpen=false">
             <div class="modal-content">
             <p>정말 삭제하시겠습니까?</p>
@@ -45,6 +51,7 @@ export default {
     const user_pk = store.state.account.userInfo.user_pk
     const isFix = ref(false)
     const changeComment = ref('')
+    const isUpdate = ref(false)
     changeComment.value += String(props.comment.story_comment)
 
     const commnetDelete = async() => {
@@ -61,13 +68,16 @@ export default {
       isFix.value = false
     }
 
+    
+
     return {
       user_pk,
       popUpOpen,
       commnetDelete,
       commentFix,
       isFix,
-      changeComment
+      changeComment,
+      isUpdate
     }
   }
 }
@@ -77,5 +87,11 @@ export default {
 .comment-info {
   display: flex;
   justify-content: space-between;
+}
+
+#update {
+  position: absolute;
+  display: white;
+
 }
 </style>

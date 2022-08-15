@@ -25,6 +25,8 @@
         <div v-if="value == 1" class="buttonReview" >{{name}}</div>
       </div>
     </div>
+
+    <button @click="deleteReview">삭제</button>
 </template>
 
 <script>
@@ -70,13 +72,25 @@ export default {
       })
     }
 
+    const deleteReview = async() => {
+      await store.dispatch('review/deleteReview', review_pk)
+      router.push({
+        name: 'detailReview',
+        params: {
+          store_name: route.params.store_name,
+          store_pk: route.params.store_pk
+        }
+      })
+    }
+
     return {
       review,
       moveToPrevious,
       score,
       store_name,
       user_pk,
-      update
+      update,
+      deleteReview
     } 
   }
 }

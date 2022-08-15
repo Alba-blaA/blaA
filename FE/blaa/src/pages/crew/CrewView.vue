@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h3>크루 페이지</h3>
     <router-view></router-view>
   </div>
 </template>
@@ -11,4 +10,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+div {
+  /* 상단바와 거리 조정 */
+  /* padding-top: 75px; */
+}
+</style>

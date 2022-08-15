@@ -6,8 +6,8 @@
         <span>{{ comment.nickname }}</span> <span>작성일: {{ comment.created_at }}</span>
       </div>
       <div v-if="user_pk == comment.user">
-        <span style="display: inline-block; margin-right: 10px; cursor: pointer" @click="fixComment">수정</span>
-        <span style="display: inline-block; cursor: pointer" @click="commnetDelete">X</span>
+        <span style="display: inline-block; margin-right: 10px; cursor: pointer" @click="modiComment">수정</span>
+        <span style="display: inline-block; cursor: pointer" @click="deleComment">삭제</span>
         <!-- <PopUp v-if="popUpOpen" @close-modal="popUpOpen = false">
           <div class="modal-content">
             <p>정말 삭제하시겠습니까?</p>
@@ -46,10 +46,15 @@ export default {
     //   await store.dispatch('story/deleteComment', comment_pk)
     // }
 
+    const deleComment = async () => {
+      const comment_pk = props.comment.crew_comment_pk;
+      await store.dispatch("crew/deleComment", comment_pk);
+    };
+
     return {
       user_pk,
       popUpOpen,
-      // commnetDelete,
+      deleComment,
     };
   },
 };

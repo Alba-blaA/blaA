@@ -121,11 +121,15 @@ export default {
           },
           params: {
             id: hashtag,
-          },
-        });
-        commit("GET_IMAGES", res.data.story_pk);
-      } catch (error) {
-        console.log(error);
+          }
+        })
+        const data = []
+        for (const story in res.data) {
+          data.push(res.data[story].story_pk)
+        }
+        commit('GET_IMAGES', data)
+      } catch(error) {
+        console.log(error)
       }
     },
     async getCurrentStory({ commit, state }, story_pk) {

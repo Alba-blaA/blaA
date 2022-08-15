@@ -47,6 +47,10 @@ export default {
       // 작성자, 내용, 날짜가 객체로 들어감
       state.comments.push(payload);
     },
+    DELETE_COMMENT(state, payload) {
+      const idx = state.comments.findIndex((ele) => ele.crew_comment_pk == payload);
+      state.comments.splice(idx, 1);
+    },
   },
   actions: {
     ///////////////////////////Crew Article/////////////////////////////////
@@ -258,6 +262,19 @@ export default {
         const instance = await axios.get(api.crew.comment(crew_article_pk));
         console.log(instance.data);
         commit("GET_COMMENTS", instance.data.results);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async deleComment({ commit }, crew_comment_pk) {
+      try {
+        const instance = await axios.get(api.crew.commentUpdate(crew_comment_pk));
+        console.log(instance.data);
+        console.log(instance.status);
+        commit("DELETE_COMMENT", crew_comment_pk);
+        if (instance.status == 200) {
+          alert("삭제가 완료되었습니다.");
+        }
       } catch (error) {
         console.log(error);
       }

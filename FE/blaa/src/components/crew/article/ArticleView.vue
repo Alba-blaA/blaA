@@ -9,9 +9,7 @@ export default {
   components: {
     // BoardList,
   },
-}
+};
 </script>
 
-<style>
-
-</style>
+<style></style>
