@@ -1,35 +1,35 @@
 <template>
-  <h1>메인페이지</h1>
-
-  <div v-if="userInfo">
-    <div v-if="isKakaoLogin">
-      <p style="float: left">{{ userInfo.nickname }} 님</p>
-      &nbsp;
-      <img src="@/img/KakaoLogo.jpg" width="60" height="26" />
-    </div>
-    <div v-else>
-      <p>{{ userInfo.nickname }} 님</p>
-    </div>
-    <br />
-
-    <!-- <button @click.prevent="logout">로그아웃</button> -->
-    <!-- <button @click.prevent="gochatroom">채팅하러가기</button> -->
-    <button @click.prevent="gostory">오출완가기</button>
-    <!-- <button @click.prevent="gosearch">유저정보검색하기</button> -->
-    <button @click.prevent="goMyProfile">마이프로필</button>
-    <button @click.prevent="gocrew">크루가기</button>
-    <button @click.prevent="goReview">리뷰가기</button>
-  </div>
-
-  <div v-else>
-    <p>로그인이 필요합니다.</p>
-    <button type="button" @click="login">로그인</button>
-    &nbsp;
-    <button type="button" @click="kakaoLogin">카카오 로그인</button>
-    &nbsp;
-    <button @click="register">회원가입</button>
-  </div>
   <router-view></router-view>
+
+  <!-- <div v-if="userInfo">
+      <div v-if="isKakaoLogin">
+        <p style="float: left">{{ userInfo.nickname }} 님</p>
+        &nbsp;
+        <img src="@/img/KakaoLogo.jpg" width="60" height="26" />
+      </div>
+      <div v-else>
+        <p>{{ userInfo.nickname }} 님</p>
+      </div>
+      <br /> -->
+
+  <!-- <button @click.prevent="logout">로그아웃</button> -->
+  <!-- <button @click.prevent="gochatroom">채팅하러가기</button> -->
+  <!-- <button @click.prevent="gostory">오출완가기</button> -->
+  <!-- <button @click.prevent="gosearch">유저정보검색하기</button> -->
+  <!-- <button @click.prevent="goMyProfile">마이프로필</button>
+      <button @click.prevent="gocrew">크루가기</button>
+      <button @click.prevent="goReview">리뷰가기</button>
+    </div>
+
+    <div v-else>
+      <p>로그인이 필요합니다.</p>
+      <button type="button" @click="login">로그인</button>
+      &nbsp;
+      <button type="button" @click="kakaoLogin">카카오 로그인</button>
+      &nbsp;
+      <button @click="register">회원가입</button>
+    </div> -->
+  <!-- <router-view></router-view> -->
 </template>
 
 <script>
@@ -115,7 +115,7 @@ export default {
       userInfo,
       login,
       kakaoLogin,
-      
+
       register,
       gochatroom,
       gostory,
@@ -128,6 +128,31 @@ export default {
 </script>
 
 <style>
+/* .next-leave-to {
+  animation: leaveToLeft 500ms both cubic-bezier(0.165, 0.84, 0.44, 1);
+  z-index: 0;
+}
+@keyframes leaveToLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-25%);
+    filter: brightness(0.5);
+  }
+}
+
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease-out;
+}
+.fade-leave-to {
+  opacity: 0;
+} */
+
 #profile {
   width: 150px;
   height: 150px;
