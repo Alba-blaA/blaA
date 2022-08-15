@@ -210,15 +210,18 @@ def follow_story_list(request):
     if tmp :
 
         story = Story.objects.filter(user_pk=tmp[0])
+        
         for user in range(1,len(tmp)) :
             story_res = story | Story.objects.filter(user_pk=tmp[user])
             story=story_res
+        cnt = {'count':story.count()}
         paginator = Paginator(story, 10) # Show 25 contacts per page.
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         serializer = StorySerializer(page_obj, many=True)
-
-        return Response(serializer.data)
+        response_data=serializer.data
+        response_data.append(cnt)
+        return Response(response_data)
     else :
         story = Story.objects.filter(~Q(user_pk=request.user.user_pk))
         serializer = StorySerializer(story, many=True)
