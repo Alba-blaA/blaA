@@ -19,7 +19,7 @@ export default {
         comment_content: comment.value,
         crew_article_pk: route.params.crew_article_pk,
       });
-      
+      comment.value = "";
     };
 
     return {

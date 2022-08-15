@@ -3,23 +3,51 @@
   <!-- <div style="width: 100%; height: 500px; background-color: #a94442"></div> -->
 
   <div class="bottom_menu">
-    <div>
-      <img src="@/assets/Footer/home.png" width="25px" />
+    <div @click.prevent="gostory">
+      <img width="25" src="@/assets/Footer/home.png" />
     </div>
-    <div>
-      <img src="@/assets/Footer/group.png" width="25px" />
+    <div @click.prevent="gocrew">
+      <img width="25" src="@/assets/Footer/group.png" />
     </div>
-    <div>
-      <img src="@/assets/Footer/store.png" width="25px" />
+    <div @click.prevent="goReview">
+      <img width="25" src="@/assets/Footer/store.png" />
     </div>
-    <div>
-      <img src="@/assets/Footer/gear.png" width="25px" />
+    <div @click.prevent="goMyProfile">
+      <img width="25" src="@/assets/Footer/gear.png" />
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import { useRouter } from "vue-router";
+export default {
+  setup() {
+    const router = useRouter();
+
+    const gostory = () => {
+      router.push({ path: "/story" });
+    };
+
+    const gocrew = () => {
+      router.push({ path: "/crew" });
+    };
+
+    const goMyProfile = async () => {
+      router.push({ path: "/profile" });
+    };
+
+    const goReview = () => {
+      router.push({ path: "/review" });
+    };
+
+    return {
+      gostory,
+      gocrew,
+      goMyProfile,
+      goReview,
+    };
+  },
+};
 </script>
 
 <style scoped>
@@ -27,9 +55,7 @@ export default {};
   position: fixed;
   bottom: 0px;
   left: 0px;
-  right: 0px;
-  bottom: 0;
-  width: 360px;
+  width: 360px; /*화면 가로크기에 따라 변경됨.*/
   height: 50px;
   z-index: 100;
   border-top: 1px solid black;

@@ -175,7 +175,7 @@ const router = createRouter({
           path: ":crew_pk",
           name: "crewboard",
           redirect: { name: "articlelist" },
-          component: () => import("@/components/crew/CrewBoard.vue"),
+          component: () => import("@/components/crew/list/CrewBoard.vue"),
           children: [
             {
               path: "list",

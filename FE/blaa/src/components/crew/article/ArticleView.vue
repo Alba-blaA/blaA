@@ -1,8 +1,6 @@
 <template>
   <div>게시판-view</div>
-  <div id="contents">
-    <router-view></router-view>
-  </div>
+  <router-view></router-view>
 </template>
 
 <script>
@@ -14,12 +12,4 @@ export default {
 };
 </script>
 
-<style>
-#contents {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 6rem;
-}
-</style>
+<style></style>
