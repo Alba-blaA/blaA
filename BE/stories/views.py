@@ -13,6 +13,7 @@ from .serializers.hashtag import HashtagSerializer
 from django.db.models import Q
 from django.core.paginator import Paginator
 # Create your views here.
+from .serializers.hashtag import HashtagSerializer,HashtagFilterSerializer
 
 @api_view(['GET', 'POST'])
 def story_list_or_create(request):
@@ -146,7 +147,7 @@ def comment_update_or_delete(request, comment_pk):
 def hashtag_list_or_create(request, story_pk):
     
     def hashtag_list():
-        story = get_object_or_404(Story, story_pk = story_pk)
+        story = get_object_or_404(Story, story_pk = story_pk).order_by('-created_at')
 
         hashtags = get_list_or_404(Hashtag,story_pk=story)
         serializer = HashtagSerializer(hashtags, many= True)
@@ -212,7 +213,7 @@ def follow_story_list(request):
         story = Story.objects.filter(user_pk=tmp[0])
         
         for user in range(1,len(tmp)) :
-            story_res = story | Story.objects.filter(user_pk=tmp[user])
+            story_res = story | Story.objects.filter(user_pk=tmp[user]).order_by('-created_at')
             story=story_res
         cnt = {'count':story.count()}
         paginator = Paginator(story, 10) # Show 25 contacts per page.
@@ -268,6 +269,14 @@ def story_category_filter(request):
     response_data=serializer.data
     response_data.append(cnt)
     return Response(response_data)
+    
+@api_view(['GET'])   
+def hashtag_filter(request):
+    tmp = request.GET.get('id',"")
+    tmp3 = tmp.split(" ")
+    story = Hashtag.objects.distinct().filter(Q(hashtag_content__in = tmp3))
+    serializer = HashtagFilterSerializer(story, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])   
 def story_both_filter(request):
