@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <!-- <div class="header">
     <div v-if="userInfo">
       <div v-if="isKakaoLogin">
         <p style="float: left">{{ userInfo.nickname }} 님</p>
@@ -18,6 +18,9 @@
       &nbsp;
       <button @click="register">회원가입</button>
     </div>
+  </div> -->
+  <div>
+    
   </div>
 </template>
 
