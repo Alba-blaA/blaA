@@ -61,7 +61,7 @@ export default {
 
         const filteredUsers = computed(() => {
         if (searchText.value) {
-            return state.users.filter( user => {
+            return state.users.filter(user => {
             return user.nickname.includes(searchText.value);
             });
         }
@@ -78,16 +78,12 @@ export default {
             if(userInfo){               
                
                 axios.get(api.accounts.searchallusers(),
-                 ).then((response) =>{
-                    
-                     state.users = response.data
-                            
+                 ).then((response) =>{                    
+                     state.users = response.data                          
 
                  }                        
-                )
-                
+                )               
             }
-
         })
         
         const inviteuser = async (invitingcrew_pk, inviteduser_pk) => {

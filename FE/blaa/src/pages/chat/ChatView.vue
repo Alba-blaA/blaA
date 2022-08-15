@@ -17,7 +17,6 @@
   
   <div class="view chat"  v-if="userInfo">
     <header>
-      <button class="logout" @click="Logout">Logout</button>
       <h1>{{ state.username }}'s Chatting Room</h1>      
     </header>    
     <section class = "chat-box">
@@ -30,6 +29,7 @@
         </div>
       </div>
     </section>
+
     <footer>
       <form @submit.prevent="SendMessage">
         <input 
@@ -38,7 +38,7 @@
           placeholder="Write a message..." />
         <input 
           type="submit" 
-          value="Send" />     
+          value="전송" />     
       </form>
     </footer>    
   </div>
@@ -284,7 +284,7 @@ export default {
     background-color: #FFF;
     box-shadow: 0px 0px 12px rgba(100, 100, 100, 0.2);
     flex: 1 1 100%;
-    padding: 30px;
+    padding: 12px;
   }
   .view.chat .chat-box .message {
     display: flex;
@@ -319,13 +319,13 @@ export default {
   .view.chat .chat-box .message.current-user .message-inner .content {
     color: #FFF;
     font-weight: 600;
-    background-color: #18d140;
+    background-color: #4ecc49;
   }
   .view.chat footer {
     position: sticky;
     bottom: 0px;
     background-color: #FFF;
-    padding: 30px;
+    padding: 0px;
     box-shadow: 0px 0px 12px rgba(100, 100, 100, 0.2);
   }
   .view.chat footer form {
@@ -339,12 +339,11 @@ export default {
     background: none;
     display: block;
     width: 100%;
-    padding: 10px 15px;
-    border-radius: 8px 0px 0px 8px;
+    padding: 10px 15px;    
     color: #333;
     font-size: 18px;
     box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
-    background-color: #F3F3F3;
+   
     transition: 0.4s;
   }
   .view.chat footer form input[type=text]::placeholder {
@@ -358,11 +357,15 @@ export default {
     background: none;
     display: block;
     padding: 10px 15px;
-    border-radius: 0px 8px 8px 0px;
-    background-color: #0b8b13;
+    border-radius: 20px 20px 20px 20px;
+    background-color: #498D6D;
     color: #FFF;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 700;
+    margin-top : 10px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    margin-right: 3px;
   }
   
 
