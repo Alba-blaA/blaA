@@ -4,7 +4,7 @@
       <div v-if="isKakaoLogin">
         <p style="float: left">{{ userInfo.nickname }} 님</p>
         &nbsp;
-        <img src="@/img/KakaoLogo.jpg" width="60" height="26" />
+        <img src="@/img/KakaoLogo.png" width="60" height="26" />
       </div>
       <div v-else>
         <p>{{ userInfo.nickname }} 님</p>
@@ -53,7 +53,7 @@ export default {
 
     const kakaoLogin = () => {
       const params = {
-        redirectUri: "http://localhost:3000/kakao",
+        redirectUri: "https://i7b209.p.ssafy.io/kakao",
         // redirectUri: "http://127.0.0.1:8000/account/sign-in/kakao/callback",
       };
       window.Kakao.Auth.authorize(params);

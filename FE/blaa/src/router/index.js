@@ -44,7 +44,7 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: Home,
+      component: () => import("@/pages/MainLoadingView.vue"),
     },
     {
       path: "/login",

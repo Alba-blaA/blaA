@@ -87,7 +87,7 @@ export default {
     const route = useRoute();
     const router = useRouter();
 
-    const HOST = ref("http://localhost:8000");
+    const HOST = ref("https://i7b209.p.ssafy.io");
 
     const userInfo = store.state.account.userInfo;
     console.log(userInfo);

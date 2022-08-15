@@ -75,7 +75,7 @@ export default {
     const router = useRouter();
     const store = useStore();
 
-    const HOST = ref("http://localhost:8000");
+    const HOST = ref("https://i7b209.p.ssafy.io");
 
     const userProfile = ref({});
 

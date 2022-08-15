@@ -31,7 +31,7 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const article = ref([]);
-    const host = ref("http://localhost:8000");
+    const host = ref("https://i7b209.p.ssafy.io");
 
     const getDetail = async () => {
       await store.dispatch("crew/getArtileDetail", route.params.crew_article_pk);

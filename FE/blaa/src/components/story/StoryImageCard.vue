@@ -45,7 +45,7 @@ export default {
     const width = ref(0);
     const height = ref(0);
     // 로컬에서는 해당 형식으로 작동
-    const host = ref('http://localhost:8000');
+    const host = ref('https://i7b209.p.ssafy.io');
     const time = ref('')
     // const host = ref(api.story.host());
 

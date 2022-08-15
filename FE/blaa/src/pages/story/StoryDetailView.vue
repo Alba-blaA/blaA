@@ -64,7 +64,7 @@ export default {
     PopUp
   },
   setup() {
-    const host = "http://localhost:8000"
+    const host = "https://i7b209.p.ssafy.io"
     const store = useStore()
     const story = ref({})
     const isError = ref(false)
