@@ -11,14 +11,20 @@ from .serializers.story import StoryLikeSerializer, StorySerializer,StoryDetailS
 from .serializers.comment import CommentSerializer
 from .serializers.hashtag import HashtagSerializer
 from django.db.models import Q
+from django.core.paginator import Paginator
 # Create your views here.
 
 @api_view(['GET', 'POST'])
 def story_list_or_create(request):
     
     def story_list():
-        story = Story.objects.all()
-        serializer = StorySerializer(story, many=True)
+        story = Story.objects.all().order_by('-created_at')
+        paginator = Paginator(story, 10) # Show 25 contacts per page.
+
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        serializer = StorySerializer(page_obj, many=True)
+        print(page_obj)
         return Response(serializer.data)
     
     def create_story():
@@ -212,10 +218,12 @@ def follow_story_list(request):
         for user in range(1,len(tmp)) :
             story_res = story | Story.objects.filter(user_pk=tmp[user])
             story=story_res
-            
-        serializer = StorySerializer(story, many=True)
+        paginator = Paginator(story, 10) # Show 25 contacts per page.
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        serializer = StorySerializer(page_obj, many=True)
+        print(page_obj)
         return Response(serializer.data)
-    
     else :
         story = Story.objects.filter(~Q(user_pk=request.user.user_pk))
         serializer = StorySerializer(story, many=True)
@@ -239,6 +247,12 @@ def like_story(request, story_pk):
 def story_region_filter(request):
     story = Story.objects.filter(Q(region= request.user.region)&~Q(user_pk = request.user))
     # story = get_list_or_404(Story, region= request.user.region, user_pk != request.user)
+    paginator = Paginator(story, 10) # Show 25 contacts per page.
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    serializer = StorySerializer(page_obj, many=True)
+    print(page_obj)
+    return Response(serializer.data)
     serializer = StorySerializer(story, many=True)
     return Response(serializer.data)
 
