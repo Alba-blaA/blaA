@@ -12,9 +12,7 @@
     <input id="update-profileImg" class="update-profileImg" @change="updateProfileImg" type="file" style="display: none;"/>
 
   </div>
-  <h4 class="mt-3" style="text-align:center;">{{ userInfo.nickname }}</h4>
-
-  <br />
+  <h4 class="mt-3 mb-2" style="text-align:center; font-weight: bold;">{{ userInfo.nickname }}</h4>
 
   <div class="d-flex justify-content-center">
       <table>
@@ -22,7 +20,7 @@
           <td rowspan="4" align="center" @click="follower">
           <div style="margin-right: 0.5rem;">
 
-            <b style="font-size:large">
+            <b style="font-size:1.2rem">
               {{ follow.followers }}
               <br />
               <p >팔로워</p>
@@ -32,7 +30,7 @@
           &nbsp; &nbsp;
           <td rowspan="4" align="center" @click="following">
           <div style="margin-left: 0.5rem;">
-            <b style="font-size:large">
+            <b style="font-size:1.2rem">
               {{ follow.followings }}
               <br />
               <p>팔로잉</p>
@@ -67,7 +65,7 @@
 
       <hr />
       <div @click="showinvitedcrewlist">
-        <h5 class="profile_list"><b>나를초대한크루리스트</b></h5>
+        <h5 class="profile_list"><b>초대받은 크루</b></h5>
       </div>
 
       <hr />
@@ -264,12 +262,13 @@ export default {
 }
 
 .imgProfile {
-  width: 9rem;
-  height: 9rem;
+  width: 9.6rem;
+  height: 9.6rem;
   object-fit: cover;
 }
 
 .profile_list{
   margin-left: 1rem;
+  font-weight: bold;
 }
 </style>
