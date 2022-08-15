@@ -16,10 +16,18 @@ class StorySerializer(serializers.ModelSerializer):
     
     user_pk = UserSerializer(read_only=True)
     story_picture = serializers.ImageField()
+    # count = serializers.SerializerMethodField()
+
+    # def get_count(self,obj) :
+    #     cnt = Story.objects.all().count()
+    #     return cnt
+
     class Meta:
         model = Story
         fields = '__all__'
         read_only_fields = ('user_pk','region','category','user_pk','like_user')
+
+
 
 
 class StoryDetailSerializer(serializers.ModelSerializer) :
