@@ -1,6 +1,6 @@
 <template>
   <header-view></header-view>
-  <div class="container" style="padding-top: 80px; padding-bottom: 80px">
+  <div class="container" style="padding-top: 80px; padding-bottom: 60px">
     <router-view></router-view>
   </div>
   <footer-view></footer-view>

@@ -33,7 +33,6 @@
         </div>
       </div>
     </section>
-
     <footer>
       <form @submit.prevent="SendMessage">
         <input 
@@ -46,6 +45,7 @@
       </form>
     </footer>    
   </div>
+
   <div v-else>
     <h1>로그인이 필요합니다.</h1>    
   </div>
@@ -79,10 +79,8 @@ export default {
     const userInfo = store.state.account.userInfo; 
     const from_userpk = route.params.from_userpk 
     const from_usernickname = route.params.from_usernickname
-    
-    
-    
-    
+  
+            
 
     console.log("from_userpk는",from_userpk)
      
@@ -117,7 +115,8 @@ export default {
         username: state.username,
         content: inputMessage.value,
         from_userpk: userInfo.user_pk,
-        to_userpk: parseInt(from_userpk),        
+        to_userpk: parseInt(from_userpk),
+        profileurl : userInfo.image        
       }
 
       await messageRef.push(message); 
@@ -131,7 +130,7 @@ export default {
     })
 
     onMounted(() => {
-      console.log(userInfo);
+      console.log(userInfo.image);
       if (userInfo) {
         state.username = store.state.account.userInfo.nickname
         axios.get(api.accounts.myInfo(from_userpk)).then((response) => {
@@ -334,7 +333,7 @@ export default {
   .view.chat .chat-box .message.current-user .message-inner .content {
     color: #FFF;
     font-weight: 600;
-    background-color: #4ecc49;
+    background-color: #498D6D;
   }
   .view.chat footer {
     position: sticky;

@@ -9,14 +9,14 @@
               <input v-model="searchText" type="text" placeholder="닉네임 검색" />
           </div>
           <div class="list">
-              <ul>
+              <ul style="padding-left : 1rem">
                   <li @click="gochat(message.from_userpk, message.username)" v-for="message in filteredMessages" :key = "message.key">
                       <table cellpadding="0" cellspacing="0">
                           <tr>
                               <td class="profile_td">
                               <!--ProfileImg-->
-                                  <img src="" />
-                                  <div>{{ message.from_userpk }}</div>
+                                  <img id = "chatprofile" class="imgProfile" :src=" HOST + message.profileurl" />  
+                                                        
                               </td>
                               <td class="chat_td">
                               <!--Email & Preview-->
@@ -32,8 +32,10 @@
                   </li>          
               </ul>
           </div>
+      </div>      
+      <div class="d-flex justify-content-center">
+        <span @click.prevent="gosearch" class="material-symbols-outlined">add_circle</span>
       </div>
-      <button @click.prevent="gosearch">유저정보검색하기</button>
     </div>
     
     <div v-else>
@@ -60,6 +62,7 @@ export default {
       }}
       )
     }
+    const HOST = ref("https://i7b209.p.ssafy.io");
 
     const store = useStore();
 
@@ -81,13 +84,22 @@ export default {
     });
 
     const state = reactive({      
-      messages: [],      
+      messages: [],
+      userprofile : "",      
       
     })
 
+    const pkToimage = (async (user_pk) => {
+      await axios.get(api.accounts.myInfo(user_pk)).then((response) => {                   
+            state.userprofile =  response.data.image            
+          })
+          return state.userprofile
+    })
+    console.log("결과" + pkToimage(1));
+
     onMounted(() =>  {      
       if (userInfo) {
-        const messageRef = db.database().ref("messages");     
+        const messageRef = db.database().ref("messages");        
         
         messageRef.on('value', snapshot =>  {
           const data = snapshot.val();
@@ -100,6 +112,7 @@ export default {
                 username: data[key].username,
                 content: data[key].content,
                 from_userpk : data[key].from_userpk,
+                profileurl : data[key].profileurl,
                 to_userpk : data[key].to_userpk,
                 to_usernickname : "sorry",
                 to_userprofileurl : "you failed"                
@@ -134,7 +147,9 @@ export default {
       state,
       filteredMessages,
       searchText,
-      gosearch
+      gosearch,
+      HOST,
+      pkToimage
 
     }
   }
@@ -156,7 +171,7 @@ body {
 .chat_list_wrap .header {
   font-size: 14px;
   padding: 15px 0;
-  background: #1daa13;
+  background: #498D6D;
   color: white;
   text-align: center;
   font-family: "Josefin Sans", sans-serif;
@@ -172,9 +187,7 @@ body {
   border: 0;
   text-align: center;
 }
-.chat_list_wrap .list {
-  padding: 0 16px;
-}
+
 .chat_list_wrap .list ul {
   width: 100%;
   list-style: none;
