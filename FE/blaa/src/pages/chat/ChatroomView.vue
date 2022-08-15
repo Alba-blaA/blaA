@@ -1,38 +1,43 @@
 <template>
-
 <body>
-    <div class="chat_list_wrap">
-        <div class="header">
-            {{ userInfo.nickname }}'s bla
-        </div>
-        <div class="search">
-            <input v-model="searchText" type="text" placeholder="닉네임 검색" />
-        </div>
-        <div class="list">
-            <ul>
-                <li @click="gochat(message.from_userpk)" v-for="message in filteredMessages" :key = "message.key">
-                    <table cellpadding="0" cellspacing="0">
-                        <tr>
-                            <td class="profile_td">
-                            <!--ProfileImg-->
-                                <img src="" />
-                                <div>{{ message.from_userpk }}</div>
-                            </td>
-                            <td class="chat_td">
-                            <!--Email & Preview-->
-                                <div class="email">
-                                    {{ message.username}}
-                                </div>
-                                <div class="chat_preview">
-                                    {{ message.content }}
-                                </div>
-                            </td>                            
-                        </tr>
-                    </table>
-                </li>
-        
-            </ul>
-        </div>
+    <div v-if="userInfo">
+      <div class="chat_list_wrap">
+          <div class="header">
+              {{ userInfo.nickname }}'s bla
+          </div>
+          <div class="search">
+              <input v-model="searchText" type="text" placeholder="닉네임 검색" />
+          </div>
+          <div class="list">
+              <ul>
+                  <li @click="gochat(message.from_userpk)" v-for="message in filteredMessages" :key = "message.key">
+                      <table cellpadding="0" cellspacing="0">
+                          <tr>
+                              <td class="profile_td">
+                              <!--ProfileImg-->
+                                  <img src="" />
+                                  <div>{{ message.from_userpk }}</div>
+                              </td>
+                              <td class="chat_td">
+                              <!--Email & Preview-->
+                                  <div class="username">
+                                      {{ message.username}}
+                                  </div>
+                                  <div class="chat_preview">
+                                      {{ message.content }}
+                                  </div>
+                              </td>                            
+                          </tr>
+                      </table>
+                  </li>          
+              </ul>
+          </div>
+      </div>
+      <button @click.prevent="gosearch">유저정보검색하기</button>
+    </div>
+    
+    <div v-else>
+      <div>로그인이 필요함</div>
     </div>
 </body>     
 </template>
@@ -43,7 +48,7 @@ import db from '@/db'
 import { reactive, onMounted, ref, computed } from 'vue';
 import { useStore } from "vuex";
 import api from "@/api/api.js"
-import axios from 'axios'
+import axios from "@/api/axios.js";
 
 export default {
   setup () {
@@ -56,9 +61,15 @@ export default {
     }
 
     const store = useStore();
+
     const userInfo = store.state.account.userInfo;
 
     const searchText = ref('');
+
+    const gosearch = () => {
+      router.push({ path: "/searchusers" });
+    };
+    
     const filteredMessages = computed(() => {
       if (searchText.value) {
         return state.messages.filter( message => {
@@ -73,7 +84,7 @@ export default {
       
     })
 
-    onMounted(async () =>  {      
+    onMounted(() =>  {      
       if (userInfo) {
         const messageRef = db.database().ref("messages");     
         
@@ -97,20 +108,16 @@ export default {
           )          
           let arrayUniqueByKey = [...new Map(messages.map(item =>
           [item['from_userpk'], item])).values()];
-          let token = sessionStorage.getItem("token");
-
+          
           for (let index = 0; index < arrayUniqueByKey.length; index++)  {                         
-            axios.get(api.accounts.pkinfo(arrayUniqueByKey[index]['from_userpk']),
-            {
-              headers : {"Authorization": `Bearer ${token}`}
-            }).then(response => {                          
+            axios.get(api.accounts.myInfo(arrayUniqueByKey[index]['from_userpk']),
+           ).then(response => {                          
               arrayUniqueByKey[index]['to_usernickname'] = response.data.nickname,
               arrayUniqueByKey[index]['to_userprofileurl'] = response.data.image                                            
             })                 
                                    
           }
-          state.messages = arrayUniqueByKey;
-          console.log(state.messages);
+          state.messages = arrayUniqueByKey;         
         
           // state.messages = arrayUniqueByKey;  
           // console.log(state.messages[2]['to_usernickname']);      
@@ -125,7 +132,8 @@ export default {
       userInfo,
       state,
       filteredMessages,
-      searchText
+      searchText,
+      gosearch
 
     }
   }
@@ -187,7 +195,7 @@ body {
   width: 50px;
   height: auto;
 }
-.chat_list_wrap .list ul li table td.chat_td .email {
+.chat_list_wrap .list ul li table td.chat_td .username {
   font-size: 12px;
   font-weight: bold;
 }

@@ -1,19 +1,67 @@
 <template>
   <div id="login">
-    <br />
-    <form>
-      <input id="login-id" v-model="user.email" placeholder="Enter email" />
+    <div style="display: table-cell; vertical-align: middle">
+      <!-- <br /> -->
+      <h1 id="login-text">로그인</h1>
       <br />
-      <input
-        id="login-userpw"
-        type="password"
-        autocomplete="off"
-        v-model="user.password"
-        placeholder="Enter Password"
+      <b-form>
+        <b-form-group>
+          <b-form-input
+            id="login-id"
+            type="email"
+            v-model="user.email"
+            placeholder="EMAIL"
+          ></b-form-input>
+          <!-- <b>{{ message }}</b> -->
+        </b-form-group>
+
+        <b-form-group>
+          <b-form-input
+            id="login-password"
+            type="password"
+            v-model="user.password"
+            placeholder="PASSWORD"
+            autocomplete="off"
+          ></b-form-input>
+          <!-- <b>{{ message }}</b> -->
+        </b-form-group>
+        <div class="row">
+          <b-button
+            class="col-sm-12"
+            pill
+            variant="light"
+            @click.prevent="confirm"
+            ><b>로그인</b></b-button
+          >
+        </div>
+
+        <div class="row">
+          <b-button class="col-sm-12" pill variant="light" @click="register"
+            ><b>회원가입</b></b-button
+          >
+        </div>
+      </b-form>
+
+      <div class="find-account">
+        <b class="find">아이디 찾기</b> &nbsp;
+        <b class="find">비밀번호 찾기</b>
+      </div>
+
+      <br />
+      <br />
+      <div style="position: relative">
+        <hr style="width: 25%; float: left" />
+        <b style="font-size: 20px; text-align: center">소셜 로그인</b>
+        <hr style="width: 25%; float: right" />
+      </div>
+
+      <br />
+      <img
+        id="login-kakao"
+        src="@/img/KakaoLogo.png"
+        @click.prevent="kakaoLogin"
       />
-    </form>
-    <br /><br />
-    <div><button @click.prevent="confirm">Login</button> <br /></div>
+    </div>
   </div>
 </template>
 
@@ -45,10 +93,12 @@ export default {
       await store.dispatch("account/userConfirm", user.value);
 
       let token = sessionStorage.getItem("token");
+      console.log("Login Token : ", token);
       if (isLogin.value) {
         await store.dispatch("account/getUserInfo", token);
+        // await store.commit("account/USER_INFO")
         console.log("로그인 성공!!!!!");
-        router.push("/");
+        router.push("/story");
       } else {
         console.log("isLogin : ", store.state.account.isLogin);
         console.log("isLoginError : ", store.state.account.isLoginError);
@@ -56,14 +106,69 @@ export default {
       }
     };
 
+    const register = () => {
+      router.push({ name: "signup" });
+    };
+
+    const kakaoLogin = () => {
+      const params = {
+        redirectUri: "http://localhost:3000/kakao",
+        // redirectUri: "http://127.0.0.1:8000/account/sign-in/kakao/callback",
+      };
+      window.Kakao.Auth.authorize(params);
+    };
+
     return {
       user,
       isLoginError,
       isLogin,
       confirm,
+      register,
+      kakaoLogin,
     };
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+#login {
+  padding: 40px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: auto;
+  text-align: center;
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+#login-text {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 35px;
+  line-height: 42px;
+  text-align: center;
+}
+
+.row {
+  padding: 10px;
+}
+
+.find-account {
+  float: right;
+  margin-top: 10px;
+}
+
+.find {
+  font-size: 12px;
+  color: gray;
+}
+
+#login-kakao {
+  width: 50px;
+  height: 50px;
+}
+</style>

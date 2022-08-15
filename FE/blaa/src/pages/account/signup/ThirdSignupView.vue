@@ -1,6 +1,30 @@
 <template>
-  <h3>회원가입 3단계</h3>
+  <div id="signup">
+    <div id="signup-top">
+      <h1 class="signup-text">회원가입</h1>
+      <div class="signup-step">
+        <div class="yellow-circle"><b class="signup-num">1</b></div>
+        <img class="arrow" src="@/img/yellow_arrow.png" />
+        <div class="gray-circle"><b class="signup-num">2</b></div>
+        <img class="arrow" src="@/img/gray_arrow.png" />
+        <div class="gray-circle"><b class="signup-num">3</b></div>
+      </div>
+    </div>
 
+    <b-form>
+      <b-form-group>
+        <b-form-input
+          id="signup-nickname"
+          type="text"
+          v-model="user.nickname"
+          placeholder="NICKNAME"
+        >
+        </b-form-input>
+        <b-button>중복확인</b-button>
+      </b-form-group>
+    </b-form>
+  </div>
+  <!-- 
   <input
     id="signup-nickname"
     v-model="user.nickname"
@@ -53,7 +77,7 @@
   <div>
     <button @click.prevent="before">이전</button> &nbsp;
     <button @click.prevent="signup">가입</button>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -190,6 +214,7 @@ export default {
                 "회원가입 후 vuex : ",
                 store.state.account.signupUser
               );
+              alert("회원가입 완료!");
             } else {
               console.log("회원가입 문제 발생");
               console.log("회원가입 문제 에러코드 : ", response.status);

@@ -47,19 +47,14 @@ urlpatterns = [
     path('api/v1/categorys/',include('categorys.urls')),
     path('api/v1/reviews/',include('reviews.urls')),
     path('api/v1/stories/',include('stories.urls')),
-<<<<<<< HEAD
-    path('account/',include('accounts.urls')),
+    # path('account/',include('accounts.urls')),
     path('api/v1/blacklist/', include('blacklists.urls')),
-    
-]
-=======
     path('api/v1/crews/',include('crews.urls')),
-
-
+    path('api/v1/notifications/',include('notifications.urls')),
     #--------------------swagger--------------
     path('api/v1/swagger.json', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     # path('swagger(?P<format>\.json|\.yaml)$/', schema_view.without_ui(cache_timeout=0), name='swagger'),
     path('api/v1/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('api/v1/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
->>>>>>> develop
+    

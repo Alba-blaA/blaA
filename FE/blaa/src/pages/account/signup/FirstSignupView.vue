@@ -1,7 +1,29 @@
 <template>
-  <h3>회원가입 1단계</h3>
-  <button @click.prevent="isAlba">아르바이트를 하고 있어요</button> &nbsp;
-  <button @click.prevent="isPublic">아르바이트를 안 하고 있어요</button>
+  <img class="back" src="@/img/back.png" @click="back" />
+  <div id="signup">
+    <div id="signup-top">
+      <h1 class="signup-text">회원가입</h1>
+      <div class="signup-step">
+        <div class="yellow-circle"><b class="signup-num">1</b></div>
+        <img class="arrow" src="@/img/yellow_arrow.png" />
+        <div class="gray-circle"><b class="signup-num">2</b></div>
+        <img class="arrow" src="@/img/gray_arrow.png" />
+        <div class="gray-circle"><b class="signup-num">3</b></div>
+      </div>
+    </div>
+
+    <div id="signup1-form">
+      <br /><br />
+
+      <div id="is-alba-true" @click.prevent="isAlba">
+        아르바이트를 하고 있어요
+      </div>
+
+      <div id="is-alba-false" @click.prevent="isPublic">
+        아르바이트를 안 하고 있어요
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -11,6 +33,10 @@ import router from "@/router/index.js";
 export default {
   setup() {
     const store = useStore();
+
+    const back = () => {
+      router.go(-1);
+    };
 
     const isAlba = () => {
       store.commit("account/SET_SIGNUP_ALBA", true);
@@ -25,6 +51,7 @@ export default {
     };
 
     return {
+      back,
       isAlba,
       isPublic,
     };
@@ -32,4 +59,114 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.back {
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+#signup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: auto;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  padding-top: 70px;
+  border: 3px solid yellow;
+}
+
+#signup-top {
+  margin-top: 40px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.signup-text {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 35px;
+  line-height: 30px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.signup-step {
+  text-align: center;
+  display: inline-block;
+  height: 50px;
+  line-height: 50px;
+}
+
+.yellow-circle {
+  width: 50px;
+  height: 50px;
+  background-color: #eec95c;
+  border-radius: 50%;
+  float: left;
+  position: relative;
+}
+
+.gray-circle {
+  width: 50px;
+  height: 50px;
+  background-color: #d9d9d9;
+  border-radius: 50%;
+  float: left;
+  position: relative;
+}
+
+.signup-num {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 36px;
+  text-align: center;
+  color: #ffffff;
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+}
+
+.arrow {
+  float: left;
+  max-height: 100%;
+  vertical-align: middle;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+#signup1-form {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#is-alba-true {
+  float: right;
+  width: 258px;
+  height: 177px;
+  left: 102px;
+  top: 261px;
+
+  background: #d9d9d9;
+  border-radius: 50px 0px 0px 50px;
+}
+
+#is-alba-false {
+  float: left;
+  width: 258px;
+  height: 177px;
+  left: 102px;
+  top: 261px;
+
+  background: #d9d9d9;
+  border-radius: 0px 50px 50px 0px;
+}
+</style>

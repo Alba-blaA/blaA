@@ -1,10 +1,7 @@
 // import jwt_decode from "jwt-decode";
 import { login, findByToken } from "@/hooks/user.js";
-import { useCookies } from "vue3-cookies";
-import axios from "axios";
+import axios from "@/api/axios.js";
 import api from "@/api/api.js";
-
-const { cookies } = useCookies();
 
 const accountStore = {
   namespaced: true,
@@ -166,8 +163,11 @@ const accountStore = {
         (response) => {
           if (response.status === 200) {
             console.log("response : ", response);
-            commit("USER_INFO", response.data.user);
-            console.log("userInfo : ", response.data.user);
+            var userInfo = response.data.user;
+            userInfo.token = userInfo.token.slice(2, -1);
+            console.log("변경된 userInfo", userInfo);
+            commit("USER_INFO", userInfo);
+            console.log("userInfo : ", userInfo);
             commit("SAVE_STATE_TO_STORAGE");
           } else {
             console.log("유저 정보 없음");

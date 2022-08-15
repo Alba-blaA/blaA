@@ -11,6 +11,11 @@
     <p class="form-input">가게주소 : {{storeAddress}}</p>
     <p v-if="storeError" class="error">가게를 검색해주세요</p>
   </div>
+  <div v-if="isStore">
+    <label for="store_picture">가게 사진 등록</label>
+    <input class="store_picture" id="store_picture" type="file" @change="previewFile"/><br />
+    <img class="img_test" src="" height="200" alt="이미지 미리보기..." />
+  </div>
   <!-- 별점 -->
   <span>별점 : </span>
   <form id="myform" class="mb-3" @click="checkStar">
@@ -26,7 +31,7 @@
   <p v-if="starError" class="error">별점을 입력해주세요</p>
   <hr>
   <!-- 버튼식 -->
-  <form @click="checkBtn">
+  <form @click="checkBtn" id="buttonReview">
     <label for="kind" class="btn"><input type="checkbox" name="reviewBtn" vlaue="1" id="kind" class="checkList" >친절한 사장님</label>
     <label for="clean" class="btn"><input type="checkbox" name="reviewBtn" value="2" id="clean" class="checkList">깨끗한 매장</label>
     <label for="short" class="btn"><input type="checkbox" name="reviewBtn" value="3" id="short" class="checkList">교통 접근성</label>
@@ -45,7 +50,7 @@
 
 <script>
 import ReviewMap from '@/components/review/ReviewMap.vue'
-import { ref } from 'vue'
+import { onMounted, ref, onBeforeMount, watch, onUnmounted } from 'vue'
 import $ from 'jquery'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -69,14 +74,64 @@ export default {
     const starError = ref(false)
     const isStore = ref(true)
     const store_pk = ref(0)
+    const store_picture = ref(null)
+    const image_url = ref('')
+
+    onUnmounted(() => {
+      storeButton.value = [0,0,0,0,0,0]
+      console.log($('#buttonReview'))
+      console.log($('#buttonReview').find('.selected'))
+      $('#buttonReview').find('.selected').each( function() {
+        console.log($(this))
+        $(this).removeClass("selected")
+      })
+      console.log('언마운트')
+    })
 
     // 상점 선택하기
     const selectStore = (data) => {
       store_pk.value = data.store_pk
       isStore.value = data.isStore
+      console.log(isStore.value)
       storeName.value = data.name
       storeAddress.value = data.region
       isModalOpen.value = false
+    }
+
+    // 사진 등록하기
+    const previewFile = (e) => {
+      const preview = document.querySelector('.img_test')
+      if (e.target.files[0]) {
+        store_picture.value = e.target.files[0]
+        const reader = new FileReader();
+
+        // 파일명을 가져와서 소문자로 변환
+        let fileName = store_picture.value.name.substring(
+          store_picture.value.name.lastIndexOf(".") + 1
+        )
+        fileName = fileName.toLowerCase()
+
+        // 파일 형식과 3MB의 파일크기 확인
+        if (
+          ["jpeg", "png", "gif", "bmp"].includes(fileName) && store_picture.value.size <= 25165824
+        ) {
+          reader.onload = e => {
+            preview.src = e.target.result
+            image_url.value = e.target.result
+          }
+          reader.readAsDataURL(store_picture.value)
+        } else if (store_picture.value.size <= 25165824) {
+          preview.src = null
+        } else {
+          alert('파일을 다시 선택해 주세요')
+          store_picture.value = null
+          preview.src = null
+        }
+      // 파일을 선택하지 않았을 떄
+      } else {
+        store_picture.value = null
+        preview.src = null
+      }
     }
 
     // 별점 가져오기
@@ -111,8 +166,8 @@ export default {
             buttonType.push(String(idx+1))
           }
         }
-        console.log(buttonType)
-        const data = {
+
+        let data = {
           // 값을 생성하는지 아닌지 여부를 확인하기위해서
           isStore: isStore.value,
           store_pk: store_pk.value,
@@ -122,6 +177,33 @@ export default {
           oneline_review: oneReview.value,
           type: buttonType
         }
+
+        // 이미지 전달
+        if (store_picture.value) {
+          const form = new FormData()
+
+          form.append('image', store_picture.value)
+          form.append('name', storeName.value)
+          form.append('region', storeAddress.value)
+          
+          data = {
+            ...data,
+            form: form,
+          }
+
+        } else {
+          const form = new FormData()
+
+          form.append('name', storeName.value)
+          form.append('region', storeAddress.value)
+          
+          data = {
+            ...data,
+            form: form,
+          }
+        }
+        
+
         await store.dispatch('review/makeReviews', data).then(
           router.push({
             name: 'review'
@@ -147,7 +229,9 @@ export default {
       sumbitReview,
       starError,
       storeError,
-      oneReviewError
+      oneReviewError,
+      previewFile,
+      isStore
     }
   }
 }

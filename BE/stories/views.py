@@ -3,11 +3,13 @@ from django.shortcuts import get_list_or_404, get_object_or_404, render
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from collections import deque
+from notifications.models import Notification
 from .models import Hashtag, Story,Comment
 from accounts.models import User
-from .serializers.story import StorySerializer,StoryDetailSerializer
+from .serializers.story import StoryLikeSerializer, StorySerializer,StoryDetailSerializer
 from .serializers.comment import CommentSerializer
-from .serializers.hashtag import HashtagSerializer
+from .serializers.hashtag import HashtagSerializer,HashtagFilterSerializer
 from django.db.models import Q
 # Create your views here.
 
@@ -15,7 +17,7 @@ from django.db.models import Q
 def story_list_or_create(request):
     
     def story_list():
-        story = Story.objects.all()
+        story = Story.objects.all().order_by('-created_at')
         serializer = StorySerializer(story, many=True)
         return Response(serializer.data)
     
@@ -86,8 +88,10 @@ def comment_list_or_create(request, story_pk):
     def comment_create():
         story = get_object_or_404(Story, story_pk = story_pk)
         serializer = CommentSerializer(data=request.data)
+        story_user = story.user_pk
         if serializer.is_valid(raise_exception=True):
             serializer.save(user_pk = request.user, story_pk = story)
+            Notification.objects.create(type='story',user=story_user,content=f'{request.user.nickname}님이 {story_user.nickname}의 게시글에 댓글을 남겼습니다.',redirect_pk=story_pk)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     if request.method == 'GET':
@@ -138,7 +142,7 @@ def comment_update_or_delete(request, comment_pk):
 def hashtag_list_or_create(request, story_pk):
     
     def hashtag_list():
-        story = get_object_or_404(Story, story_pk = story_pk)
+        story = get_object_or_404(Story, story_pk = story_pk).order_by('-created_at')
         print(story)
         hashtags = get_list_or_404(Hashtag,story_pk=story)
         serializer = HashtagSerializer(hashtags, many= True)
@@ -201,16 +205,23 @@ def hashtag_update_or_delete(request, hashtag_pk):
         
 @api_view(['GET'])        
 def follow_story_list(request):
-    print(request.user.user_pk)
     tmp = request.user.followings.all()
-    print(tmp)
-    story = Story.objects.filter(user_pk=tmp[0])
-    for user in range(1,len(tmp)) :
-        story_res = story | Story.objects.filter(user_pk=tmp[user])
-        story=story_res
-    print(story)
-    serializer = StorySerializer(story, many=True)
-    return Response(serializer.data)
+    if tmp :
+        print(tmp)
+        story = Story.objects.filter(user_pk=tmp[0]).order_by('-created_at')
+        for user in range(1,len(tmp)) :
+            story_res = story | Story.objects.filter(user_pk=tmp[user])
+            story=story_res
+            
+        serializer = StorySerializer(story, many=True)
+        return Response(serializer.data)
+    
+    else :
+        story = Story.objects.filter(~Q(user_pk=request.user.user_pk)).order_by('-created_at')
+        serializer = StorySerializer(story, many=True)
+        response_data = serializer.data
+        response_data.insert(0,{"message" : f"{request.user.nickname} doesn't follow any users yet."})
+    return Response(response_data)
    
 @api_view(['POST'])     
 def like_story(request, story_pk):
@@ -218,15 +229,11 @@ def like_story(request, story_pk):
     user = request.user
     if story.like_user.filter(user_pk=user.pk).exists():
         story.like_user.remove(user)
-        context = {
-                'result' : f'{request.user.nickname}님이 좋아요 취소'
-        }
+        serializer = StoryLikeSerializer(story)
     else:
         story.like_user.add(user)
-        context = {
-                    'result' : f'{request.user.nickname}님이 좋아요 누름'
-                }
-    return Response(context)
+        serializer = StoryLikeSerializer(story)
+    return Response(serializer.data)
 
 @api_view(['GET'])   
 def story_region_filter(request):
@@ -255,3 +262,10 @@ def mystory_list(request,user_pk):
     serializer = StorySerializer(story, many=True)
     return Response(serializer.data)
     
+@api_view(['GET'])   
+def hashtag_filter(request):
+    tmp = request.GET.get('id',"")
+    tmp3 = tmp.split(" ")
+    story = Hashtag.objects.distinct().filter(Q(hashtag_content__in = tmp3))
+    serializer = HashtagFilterSerializer(story, many=True)
+    return Response(serializer.data)

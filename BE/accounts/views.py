@@ -1,13 +1,14 @@
-import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render,get_object_or_404
 from django.views import View
 from rest_framework.generics import GenericAPIView,UpdateAPIView,CreateAPIView,ListAPIView
+from accounts.pagination import CustomPageNumberPagination
+from notifications.models import Notification
 from accounts.models import User
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,permission_classes
 from accounts.serializers import  (RegisterSerializer,LoginSerializer, UserCrewSerializer, UserListSerializer, UserReviewSerializer,
                                    UserSerializer,ChangePasswordSerializer,
-                                   NicknameUniqueCheckSerializer,EmailUniqueCheckSerializer)
+                                   NicknameUniqueCheckSerializer,EmailUniqueCheckSerializer,UserNoneImageSerializer)
 from rest_framework import response,status,permissions
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
@@ -47,6 +48,7 @@ class UserListAPIView(ListAPIView) :
     #요청한 유저를 가져와서, serializer에 넣음 
     serializer_class = UserListSerializer
     queryset = User.objects.all()
+    pagination_class = None
 
 #회원가입 API (POST)
 class RegisterAPIView(GenericAPIView) :
@@ -125,7 +127,11 @@ class UserRetrieveUpdateDeleteAPIView(GenericAPIView):
         if request.user != user :
             return Response({'message':"You do not have permission to change the user's information,try again"},status=status.HTTP_400_BAD_REQUEST)
         #아니면 회원정보 수정 
-        serializer = UserSerializer(instance=user, data=request.data)
+
+        if request.FILES.get('image') :
+            serializer = UserSerializer(instance=user,data=request.data)
+        else : 
+            serializer = UserNoneImageSerializer(instance=user, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -155,6 +161,7 @@ def follow(request, user_pk):
                 }
             else:
                 person.followers.add(user)
+                Notification.objects.create(type='follow',user=person,content=f'{request.user.nickname}님이 {person.nickname}을 Follow 했습니다.',redirect_pk=request.user.pk)
                 context = {
                     'result' : f'{request.user.nickname}님이 {person.nickname}을 Follow'
                 }
@@ -162,127 +169,10 @@ def follow(request, user_pk):
     return redirect('accounts:login')
 
 
-class KakaoSignInView(View):
-    def get(self, request):
-        client_id = "0f5982ee3aa76733f951e5add93878c1"
-        redirect_uri = "http://127.0.0.1:8000/account/sign-in/kakao/callback"
-        return redirect(
-            f"https://kauth.kakao.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
-        )
 
-class KaKaoLogin(View):
-    # authentication_classes=[]
-    def get(self, request):
-        # API_HOST = f'https://kapi.kakao.com/v2/user/me'
-            
-        # response = requests.get(API_HOST)
-        # print(response)
-        # text = json.loads(response.text)
-        # print(response.status_code)
-        # print(text)
-        
-        # print(json.loads(request.body))
-        # data=json.loads(request.body)
-        auth_header = get_authorization_header(request)
-        # print(auth_header)
-        #받은 header를 utf-8로 디코딩한다. 
-        auth_data = auth_header.decode('utf-8')
-        # print(auth_data)
-        #token 형식이 Bearer + Token 이므로, ' '로 나눈다. 
-        auth_token = auth_data.split(' ')
-        print(auth_token)
-        URL = f'https://kapi.kakao.com/v2/user/me'
-        # token = '7LFdr9efDtY-y2oghj4VtF3FR-ZPIKyYwFQmNjRGCilwUQAAAYJnqUQx'
-        headers = {'Authorization': f'Bearer {auth_token[1]}','Content-Type': 'application/json; charset=utf-8'}
-        response = requests.get(URL, headers=headers)
-        print(response)
-        text = json.loads(response.text)
-        print(response.status_code)
-        print(text)
-        print(text.get('properties').get('nickname'))
-        
-        serializer_class = RegisterSerializer
-            
-        data = {
-            "email" : text.get('kakao_account').get('email'),
-            "name" : text.get('properties').get('nickname'),
-            "password" : "asdwghoiwehvewo",
-            "nickname" : "dfdfef",
-            "region" : "defs",
-            "category" : "fwberbe",
-            "is_alba" : True,
-                
-                }
-        if User.objects.filter(email=data['email']) :
-            user = User.objects.get(email=data['email']) 
-            print(user)
-            # payload = JWT_PAYLOAD_HANDLER(user)
-            # jwt_token = JWT_ENCODE_HANDLER(payload)
-            dt = datetime.now( ) + timedelta(days=60)
-            token = jwt.encode({
-                'id': user.pk,
-                'exp': dt.utcfromtimestamp(dt.timestamp())
-        }, settings.SECRET_KEY, algorithm='HS256')
-            # print(json.load(token))
-            print(str(token, 'utf-8'))
-            context = {
-                'token' :str(token, 'utf-8')
-            }
-            return JsonResponse(context)
-            # return HttpResponse(data={'token':token},status=status.HTTP_200_OK)
-        else :
-            #요청이 온 데이터로 serializer 
-            serializers = serializer_class(data=data)  
-            #오류가 발생하지 않으면 회원가입 승인 
-            if serializers.is_valid(raise_exception=True) :
-                serializers.save()
-                token = serializers.data['token']
-                print(token)
-                print(type(token))
-                token = token.split('\'')
-                print(token)
-                print(token[1])
-                serializers.data['token'] = token[1]
-                print(serializers.data)
-                print(serializers.data['token'])
-                
-                return JsonResponse(serializers.data,status=status.HTTP_201_CREATED)
-            return JsonResponse(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
 
-        
-class KakaoSignInCallbackView(View):
-    def get(self, request):
 
-        try:
-            print(request.GET)
-            code = request.GET.get("code")                                       
-            client_id = "0f5982ee3aa76733f951e5add93878c1"
-            redirect_uri = "http://127.0.0.1:8000/account/sign-in/kakao/callback"
-            
-            
-            token_request = requests.post(                                        
-                f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={client_id}&redirect_uri={redirect_uri}&code={code}"
-            )
 
-            token_json = token_request.json()                                    
-            print(token_json)
-            error = token_json.get("error",None)
-
-            if error is not None :
-                return JsonResponse({"message": "INVALID_CODE"}, status = 400)
-
-            access_token = token_json.get("access_token")
-            print(access_token)
-            
-                                    
-
-        except KeyError:
-            return JsonResponse({"message" : "INVALID_TOKEN"}, status = 400)
-
-        except access_token.DoesNotExist:
-            return JsonResponse({"message" : "INVALID_TOKEN"}, status = 400)
-    
-        
 class EmailUniqueCheck(CreateAPIView):
     authentication_classes=[]
     serializer_class = EmailUniqueCheckSerializer
@@ -293,9 +183,9 @@ class EmailUniqueCheck(CreateAPIView):
         if serializer.is_valid():
             return Response(data={'detail':['You can use this email']}, status=status.HTTP_200_OK)
         else:
-            detail = dict()
-            detail['detail'] = serializer.errors['email']
-            return Response(data=detail, status=status.HTTP_400_BAD_REQUEST)
+            # detail = dict()
+            # detail['detail'] = serializer.errors['email']
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 class NicknameUniqueCheck(CreateAPIView):
     authentication_classes=[]
@@ -310,15 +200,6 @@ class NicknameUniqueCheck(CreateAPIView):
             detail['detail'] = serializer.errors['nickname']
             return Response(data=detail, status=status.HTTP_400_BAD_REQUEST)
 
-
-
-# class UserCrewAPIView(ListAPIView) :
-#     serializer_class = UserCrewSerializer 
-#     lookup_field = 'user_pk'
-
-#     def get_queryset(self):
-#         print(self.request.user)
-#         return User.objects.filter(email=self.request.user)
 
 
 class UserCrewAPIView(ListAPIView) :
@@ -342,6 +223,7 @@ class UserCrewAPIView(ListAPIView) :
 
 class UserReviewAPIView(ListAPIView) :
     serializer_class = UserReviewSerializer 
+    pagination_class = CustomPageNumberPagination
     lookup_field = 'user_pk'
 
     def list(self, request,user_pk, *args, **kwargs):
@@ -358,3 +240,159 @@ class UserReviewAPIView(ListAPIView) :
     def get_queryset(self,user_pk):
         # print(self.request.user)
         return User.objects.filter(user_pk=user_pk)
+
+
+class FollowAPIView(ListAPIView) :
+
+    serializer_class = UserListSerializer
+    lookup_field = 'user_pk'
+    queryset = User.objects.all()
+    pagination_class = CustomPageNumberPagination
+    
+    def list(self, request, *args, **kwargs):
+        user = self.get_object()
+        queryset = User.objects.all()
+        type = request.GET.get('type', None)
+        print(type)
+        #내가 팔로우 하는 유저
+        if type == 'following' :
+            queryset = User.objects.filter(followers=user)
+        
+        #나를 팔로잉 하는 유저 
+        elif type == 'follower' :
+            queryset = User.objects.filter(followings=user)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+
+class KakaoSignInView(View):
+    def get(self, request):
+        client_id = "0f5982ee3aa76733f951e5add93878c1"
+        redirect_uri = "http://127.0.0.1:8000/account/sign-in/kakao/callback"
+        return redirect(
+            f"https://kauth.kakao.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
+        )
+
+class KakaoLogin(GenericAPIView) :
+    authentication_classes=[]
+    serializer_class = LoginSerializer
+    
+    def post(self,request) :
+
+        data = request.data
+        if User.objects.filter(email=data['email']) :
+            user = User.objects.get(email=data['email']) 
+
+            dt = datetime.now( ) + timedelta(days=60)
+            token = jwt.encode({
+                'id': user.pk,
+                'exp': dt.utcfromtimestamp(dt.timestamp())
+        }, settings.SECRET_KEY, algorithm='HS256')
+            # print(json.load(token))
+
+            context = {
+                'email' : data['email'],
+                'token' :str(token, 'utf-8')
+            }
+            
+            return JsonResponse(context)
+    # authentication_classes=[]
+# # API_HOST = f'https://kapi.kakao.com/v2/user/me'
+    
+# # response = requests.get(API_HOST)
+# # print(response)
+# # text = json.loads(response.text)
+# # print(response.status_code)
+# # print(text)
+
+# # print(json.loads(request.body))
+# # data=json.loads(request.body)
+# auth_header = get_authorization_header(request)
+# # print(auth_header)
+# #받은 header를 utf-8로 디코딩한다. 
+# auth_data = auth_header.decode('utf-8')
+# # print(auth_data)
+# #token 형식이 Bearer + Token 이므로, ' '로 나눈다. 
+# auth_token = auth_data.split(' ')
+# print(auth_token)
+# URL = f'https://kapi.kakao.com/v2/user/me'
+# # token = '7LFdr9efDtY-y2oghj4VtF3FR-ZPIKyYwFQmNjRGCilwUQAAAYJnqUQx'
+# headers = {'Authorization': f'Bearer {auth_token[1]}','Content-Type': 'application/json; charset=utf-8'}
+# response = requests.get(URL, headers=headers)
+# print(response)
+# text = json.loads(response.text)
+# print(response.status_code)
+# print(text)
+# print(text.get('properties').get('nickname'))
+
+# serializer_class = RegisterSerializer
+    
+# data = {
+#     "email" : text.get('kakao_account').get('email'),
+#     "name" : text.get('properties').get('nickname'),
+#     "password" : "asdwghoiwehvewo",
+#     "nickname" : "dfdfef",
+#     "region" : "defs",
+#     "category" : "fwberbe",
+#     "is_alba" : True,
+        
+#         }
+        # return HttpResponse(data={'token':token},status=status.HTTP_200_OK)
+    # else :
+    #     #요청이 온 데이터로 serializer 
+    #     serializers = serializer_class(data=data)  
+    #     #오류가 발생하지 않으면 회원가입 승인 
+    #     if serializers.is_valid(raise_exception=True) :
+    #         serializers.save()
+    #         token = serializers.data['token']
+    #         print(token)
+    #         print(type(token))
+    #         token = token.split('\'')
+    #         print(token)
+    #         print(token[1])
+    #         serializers.data['token'] = token[1]
+    #         print(serializers.data)
+    #         print(serializers.data['token'])
+            
+    #         return JsonResponse(serializers.data,status=status.HTTP_201_CREATED)
+    #     return JsonResponse(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
+
+        
+class KakaoSignInCallbackView(View):
+    def get(self, request):
+
+        try:
+            code = request.GET.get("code")                                       
+            client_id = "0f5982ee3aa76733f951e5add93878c1"
+            redirect_uri = "http://127.0.0.1:8000/account/sign-in/kakao/callback"
+            
+            
+            token_request = requests.post(                                        
+                f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={client_id}&redirect_uri={redirect_uri}&code={code}"
+            )
+
+            token_json = token_request.json()                                    
+
+            error = token_json.get("error",None)
+
+            if error is not None :
+                return JsonResponse({"message": "INVALID_CODE"}, status = 400)
+
+            access_token = token_json.get("access_token")
+            
+                                    
+
+        except KeyError:
+            return JsonResponse({"message" : "INVALID_TOKEN"}, status = 400)
+
+        except access_token.DoesNotExist:
+            return JsonResponse({"message" : "INVALID_TOKEN"}, status = 400)
+    
+        

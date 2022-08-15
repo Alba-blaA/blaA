@@ -43,7 +43,7 @@ class CrewArticleSerializer(serializers.ModelSerializer) :
 class CrewArticleRUDSerializer(serializers.ModelSerializer) :
     # crew_pk = CrewSerializerForArticle()
     images = serializers.SerializerMethodField()
-    image_update = serializers.BooleanField(write_only=True)
+    # image_update = serializers.BooleanField(write_only=True)
     def get_images(self, obj):
         image = obj.crewarticleimage_set.all()
         return ArticleImageSerializer(instance=image, many=True).data
@@ -59,7 +59,7 @@ class CrewArticleRUDSerializer(serializers.ModelSerializer) :
        
         instance.crew_title = validated_data.get('crew_title', instance.crew_title)
         instance.crew_content = validated_data.get('crew_content', instance.crew_content)
-        instance.crew_private = validated_data.get('crew_content', instance.crew_content)
+        instance.crew_private = validated_data.get('crew_private', instance.crew_private)
         instance.crew_pin = validated_data.get('crew_pin', instance.crew_pin)
         try:
             images_data = self.context['request'].FILES 
@@ -76,8 +76,6 @@ class CrewArticleRUDSerializer(serializers.ModelSerializer) :
                     image_instance_list.append(image)
 
             instance.crewarticleimage_set.set(image_instance_list)
-            # instance.crewarticleimage_set.all()
+        instance.save()
 
-        # print(instance.pk)
-        print(instance.crewarticleimage_set.all())
         return instance

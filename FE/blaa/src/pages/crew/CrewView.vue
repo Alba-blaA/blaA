@@ -1,9 +1,14 @@
 <template>
-  <h1>여기는 크루 페이지입니다!</h1>
+  <div>
+    <h3>크루 페이지</h3>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
-export default {};
+export default {
+  setup() {},
+};
 </script>
 
 <style></style>

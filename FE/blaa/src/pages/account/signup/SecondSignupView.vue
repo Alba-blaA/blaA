@@ -1,9 +1,48 @@
 <template>
-  <h3>회원가입 2단계</h3>
   <div id="signup">
-    <br />
-    <form>
-      <input id="signup-email" v-model="user.email" placeholder="Enter email" />
+    <div id="signup-top">
+      <h1 class="signup-text">회원가입</h1>
+      <div class="signup-step">
+        <div class="yellow-circle"><b class="signup-num">1</b></div>
+        <img class="arrow" src="@/img/yellow_arrow.png" />
+        <div class="yellow-circle"><b class="signup-num">2</b></div>
+        <img class="arrow" src="@/img/yellow_arrow.png" />
+        <div class="gray-circle"><b class="signup-num">3</b></div>
+      </div>
+    </div>
+
+    <b-form>
+      <b-form-group class="row" label="이메일">
+        <b-form-input
+          id="signup-email"
+          class="col-sm-6"
+          type="email"
+          v-model="user.email"
+          placeholder="EMAIL"
+        >
+        </b-form-input>
+        <b-button>중복확인</b-button>
+      </b-form-group>
+
+      <b-form-group class="row" label="비밀번호">
+        <b-form-input
+          id="signup-password"
+          class="col-sm-6"
+          type="email"
+          v-model="user.email"
+          placeholder="EMAIL"
+        >
+        </b-form-input>
+        <b-button>중복확인</b-button>
+      </b-form-group>
+    </b-form>
+    <!-- <form>
+      <input
+        id="signup-email"
+        type="email"
+        v-model="user.email"
+        placeholder="Enter email"
+      />
       &nbsp;
       <button id="btnEmailCheck" @click.prevent="emailCheck">중복확인</button>
       <br />
@@ -40,7 +79,7 @@
     <div>
       <button @click.prevent="before">이전</button> &nbsp;
       <button @click.prevent="next">다음</button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -68,7 +107,8 @@ export default {
 
     onMounted(() => {
       const kakaoLogin = store.state.account.kakaoLogin;
-      if(kakaoLogin) {
+      console.log("kakaoLogin : ", kakaoLogin);
+      if (kakaoLogin) {
         user.value.email = store.state.account.kakaoUserInfo.email;
         document.getElementById("signup-email").disabled = true;
         document.getElementById("btnEmailCheck");
@@ -81,7 +121,6 @@ export default {
         user.value.name = store.state.account.kakaoUserInfo.name;
         document.getElementById("signup-name").disabled = true;
       }
-      
     });
 
     const emailCheck = () => {
@@ -158,4 +197,84 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+#signup {
+  padding-left: 40px;
+  padding-right: 40px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: auto;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  padding-top: 70px;
+  border: 3px solid yellow;
+}
+
+#signup-top {
+  margin-top: 40px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.signup-text {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 35px;
+  line-height: 30px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.signup-step {
+  text-align: center;
+  display: inline-block;
+  height: 50px;
+  line-height: 50px;
+}
+
+.yellow-circle {
+  width: 50px;
+  height: 50px;
+  background-color: #eec95c;
+  border-radius: 50%;
+  float: left;
+  position: relative;
+}
+
+.gray-circle {
+  width: 50px;
+  height: 50px;
+  background-color: #d9d9d9;
+  border-radius: 50%;
+  float: left;
+  position: relative;
+}
+
+.signup-num {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 36px;
+  text-align: center;
+  color: #ffffff;
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+}
+
+.arrow {
+  float: left;
+  max-height: 100%;
+  vertical-align: middle;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+</style>

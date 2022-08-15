@@ -1,24 +1,24 @@
 // 기본 url
+// const HOST = process.env.VUE_APP_API_URL + "/api/v1";
 const HOST = "http://localhost:8000/api/v1/";
 
 // ===================================
 // 세부 url
 const ACCOUNTS = "accounts/";
-
 const CATEGORYS = "categorys/";
-// const STORY = 'story/'
-// const REVIEWS = 'reviews/'
-const STORY = 'stories/'
-const COMMENT = 'comment/'
-const REVIEW = 'reviews/'
-const STORE = 'store/'
-
-const CREW = 'crew/'
+const STORY = "stories/";
+const COMMENT = "comment/";
+const REVIEW = "reviews/";
+const STORE = "store/";
+const CREW = "crews/";
+const NOTIFICATION = "notifications/";
+const SCHEDULE = "schedule/"
 // const CHAT = 'chat/'
 
 export default {
   accounts: {
     login: () => HOST + ACCOUNTS + "login/",
+    kakaoLogin: () => HOST + ACCOUNTS + "kakao/",
     logout: () => HOST + ACCOUNTS + "logout/",
     signup: () => HOST + ACCOUNTS + "signup/",
     emailCheck: () => HOST + ACCOUNTS + "unique/email/",
@@ -28,50 +28,76 @@ export default {
     // username으로 프로필 제공
     profile: (username) => HOST + ACCOUNTS + "profile/" + username,
     myInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
+    searchallusers: () => HOST + ACCOUNTS + "users/",
   },
 
+  crew: {
+    crew: () => HOST + CREW,
+    crewInfo: (crew_pk) => HOST + CREW + crew_pk + "/",
+    article: (crew_article_pk) =>
+      HOST + CREW + "article/edit/" + crew_article_pk + "/",
+    crewmemebers: (crew_pk) => HOST + CREW + "user/" + crew_pk,
+    inviteuser: (crew_pk, user_pk) =>
+      HOST + CREW + "invite/" + crew_pk + "/" + user_pk + "/",
+    articles: (crew_pk) => HOST + CREW + "article/" + crew_pk + "/",
+    members: (crew_pk) => HOST + CREW + "user/" + crew_pk + "/",
+    sign: (crew_pk) => HOST + CREW + "sign/" + crew_pk + "/",
+    invitelist: (crew_pk, type) =>
+      HOST + CREW + "invitelist/" + crew_pk + "/?type=" + type,
+    accept: (crew_pk, user_pk) =>
+      HOST + CREW + "accept_user/" + crew_pk + "/" + user_pk + "/",
+    deny: (crew_pk, user_pk) =>
+      HOST + CREW + "deny_user/" + crew_pk + "/" + user_pk + "/",
+    leave: (crew_pk) => HOST + CREW + "leave/" + crew_pk + "/",
+    comment: (crew_article_pk) =>
+      HOST + CREW + "comment/" + crew_article_pk + "/",
+    commentUpdate: (crew_comment_pk) =>
+      HOST + CREW + "comment/update/" + crew_comment_pk + "/",
+
+    // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
+    acceptcrew: (crew_pk) => HOST + CREW + "accept_crew/" + crew_pk + "/",
+    refusecrew: (crew_pk) => HOST + CREW + "deny_crew/" + crew_pk + "/",
+    registercrewschedule: (crew_pk) => HOST + CREW + SCHEDULE + crew_pk + "/"
+  },
   categorys: {
     job: () => HOST + CATEGORYS + "job/",
     region: () => HOST + CATEGORYS + "region/",
   },
-  // 예시
-  // movies: {
-  //   // /articles/
-  //   movies: () => HOST + MOVIES,
-  //   // /articles/1/
-  //   movie: moviePk => HOST + MOVIES + ${moviePk},
-  //   reviews: moviePk => HOST + MOVIES + ${moviePk}/ + REVIEWS,
-  //   recommendations: moviePk => HOST2 + ${moviePk}/ + RECOMMENDATIONS + "?api_key=87931dd6e8327ea04518e5e2a6836196&language=ko",
-  //   search: value => HOST3 + ${value}& + "api_key=87931dd6e8327ea04518e5e2a6836196&language=ko",
-  //   review: (moviePk, reviewPk) =>
-  //     HOST + MOVIES + ${moviePk}/ + REVIEWS + ${reviewPk}/,
-  // },
-  // articles: {
-  //   // /articles/
-  //   articles: () => HOST + ARTICLES,
-  //   // /articles/1/
-  //   article: articlePk => HOST + ARTICLES + ${articlePk}/,
-  //   likeArticle: articlePk => HOST + ARTICLES + ${articlePk}/ + 'like/',
-  //   comments: articlePk => HOST + ARTICLES + ${articlePk}/ + COMMENTS,
-  //   comment: (articlePk, commentPk) =>
-  //     HOST + ARTICLES + ${articlePk}/ + COMMENTS + ${commentPk}/,
-  // },
   story: {
     host: () => HOST,
     story: () => HOST + STORY,
-    detail: (story_pk) => HOST + STORY + story_pk + '/',
-    like: (story_pk) => HOST + STORY + 'like/' + story_pk,
-    comment:(story_pk) => HOST + STORY + COMMENT + story_pk +'/',
-    commentChange: (comment_pk) => HOST + STORY + COMMENT + 'ud/' + comment_pk,
+    hashtag: () => HOST + STORY + "hashtag/filter/",
+    detail: (story_pk) => HOST + STORY + story_pk + "/",
+    like: (story_pk) => HOST + STORY + "like/" + story_pk + "/",
+    comment: (story_pk) => HOST + STORY + COMMENT + story_pk + "/",
+    commentChange: (comment_pk) =>
+      HOST + STORY + COMMENT + "ud/" + comment_pk + "/",
     myStory: (user_pk) => HOST + STORY + "mystory/" + user_pk + "/",
   },
   review: {
     store: () => HOST + REVIEW + STORE,
-    review: (store_pk) => HOST + REVIEW + store_pk + '/',
-    reviewDetail: (review_pk) => HOST + REVIEW + 'detail/' + review_pk + '/',
-    like: (review_pk) => HOST + REVIEW + 'like/' + review_pk
+    review: (store_pk) => HOST + REVIEW + store_pk + "/",
+    reviewDetail: (review_pk) => HOST + REVIEW + "detail/" + review_pk + "/",
+    like: (review_pk) => HOST + REVIEW + "like/" + review_pk + "/",
   },
-  crew: {
-    myCrew: (user_pk) => HOST + CREW + user_pk + "/",
-  }
+  profile: {
+    updateMyInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
+    updateMyPW: (user_pk) =>
+      HOST + ACCOUNTS + "change_password/" + user_pk + "/",
+    myFollow: (user_pk) => HOST + ACCOUNTS + "followlist/" + user_pk + "/",
+    myStory: (user_pk) => HOST + STORY + "mystory/" + user_pk + "/",
+    myReview: (user_pk) => HOST + ACCOUNTS + "review/" + user_pk + "/",
+    myCrew: (user_pk) => HOST + ACCOUNTS + "crew/" + user_pk + "/",
+    myInfo: (user_pk) => HOST + ACCOUNTS + user_pk + "/",
+    follow: (user_pk) => HOST + ACCOUNTS + "follow/" + user_pk + "/",
+    setBlackList: () => HOST + "blacklist/",
+  },
+
+  notification: {
+    getnotifications: () => HOST + NOTIFICATION,
+    getinvitedcrewlist: () => HOST + CREW + "signlist/",
+    deletenotification: (notification_pk) =>
+      HOST + NOTIFICATION + notification_pk,
+    makeviewtrue: (notification_pk) => HOST + NOTIFICATION + notification_pk,
+  },
 };
