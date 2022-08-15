@@ -119,14 +119,32 @@ export default {
     const tel2 = ref(tel[1]);
     const tel3 = ref(tel[2]);
 
-    const region = userInfo.region.split(" ");
-    const sido = ref(region[0]);
-    console.log("sido: ", sido.value);
-    const gugun = ref(region[1]);
-    const dong = ref(region[2]);
+    // const region = userInfo.region.split(" ");
+    // const sido = ref("");
+    // for (var i = 0; i < store.state.account.si.length; i++) {
+    //   if (store.state.account.si[i].sido_name == region[0]) {
+    //     sido.value = store.state.account.si[i].sido_code;
+    //     console.log("sido.value : ", sido.value);
+    //   }
+    // }
+
+    // console.log("sido: ", sido.value);
+    // const gugun = ref("");
+    // for (var j = 0; j < store.state.account.dong.length; j++) {
+    //   if (store.state.account.gu[j].gugun_name == region[1]) {
+    //     gugun.value = store.state.account.gu[j].gugun_code;
+    //   }
+    // }
+
+    // const dong = ref("");
+    // for (var k = 0; k < store.state.account.dong.length; k++) {
+    //   if (store.state.account.gu[k].dong_name == region[2]) {
+    //     dong.value = store.state.account.gu[k].dong_code;
+    //   }
+    // }
 
     store.dispatch("account/getCategoryList");
-    store.dispatch("account/getSiList");
+    // store.dispatch("account/getSiList");
 
     const nicknameCheck = () => {
       if (updateInfo.value.nickname == null) {
@@ -154,36 +172,36 @@ export default {
       return store.state.account.category;
     });
 
-    const si_list = computed(() => {
-      return store.state.account.si;
-    });
+    // const si_list = computed(() => {
+    //   return store.state.account.si;
+    // });
 
-    const gu_list = computed(() => {
-      return store.state.account.gu;
-    });
+    // const gu_list = computed(() => {
+    //   return store.state.account.gu;
+    // });
 
-    const dong_list = computed(() => {
-      return store.getters["account/dong_list"];
-    });
+    // const dong_list = computed(() => {
+    //   return store.getters["account/dong_list"];
+    // });
 
-    const getGu = (sido) => {
-      if (sido != null) {
-        console.log("selected sido :", sido);
-        store.dispatch("account/getGuList", sido);
-        gugun.value = null;
-        dong.value = null;
-      }
-    };
+    // const getGu = (sido) => {
+    //   if (sido != null) {
+    //     console.log("selected sido :", sido);
+    //     store.dispatch("account/getGuList", sido);
+    //     gugun.value = null;
+    //     dong.value = null;
+    //   }
+    // };
 
-    const getDong = (sido, gugun) => {
-      if (sido != null && gugun != null) {
-        store.dispatch("account/getDongList", {
-          sido: sido,
-          gugun: gugun,
-        });
-        dong.value = null;
-      }
-    };
+    // const getDong = (sido, gugun) => {
+    //   if (sido != null && gugun != null) {
+    //     store.dispatch("account/getDongList", {
+    //       sido: sido,
+    //       gugun: gugun,
+    //     });
+    //     dong.value = null;
+    //   }
+    // };
 
     const updateInfo = ref({
       email: userInfo.email,
@@ -191,80 +209,76 @@ export default {
       tel: null,
       nickname: userInfo.nickname,
       category: userInfo.category,
-      region: null,
+      region: userInfo.region,
       is_alba: userInfo.is_alba,
     });
     console.log("updateInfo", updateInfo.value);
 
-    const updatePassword = ref({
-      old_password: null,
-      password: null,
-      password2: null,
-    });
+    // const checkPassword = () => {
+    //   var password = prompt("비밀번호를 입력해주세요!");
 
-    const updateUserInfo = {};
+    //   if (password) {
+    //     axios
+    //       .post(api.accounts.login(), {
+    //         email: userInfo.email,
+    //         password: password,
+    //       })
+    //       .then((response) => {
+    //         console.log("유저 정보 조회 성공 : ", response);
+    //       })
+    //       .catch((err) => {
+    //         console.log("유저 정보 조회 실패 : ", err);
+    //         router.go(-1);
+    //         alert("비밀번호가 틀립니다!");
+    //         checkPassword();
+    //       });
+    //   } else {
+    //     router.go(-1);
+    //   }
+    // };
 
-    const checkPassword = () => {
-      var password = prompt("비밀번호를 입력해주세요!");
-
-      if (password) {
-        axios
-          .post(api.accounts.login(), {
-            email: userInfo.email,
-            password: password,
-          })
-          .then((response) => {
-            console.log("유저 정보 조회 성공 : ", response);
-          })
-          .catch((err) => {
-            console.log("유저 정보 조회 실패 : ", err);
-            router.go(-1);
-            alert("비밀번호가 틀립니다!");
-            checkPassword();
-          });
-      } else {
-        router.go(-1);
-      }
-    };
-
-    if (!store.state.account.kakaoLogin) {
-      checkPassword();
-    }
+    // if (!store.state.account.kakaoLogin) {
+    //   checkPassword();
+    // }
 
     const update = () => {
-      updateInfo.value.region =
-        sido.value + " " + gugun.value + " " + dong.value;
+      // updateInfo.value.region =
+      //   sido.value + " " + gugun.value + " " + dong.value;
 
+      updateInfo.value.tel = tel1.value + "-" + tel2.value + "-" + tel3.value;
+      console.log("수정완료 전 updateInfo : ", updateInfo.value);
       axios
-        .put(api.profile.myInfo(), {
-          name: updateInfo.value.name,
-          nickname: updateInfo.value.nickname,
-          region: "",
-          category: updateInfo.value.category,
-          is_alba: updateInfo.value.is_alba,
-          tel: updateUserInfo.value.tel,
+        .put(api.profile.myInfo(route.params.user_pk), updateInfo.value)
+        .then((response) => {
+          alert("회원 정보 수정 완료!");
+          store.commit("account/USER_INFO", response.data);
+          router.push({
+            name: "myinfo",
+            params: { user_pk: route.params.user_pk },
+          });
         })
-        .then((response) => {})
-        .catch((err) => {});
+        .catch((err) => {
+          console.log(err);
+        });
     };
 
     return {
       userInfo,
+      nicknameCheck,
       updateInfo,
-      updatePassword,
-      updateUserInfo,
       tel1,
       tel2,
       tel3,
-      sido,
-      gugun,
-      dong,
+      update,
+      // sido,
+      // gugun,
+      // dong,
       category_list,
-      si_list,
-      gu_list,
-      dong_list,
-      getGu,
-      getDong,
+      // si_list,
+      // gu_list,
+      // dong_list,
+      // getGu,
+      // getDong,
       // checkPassword,
     };
   },

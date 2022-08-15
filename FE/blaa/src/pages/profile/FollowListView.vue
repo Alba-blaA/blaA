@@ -57,11 +57,11 @@
       <tr>
         <td colspan="100%"><hr /></td>
       </tr>
-      <infinite-loading
-        @infinite="infiniteHandler"
-        spinner="waveDots"
-      ></infinite-loading>
     </table>
+    <infinite-loading
+      @infinite="infiniteHandler"
+      spinner="waveDots"
+    ></infinite-loading>
   </div>
 </template>
 
@@ -70,7 +70,6 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { ref, computed } from "vue";
 import axios from "@/api/axios.js";
-import api from "@/api/api.js";
 import InfiniteLoading from "v3-infinite-loading";
 
 export default {
@@ -82,8 +81,8 @@ export default {
     const router = useRouter();
     const store = useStore();
 
-    const followerList = null;
-    const followingList = ref({});
+    const followerList = store.state.profile.followerList;
+    const followingList = store.state.profile.followingList;
 
     if (route.params.followType === "follower") {
       followerList.value = store.state.profile.followerList;
@@ -100,34 +99,28 @@ export default {
       return false;
     });
 
-    var page = ref(route.query.page) + 1;
-    const infiniteHandler = (state) => {
-      axios
-        .get(api.profile.myFollow(route.params.user_pk), {
-          params: {
-            type: "follower",
-            page: page.value,
-          },
-        })
-        .then((response) => {
-          setTimeout(() => {
-            // console.log("page : ", page);
-            console.log("followerList value : ", followerList);
-            followerList.value = followerList.concat(response.data.results);
-            console.log("페이지 추가 followerList", followerList.value);
-            state.loaded();
-            page.value += 1;
-            // if (response.data.next) {
-            //   state.complete();
-            // }
-          }, 1000);
-        })
-        .catch((error) => {
-          if (error.status == 404) {
-            state.complete();
-          }
-          console.log(error);
-        });
+    const infiniteHandler = async ($state) => {
+      if (store.state.profile.followerList.next) {
+        await axios
+          .get(store.state.profile.followerList.next)
+          .then((response) => {
+            console.log("추가 팔로워리스트 : ", response.data);
+            const followerData = ref({});
+            followerData.value = response.data;
+
+            store.commit("profile/GET_FOLLOWER_LIST", followerData);
+          });
+        setTimeout(() => {
+          console.log(
+            "페이지 추가 followerlist : ",
+            store.state.profile.followerList
+          );
+          followerList.value = store.state.profile.followerList.results;
+          $state.loaded();
+        }, 1000);
+      } else {
+        $state.complete();
+      }
     };
 
     const userProfile = (user_pk) => {
@@ -144,7 +137,6 @@ export default {
       followerList,
       followingList,
       isFollower,
-      page,
       infiniteHandler,
       userProfile,
     };
