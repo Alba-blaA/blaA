@@ -1,15 +1,29 @@
-<template>
-  <h4>알림창임</h4>
-      <div v-for="(notification, i) in state.notifications" :key="i"> 
-      <div>{{notification}}</div>       
+<template>  
+  <br>
+  <div><h5 class="d-flex justify-content-center align-items-center chodaecardtitle"><b>알림함</b></h5></div>     
+      <div v-for="(notification, i) in state.notifications" :key="i">           
           <b-card >       
             <b-card-text  @click="clicknotification(notification), isModalOpen = false, deleteclicknotification(notification.pk)"> 
-              <div >
-                {{ notification.content }}
-              </div>             
-            </b-card-text>
+              <div class="noticontent d-flex justify-content-center align-items-center">
+                <img class= "notiimg" src="https://cdn.pixabay.com/photo/2020/05/17/20/21/cat-5183427__480.jpg" alt="">                
+                <div>
+                  &nbsp; 
+                </div>
+                <div>
+                  &nbsp; 
+                </div>
+                <div>
+                  &nbsp; 
+                </div>
+                <div >
+                  {{ notification.content }}
+                </div>                                
+              </div>               
+            </b-card-text>           
           </b-card>
+        
       </div>
+
   
 </template>
 
@@ -70,6 +84,15 @@ export default {
 
     })
 
+    const typetransformation = (notification) => {
+      if (notification.type == "crew_invite") {
+        if (notification.content.length > 13) {
+          return notification.content.splice(1,5)          
+        }
+        
+      }
+    }
+
     const deleteclicknotification = (notification_pk) => {      
       axios.delete(api.notification.deletenotification(notification_pk))
     }       
@@ -77,7 +100,8 @@ export default {
     return {
       state,
       clicknotification,
-      deleteclicknotification,          
+      deleteclicknotification, 
+      typetransformation         
     }
     
   }
@@ -86,5 +110,14 @@ export default {
 </script>
 
 <style>
+.noticontent{
+  margin-top: 5px;
+  margin-bottom: 5px
+}
+.notiimg{
+  width: 70px;
+  height : 70px;
+  border-radius: 50px;
 
+}
 </style>

@@ -12,6 +12,7 @@ const REVIEW = "reviews/";
 const STORE = "store/";
 const CREW = "crews/";
 const NOTIFICATION = "notifications/";
+const SCHEDULE = "schedule/"
 // const CHAT = 'chat/'
 
 export default {
@@ -56,6 +57,7 @@ export default {
     // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
     acceptcrew: (crew_pk) => HOST + CREW + "accept_crew/" + crew_pk + "/",
     refusecrew: (crew_pk) => HOST + CREW + "deny_crew/" + crew_pk + "/",
+    registercrewschedule: (crew_pk) => HOST + CREW + SCHEDULE + crew_pk + "/"
   },
   categorys: {
     job: () => HOST + CATEGORYS + "job/",

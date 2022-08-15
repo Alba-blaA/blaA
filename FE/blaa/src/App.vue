@@ -22,6 +22,7 @@
     </div>
 
     <div v-else>
+<<<<<<< FE/blaa/src/App.vue
       <p>로그인이 필요합니다.</p>
       <button type="button" @click="login">로그인</button>
       &nbsp;
