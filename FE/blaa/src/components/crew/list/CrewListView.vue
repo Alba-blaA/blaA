@@ -1,9 +1,9 @@
 <template>
-  <button @click="moveMyList">내 크루</button>
-  <button @click="moveAllList">전체 크루</button>
+  <!-- <button @click="moveMyList">내 크루</button> -->
+  <!-- <button @click="moveAllList">전체 크루</button> -->
   <button @click="moveListSearch">크루 검색</button>
   <router-view></router-view><br />
-  <button @click="createCrew">새 크루 생성하기</button>
+  <div class="newCrew" @click="createCrew">새 크루 생성</div>
 </template>
 
 <script>
@@ -36,4 +36,25 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.newCrew {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 10px 24px;
+  gap: 10px;
+
+  position: fixed;
+  width: 146px;
+  height: 40px;
+  left: 107px;
+  /* margin: auto; */
+  top: 630px;
+
+  background: #eec95c;
+  border-radius: 100px;
+  color: #498d6d;
+}
+</style>

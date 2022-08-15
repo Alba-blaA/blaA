@@ -6,11 +6,13 @@
 import axios from "@/api/axios.js";
 import api from "@/api/api";
 import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
   setup() {
     const route = useRoute();
     const router = useRouter();
+    const store = useStore();
 
     var result = confirm("정말로 탈퇴하시겠습니까?");
     if (result) {
@@ -20,6 +22,11 @@ export default {
         .then((response) => {
           console.log("response : ", response);
           alert("탈퇴가 완료되었습니다.");
+          store.commit("account/LOGIN", false);
+          store.commit("account/USER_INFO", null);
+          sessionStorage.removeItem("token");
+          store.commit("account/RESET_STORATGE");
+          router.replace("/");
         })
         .catch((err) => {
           alert("회원 탈퇴 에러");

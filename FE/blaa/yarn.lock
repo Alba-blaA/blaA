@@ -3860,6 +3860,11 @@
   "resolved" "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   "version" "1.0.0"
 
+"fsevents@~2.3.2":
+  "integrity" "sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA=="
+  "resolved" "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
+  "version" "2.3.2"
+
 "function-bind@^1.1.1":
   "integrity" "sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A=="
   "resolved" "https://registry.npmjs.org/function-bind/-/function-bind-1.1.1.tgz"
@@ -6508,6 +6513,11 @@
     "date-fns" "^2.16.1"
     "date-fns-tz" "^1.0.12"
     "lodash" "^4.17.20"
+
+"v3-infinite-loading@^1.2.1":
+  "integrity" "sha512-N0rN+5CTE/iW1RaGtMfujpi1QCBDLYH9+hJKkL3jaZDzkdG/zUM4v776u0CeQn2QvSGr0dgjMyxRu486K8pnxg=="
+  "resolved" "https://registry.npmjs.org/v3-infinite-loading/-/v3-infinite-loading-1.2.1.tgz"
+  "version" "1.2.1"
 
 "v8-compile-cache@^2.0.3":
   "integrity" "sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA=="
