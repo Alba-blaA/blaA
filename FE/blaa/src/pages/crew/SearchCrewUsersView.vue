@@ -13,7 +13,7 @@
                         <b>
                             {{user.nickname}} 
                         </b>
-                    </div>       
+                    </div>    
         
                         
                    
@@ -50,6 +50,9 @@ export default {
         const route = useRoute();
         const userInfo = store.state.account.userInfo;
         const crew_pk = route.params.crew_pk
+        const state = reactive({      
+            users: [],    
+        })
         const gochat = (from_userpk) => {
         router.push({ name: 'chat',
         params: {
@@ -61,7 +64,7 @@ export default {
 
         const filteredUsers = computed(() => {
         if (searchText.value) {
-            return state.users.filter( user => {
+            return state.users.filter(user => {
             return user.nickname.includes(searchText.value);
             });
         }
@@ -70,24 +73,17 @@ export default {
         });
         });        
 
-        const state = reactive({      
-            users: [],    
-        })
-
         onMounted(() => {
-            if(userInfo){               
+            if(userInfo){              
                
                 axios.get(api.accounts.searchallusers(),
-                 ).then((response) =>{
-                    
-                     state.users = response.data
-                            
+                 ).then((response) =>{  
+                                   
+                     state.users = response.data.results                          
 
                  }                        
-                )
-                
+                )               
             }
-
         })
         
         const inviteuser = async (invitingcrew_pk, inviteduser_pk) => {

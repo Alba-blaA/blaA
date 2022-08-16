@@ -95,7 +95,6 @@ export default {
       console.log("color :" + info.color);
       console.log("crew_starthour :" + timetoString(a));
       console.log("crew_endhour :" + timetoString(b));
-      console.log("crew :" +  crew_pk);
       console.log("user :" + userInfo.user_pk);
       
       // const data = {
@@ -108,9 +107,8 @@ export default {
         crew_day : daytoString(a),
         color : info.color,
         crew_starthour : timetoString(a),
-        crew_endhour : timetoString(b),
-        crew : info.crew_pk,
-        user : userInfo.user_pk             
+        crew_endhour : timetoString(b),      
+        user : Number(userInfo.user_pk)             
       }).then((response) => {
         console.log(response);
 
