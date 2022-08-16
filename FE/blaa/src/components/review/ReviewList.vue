@@ -1,8 +1,8 @@
 <template>
   <div class="store" @click="moveToDetail">
     <div class="storeInfo">
-      <img :src="host + review.image" alt="이미지">
-      <p style="width: 100%">{{review.name}}</p>
+      <img :src="HOST + review.image" alt="이미지">
+      <p style="width: 100%">{{review.name}}</p>  
     </div>
     <div class="star-ratings" :style="{ left : starWidth.value }" >
         <div 
@@ -36,6 +36,7 @@ export default {
     }
   },
   setup(props) {
+    const HOST = ref("https://i7b209.p.ssafy.io");
     const router = useRouter()
     const host = ref('https://i7b209.p.ssafy.io')
     const starWidth = ref(0)
@@ -92,7 +93,7 @@ export default {
       score,
       high_button,
       starWidth,
-      host
+      HOST
     }
   }
 }
