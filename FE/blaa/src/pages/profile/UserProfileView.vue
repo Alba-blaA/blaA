@@ -2,45 +2,56 @@
   <br /><br />
   <button type="button" @click="startChat">채팅하기</button>
 
-  <div id="profile" style="border: 3px solid; text-align:center; margin: auto;" >
+  <div id="profile" style="border: 3px solid; text-align: center; margin: auto">
     <img class="imgProfile" :src="HOST + userProfile.image" />
   </div>
-  <br>
+  <br />
   <div class="d-flex justify-content-center row">
-    <h5 class="mt-2 mb-2 col-7" style="text-align:right; font-weight: bold;">{{ userProfile.nickname }}</h5>
+    <h5 class="mt-2 mb-2 col-7" style="text-align: right; font-weight: bold">
+      {{ userProfile.nickname }}
+    </h5>
     <div class="col-5 px-0 mb-2">
-      <button id="follow" type="button" 
-      class="rounded-pill "
-      style="width:5rem; height:2rem; text-align:center; border-radius: 20%; background-color: #1294F2; border: 0px;"
-      @click="btnFollow">
-        <p class="mt-1" style="color:white;">{{ followMessage }}</p>
+      <button
+        id="follow"
+        type="button"
+        class="rounded-pill"
+        style="
+          width: 5rem;
+          height: 2rem;
+          text-align: center;
+          border-radius: 20%;
+          background-color: #1294f2;
+          border: 0px;
+        "
+        @click="btnFollow"
+      >
+        <p class="mt-1" style="color: white">{{ followMessage }}</p>
       </button>
     </div>
-
   </div>
 
-  <hr>
+  <hr />
   <div class="d-flex justify-content-center">
     <table>
       <tr>
         <td rowspan="4" align="center" @click="follower">
-        <div style="margin-right: 0.5rem;">
-          <b style="font-size:1.2rem">
-            {{ userProfile.followers }}
-            <br />
-            팔로워
-          </b>
-        </div>
+          <div style="margin-right: 0.5rem">
+            <b style="font-size: 1.2rem">
+              {{ userProfile.followers }}
+              <br />
+              팔로워
+            </b>
+          </div>
         </td>
         &nbsp; &nbsp;
         <td rowspan="4" align="center" @click="following">
-        <div style="margin-left: 0.5rem;">
-          <b style="font-size:1.2rem">
-            {{ userProfile.followings }}
-            <br />
-            팔로잉
-          </b>
-        </div>
+          <div style="margin-left: 0.5rem">
+            <b style="font-size: 1.2rem">
+              {{ userProfile.followings }}
+              <br />
+              팔로잉
+            </b>
+          </div>
         </td>
       </tr>
     </table>
@@ -73,7 +84,7 @@
 import axios from "@/api/axios.js";
 import api from "@/api/api.js";
 import { useRoute, useRouter } from "vue-router";
-import { ref } from "vue";
+import { ref, watch, onBeforeMount } from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -84,19 +95,35 @@ export default {
 
     const HOST = ref("https://i7b209.p.ssafy.io");
 
-    const userProfile = ref({});
+    const userProfile = ref({
+      category: null,
+      email: null,
+      followers: null,
+      followings: null,
+      image: null,
+      is_alba: null,
+      name: null,
+      nickname: null,
+      region: null,
+      tel: null,
+      user_pk: null,
+    });
 
-    const myFollowingList = store.state.profile.followingList.results;
-
+    const myFollowingList = watch(() => {
+      return store.state.profile.followingList.results;
+    });
     var followMessage = ref("");
 
     const setProfile = async () => {
+      console.log("route.params.user_pk : ", route.params.user_pk);
+      console.log("URL : ", api.profile.myInfo(route.params.user_pk));
       await axios
-        .get(api.accounts.myInfo(route.params.user_pk))
+        .get(api.profile.myInfo(route.params.user_pk))
         .then((response) => {
           console.log("response : ", response);
           userProfile.value = response.data;
           console.log("userProfile : ", userProfile.value);
+          console.log("userProfile image : ", userProfile.value.image);
         })
         .catch((err) => {
           console.log("err", err);
@@ -114,16 +141,19 @@ export default {
         }
       }
     };
-    setProfile();
+
+    onBeforeMount(() => {
+      setProfile();
+    });
 
     const startChat = () => {
       console.log("채팅 시작하기");
     };
 
-    const btnFollow = () => {
+    const btnFollow = async () => {
       console.log("팔로우 버튼");
-      followMessage.value = "Unfollow";
-      axios
+      // followMessage.value = "Unfollow";
+      await axios
         .post(api.profile.follow(route.params.user_pk))
         .then((response) => {
           console.log("follow start response : ", response);
@@ -132,9 +162,11 @@ export default {
           if (arr.length === 3) {
             alert(userProfile.value.nickname + "님을 팔로우합니다.");
             followMessage.value = "Unfollow";
+            router.go();
           } else {
             alert(userProfile.value.nickname + "님을 팔로우 취소합니다.");
             followMessage.value = "Follow";
+            router.go();
           }
         })
         .catch((err) => {

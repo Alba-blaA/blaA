@@ -75,9 +75,7 @@
       </div>
       <br /><br />
 
-      <label v-if="updateInfo.is_alba" for="update-category"
-        >근무 중인 업종</label
-      >
+      <label v-if="isAlba" for="update-category">근무 중인 업종</label>
       <label v-else for="update-category">관심 업종</label>
       <select id="update-category" v-model="updateInfo.category">
         <option value="null">업종 카테고리</option>
@@ -252,6 +250,10 @@ export default {
     });
     console.log("updateInfo", updateInfo.value);
 
+    const isAlba = computed(() => {
+      return updateInfo.value.is_alba;
+    });
+
     // const checkPassword = () => {
     //   var password = prompt("비밀번호를 입력해주세요!");
 
@@ -308,6 +310,7 @@ export default {
       userInfo,
       nicknameCheck,
       updateInfo,
+      isAlba,
       tel1,
       tel2,
       tel3,
