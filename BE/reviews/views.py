@@ -40,7 +40,7 @@ class StoreListCreateAPIView(ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         if request.FILES.get('image') :
             serializer = StoryCreateSerializer(data=request.data)
-            print(request.FILES.get('image'))
+            # print(request.FILES.get('image'))
         else : 
             serializer = StoreNoneImageCreateSerializer(data= request.data)
         serializer.is_valid(raise_exception=True)
@@ -98,7 +98,7 @@ class StoreReviewListCreateAPIView(ListCreateAPIView) :
         if cnt :
             review = Review.objects.filter(store=store).aggregate(Sum('star'))
             # sum = Store.objects.all().aggregate(Sum('star'))
-            print(cnt,review)
+            # print(cnt,review)
             return round(review['star__sum']/cnt,1)
         else :
             return 0

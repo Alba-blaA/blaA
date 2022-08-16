@@ -273,11 +273,11 @@ def story_category_filter(request):
 @api_view(['GET'])   
 def hashtag_filter(request):
     tmp = request.GET.get('id',"")
-    print(tmp)
+    # print(tmp)
     tmp3 = tmp.split(" ")
-    print(tmp3)
+    # print(tmp3)
     story = Hashtag.objects.distinct().filter(Q(hashtag_content__in = tmp3))
-    print(story)
+    # print(story)
     cnt = {'count':story.count()}
     paginator = Paginator(story, 10) # Show 25 contacts per page.
     page_number = request.GET.get('page')
