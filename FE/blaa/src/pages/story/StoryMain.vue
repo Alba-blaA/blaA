@@ -31,12 +31,26 @@
 
   </div> -->
   <hr>
-  <div v-if="state.isUnread">
-    <button @click="gotonotification">안읽은 알림있음</button>
-  </div >
-  <div v-else>
-    <button @click="gotonotification">안읽은 알림 없음</button>
-  </div>    
+  <div class="notification">
+    <div v-if="state.isUnread">   
+      <span @click="gotonotification" class="material-symbols-outlined">
+        notification_important
+        </span>
+    </div >
+    <div v-else>
+      <div v-if="state.notifications.length != 0 ">
+        <span @click="gotonotification" class="material-symbols-outlined">
+          notifications_active
+          </span>
+      </div>
+      <div v-else>
+        <span  @click="gotonotification" class="material-symbols-outlined">
+          notifications
+          </span>
+      </div>    
+    </div> 
+
+  </div>
   <router-view></router-view>
 
 </template>
