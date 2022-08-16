@@ -1,25 +1,37 @@
 <template>
-  <div v-if="userInfo">
-    <div>여기는 유저검색페이지입니다!</div>
-    <div class="search">
-      <input v-model="searchText" type="text" placeholder="닉네임 검색" />
-    </div>
-    <div v-for="user in filteredUsers" :key="user.user_pk">
-      <br />
-      <b-card>
-        <div>
-          <img class="notiimg" src="https://cdn.pixabay.com/photo/2020/05/17/20/21/cat-5183427__480.jpg" alt="" />
-          <div class="chodaeorchatname">
-            <b>
-              {{ user.nickname }}
-            </b>
-          </div>
+  <div v-if="userInfo">    
+    <div class="view chat" style="background-color : #eec95c">    
+      <header class="chat_list_wrap">   
+
+        <div class="search">
+          <input v-model="searchText" type="text" placeholder="Search user to invite" />
         </div>
-        <div class="d-flex justify-content-end align-items-center chodaeorchatbutton">
-          <button class="w-btn w-btn-yellow" @click="inviteuser(crew_pk, user.user_pk)">초대하기</button>
-          <button class="w-btn w-btn-green" @click="gochat(user.user_pk)">채팅하기</button>
+      </header>
+      <section class= "chat-box">
+        <br />
+        <div v-for="user in filteredUsers" :key="user.user_pk">
+          <b-card>
+            <b-card-text>
+              <div class="d-flex justify-content-center">
+                <img  id = "searchprofile" class="imgProfile" :src="HOST + user.image" alt="" />           
+                  <b class="chodaeorchatname d-flex align-items-center">
+                    {{ user.nickname }}
+                  </b>          
+              </div>
+              <br>
+              <div class="d-flex justify-content-end align-items-center chodaeorchatbutton" style="padding-right : 10px">
+                <button class="w-btn w-btn-yellow" @click="inviteuser(crew_pk, user.user_pk)">초대하기</button>            
+                <button class="w-btn w-btn-green" @click="gochat(user.user_pk)">채팅하기</button>
+              </div>
+            </b-card-text>
+          </b-card>
         </div>
-      </b-card>
+
+      </section>
+      
+   
+
+      
     </div>
   </div>
   <div v-else>로그인이 필요합니다.</div>
@@ -34,6 +46,7 @@ import { useRoute } from "vue-router";
 
 export default {
   setup() {
+    const HOST = ref("https://i7b209.p.ssafy.io");
     const store = useStore();
     const route = useRoute();
     const userInfo = store.state.account.userInfo;
@@ -66,7 +79,7 @@ export default {
     onMounted(() => {
       if (userInfo) {
         axios.get(api.accounts.searchallusers()).then((response) => {
-          state.users = response.data;
+          state.users = response.data; 
         });
       }
     });
@@ -88,6 +101,7 @@ export default {
       userInfo,
       crew_pk,
       inviteuser,
+      HOST
     };
   },
 };
@@ -109,11 +123,13 @@ export default {
 .w-btn-green {
   background-color: #498d6d;
   color: #d7fff1;
+  margin-left: 6px;
 }
 
 .w-btn-yellow {
   background-color: #eec95c;
   color: #6e6e6e;
+  margin-right: 3px;
 }
 .notiimg {
   width: 70px;
@@ -121,11 +137,31 @@ export default {
   border-radius: 50px;
 }
 .chodaeorchatbutton {
-  width: 340px;
-  height: 20px;
+  width: 100%;
+  height: 40%;
   margin-bottom: 10px;
 }
 .chodaeorchatname {
   margin-left: 10px;
 }
+
+.search {
+  width: 100%;
+    border-radius: 4px;
+    padding: 5px 0;
+    border: 0;
+    text-align: center;
+
+}
+
+#searchprofile {
+  width: 50px;
+  height: 50px;
+  border-radius: 70%;
+  overflow: hidden;
+  margin-right : 13px
+}
+
+
+  
 </style>

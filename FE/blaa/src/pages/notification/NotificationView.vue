@@ -4,8 +4,7 @@
       <div v-for="(notification, i) in state.notifications" :key="i">           
           <b-card >       
             <b-card-text  @click="clicknotification(notification), isModalOpen = false, deleteclicknotification(notification.pk)"> 
-              <div class="noticontent d-flex justify-content-center align-items-center">
-                <img class= "notiimg" src="https://cdn.pixabay.com/photo/2020/05/17/20/21/cat-5183427__480.jpg" alt="">                
+              <div class="noticontent d-flex justify-content-center align-items-center">                              
                 <div>
                   &nbsp; 
                 </div>
@@ -48,6 +47,7 @@ export default {
                       state.notifications = response.data.results
                       for (let index = 0; index < state.notifications.length; index++) {
                         const element = state.notifications[index];
+                        console.log(element);
                         axios.put(api.notification.makeviewtrue(element.pk),{
                             view : true
                         })                     
