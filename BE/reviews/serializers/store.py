@@ -2,7 +2,7 @@ from rest_framework import serializers
 from reviews.models import Review
 from reviews.models import Store
 from django.db.models import Sum
-class StoreListCreateSerializer(serializers.ModelSerializer) :
+class StoreListSerializer(serializers.ModelSerializer) :
     star = serializers.SerializerMethodField()
     button = serializers.SerializerMethodField()
 
@@ -30,11 +30,13 @@ class StoreListCreateSerializer(serializers.ModelSerializer) :
         model = Store
         fields = '__all__'
 
+class StoreNoneImageCreateSerializer(serializers.ModelSerializer) :
 
-        def create(self, validated_data):
-            images_data = self.context['request'].FILES
-            store = Store.objects.create(**validated_data)
-            if images_data :
-                store.image = images_data
-            return store
+    class Meta : 
+        model = Store
+        fields = '__all__'
 
+class StoryCreateSerializer(serializers.ModelSerializer) :
+    class Meta : 
+        model = Store
+        fields = ('store_pk','name','image','region')

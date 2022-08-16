@@ -44,7 +44,7 @@ class CrewSerializer(serializers.ModelSerializer) :
     # crew_img = serializers.ImageField(required=False)
     class Meta: 
         model = Crew
-        fields= ('crew_pk','crew_name','crew_leader','crew_leader_pk','crew_explain','crew_region','crew_img','crew_member_count','created_at')
+        fields= ('crew_pk','crew_name','crew_leader','crew_leader_pk','crew_explain','crew_region','crew_img','crew_member_count','created_at','is_business')
         read_only_fields = ('crew_pk','crew_leader',)
 
     def update(self, instance, validated_data):

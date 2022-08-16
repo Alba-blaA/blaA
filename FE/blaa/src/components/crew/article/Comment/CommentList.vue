@@ -1,6 +1,5 @@
 <template>
   <div>댓글 : {{ comments.length }}</div>
-  <hr />
   <ul v-if="comments.length">
     <CommentListItem v-for="(comment, i) in comments" :key="i" :comment="comment" />
   </ul>
