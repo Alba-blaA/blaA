@@ -34,6 +34,7 @@ class StoreListCreateSerializer(serializers.ModelSerializer) :
         def create(self, validated_data):
             images_data = self.context['request'].FILES
             store = Store.objects.create(**validated_data)
+            print(images_data)
             if images_data :
                 store.image = images_data
             return store

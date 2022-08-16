@@ -34,6 +34,7 @@ class StoreListCreateAPIView(ListCreateAPIView):
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
+        print(serializer.data)
         return Response(serializer.data)
 
 class ReviewListAPIView(ListAPIView) :
