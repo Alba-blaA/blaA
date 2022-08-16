@@ -14,5 +14,5 @@ class NotificationEditSerializer(serializers.ModelSerializer) :
 
     class Meta :
         model = Notification
-        fields = ('type','redirect_pk','user','content','view','created_at')
+        fields = ('pk','type','redirect_pk','user','content','view','created_at')
         read_only_fields = ('type','redirect_pk','user','content','created_at')
