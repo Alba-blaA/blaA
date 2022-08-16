@@ -1,7 +1,5 @@
 <template>
-  <br /><br />
-  <button type="button" @click="startChat">채팅하기</button>
-
+  
   <div id="profile" style="border: 3px solid; text-align: center; margin: auto">
     <img class="imgProfile" :src="HOST + userProfile.image" />
   </div>
@@ -57,25 +55,31 @@
       </tr>
     </table>
   </div>
-
+  <hr>
+  <div>
+      <button
+        class="profile_list"
+       style="border:0; outline:0; background-color: white; font-size: 1.2rem; "
+       type="button" @click="startChat(userProfile.user_pk, userProfile.nickname)">{{ userProfile.nickname }}와 채팅하기</button>
+  </div>
   <hr />
   <div @click="userReview">
     <h5 class="profile_list">
-      <b>{{ userProfile.nickname }}님의 리뷰</b>
+      <p>{{ userProfile.nickname }}님의 리뷰</p>
     </h5>
   </div>
 
   <hr />
   <div @click="userCrew">
     <h5 class="profile_list">
-      <b>{{ userProfile.nickname }}님의 크루</b>
+      <p>{{ userProfile.nickname }}님의 크루</p>
     </h5>
   </div>
 
   <hr />
   <div @click="setBlackList">
     <h5 class="profile_list">
-      <b>{{ userProfile.nickname }}님 신고하기</b>
+      <p>{{ userProfile.nickname }}님 신고하기</p>
     </h5>
   </div>
   <hr />
@@ -155,9 +159,15 @@ export default {
       return check;
     });
 
-    const startChat = () => {
+    const startChat = (from_userpk, from_usernickname) => {
       console.log("채팅 시작하기");
-    };
+      router.push({ name: 'chat',
+      params: {
+        from_userpk: from_userpk,
+        from_usernickname : from_usernickname
+        }}
+        )
+      };
 
     const btnFollow = async () => {
       console.log("팔로우 버튼");
