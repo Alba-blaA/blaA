@@ -11,7 +11,7 @@
         <img :src="host + image.story_picture" class="image"  :style="{ width: '100%', borderRadius:'10px' }" />
       </div>
     <div class="storyInfo">
-      <img :src="host + image.user_pk.image" alt="프로필" @click="moveToProfile" style="cursor: pointer; border-radius:50%">
+      <img :src="host + image.user_pk.image" alt="프로필" heigth="48" width="48" @click="moveToProfile" style="cursor: pointer; border-radius:50%">
       <div style="margin-left:5px; width:100%">
         <p>{{ image.story_title }}</p>
         <!-- created at 현재 시간이랑 비교 -->

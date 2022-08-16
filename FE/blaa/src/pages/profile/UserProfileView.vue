@@ -2,37 +2,45 @@
   <br /><br />
   <button type="button" @click="startChat">채팅하기</button>
 
-  <div id="profile">
-    <img id="imgProfile" :src="HOST + userProfile.image" />
-  </div>  
-  <div>
-    <h3 style="float: left">{{ userProfile.nickname }}</h3>
-    &nbsp;
-    <div>
-      <button type="button" @click="btnFollow">
-        {{ followMessage }}
+  <div id="profile" style="border: 3px solid; text-align:center; margin: auto;" >
+    <img class="imgProfile" :src="HOST + userProfile.image" />
+  </div>
+  <br>
+  <div class="d-flex justify-content-center row">
+    <h5 class="mt-2 mb-2 col-7" style="text-align:right; font-weight: bold;">{{ userProfile.nickname }}</h5>
+    <div class="col-5 px-0 mb-2">
+      <button id="follow" type="button" 
+      class="rounded-pill "
+      style="width:5rem; height:2rem; text-align:center; border-radius: 20%; background-color: #1294F2; border: 0px;"
+      @click="btnFollow">
+        <p class="mt-1" style="color:white;">{{ followMessage }}</p>
       </button>
     </div>
-    <hr />
+
   </div>
 
-  <div>
+  <hr>
+  <div class="d-flex justify-content-center">
     <table>
       <tr>
-        <td rowspan="2" align="center" @click="follower">
-          <b>
+        <td rowspan="4" align="center" @click="follower">
+        <div style="margin-right: 0.5rem;">
+          <b style="font-size:1.2rem">
             {{ userProfile.followers }}
             <br />
             팔로워
           </b>
+        </div>
         </td>
         &nbsp; &nbsp;
-        <td rowspan="2" align="center" @click="following">
-          <b>
+        <td rowspan="4" align="center" @click="following">
+        <div style="margin-left: 0.5rem;">
+          <b style="font-size:1.2rem">
             {{ userProfile.followings }}
             <br />
             팔로잉
           </b>
+        </div>
         </td>
       </tr>
     </table>
@@ -40,22 +48,22 @@
 
   <hr />
   <div @click="userReview">
-    <h5>
-      <b>&nbsp;{{ userProfile.nickname }}님의 리뷰</b>
+    <h5 class="profile_list">
+      <b>{{ userProfile.nickname }}님의 리뷰</b>
     </h5>
   </div>
 
   <hr />
   <div @click="userCrew">
-    <h5>
-      <b>&nbsp;{{ userProfile.nickname }}님의 크루</b>
+    <h5 class="profile_list">
+      <b>{{ userProfile.nickname }}님의 크루</b>
     </h5>
   </div>
 
   <hr />
   <div @click="setBlackList">
-    <h5>
-      <b>&nbsp;{{ userProfile.nickname }}님 신고하기</b>
+    <h5 class="profile_list">
+      <b>{{ userProfile.nickname }}님 신고하기</b>
     </h5>
   </div>
   <hr />
@@ -98,11 +106,11 @@ export default {
         console.log("myfollowingList user_pk", myFollowingList[i].user_pk);
         console.log("userProfile user_pk", userProfile.value.user_pk);
         if (myFollowingList[i].user_pk == userProfile.value.user_pk) {
-          followMessage.value = "팔로우 취소";
+          followMessage.value = "Unfollow";
 
           return;
         } else {
-          followMessage.value = "팔로우";
+          followMessage.value = "Follow";
         }
       }
     };
@@ -114,7 +122,7 @@ export default {
 
     const btnFollow = () => {
       console.log("팔로우 버튼");
-      followMessage.value = "팔로우취소";
+      followMessage.value = "Unfollow";
       axios
         .post(api.profile.follow(route.params.user_pk))
         .then((response) => {
@@ -123,10 +131,10 @@ export default {
           const arr = result.split(" ");
           if (arr.length === 3) {
             alert(userProfile.value.nickname + "님을 팔로우합니다.");
-            followMessage.value = "팔로우 취소";
+            followMessage.value = "Unfollow";
           } else {
             alert(userProfile.value.nickname + "님을 팔로우 취소합니다.");
-            followMessage.value = "팔로우";
+            followMessage.value = "Follow";
           }
         })
         .catch((err) => {
@@ -214,13 +222,12 @@ export default {
 #profile {
   width: 150px;
   height: 150px;
-  border-radius: 70%;
+  border-radius: 50%;
   overflow: hidden;
 }
-
-#imgProfile {
-  width: 100%;
-  height: 100%;
+.imgProfile {
+  width: 9.6rem;
+  height: 9.6rem;
   object-fit: cover;
 }
 </style>

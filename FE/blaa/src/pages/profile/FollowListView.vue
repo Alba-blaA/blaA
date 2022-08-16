@@ -3,65 +3,53 @@
   <div v-if="isFollower">
     <h3><b>팔로워 페이지</b></h3>
     <hr />
-    <table
-      v-for="follower in followerList.results"
-      :key="follower.user_pk"
-      style="width: 100%"
-    >
-      <tr>
-        <td width="10px"></td>
-        <td id="profile">
-          <img
-            id="imgProfile"
-            :src="follower.image"
-            @click="userProfile(follower.user_pk)"
-          />
-        </td>
-        <td width="20px"></td>
-        <td>
-          <b>{{ follower.nickname }}</b>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="100%"><hr /></td>
-      </tr>
-    </table>
-    <infinite-loading
+    <div class="container">
+      <div
+        v-for="follower in followerList.results"
+        :key="follower.user_pk"
+        style="width: 100%"
+      >
+          <div class="d-flex justify-content-between row">
+            <img
+              :src="follower.image"
+              style="width:5rem; height:3.5rem; border-radius: 50%;"
+              @click="userProfile(follower.user_pk)"
+            />
+            <h5 class="col-9 mt-3 mb-0"  style="font-weight: bold;">{{ follower.nickname }}</h5>
+          </div>
+          <hr>
+  
+      </div>
+
+    </div>
+    <!-- <infinite-loading
       @infinite="infiniteHandler"
       spinner="waveDots"
-    ></infinite-loading>
+    ></infinite-loading> -->
   </div>
 
   <div v-else>
     <h3><b>팔로잉 페이지</b></h3>
     <hr />
-    <table
+    <div class="container"
       v-for="following in followingList.results"
       :key="following.user_pk"
       style="width: 100%"
     >
-      <tr>
-        <td width="10px"></td>
-        <td id="profile">
-          <img
-            id="imgProfile"
-            :src="following.image"
-            @click="userProfile(following.user_pk)"
-          />
-        </td>
-        <td width="20px"></td>
-        <td>
-          <b>{{ following.nickname }}</b>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="100%"><hr /></td>
-      </tr>
-    </table>
-    <infinite-loading
-      @infinite="infiniteHandler"
-      spinner="waveDots"
-    ></infinite-loading>
+      <div class="d-flex justify-content-between row">
+        <img
+          :src="following.image"
+          style="width:5rem; height:3.5rem; border-radius: 50%;"
+          @click="userProfile(following.user_pk)"
+        />
+        <h5 class="col-9 mt-3 mb-0"  style="font-weight: bold;">{{ following.nickname }}</h5>
+      </div>
+      <hr>
+      <!-- <infinite-loading
+        @infinite="infiniteHandler"
+        spinner="waveDots"
+      ></infinite-loading> -->
+    </div>
   </div>
 </template>
 
@@ -70,11 +58,11 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { ref, computed } from "vue";
 import axios from "@/api/axios.js";
-import InfiniteLoading from "v3-infinite-loading";
+// import InfiniteLoading from "v3-infinite-loading";
 
 export default {
   components: {
-    InfiniteLoading,
+    // InfiniteLoading,
   },
   setup() {
     const route = useRoute();
