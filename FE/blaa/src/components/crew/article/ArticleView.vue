@@ -1,5 +1,4 @@
 <template>
-  <div>게시판-view</div>
   <router-view></router-view>
 </template>
 

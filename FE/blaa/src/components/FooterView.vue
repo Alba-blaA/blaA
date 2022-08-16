@@ -4,16 +4,16 @@
 
   <div class="row" id="bottom_menu">
     <div class="col" @click.prevent="gostory">
-      <img width="25" src="@/assets/Footer/home.png" />
+      <img width="25" src="@/assets/footer/home.png" />
     </div>
     <div class="col" @click.prevent="gocrew">
-      <img width="25" src="@/assets/Footer/group.png" />
+      <img width="25" src="@/assets/footer/group.png" />
     </div>
     <div class="col" @click.prevent="goReview">
-      <img width="25" src="@/assets/Footer/store.png" />
+      <img width="25" src="@/assets/footer/store.png" />
     </div>
     <div class="col" @click.prevent="goMyProfile">
-      <img width="25" src="@/assets/Footer/gear.png" />
+      <img width="25" src="@/assets/footer/gear.png" />
     </div>
   </div>
 </template>

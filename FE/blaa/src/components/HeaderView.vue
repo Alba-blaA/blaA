@@ -19,7 +19,7 @@
       <button @click="register">회원가입</button>
     </div>
   </div> -->
-  <div></div>
+  <div class="header"></div>
 </template>
 
 <script>
@@ -87,6 +87,8 @@ export default {
   top: 0;
   left: 0;
   right: 0;
+  width: 364px;
+  height: 24px;
 }
 #profile {
   width: 150px;

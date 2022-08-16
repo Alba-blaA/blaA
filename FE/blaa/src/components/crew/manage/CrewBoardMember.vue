@@ -1,9 +1,15 @@
 <template>
-  <div class="back_ground"></div>
+  <div
+    :class="{
+      back_ground_business: crewInfo.is_business,
+      back_ground_friends: !crewInfo.is_business,
+    }"
+  ></div>
   <div class="info_desk">
-    <!-- <img :src="host + crewInfo.crew_img" /> -->
     <div style="text-align: center; padding: 20px">
-      <img src="@/assets/crew_default1.png" />
+      <!-- <div v-if=""></div> -->
+      <img class="imgProfile" :src="crewInfo.crew_img" />
+      <!-- <img src="@/assets/crew_default1.png" /> -->
     </div>
     <div style="text-align: center">
       <h2 style="margin: 0">{{ crewInfo.crew_name }}</h2>
@@ -23,42 +29,35 @@
         <p>참여인원</p>
       </div>
     </div>
-    <div class="joinBtn" @click="crewJoin(crewInfo.crew_pk)">가입하기</div>
   </div>
   <br />
-  <div style="position: relative; margin-top: 200px">
+
+  <div style="position: relative; margin-top: 150px">
     <hr />
-    <div class="row" style="text-align: center; margin-left: 30px; margin-right: 30px">
-      <div class="col-5" @click="Info">정보</div>
-      <div class="col-2" style="display: flex; justify-content: center">
-        <div class="v-line2"></div>
-      </div>
-      <div class="col-5" @click="Feed">피드</div>
+    <div class="row" style="margin-left: 20px; margin-right: 20px">
+      <h5 style="color: #498d6d">내가 고정한 게시물</h5>
+    </div>
+
+    <div class="pin_article" style="margin: 20px">
+      <p>여기 고정된 게ㅣ시물</p>
     </div>
     <hr />
 
-    <div v-show="isInfo">
-      <div class="detail">
-        <h4>우리 크루를 소개합니다!</h4>
-        <p>
-          안녕하세요, {{ crewInfo.crew_name }} 입니다.<br />
-          크루 설명: {{ crewInfo.crew_explain }}
-        </p>
+    <div class="row" style="margin-left: 20px; margin-right: 20px">
+      <h5 style="color: #498d6d">바로가기</h5>
+    </div>
+    <div class="col" style="margin-left: 20px; margin-right: 20px">
+      <div class="buttons" @click="moveToArticle">
+        <p class="button_text">게시판</p>
       </div>
-      <hr />
-      <div class="detail">
-        <h4>위치</h4>
-        <p>박찬 지도 띄워줘</p>
-      </div>
-      <hr />
-      <div class="detail">
-        <h4>크루장</h4>
-        <p>{{ crewInfo.crew_leader }}</p>
+      <div class="buttons" @click="moveToCalendar">
+        <p class="button_text">스케줄</p>
       </div>
     </div>
-    <div v-show="isFeed">
+
+    <!-- <div v-show="isFeed">
       <router-view :isMember="isMember" style="margin: 30px"></router-view>
-    </div>
+    </div> -->
 
     <!-- <button @click="moveToArticle">Article</button>
     <button @click="moveToCalendar">Calendar</button>
@@ -78,11 +77,10 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const crewInfo = reactive({});
-    const crewMember = ref([]);
+
     const user_pk = store.state.account.userInfo.user_pk;
     let isInfo = ref(true);
     let isFeed = ref(false);
-    let isMember = ref(false);
 
     // const getCrewInfo = async () => {
     //   await store.dispatch("crew/getCrewInfo", route.params.crew_pk);
@@ -90,18 +88,7 @@ export default {
     // };
     onMounted(async () => {
       await store.dispatch("crew/getCrewInfo", route.params.crew_pk);
-      await store.dispatch("crew/getCrewMembers", route.params.crew_pk);
-
       Object.assign(crewInfo, store.state.crew.crewInfo);
-      Object.assign(crewMember.value, store.state.crew.members);
-      if (crewMember.value.length > 0) {
-        for (var i = 0; i < crewMember.value.length; i++) {
-          if (crewMember.value[i].user_pk == user_pk) {
-            isMember.value = true;
-            break;
-          }
-        }
-      }
     });
 
     const crewJoin = async (crew_pk) => {
@@ -159,18 +146,25 @@ export default {
       Feed,
       isInfo,
       isFeed,
-      isMember,
     };
   },
 };
 </script>
 
 <style scoped>
-.back_ground {
+.back_ground_business {
+  height: 179px;
+  z-index: -1;
+  margin: 0;
+
+  background-color: #498d6d;
+}
+
+.back_ground_friends {
   height: 179px;
   z-index: -1;
 
-  background-color: #498d6d;
+  background-color: #ffcd38;
 }
 
 .info_desk {
@@ -185,10 +179,10 @@ export default {
   box-shadow: 0px 4px 80px rgba(0, 0, 0, 0.07), 0px 0.893452px 17.869px rgba(0, 0, 0, 0.0417275), 0px 0.266004px 5.32008px rgba(0, 0, 0, 0.0282725);
   border-radius: 30px;
 
-  /* animation: fadeInUp 1s; */
+  animation: fadeInUp 1s;
 }
 
-.joinBtn {
+.joinBtn_business {
   display: flex;
   width: 207px;
   height: 30px;
@@ -199,6 +193,21 @@ export default {
   margin-bottom: 20px;
 
   background: #498d6d;
+  color: #ffffff;
+  border-radius: 20px;
+}
+
+.joinBtn_friends {
+  display: flex;
+  width: 207px;
+  height: 30px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: auto;
+  margin-bottom: 20px;
+
+  background: #ffcd38;
   color: #ffffff;
   border-radius: 20px;
 }
@@ -214,20 +223,50 @@ export default {
 }
 
 hr {
-  margin: 8px;
+  margin: 20px;
 }
 
 .detail {
   margin: 30px;
 }
-/* @keyframes fadeInUp {
+
+.imgProfile {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.pin_article {
+  height: 150px;
+  text-align: center;
+  padding: 20px;
+
+  background-color: #498d6d;
+  border-radius: 20px;
+}
+
+.buttons {
+  height: 60px;
+  margin-bottom: 10px;
+
+  background: #f5f5f5;
+  border-radius: 20px;
+  border: 1px #498d6d;
+}
+
+.button_text {
+  line-height: 60px;
+  margin-left: 30px;
+}
+
+@keyframes fadeInUp {
   0% {
     opacity: 0;
-    transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 20%, 0);
   }
   to {
     opacity: 1;
     transform: translateZ(0);
   }
-} */
+}
 </style>

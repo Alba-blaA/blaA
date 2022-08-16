@@ -75,6 +75,7 @@ export default {
 .back {
   margin-left: 10px;
   margin-top: 10px;
+  padding-bottom: 80px;
 }
 
 #signup {

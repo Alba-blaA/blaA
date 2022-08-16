@@ -14,51 +14,24 @@
     <form>
       <label for="signup-email">이메일</label>
       <div class="in-line">
-        <input
-          id="signup-email"
-          type="email"
-          name="email"
-          v-model="user.email"
-          placeholder="E-mail"
-        />
-        <input
-          type="button"
-          name="email"
-          value="중복확인"
-          @click.prevent="emailCheck"
-        />
+        <input id="signup-email" type="email" name="email" v-model="user.email" placeholder="E-mail" />
+        <input type="button" name="email" value="중복확인" @click.prevent="emailCheck" />
       </div>
       <small>{{ emailMessage }}</small>
       <br />
 
       <label for="signup-password"> 비밀번호 </label>
-      <input
-        id="signup-password"
-        type="password"
-        v-model="user.password"
-        placeholder="Password"
-        autocomplete="off"
-      />
+      <input id="signup-password" type="password" v-model="user.password" placeholder="Password" autocomplete="off" />
       <small>{{ passwordMessage }}</small>
       <br /><br />
 
       <label for="signup-checkpassword"> 비밀번호 확인 </label>
-      <input
-        id="signup-checkpassword"
-        type="password"
-        placeholder="Password"
-        autocomplete="off"
-      />
+      <input id="signup-checkpassword" type="password" placeholder="Password" autocomplete="off" />
       <small>{{ checkPasswordMessage }}</small>
       <br /><br />
 
       <label for="signup-name"> 이름 </label>
-      <input
-        id="signup-name"
-        type="text"
-        v-model="user.name"
-        placeholder="Name"
-      />
+      <input id="signup-name" type="text" v-model="user.name" placeholder="Name" />
       <small>{{ nameMessage }}</small>
       <br /><br />
 
@@ -215,10 +188,7 @@ export default {
           }, 3000);
         }
 
-        if (
-          user.value.password !=
-          document.getElementById("signup-checkpassword").value
-        ) {
+        if (user.value.password != document.getElementById("signup-checkpassword").value) {
           err = true;
           checkPasswordMessage.value = "비밀번호가 일치하지 않습니다.";
           setTimeout(() => {
@@ -249,8 +219,7 @@ export default {
       if (!err) {
         return;
       } else {
-        const tel =
-          user.value.tel1 + "-" + user.value.tel2 + "-" + user.value.tel3;
+        const tel = user.value.tel1 + "-" + user.value.tel2 + "-" + user.value.tel3;
 
         store.commit("account/SET_SIGNUP_EMAIL", user.value.email);
         store.commit("account/SET_SIGNUP_PASSWORD", user.value.password);
@@ -280,6 +249,7 @@ export default {
 #signup {
   padding-left: 40px;
   padding-right: 40px;
+  padding-bottom: 80px;
   position: fixed;
   top: 0;
   left: 0;

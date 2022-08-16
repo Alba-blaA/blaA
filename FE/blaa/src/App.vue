@@ -1,6 +1,6 @@
 <template>
   <header-view></header-view>
-  <div class="container" style="padding-bottom: 80px">
+  <div style="padding-bottom: 80px">
     <router-view></router-view>
   </div>
   <footer-view v-if="isLogin"></footer-view>
@@ -33,16 +33,8 @@ export default {
 </script>
 
 <style>
-#profile {
-  width: 150px;
-  height: 150px;
-  border-radius: 70%;
-  overflow: hidden;
-}
-
-#imgProfile {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+@font-face {
+  font-family: "pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.5/dist/web/variable/pretendardvariable.css");
 }
 </style>
