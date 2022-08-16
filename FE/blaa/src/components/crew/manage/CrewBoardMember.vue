@@ -35,10 +35,10 @@
   <div style="position: relative; margin-top: 150px">
     <hr />
     <div class="row" style="margin-left: 20px; margin-right: 20px">
-      <h5 style="color: #498d6d">내가 고정한 게시물</h5>
+      <h6 style="color: #498d6d">고정 게시물</h6>
     </div>
 
-    <div class="pin_article" style="margin: 20px">
+    <div class="pin_article">
       <p>여기 고정된 게ㅣ시물</p>
     </div>
     <hr />
@@ -239,7 +239,8 @@ hr {
 .pin_article {
   height: 150px;
   text-align: center;
-  padding: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
 
   background-color: #498d6d;
   border-radius: 20px;
