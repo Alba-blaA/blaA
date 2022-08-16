@@ -23,7 +23,7 @@ class CrewNoneImageCreateSerializer(serializers.ModelSerializer) :
     def create(self, validated_data):
         instance = Crew.objects.create(**validated_data)
         if instance.is_business :
-            instance.crew_img = 'media/crew/image/crew_default1.png'
+            instance.crew_img = 'crew/image/crew_default1.png'
         instance.save()
         return instance
 
