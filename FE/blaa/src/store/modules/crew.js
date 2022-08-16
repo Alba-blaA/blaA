@@ -176,7 +176,7 @@ export default {
     async getCrewMembers({ commit, state }, crew_pk) {
       try {
         const instance = await axios.get(api.crew.members(crew_pk));
-        commit("GET_CREW_MEMBERS", instance.data);
+        commit("GET_CREW_MEMBERS", instance.data.results);
       } catch (error) {
         console.log(error);
       }

@@ -9,7 +9,7 @@
   <div class="container">
     <div class="card" v-for="(crew, i) in AllCrews.crews" :key="i" v-bind="crew" @click="moveToDetail(crew.crew_pk)">
       <div class="col-4" style="text-align: center">
-        <img id="profile" :src="`https://i7b209.p.ssafy.io/` + crew.crew_img" />
+        <img id="profile" :src="host + crew.crew_img" />
       </div>
       <div class="col-8">
         <div class="row">
@@ -56,6 +56,7 @@ export default {
       crews: [],
     });
     let business = ref(true);
+    const host = "https://i7b209.p.ssafy.io/";
 
     const start = async () => {
       await store.dispatch("crew/allcrewlist");
@@ -65,6 +66,10 @@ export default {
     const moveToDetail = (crew_pk) => {
       router.push({ name: "crewboard", params: { crew_pk: crew_pk } });
     };
+
+    // const replaceByDefault = (e) => {
+    //   e.target.src = "@/assets/crew_default1";
+    // };
 
     // const filtered = computed(() => {
     //   return AllCrews.crews.filter((item) => {
@@ -78,6 +83,7 @@ export default {
       business,
       moveToDetail,
       // filtered,
+      host,
     };
   },
 };

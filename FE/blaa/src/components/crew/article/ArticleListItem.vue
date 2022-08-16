@@ -1,32 +1,19 @@
 <template>
-  <thead>
-    <th>순번</th>
-    <th>제목</th>
-    <th>내용</th>
-    <th>작성자</th>
-    <th>작성일자</th>
-    <th>공개여부</th>
-    <th>핀 고정</th>
-  </thead>
-  <tbody>
-    <tr>
-      <td>{{ crew_article_pk }}</td>
-      <!-- <td>{{ crew }}</td> -->
-      <td>
-        <!-- <router-link :to="'/crew/article/detail/'+crew_article_pk">{{ crew_title }}</router-link> --->
-        <router-link :to="{ name: 'articledetail', params: { crew_article_pk: crew_article_pk } }">{{ crew_title }}</router-link>
-        <!-- {{ crew_title }} -->
-      </td>
-      <td>{{ crew_content }}</td>
-      <td>{{ user }}</td>
-      <td>{{ created_at }}</td>
-      <td>{{ crew_private }}</td>
-      <td>{{ crew_pin }}</td>
-    </tr>
-  </tbody>
+  <div class="article" @click="moveToArticle(crew_article_pk)">
+    <h4>{{ crew_title }}</h4>
+    {{ user }}
+    {{ created_at }}
+    {{ crew_content }}
+  </div>
+  <hr />
+
+  <!-- <router-link :to="'/crew/article/detail/'+crew_article_pk">{{ crew_title }}</router-link> --->
+  <!-- <router-link :to="{ name: 'articledetail', params: { crew_article_pk: crew_article_pk } }">{{ crew_title }}</router-link> -->
+  <!-- {{ crew_title }} -->
 </template>
 
 <script>
+import { useRouter } from "vue-router";
 export default {
   props: {
     crew_article_pk: Number,
@@ -37,8 +24,23 @@ export default {
     crew_content: String,
     crew_private: Boolean,
     crew_pin: Boolean,
+    isMember: Boolean,
+  },
+  setup() {
+    const router = useRouter();
+    const moveToArticle = (crew_article_pk) => {
+      router.push({ name: "articledetail", params: { crew_article_pk: crew_article_pk } });
+    };
+    return {
+      moveToArticle,
+    };
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+.article {
+  width: 100%;
+  background-color: lightblue;
+}
+</style>
