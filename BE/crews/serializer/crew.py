@@ -1,7 +1,9 @@
 from rest_framework import serializers
 from accounts.models import User
-
+import traceback
 from crews.models import Crew, CrewInvite,CrewChat
+from PIL import Image
+ 
 
 
 class CrewCreateSerializer(serializers.ModelSerializer) :
@@ -17,6 +19,13 @@ class CrewNoneImageCreateSerializer(serializers.ModelSerializer) :
         model = Crew
         fields= ('crew_pk','crew_leader','is_business','crew_name','crew_img','crew_explain','crew_region')
         read_only_fields = ('crew_leader','crew_img')
+    
+    def create(self, validated_data):
+        instance = Crew.objects.create(**validated_data)
+        if instance.is_business :
+            instance.crew_img = 'crew/image/crew_default1.png'
+        instance.save()
+        return instance
 
 
 class CrewListSerializer(serializers.ModelSerializer) :

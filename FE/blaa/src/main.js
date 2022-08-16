@@ -5,7 +5,7 @@ import store from "./store";
 import BootstrapVue3 from "bootstrap-vue-3";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue-3/dist/bootstrap-vue-3.css";
-import 'v-calendar/dist/style.css';
+import "v-calendar/dist/style.css";
 import { Calendar, SetupCalendar, DatePicker } from "v-calendar";
 
 window.Kakao.init(process.env.VUE_APP_KAKAO_JAVASCRIPT);
