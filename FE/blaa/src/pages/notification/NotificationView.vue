@@ -75,10 +75,8 @@ export default {
         })        
       } else if (notification.type == "crew"){
         console.log("accpet_crew");
-        router.push({name : 'crewboard',
-          params : {
-            crew_pk: notification.redirect_pk
-          }
+        router.push({name : 'mycrewlist'
+          
         })
       }
 

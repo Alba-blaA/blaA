@@ -89,6 +89,7 @@ export default {
                 )
                     
             } catch(error){
+                console.log(error);
                 alert("가입거절에 성공하셨습니다.")
             }
         })
