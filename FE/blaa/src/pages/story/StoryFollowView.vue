@@ -28,7 +28,7 @@ export default {
     const currentPage = ref(1)
 
     const getPure = async(page = currentPage.value) => {
-      data = {
+      const data = {
         isState: 'follow',
         page: page
       }

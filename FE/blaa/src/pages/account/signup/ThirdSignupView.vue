@@ -5,79 +5,92 @@
       <div class="signup-step">
         <div class="yellow-circle"><b class="signup-num">1</b></div>
         <img class="arrow" src="@/img/yellow_arrow.png" />
-        <div class="gray-circle"><b class="signup-num">2</b></div>
-        <img class="arrow" src="@/img/gray_arrow.png" />
-        <div class="gray-circle"><b class="signup-num">3</b></div>
+        <div class="yellow-circle"><b class="signup-num">2</b></div>
+        <img class="arrow" src="@/img/yellow_arrow.png" />
+        <div class="yellow-circle"><b class="signup-num">3</b></div>
       </div>
     </div>
 
-    <b-form>
-      <b-form-group>
-        <b-form-input
+    <form>
+      <label for="signup-nickname">닉네임</label>
+      <div class="in-line">
+        <input
           id="signup-nickname"
           type="text"
           v-model="user.nickname"
-          placeholder="NICKNAME"
+          placeholder="Nickname"
+        />
+        <input
+          type="button"
+          name="nickname"
+          value="중복확인"
+          @click.prevent="nicknameCheck"
+        />
+      </div>
+      <small>{{ nicknameMessage }}</small>
+      <br />
+
+      <label v-if="is_alba" for="signup-category">근무 중인 업종</label>
+      <label v-else for="signup-category">관심 업종</label>
+      <select id="signup-category" class="select-value" v-model="user.category">
+        <option value="null">업종 카테고리</option>
+        <option
+          :key="c"
+          v-for="(category, c) in category_list"
+          :value="category.job_main_category"
         >
-        </b-form-input>
-        <b-button>중복확인</b-button>
-      </b-form-group>
-    </b-form>
+          {{ category.job_main_category }}
+        </option>
+      </select>
+      <small>{{ categoryMessage }}</small>
+
+      <div>
+        <label v-if="is_alba" for="signup-region">근무 중인 지역</label>
+        <label v-else for="signup-region">관심 지역</label>
+        <select
+          id="signup-sido"
+          class="select-value"
+          v-model="user.sido"
+          @change="getGu(user.sido)"
+        >
+          <option value="null">시/도</option>
+          <option :key="s" v-for="(si, s) in si_list" :value="si.sido_code">
+            {{ si.sido_name }}
+          </option>
+        </select>
+        &nbsp;
+
+        <select
+          id="signup-gugun"
+          v-model="user.gugun"
+          @change="getDong(user.sido, user.gugun)"
+        >
+          <option value="null">구/군</option>
+          <option :key="g" v-for="(gu, g) in gu_list" :value="gu.gugun_code">
+            {{ gu.gugun_name }}
+          </option>
+        </select>
+        &nbsp;
+
+        <select id="signup-dong" v-model="user.dong">
+          <option value="null">동/면/리</option>
+          <option
+            :key="d"
+            v-for="(dong, d) in dong_list"
+            :value="dong.dong_code"
+          >
+            {{ dong.dong_name }}
+          </option>
+        </select>
+      </div>
+      <small>{{ regionMessage }}</small>
+
+      <div>
+        <button id="btn-before" @click.prevent="before">이전</button> &nbsp;
+        <button id="btn-signup" @click.prevent="signup">등록</button>
+      </div>
+    </form>
   </div>
-  <!-- 
-  <input
-    id="signup-nickname"
-    v-model="user.nickname"
-    placeholder="Enter nickname"
-  />
-  &nbsp;
-  <button @click.prevent="nicknameCheck">중복확인</button>
-  <br />
-
-  <select id="signup-category" v-model="user.category">
-    <option value="null">업종 카테고리</option>
-    <option
-      :key="c"
-      v-for="(category, c) in category_list"
-      :value="category.job_main_category"
-    >
-      {{ category.job_main_category }}
-    </option>
-  </select>
-
-  <div>
-    <select id="signup-sido" v-model="user.sido" @change="getGu(user.sido)">
-      <option value="null">시/도</option>
-      <option :key="s" v-for="(si, s) in si_list" :value="si.sido_code">
-        {{ si.sido_name }}
-      </option>
-    </select>
-    &nbsp;
-
-    <select
-      id="signup-gugun"
-      v-model="user.gugun"
-      @change="getDong(user.sido, user.gugun)"
-    >
-      <option value="null">구/군</option>
-      <option :key="g" v-for="(gu, g) in gu_list" :value="gu.gugun_code">
-        {{ gu.gugun_name }}
-      </option>
-    </select>
-    &nbsp;
-
-    <select id="signup-dong" v-model="user.dong">
-      <option value="null">동/면/리</option>
-      <option :key="d" v-for="(dong, d) in dong_list" :value="dong.dong_code">
-        {{ dong.dong_name }}
-      </option>
-    </select>
-  </div>
-
-  <div>
-    <button @click.prevent="before">이전</button> &nbsp;
-    <button @click.prevent="signup">가입</button>
-  </div> -->
 </template>
 
 <script>
@@ -101,6 +114,14 @@ export default {
 
     store.dispatch("account/getCategoryList");
     store.dispatch("account/getSiList");
+
+    const is_alba = computed(() => {
+      return store.state.account.signupUser.is_alba;
+    });
+
+    const nicknameMessage = ref(null);
+    const categoryMessage = ref(null);
+    const regionMessage = ref(null);
 
     const nicknameCheck = () => {
       if (user.value.nickname == null) {
@@ -225,6 +246,10 @@ export default {
 
     return {
       user,
+      is_alba,
+      nicknameMessage,
+      categoryMessage,
+      regionMessage,
       nicknameCheck,
       category_list,
       si_list,
@@ -239,4 +264,182 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+#signup {
+  padding-left: 40px;
+  padding-right: 40px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: auto;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  padding-top: 70px;
+}
+
+#signup-top {
+  margin-top: 40px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.signup-text {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 35px;
+  line-height: 30px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.signup-step {
+  text-align: center;
+  display: inline-block;
+  height: 50px;
+  line-height: 50px;
+}
+
+.yellow-circle {
+  width: 50px;
+  height: 50px;
+  background-color: #eec95c;
+  border-radius: 50%;
+  float: left;
+  position: relative;
+}
+
+.gray-circle {
+  width: 50px;
+  height: 50px;
+  background-color: #d9d9d9;
+  border-radius: 50%;
+  float: left;
+  position: relative;
+}
+
+.signup-num {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 36px;
+  text-align: center;
+  color: #ffffff;
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+}
+
+.arrow {
+  float: left;
+  max-height: 100%;
+  vertical-align: middle;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+label {
+  float: left;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: bold;
+  color: black;
+}
+
+input {
+  width: 100%;
+  height: 50px;
+  padding: 5px;
+  border: solid 2px #d9d9d9;
+  border-radius: 8px;
+}
+
+.in-line {
+  position: relative;
+}
+
+input[type="button"] {
+  position: absolute;
+  width: 90px;
+  height: 40px;
+  bottom: 5px;
+  right: 5px;
+  border-radius: 100px;
+  background-color: #eec95c;
+  border: #eec95c;
+  font-weight: bold;
+}
+
+small {
+  float: left;
+  font-family: Inter;
+  font-style: normal;
+  font-size: 15px;
+}
+
+input::placeholder {
+  color: #d9d9d9;
+}
+
+input:focus {
+  border: 2px #eec95c solid;
+  outline: none;
+}
+
+select {
+  width: 100%;
+  height: 50px;
+  padding: 5px;
+  border: solid 2px #d9d9d9;
+  border-radius: 8px;
+}
+
+select:focus {
+  border: 2px #eec95c solid;
+  outline: none;
+}
+
+.select-value::part(button) {
+  color: #ffffff;
+  background-color: #f00;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.select-value::part(listbox) {
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid red;
+  border-radius: 5px;
+}
+
+#btn-before {
+  width: 100px;
+  height: 40px;
+  border: 2px solid #eec95c;
+  border-radius: 100px;
+  background-color: #ffffff;
+  color: #498d6d;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+}
+
+#btn-signup {
+  width: 100px;
+  height: 40px;
+  background: #eec95c;
+  border: #eec95c;
+  border-radius: 100px;
+  color: #498d6d;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+}
+</style>

@@ -1,8 +1,10 @@
 <template>
-  <br /><br />
-  <div>
-    <h3>회원정보수정페이지</h3>
+  <div id="update-info">
+    <h1 class="update-text">회원정보 수정</h1>
+    <hr />
+
     <form>
+      <label for="update-email">이메일</label>
       <input
         id="update-email"
         type="text"
@@ -10,8 +12,9 @@
         placeholder="Enter email"
         disabled
       />
-      <br />
+      <br /><br />
 
+      <label for="update-name">이름</label>
       <input
         id="update-name"
         type="text"
@@ -19,33 +22,63 @@
         placeholder="Enter name"
         disabled
       />
+      <br /><br />
+
+      <label for="update-tel">휴대폰</label>
+
+      <div id="input-tel">
+        <input id="update-tel1" type="text" v-model="tel1" />
+        <b> - </b>
+        <input id="update-tel2" type="text" v-model="tel2" />
+        <b> - </b>
+        <input id="update-tel3" type="text" v-model="tel3" />
+      </div>
+      <small>{{ telMessage }}</small
+      ><br />
+
+      <hr style="border-style: dotted" />
+
+      <label for="update-nickname">닉네임</label>
+      <div class="in-line">
+        <input
+          id="update-nickname"
+          type="text"
+          v-model="updateInfo.nickname"
+          placeholder="Nickname"
+        />
+        <input
+          type="button"
+          name="nickname"
+          value="중복확인"
+          @click.prevent="nicknameCheck"
+        />
+      </div>
+      <small>{{ nicknameMessage }}</small>
       <br />
 
       <div>
-        <input id="update-tel1" v-model="tel1" placeholder="Enter tel" />
-        <b> - </b>
-        <input id="update-tel2" v-model="tel2" />
-        <b> - </b>
-        <input id="update-tel3" v-model="tel3" />
+        <label>현재 근무 중인 직장이 있습니까?</label> <br />
+        <input
+          type="radio"
+          id="selectYes"
+          v-model="updateInfo.is_alba"
+          value="true"
+        />
+        <label for="selectYes">예</label>
+        <input
+          type="radio"
+          id="selectNo"
+          v-model="updateInfo.is_alba"
+          value="false"
+        />
+        <label for="selectNo">아니오</label>
       </div>
+      <br /><br />
 
-      <input
-        id="update-nickname"
-        v-model="updateInfo.nickname"
-        placeholder="Enter nickname"
-      />
-      &nbsp;
-      <button @click.prevent="nicknameCheck">중복확인</button>
-      <br />
-
-      <div>
-        <b>현재 근무 중인 직장이 있습니까?</b> <br />
-        <input type="radio" v-model="updateInfo.is_alba" value="true" />
-        <label for="true">예</label>
-        <input type="radio" v-model="updateInfo.is_alba" value="false" />
-        <label for="false">아니오</label>
-      </div>
-
+      <label v-if="updateInfo.is_alba" for="update-category"
+        >근무 중인 업종</label
+      >
+      <label v-else for="update-category">관심 업종</label>
       <select id="update-category" v-model="updateInfo.category">
         <option value="null">업종 카테고리</option>
         <option
@@ -56,6 +89,7 @@
           {{ category.job_main_category }}
         </option>
       </select>
+      <small>{{ categoryMessage }}</small>
 
       <!-- <div>
         <select id="update-sido" v-model="sido" @change="getGu(sido)">
@@ -90,9 +124,9 @@
         </select>
       </div> -->
 
-      <div>
-        <button @click.prevent="before">이전</button> &nbsp;
-        <button @click.prevent="update">수정</button>
+      <div style="margin-top: 20px">
+        <button id="btn-before" @click.prevent="before">이전</button> &nbsp;
+        <button id="btn-update" @click.prevent="update">수정</button>
       </div>
     </form>
   </div>
@@ -118,6 +152,10 @@ export default {
     const tel1 = ref(tel[0]);
     const tel2 = ref(tel[1]);
     const tel3 = ref(tel[2]);
+
+    const telMessage = ref(null);
+    const nicknameMessage = ref(null);
+    const categoryMessage = ref(null);
 
     // const region = userInfo.region.split(" ");
     // const sido = ref("");
@@ -241,6 +279,10 @@ export default {
     //   checkPassword();
     // }
 
+    const before = () => {
+      router.go(-1);
+    };
+
     const update = () => {
       // updateInfo.value.region =
       //   sido.value + " " + gugun.value + " " + dong.value;
@@ -269,6 +311,10 @@ export default {
       tel1,
       tel2,
       tel3,
+      telMessage,
+      nicknameMessage,
+      categoryMessage,
+      before,
       update,
       // sido,
       // gugun,
@@ -285,4 +331,155 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+#update-info {
+  padding-left: 40px;
+  padding-right: 40px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: auto;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  padding-top: 40px;
+  padding-bottom: 50px;
+}
+
+.update-text {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 35px;
+  line-height: 30px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+label {
+  float: left;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: bold;
+  color: black;
+}
+
+input[type="text"],
+input[type="email"] {
+  width: 100%;
+  height: 50px;
+  padding: 5px;
+  border: solid 2px #d9d9d9;
+  border-radius: 8px;
+}
+
+.in-line {
+  position: relative;
+}
+
+input[type="button"] {
+  position: absolute;
+  width: 90px;
+  height: 40px;
+  bottom: 5px;
+  right: 5px;
+  border-radius: 100px;
+  background-color: #eec95c;
+  border: #eec95c;
+  font-weight: bold;
+}
+
+small {
+  float: left;
+  font-family: Inter;
+  font-style: normal;
+  font-size: 15px;
+}
+
+input::placeholder {
+  color: #d9d9d9;
+}
+
+input:focus {
+  border: 2px #eec95c solid;
+  outline: none;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"] + label {
+  display: inline-block;
+  cursor: pointer;
+  width: 70px;
+  height: 30px;
+  border: 2px solid #d9d9d9;
+  line-height: 30px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 13px;
+  background-color: #ffffff;
+  color: #498d6d;
+  border-radius: 100px;
+}
+
+input[type="radio"]:checked + label {
+  background-color: #eec95c;
+  border: 2px solid #eec95c;
+  color: #498d6d;
+}
+
+select {
+  width: 100%;
+  height: 50px;
+  padding: 5px;
+  border: solid 2px #d9d9d9;
+  border-radius: 8px;
+}
+
+select:focus {
+  border: 2px #eec95c solid;
+  outline: none;
+}
+
+.select-value::part(button) {
+  color: #ffffff;
+  background-color: #f00;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.select-value::part(listbox) {
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid red;
+  border-radius: 5px;
+}
+
+#btn-before {
+  width: 100px;
+  height: 40px;
+  border: 2px solid #eec95c;
+  border-radius: 100px;
+  background-color: #ffffff;
+  color: #498d6d;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+}
+
+#btn-update {
+  width: 100px;
+  height: 40px;
+  background: #eec95c;
+  border: #eec95c;
+  border-radius: 100px;
+  color: #498d6d;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+}
+</style>

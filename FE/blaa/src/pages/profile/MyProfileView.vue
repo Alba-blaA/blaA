@@ -4,13 +4,22 @@
   <!-- <div id="profile">
     <img class="imgProfile" :src="HOST + userInfo.image" />
   </div> -->
-    <div class="image-upload" style="border: 3px solid; text-align:center; margin: auto;" id="profile">
+  <div
+    class="image-upload"
+    style="border: 3px solid; text-align: center; margin: auto"
+    id="profile"
+  >
     <label for="update-profileImg">
-        <img  class="imgProfile" :src="HOST + userInfo.image"/>
+      <img class="imgProfile" :src="HOST + userInfo.image" />
     </label>
 
-    <input id="update-profileImg" class="update-profileImg" @change="updateProfileImg" type="file" style="display: none;"/>
-
+    <input
+      id="update-profileImg"
+      class="update-profileImg"
+      @change="updateProfileImg"
+      type="file"
+      style="display: none"
+    />
   </div>
   <h4 class="mt-3 mb-2" style="text-align:center; font-weight: bold;">{{ userInfo.nickname }}</h4>
 
@@ -23,7 +32,7 @@
             <b style="font-size:1.2rem">
               {{ follow.followers }}
               <br />
-              <p >팔로워</p>
+              <p>팔로워</p>
             </b>
           </div>
           </td>
@@ -36,10 +45,10 @@
               <p>팔로잉</p>
             </b>
           </div>
-          </td>
-        </tr>
-      </table>
-    </div>
+        </td>
+      </tr>
+    </table>
+  </div>
 
   <!-- <button @click.prevent="gochatroom">채팅하러가기</button> -->
   <!-- <button @click="showinvitedcrewlist">나를초대한크루리스트</button> -->
@@ -73,7 +82,28 @@
         <h5 class="profile_list"><b>회원정보</b></h5>
       </div>
     </div>
+
     <hr />
+    <div @click="myReview">
+      <h5 class="profile_list"><b>내 리뷰</b></h5>
+    </div>
+
+    <hr />
+    <div @click="myCrew">
+      <h5 class="profile_list"><b>내 크루</b></h5>
+    </div>
+
+    <hr />
+    <div @click="showinvitedcrewlist">
+      <h5 class="profile_list"><b>나를초대한크루리스트</b></h5>
+    </div>
+
+    <hr />
+    <div @click="myInfo">
+      <h5 class="profile_list"><b>회원정보</b></h5>
+    </div>
+  </div>
+  <hr />
 </template>
 
 <script>
@@ -184,9 +214,9 @@ export default {
       }
     };
 
-    const follower = async () => {
+    const follower = () => {
       console.log("팔로워 조회");
-      await store.dispatch("profile/getFollowerList", userInfo.user_pk);
+
       router.push({
         name: "followList",
         params: { user_pk: userInfo.user_pk, followType: "follower", page: 1 },
@@ -262,7 +292,7 @@ export default {
   object-fit: cover;
 }
 
-.profile_list{
+.profile_list {
   margin-left: 1rem;
   font-weight: bold;
 }
