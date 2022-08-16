@@ -33,13 +33,12 @@
           <img :src="host + story.user_pk.image" height="60" width="60" style="margin: 0 auto; cursor:pointer" @click="moveToProfile">
           <div class="d-flex justify-content-between" style="padding: 20px 0 0 10px;">
             <span>{{ story.user_pk.nickname }} </span>
-            <span>{{ howNow(story.created_at) }}</span>
+            <span>{{ story.created_at }}</span>
           </div>
         </div>
       </div>
       <br>
       <CommentList/>
-      <div style="height: 1px; background-color:black; width:100%; margin: 15px 0;"></div>
       <CommentForm/>
     </div>
   </div>
@@ -105,8 +104,16 @@ export default {
         })
     }
 
+    // 폼에서 생성했을 시 뷰로 빠져나올 수 있게
     const goBack = () => {
-      router.go(-1)
+      if (window.history.state.back.includes('create')){
+        router.push({
+          name: 'story'
+        })
+      } else {
+        router.go(-1)
+      }
+      
     }
 
     const likeStory = async () => {

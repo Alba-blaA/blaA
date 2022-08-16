@@ -21,6 +21,7 @@
 import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import axios from 'axios'
+import myaxios from '@/api/axios'
 import api from '@/api/api'
 import ReviewMapList from '@/components/review/ReviewMapList.vue'
 import PaginationBar from '@/components/review/PaginationBar.vue'
@@ -51,10 +52,7 @@ export default {
       } else {
         if (!isStore.value) {
           try {
-            const res = await axios.get(api.review.store(), {
-              headers: {
-                Authorization: `Bearer ${store.state.review.Token}` 
-              },
+            const res = await myaxios.get(api.review.store(), {
               params: {
                 search: searchWord.value,
                 page: 1
@@ -80,13 +78,14 @@ export default {
       try {
           const res = await axios.get(`https://dapi.kakao.com/v2/local/search/keyword.json?query=${searchWord.value}`, {
             headers: {
-              Authorization: `KakaoAK 8f46e3774c965e5aefdfc2bb2de1af41`
+              Authorization: `KakaoAK ${process.env.VUE_APP_KAKAO_REST_API}`
             },
             params: {
               page: currentPage.value,
               size: 5
             }
           })
+          console.log(res.data)
           searchList.value = res.data.documents
           totalCount.value = res.data.meta.pageable_count
           currentPage.value = page

@@ -57,7 +57,7 @@ export default {
     async getCrewArticle({ commit, state }, crew_pk) {
       try {
         const instance = await axios.get(api.crew.articles(crew_pk));
-        commit("GET_CREW_ARTICLES", instance.data);
+        commit("GET_CREW_ARTICLES", instance.data.results);
       } catch (error) {
         console.log(error);
       }

@@ -16,8 +16,9 @@ export default {
   },
   mutations: {
     GET_IMAGES(state, payload) {
+      console.log(payload)
       state.totalCount = payload.count[0]['count']
-      if (state.isState == payload.isState.value) {
+      if (state.isState == payload.isState.value && payload.page != 1) {
         for (let i=0; i < payload.data.length; i++) {
           state.images.push(payload.data[i])
         }
@@ -27,9 +28,9 @@ export default {
       }
     },
     GET_CURRENT_STORY(state, payload) {
-      const { yyyyMMdd } = dataChange();
+      const { howNow } = dataChange();
       // 날짜 변환
-      payload.created_at = yyyyMMdd(payload.created_at);
+      payload.created_at = howNow(payload.created_at);
       state.currentStory = payload;
     },
     DELETE_CURRENT_STORY(state) {
@@ -40,20 +41,20 @@ export default {
       state.currentStory.like_user_count = payload.like_user_count;
     },
     CREATE_COMMENT(state, payload) {
-      const { yyyyMMdd } = dataChange();
-
+      const { howNow } = dataChange();
       // 날짜 변환
-      payload.created_at = yyyyMMdd(payload.created_at);
+      payload.created_at = howNow(payload.created_at);
       // 작성자, 내용, 날짜가 객체로 들어감
       state.comments.push(payload);
     },
     GET_COMMENT(state, payload) {
-      const { yyyyMMdd } = dataChange();
-
+      const { howNow } = dataChange();
       // 날짜 변환
-      payload.forEach((ele) => {
-        ele.created_at = yyyyMMdd(ele.created_at);
-      });
+      if (payload) {
+        payload.forEach((ele) => {
+          ele.created_at = howNow(ele.created_at);
+        });
+      } 
 
       state.comments = payload;
     },
@@ -73,9 +74,6 @@ export default {
     async getImages({ commit, state }, data) {
       try {
         const res = await axios.get(api.story.story(), {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
           params: {
             page: data.page
           }
@@ -83,7 +81,8 @@ export default {
         const send = {
           count: res.data.splice(-1,1),
           data: res.data,
-          isState: data.isState
+          isState: data.isState,
+          page: data.page
         }
         commit("GET_IMAGES", send);
       } catch (error) {
@@ -95,9 +94,6 @@ export default {
     async getCategory({ commit, state }, data) {
       try {
         const res = await axios.get(api.story.story() + "category/", {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
           params: {
             page: data.page
           }
@@ -105,8 +101,10 @@ export default {
         const send = {
           count: res.data.splice(-1,1),
           data: res.data,
-          isState: data.isState
+          isState: data.isState,
+          page: data.page
         }
+        console.log('업종', res.data)
         commit("GET_IMAGES", send);
       } catch (error) {
         // 에러 발생시
@@ -116,9 +114,6 @@ export default {
     async getRegion({ commit, state }, data) {
       try {
         const res = await axios.get(api.story.story() + "region/", {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
           params: {
             page: data.page
           }
@@ -126,8 +121,10 @@ export default {
         const send = {
           count: res.data.splice(-1,1),
           data: res.data,
-          isState: data.isState
+          isState: data.isState,
+          page: data.page
         }
+        console.log('지역', res.data)
         commit("GET_IMAGES", send);
       } catch (error) {
         // 에러 발생시
@@ -137,18 +134,18 @@ export default {
     async getFollow({ commit, state }, data) {
       try {
         const res = await axios.get(api.story.story() + "follow/", {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
           params: {
             page: data.page
           }
         });
+        console.log('팔로우', res.data)
         const send = {
           count: res.data.splice(-1,1),
           data: res.data,
-          isState: data.isState
+          isState: data.isState,
+          page: data.page
         }
+
         commit("GET_IMAGES", send);
       } catch (error) {
         // 에러 발생시
@@ -158,22 +155,38 @@ export default {
     async getHashtag({ commit, state }, page) {
       try {
         const res = await axios.get(api.story.hashtag(), {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
           params: {
             page: page.page,
-            id: page.hashtag,
+            id: page.hashtag_content,
           }
         })
-        const data = []
-        for (const story in res.data) {
-          data.push(res.data[story].story_pk)
+
+        const res2 = await axios.get(api.story.hashtag(), {
+          params: {
+            page: page.page,
+            id: page.hashtag_content,
+          }
+        })
+
+        let result = []
+
+        if (res.data[-1] == Number) {
+          result = res.data
+        } else {
+          result = res2.data
         }
+        const count = result.splice(-1,1)
+        
+        const array = []
+        result.forEach(ele => {
+          array.push(ele['story_pk'])
+        })
+
         const send = {
-          count: res.data.splice(-1,1),
-          data: res.data,
-          isState: data.isState
+          count: count,
+          data: array,
+          isState: page.isState,
+          page: page.page
         }
         commit('GET_IMAGES', send)
       } catch(error) {
@@ -182,23 +195,16 @@ export default {
     },
     async getCurrentStory({ commit, state }, story_pk) {
       try {
-        const res = await axios.get(api.story.detail(story_pk), {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
-        });
-        commit("GET_CURRENT_STORY", res.data);
+        const res = await axios.get(api.story.detail(story_pk));
+        // 댓글 가져옴
+        commit("GET_CURRENT_STORY", res.data)
       } catch (error) {
         console.log(error);
       }
     },
     async deleteCurrentStory({ commit, state }, story_pk) {
       try {
-        await axios.delete(api.story.detail(story_pk), {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
-        });
+        await axios.delete(api.story.detail(story_pk));
         commit("DELETE_CURRENT_STORY");
       } catch (error) {
         console.error(error);
@@ -208,12 +214,7 @@ export default {
       try {
         const res = await axios.post(
           api.story.like(story_pk),
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${state.Token}`,
-            },
-          }
+          {}
         );
         commit("LIKE_CURRNET_STORY", res.data);
       } catch (error) {
@@ -223,12 +224,18 @@ export default {
     // 댓글을 가져오는 함수
     async getComment({ commit, state }, story_pk) {
       try {
-        const res = await axios.get(api.story.comment(story_pk), {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
-        });
-        commit("GET_COMMENT", res.data);
+        const res2 = await axios.get(api.story.comment(story_pk))
+        const res = await axios.get(api.story.comment(story_pk))
+        let data = []
+        if (res.data.length) {
+          if(res2.data[0].created_at) {
+            data = res2.data
+          } else {
+            data = res.data
+          }
+        }
+        
+        commit("GET_COMMENT", data);
       } catch (error) {
         console.log(error);
       }
@@ -242,11 +249,6 @@ export default {
           api.story.comment(content.story_pk),
           {
             story_comment: content.story_comment,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${state.Token}`,
-            },
           }
         );
         // 작성자, 내용, 날짜, 작성자 프로필을 요청하여 추가적으로 입력
@@ -262,11 +264,6 @@ export default {
           api.story.commentChange(data.comment_pk),
           {
             story_comment: story_comment,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${state.Token}`,
-            },
           }
         );
         commit("FIX_COMMENT", res.data);
@@ -276,11 +273,8 @@ export default {
     },
     async deleteComment({ commit, state }, comment_pk) {
       try {
-        await axios.delete(api.story.commentChange(comment_pk), {
-          headers: {
-            Authorization: `Bearer ${state.Token}`,
-          },
-        });
+        await axios.delete(api.story.commentChange(comment_pk));
+        console.log('삭제')
         commit("DELETE_COMMENT", comment_pk);
       } catch (error) {
         console.error(error);
