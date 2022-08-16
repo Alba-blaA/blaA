@@ -10,10 +10,21 @@ export default {
     images: [],
     comments: [],
     currentStory: [],
+    // 현재 상태를 저장하는 변수
+    isState: '',
+    totalCount: 0,
   },
   mutations: {
     GET_IMAGES(state, payload) {
-      state.images = payload;
+      state.totalCount = payload.count[0]['count']
+      if (state.isState == payload.isState.value) {
+        for (let i=0; i < payload.data.length; i++) {
+          state.images.push(payload.data[i])
+        }
+      } else {
+        state.isState = payload.isState.value
+        state.images = payload.data;
+      }
     },
     GET_CURRENT_STORY(state, payload) {
       const { yyyyMMdd } = dataChange();
@@ -59,75 +70,112 @@ export default {
   },
   actions: {
     // Story 목록 조회
-    async getImages({ commit, state }) {
+    async getImages({ commit, state }, data) {
       try {
         const res = await axios.get(api.story.story(), {
           headers: {
             Authorization: `Bearer ${state.Token}`,
           },
+          params: {
+            page: data.page
+          }
         });
-        commit("GET_IMAGES", res.data);
+        const send = {
+          count: res.data.splice(-1,1),
+          data: res.data,
+          isState: data.isState
+        }
+        commit("GET_IMAGES", send);
       } catch (error) {
         // 에러 발생시
         console.log(error);
       }
     },
     // 관심업종 검색
-    async getCategory({ commit, state }) {
+    async getCategory({ commit, state }, data) {
       try {
         const res = await axios.get(api.story.story() + "category/", {
           headers: {
             Authorization: `Bearer ${state.Token}`,
           },
+          params: {
+            page: data.page
+          }
         });
-        commit("GET_IMAGES", res.data);
+        const send = {
+          count: res.data.splice(-1,1),
+          data: res.data,
+          isState: data.isState
+        }
+        commit("GET_IMAGES", send);
       } catch (error) {
         // 에러 발생시
         console.log(error);
       }
     },
-    async getRegion({ commit, state }) {
+    async getRegion({ commit, state }, data) {
       try {
         const res = await axios.get(api.story.story() + "region/", {
           headers: {
             Authorization: `Bearer ${state.Token}`,
           },
+          params: {
+            page: data.page
+          }
         });
-        commit("GET_IMAGES", res.data);
+        const send = {
+          count: res.data.splice(-1,1),
+          data: res.data,
+          isState: data.isState
+        }
+        commit("GET_IMAGES", send);
       } catch (error) {
         // 에러 발생시
         console.log(error);
       }
     },
-    async getFollow({ commit, state }) {
+    async getFollow({ commit, state }, data) {
       try {
         const res = await axios.get(api.story.story() + "follow/", {
           headers: {
             Authorization: `Bearer ${state.Token}`,
           },
+          params: {
+            page: data.page
+          }
         });
-        console.log(res.data);
-        commit("GET_IMAGES", res.data);
+        const send = {
+          count: res.data.splice(-1,1),
+          data: res.data,
+          isState: data.isState
+        }
+        commit("GET_IMAGES", send);
       } catch (error) {
         // 에러 발생시
         console.log(error);
       }
     },
-    async getHashtag({ commit, state }, hashtag) {
+    async getHashtag({ commit, state }, page) {
       try {
         const res = await axios.get(api.story.hashtag(), {
           headers: {
             Authorization: `Bearer ${state.Token}`,
           },
           params: {
-            id: hashtag,
+            page: page.page,
+            id: page.hashtag,
           }
         })
         const data = []
         for (const story in res.data) {
           data.push(res.data[story].story_pk)
         }
-        commit('GET_IMAGES', data)
+        const send = {
+          count: res.data.splice(-1,1),
+          data: res.data,
+          isState: data.isState
+        }
+        commit('GET_IMAGES', send)
       } catch(error) {
         console.log(error)
       }

@@ -12,7 +12,7 @@
       <div class="d-flex justify-content-center">
         <div class="d-flex justify-content-between" style="width:90%">
           <span class="material-symbols-outlined" style="color:black; cursor:pointer;" @click="goBack">arrow_back</span>
-          <h2 class="m-0">{{ story.story_title }}</h2>
+          <h2 class="m-0; font-weight: 700;">{{ story.story_title }}</h2>
           <!-- 좋아요 기능 구현 -->
           <div class="like">
             <span>{{story.like_user_count}}</span>
@@ -24,13 +24,13 @@
           </div>
         </div>
       </div>
-      <hr>
+      <div style="height: 1px; background-color:black; width:100%; margin: 15px 0;"></div>
       <div class="story-content">
         <div id="image">
           <img :src="host + story.story_picture" alt="이미지 영역입니다." style="width:100%">
         </div>
         <div id="story-info">
-          <img :src="host + story.user_pk.image" height="60" alt="">
+          <img :src="host + story.user_pk.image" height="60" width="60" style="margin: 0 auto; cursor:pointer" @click="moveToProfile">
           <div class="d-flex justify-content-between" style="padding: 20px 0 0 10px;">
             <span>{{ story.user_pk.nickname }} </span>
             <span>{{ howNow(story.created_at) }}</span>
@@ -39,7 +39,7 @@
       </div>
       <br>
       <CommentList/>
-      <hr>
+      <div style="height: 1px; background-color:black; width:100%; margin: 15px 0;"></div>
       <CommentForm/>
     </div>
   </div>
@@ -92,7 +92,6 @@ export default {
       isError.value = false
       await store.dispatch('story/getCurrentStory', route.params.story_pk).then(() => {
         story.value = store.state.story.currentStory
-        console.log(story.value)
       }).catch((error) => {
         console.error(error)
         isError.value = true
@@ -114,6 +113,15 @@ export default {
       await store.dispatch('story/likeStory', route.params.story_pk)
     }
 
+    const moveToProfile = () => {
+      router.push({
+        name: 'userProfile',
+        params: {
+          user_pk: story.value.user_pk.user_pk
+        }
+      })
+    }
+
     return {
       host,
       story,
@@ -123,7 +131,8 @@ export default {
       isLike,
       likeStory,
       goBack,
-      howNow
+      howNow,
+      moveToProfile
     }
   }
 }
