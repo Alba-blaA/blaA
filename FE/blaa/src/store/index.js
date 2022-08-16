@@ -19,5 +19,9 @@ export default createStore({
     review,
     profile,
   },
-  plugins: [createPersistedState()],
+  plugins: [
+    createPersistedState({
+      storage: window.sessionStorage,
+    }),
+  ],
 });
