@@ -40,10 +40,9 @@ export default {
     };
 
     const logout = () => {
-      store.commit("account/LOGIN", false);
       store.commit("account/USER_INFO", null);
+      store.commit("account/LOGIN", false);
       sessionStorage.removeItem("token");
-      store.commit("account/RESET_STORAGE");
       router.replace("/");
     };
 

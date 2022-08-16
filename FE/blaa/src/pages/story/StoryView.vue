@@ -1,10 +1,10 @@
 <template>
 <div>
   <StoryTopNavbar :isStory="isStory" :isFollow="isFollow" :isFilter="isFilter" @change="change"/>
-  <div v-if="isFilter">
-    <button class="btn" @click="isPopUp=true">검색</button>
-    <button class="btn m-1" @click="onCategory" :class="{ activate: isCategory, deactivate: !isCategory}">관심업종</button>
-    <button class="btn m-1" @click="onRegion" :class="{ activate: isRegion, deactivate: !isRegion}">근무지</button>
+  <div v-if="isFilter" style="margin: 10px 0px;">
+    <button class="button" @click="isPopUp=true">검색</button>
+    <button class="button" @click="onCategory" :class="{ activate: isCategory}">관심업종</button>
+    <button class="button" @click="onRegion" :class="{ activate: isRegion}">근무지</button>
   </div>
   <!-- Modal -->
   <PopUp v-if="isPopUp">
@@ -58,7 +58,7 @@ export default {
     } = dataChange()
 
     const getPure = async(page = currentPage.value) => {
-      if (isState.value == "") {currentPage.value = 1}
+      if (isState.value != "") {currentPage.value = 1}
       if (!hashTag.value.length) {
         isState.value = ""
         const data = {
@@ -87,7 +87,7 @@ export default {
     }
 
     const searchHastTagStory = async(page = currentPage.value) => {
-      if (isState.value == "hashtag") {currentPage.value = 1}
+      if (isState.value != "hashtag") {currentPage.value = 1}
       hashtag_content.value = ''
       isState.value = "hashtag"
       if(hashTag.value.length) {
@@ -117,7 +117,7 @@ export default {
     }
 
     const onCategory = async(page = currentPage.value) => {
-      if (isState.value == "category") {currentPage.value = 1}
+      if (isState.value != "category") {currentPage.value = 1}
       isState.value = "category"
       isCategory.value = !isCategory.value
       isRegion.value = false
@@ -178,17 +178,22 @@ export default {
       if((window.innerHeight + window.scrollY) >= document.body.offsetHeight) { 
         setTimeout(function(){
         // 실행 시킬 함수 구현
-        currentPage.value += 1
-        
-        if( isState.value == '') {
-          getPure(currentPage.value)
-        } else if(isState.value == 'region') {
-          onRegion(currentPage.value)
-        } else if (isState.value == 'category') {
-          onCategory(currentPage.value)
-        } else if (isState.value == 'hashtag'){
-          searchHastTagStory(currentPage.value)
+
+        // 오류 방지 조건문
+        if (numberOfPages.value.value > currentPage.value) {
+          currentPage.value += 1
+          
+          if( isState.value == '') {
+            getPure(currentPage.value)
+          } else if(isState.value == 'region') {
+            onRegion(currentPage.value)
+          } else if (isState.value == 'category') {
+            onCategory(currentPage.value)
+          } else if (isState.value == 'hashtag'){
+            searchHastTagStory(currentPage.value)
+          }
         }
+
         }, 1000)}
       }
     }
@@ -214,10 +219,14 @@ export default {
 
 <style scoped>
 .activate {
-  background-color: greenyellow;
+  background-color: #498D6D;
 }
 
-.deactivate {
-  background-color: gray;
+.button {
+  border: 0;
+  padding: 5px 8px;
+  margin-right: 20px;
+  border-radius: 10px;
+  font-weight: 600;
 }
 </style>

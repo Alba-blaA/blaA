@@ -5,7 +5,7 @@
     <router-link :to="{name: 'story'}" :class="{activate: isStory, deactivate: isFollow}">오출완</router-link>
   </div>
   <div class="alpha-feature">
-    <div class="plus-btn" @click="change" v-if="isStory"><span class="material-symbols-outlined" @click="isSearch=!isSearch">search</span></div>
+    <div class="plus-btn" @click="change" v-if="isStory"><span class="material-symbols-outlined" style="font-size: 32px;" @click="isSearch=!isSearch">search</span></div>
     <router-link :to="{name: 'createStory'}"><i class="fa fa-regular fa-plus fa-2x"></i></router-link>
   </div>
 </div>
@@ -43,12 +43,17 @@ export default {
   font-size: 1.5rem;
 }
 .alpha-feature {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-left: 0.5rem;
-  height: 1.5rem;
+  height: 32px;
 }
 
 .plus-btn {
   display: inline-block;
+  margin-right: 5px;
+  height: 32px;
 }
 
 .fa-plus {

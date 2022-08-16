@@ -44,10 +44,6 @@ export default {
       return store.state.account.userInfo;
     });
 
-    onMounted(() => {
-      store.dispatch("account/doReadStateFromStorage");
-    });
-
     const login = () => {
       router.push({ name: "login" });
     };

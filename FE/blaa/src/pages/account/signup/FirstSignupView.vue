@@ -1,5 +1,15 @@
 <template>
-  <img class="back" src="@/img/back.png" @click="back" />
+  <!-- <div @click.prevent="back" style="border: 1px solid red"> -->
+  <!-- <button @click.prevent="back"> -->
+  <img
+    class="back"
+    src="@/img/back.png"
+    @click="back()"
+    style="border: 1px solid red"
+  />
+  <!-- </button> -->
+  <!-- </div> -->
+
   <div id="signup">
     <div id="signup-top">
       <h1 class="signup-text">회원가입</h1>
@@ -28,14 +38,16 @@
 
 <script>
 import { useStore } from "vuex";
-import router from "@/router/index.js";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
     const store = useStore();
+    const router = useRouter();
 
     const back = () => {
-      router.go(-1);
+      console.log("뒤로가기");
+      router.push({ name: "login" });
     };
 
     const isAlba = () => {
