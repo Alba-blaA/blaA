@@ -46,25 +46,45 @@
 
 <script>
 import { useStore } from "vuex";
-import { computed, reactive, ref } from "vue";
-import { useRouter } from "vue-router";
+import { onMounted, computed, reactive, ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
 export default {
   setup() {
     const store = useStore();
     const router = useRouter();
+    const route = useRoute();
     let AllCrews = reactive({
       crews: [],
     });
+    const crewMember = ref([]);
+    const user_pk = store.state.account.userInfo.user_pk;
     let business = ref(true);
+    let isMember = ref(false);
     const host = "https://i7b209.p.ssafy.io/";
 
-    const start = async () => {
+    onMounted(async () => {
       await store.dispatch("crew/allcrewlist");
       AllCrews.crews = store.state.crew.AllCrews.results;
-    };
+    });
 
-    const moveToDetail = (crew_pk) => {
-      router.push({ name: "crewboard", params: { crew_pk: crew_pk } });
+    const moveToDetail = async (crew_pk) => {
+      await store.dispatch("crew/getCrewMembers", crew_pk);
+
+      Object.assign(crewMember.value, store.state.crew.members);
+      if (crewMember.value.length > 0) {
+        for (var i = 0; i < crewMember.value.length; i++) {
+          if (crewMember.value[i].user_pk == user_pk) {
+            isMember.value = true;
+            break;
+          }
+        }
+      }
+      console.log(isMember.value);
+      if (isMember.value) {
+        router.push({ name: "crewboardmember", params: { crew_pk: crew_pk } });
+      } else if (!isMember.value) {
+        router.push({ name: "crewboardnonmember", params: { crew_pk: crew_pk } });
+      }
     };
 
     // const replaceByDefault = (e) => {
@@ -77,13 +97,13 @@ export default {
     //   });
     // });
 
-    start();
     return {
       AllCrews,
       business,
       moveToDetail,
       // filtered,
       host,
+      isMember,
     };
   },
 };

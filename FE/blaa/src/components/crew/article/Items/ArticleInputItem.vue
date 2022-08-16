@@ -10,8 +10,8 @@
     <label for="images">이미지 첨부</label>
     <input type="file" id="images" name="images" multiple="multiple" @change="previewFile" /><br />
     <button type="submit">등록</button>
-    <button @click="moveList">목록</button>
   </form>
+  <button @click="moveList">목록</button>
 </template>
 
 <script>
@@ -90,7 +90,7 @@ export default {
     };
 
     const moveList = () => {
-      router.push({ name: "articlelist" });
+      router.push({ name: "articlelist", params: { crew_pk: route.params.crew_pk } });
     };
 
     const reload = computed(() => {
