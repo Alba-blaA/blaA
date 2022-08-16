@@ -196,11 +196,13 @@ export default {
 }
 
 .buttonDetail {
+  justify-content: center;
+  text-align: center;
   background-color: white;
   color: #498D6D;
   border-radius: 16px;
   padding: 6px 10px;
-  margin: 0 8px;
+  margin: 8px 12px;
   font-weight: 600;
 }
 

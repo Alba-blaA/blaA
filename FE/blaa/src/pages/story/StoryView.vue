@@ -3,8 +3,8 @@
   <StoryTopNavbar :isStory="isStory" :isFollow="isFollow" :isFilter="isFilter" @change="change"/>
   <div v-if="isFilter" style="margin: 10px 0px;">
     <button class="button" @click="isPopUp=true">검색</button>
-    <button class="button" @click="onCategory" :class="{ activate: isCategory}">관심업종</button>
-    <button class="button" @click="onRegion" :class="{ activate: isRegion}">근무지</button>
+    <button class="button" @click="onCategory" :class="{ activate: isCategory }">관심업종</button>
+    <button class="button" @click="onRegion" :class="{ activate: isRegion }">근무지</button>
   </div>
   <!-- Modal -->
   <PopUp v-if="isPopUp">
@@ -12,11 +12,10 @@
     <button type="button" class="btn btn-secondary" @click="[isPopUp=false, getPure()]">닫기</button>
     <button type="button" class="btn btn-primary" @click="searchHastTagStory">검색</button>
   </PopUp>
-  <div v-if="images.value">
+  <div v-if="images.value.length">
     <StoryImageCardList :images="images.value"/>
   </div>
-  <p v-else>아직 불러오는 중이에요
-  </p>
+  <p v-else>해당하는 게시물이 없어요</p>
 </div>
 </template>
 
@@ -63,7 +62,7 @@ export default {
         isState.value = ""
         const data = {
           isState: isState,
-          page: page
+          page: currentPage.value
         }
         await store.dispatch('story/getImages', data)
         images.value = computed(() => {return store.state.story.images})
@@ -100,7 +99,7 @@ export default {
         const data = {
           hashtag_content: hashtag_content.value,
           isState: isState,
-          page: page
+          page: currentPage.value
         }
         await store.dispatch('story/getHashtag', data)
         images.value = computed(() => {return store.state.story.images})
@@ -122,14 +121,11 @@ export default {
       isCategory.value = !isCategory.value
       isRegion.value = false
 
-      watch(isState.value, (now, pre) => {
-          console.log(now, pre)
-        })
       // 관심업종이 커져있으면 해당 업종 검색
       if (isCategory.value) {
         const data = {
           isState: isState,
-          page: page
+          page: currentPage.value
         }
         await store.dispatch('story/getCategory', data)
         images.value = computed(() => {return store.state.story.images})
@@ -140,6 +136,8 @@ export default {
           return  Math.ceil(store.state.story.totalCount / 10)
         })
       } else {
+        currentPage.value = 1
+        isState.value = ''
         getPure()
       }
     }
@@ -154,7 +152,7 @@ export default {
       if (isRegion.value) {
         const data = {
           isState: isState,
-          page: page
+          page: currentPage.value
         }
         await store.dispatch('story/getRegion', data)
         images.value = computed(() => {return store.state.story.images})
@@ -165,6 +163,8 @@ export default {
           return  Math.ceil(store.state.story.totalCount / 10)
         })
       } else {
+        currentPage.value = 1
+        isState.value = ''
         getPure()
       }
     }
@@ -174,6 +174,7 @@ export default {
     }   
 
     window.onscroll = function(e) {
+      console.log(numberOfPages.value.value, currentPage.value)
     if (numberOfPages.value.value > currentPage.value) {
       if((window.innerHeight + window.scrollY) >= document.body.offsetHeight) { 
         setTimeout(function(){

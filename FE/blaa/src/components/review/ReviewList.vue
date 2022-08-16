@@ -1,10 +1,10 @@
 <template>
   <div class="store" @click="moveToDetail">
     <div class="storeInfo">
-      <img :src="replaceUrl.value" alt="이미지">
+      <img :src="host + review.image" alt="이미지">
       <p style="width: 100%">{{review.name}}</p>
     </div>
-    <div class="star-ratings" :style="{ left : starWidth}">
+    <div class="star-ratings" :style="{ left : starWidth.value }" >
         <div 
           class="star-ratings-fill space-x-2 text-lg"
           :style="{ width: score + '%' }"
@@ -26,7 +26,7 @@
 
 <script>
 import { ref } from 'vue'
-import { computed } from '@vue/runtime-core'
+import { computed, onMounted } from '@vue/runtime-core'
 import { useRouter } from 'vue-router'
 import $ from 'jquery'
 export default {
@@ -37,10 +37,8 @@ export default {
   },
   setup(props) {
     const router = useRouter()
-    const url = String(props.review.image)
-    const replaceUrl = computed(() => {
-      return url.replace('media/', 'api/v1/')
-    })
+    const host = ref('https://i7b209.p.ssafy.io')
+    const starWidth = ref(0)
 
     // 버튼
     const buttonType = ['친절한 사장님', '깨끗한 매장', '좋은 분위기', '교통 접근성', '칼퇴근 가능', '유니폼 제공']
@@ -66,7 +64,19 @@ export default {
     })
 
     // 별점 위치
-    let starWidth = (($(window).width() / (10/9))- 160) + 'px'
+    onMounted(() => {
+      setTimeout(() => {
+        starWidth.value = computed(() => {
+          return $('.store').width() - 120
+        })
+      }, 50)
+    })
+   
+    $(window).resize(function() {
+      starWidth.value = computed(() => {
+        return $('.store').width() - 120
+      })
+    })
     
     const moveToDetail = () => {
       router.push({
@@ -79,10 +89,10 @@ export default {
     }
     return {
       moveToDetail,
-      replaceUrl,
       score,
       high_button,
-      starWidth
+      starWidth,
+      host
     }
   }
 }
@@ -128,6 +138,8 @@ span {
   unicode-bidi: bidi-override;
   width: max-content;
   margin-bottom: 10px;
+  
+  left: 70%;
   /* margin-right: 20px; */
   -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
   -webkit-text-stroke-width: 1.3px;
