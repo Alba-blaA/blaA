@@ -1,8 +1,7 @@
 <template>
-  <div>
-    <h4>글 목록</h4>
-    <article-list-item v-for="(article, i) in articles.results" :key="i" v-bind="article" :isMember="isMember" />
-    <button v-show="isMember" @click="moveRegist">글쓰기</button>
+  <div v-if="articles.length < 1">아직 작성된 게시글이 없어요 ㅜ ㅜ</div>
+  <div v-else>
+    <article-list-item v-for="(article, i) in articles" :key="i" v-bind="article" :isMember="isMember" />
   </div>
 </template>
 
@@ -10,7 +9,7 @@
 import ArticleListItem from "@/components/crew/article/ArticleListItem.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 export default {
   components: {
     ArticleListItem,
@@ -24,19 +23,13 @@ export default {
     const route = useRoute();
     const articles = ref([]);
 
-    const getArticles = async () => {
+    onMounted(async () => {
       await store.dispatch("crew/getCrewArticle", route.params.crew_pk);
       articles.value = store.state.crew.articles;
-    };
+    });
 
-    const moveRegist = () => {
-      router.push({ name: "articleregist" });
-    };
-    getArticles();
     return {
       articles,
-      getArticles,
-      moveRegist,
     };
   },
 };

@@ -230,7 +230,7 @@ export default {
 
             if (response.status === 201) {
               console.log("회원가입 성공");
-              router.push({ name: "home" });
+              router.push({ name: "login" });
               console.log(
                 "회원가입 후 vuex : ",
                 store.state.account.signupUser

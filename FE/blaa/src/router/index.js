@@ -169,23 +169,27 @@ const router = createRouter({
           component: () => import("@/components/crew/member/CrewMemberLeave.vue"),
         },
         {
-          path: ":crew_pk",
-          name: "crewboard",
-          redirect: { name: "articlelist" },
-          component: () => import("@/components/crew/list/CrewBoard.vue"),
+          path: "nm/:crew_pk",
+          name: "crewboardnonmember",
+          component: () => import("@/components/crew/manage/CrewBoardNonMember.vue"),
+        },
+        {
+          path: "m/:crew_pk",
+          name: "crewboardmember",
+          component: () => import("@/components/crew/manage/CrewBoardMember.vue"),
+        },
+        {
+          path: "article/:crew_pk",
+          name: "article",
+          component: () => import("@/components/crew/article/ArticleListView.vue"),
           children: [
             {
-              path: "list",
+              path: "",
               name: "articlelist",
               component: () => import("@/components/crew/article/ArticleList.vue"),
             },
             {
-              path: "regist",
-              name: "articleregist",
-              component: () => import("@/components/crew/article/ArticleRegist.vue"),
-            },
-            {
-              path: ":crew_article_pk",
+              path: "/crew/m/:crew_pk/detail/:crew_article_pk",
               name: "articledetail",
               component: () => import("@/components/crew/article/ArticleDetail.vue"),
             },
@@ -217,6 +221,12 @@ const router = createRouter({
             // },
           ],
         },
+        {
+          path: "regist:crew_pk",
+          name: "articleregist",
+          component: () => import("@/components/crew/article/ArticleRegist.vue"),
+        },
+
         {
           path: "user",
           name: "crewmemberlist",
