@@ -1,28 +1,88 @@
 <template>
-  <div>
-    <h2>{{ crewInfo.crew_name }} 의 게시판입니다.</h2>
-    <br />
-    <p>{{ crewInfo.crew_member_count }} 명 참여중</p>
-    <br />
-    <button @click="moveToArticle">Article</button>
+  <div class="back_ground"></div>
+  <div class="info_desk">
+    <!-- <img :src="host + crewInfo.crew_img" /> -->
+    <div style="text-align: center; padding: 20px">
+      <img src="@/assets/crew_default1.png" />
+    </div>
+    <div style="text-align: center">
+      <h2 style="margin: 0">{{ crewInfo.crew_name }}</h2>
+      <p>{{ crewInfo.crew_region }}</p>
+    </div>
+    <div class="row" style="margin: auto; text-align: center">
+      <div class="col-5" style="padding-left: 40px">
+        <!-- <p>{{ crewInfo.created_at }}</p> -->
+        <h4>30일</h4>
+        <p>내 활동기간</p>
+      </div>
+      <div class="col-2" style="display: flex; justify-content: center">
+        <div class="v-line"></div>
+      </div>
+      <div class="col-5" @click="moveToMember" style="padding-right: 40px">
+        <h5>{{ crewInfo.crew_member_count }}명</h5>
+        <p>참여인원</p>
+      </div>
+    </div>
+    <div class="joinBtn" @click="crewJoin(crewInfo.crew_pk)">가입하기</div>
+  </div>
+  <br />
+  <div style="position: relative; margin-top: 200px">
+    <hr />
+    <div class="row" style="text-align: center; margin-left: 30px; margin-right: 30px">
+      <div class="col-5" @click="Info">정보</div>
+      <div class="col-2" style="display: flex; justify-content: center">
+        <div class="v-line2"></div>
+      </div>
+      <div class="col-5" @click="Feed">피드</div>
+    </div>
+    <hr />
+
+    <div v-show="isInfo">
+      <div class="detail">
+        <h4>우리 크루를 소개합니다!</h4>
+        <p>
+          안녕하세요, {{ crewInfo.crew_name }} 입니다.<br />
+          크루 설명: {{ crewInfo.crew_explain }}
+        </p>
+      </div>
+      <hr />
+      <div class="detail">
+        <h4>위치</h4>
+        <p>박찬 지도 띄워줘</p>
+      </div>
+      <hr />
+      <div class="detail">
+        <h4>크루장</h4>
+        <p>{{ crewInfo.crew_leader }}</p>
+      </div>
+    </div>
+    <div v-show="isFeed">
+      <router-view :isMember="isMember" style="margin: 30px"></router-view>
+    </div>
+
+    <!-- <button @click="moveToArticle">Article</button>
     <button @click="moveToCalendar">Calendar</button>
     <button @click="moveToDetail">크루 정보</button>
     <button @click="moveToMember">사용자</button>
-    <button @click="crewJoin(crewInfo.crew_pk)">가입하기</button>
-    <router-view></router-view>
+    <router-view></router-view> -->
   </div>
 </template>
 
 <script>
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
 export default {
   setup() {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
     const crewInfo = reactive({});
+    const crewMember = ref([]);
+    const user_pk = store.state.account.userInfo.user_pk;
+    let isInfo = ref(true);
+    let isFeed = ref(false);
+    let isMember = ref(false);
 
     // const getCrewInfo = async () => {
     //   await store.dispatch("crew/getCrewInfo", route.params.crew_pk);
@@ -30,11 +90,32 @@ export default {
     // };
     onMounted(async () => {
       await store.dispatch("crew/getCrewInfo", route.params.crew_pk);
+      await store.dispatch("crew/getCrewMembers", route.params.crew_pk);
+
       Object.assign(crewInfo, store.state.crew.crewInfo);
+      Object.assign(crewMember.value, store.state.crew.members);
+      if (crewMember.value.length > 0) {
+        for (var i = 0; i < crewMember.value.length; i++) {
+          if (crewMember.value[i].user_pk == user_pk) {
+            isMember.value = true;
+            break;
+          }
+        }
+      }
     });
 
     const crewJoin = async (crew_pk) => {
       await store.dispatch("crew/crewJoin", crew_pk);
+    };
+
+    const Info = () => {
+      isFeed.value = false;
+      isInfo.value = true;
+    };
+
+    const Feed = () => {
+      isInfo.value = false;
+      isFeed.value = true;
     };
 
     const moveToArticle = () => {
@@ -74,9 +155,79 @@ export default {
       moveToDetail,
       moveToMember,
       crewJoin,
+      Info,
+      Feed,
+      isInfo,
+      isFeed,
+      isMember,
     };
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+.back_ground {
+  height: 179px;
+  z-index: -1;
+
+  background-color: #498d6d;
+}
+
+.info_desk {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50px;
+  margin: auto;
+  width: 320px;
+
+  background: #ffffff;
+  box-shadow: 0px 4px 80px rgba(0, 0, 0, 0.07), 0px 0.893452px 17.869px rgba(0, 0, 0, 0.0417275), 0px 0.266004px 5.32008px rgba(0, 0, 0, 0.0282725);
+  border-radius: 30px;
+
+  /* animation: fadeInUp 1s; */
+}
+
+.joinBtn {
+  display: flex;
+  width: 207px;
+  height: 30px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: auto;
+  margin-bottom: 20px;
+
+  background: #498d6d;
+  color: #ffffff;
+  border-radius: 20px;
+}
+
+.v-line {
+  border-left: 0.5px solid #d9d9d9;
+  height: 50px;
+}
+
+.v-line2 {
+  border-left: 0.5px solid #d9d9d9;
+  height: 20px;
+}
+
+hr {
+  margin: 8px;
+}
+
+.detail {
+  margin: 30px;
+}
+/* @keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translateZ(0);
+  }
+} */
+</style>

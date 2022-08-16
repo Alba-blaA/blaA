@@ -1,5 +1,5 @@
 import api from '@/api/api'
-import axios from 'axios'
+import axios from "@/api/axios.js";
 import { dataChange } from '@/hooks/dateChange'
 import { useRouter } from 'vue-router'
 
@@ -81,9 +81,7 @@ export default {
     async getReviews({commit, state}, data) {
       try {
         const res = await axios.get(api.review.store(), {
-          headers: {
-            Authorization: `Bearer ${state.Token}`
-          },
+          
           params: {
             page: data.page,
             search: data.searchText
@@ -101,11 +99,7 @@ export default {
     },
     async getReview({commit, state}, store_pk) {
       try {
-        const res = await axios.get(api.review.review(store_pk),{
-          headers: {
-            Authorization: `Bearer ${state.Token}`
-          }
-        })
+        const res = await axios.get(api.review.review(store_pk))
         commit('GET_REVIEW', res.data)
       } catch (error) {
         console.error(error)
@@ -113,11 +107,7 @@ export default {
     },
     async getDetailReview({commit, state}, review_pk) {
       try {
-        const res = await axios.get(api.review.reviewDetail(review_pk), {
-          headers: {
-            Authorization: `Bearer ${state.Token}`
-          }
-        })
+        const res = await axios.get(api.review.reviewDetail(review_pk))
         commit('GET_DETAIL_REVIEW', res.data)
       } catch (error) {
         console.error(error)
@@ -127,11 +117,7 @@ export default {
       const review_pk = data.review_pk
       const isDetail = data.isDetail
       try {
-        const res = await axios.post(api.review.like(review_pk), {}, {
-          headers: {
-            Authorization: `Bearer ${state.Token}`
-          }
-        })
+        const res = await axios.post(api.review.like(review_pk), {})
         const data = {
           review_pk: review_pk,
           like_users: res.data.like_users,
@@ -164,9 +150,7 @@ export default {
           console.log(data.name)
           // 한번 더 스토어 정보가 있나 확인
           const res = await axios.get(api.review.store(), {
-            headers: {
-              Authorization: `Bearer ${state.Token}`
-            },
+           
             params: {
               search: data.name
             }
@@ -174,12 +158,7 @@ export default {
           // 그래도 없으면 생성 진행
           if (res.data.count == 0) {
             try {
-              const res = await axios.post(api.review.store(), store.form, {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                  Authorization: `Bearer ${state.Token}`
-                }
-              })
+              const res = await axios.post(api.review.store(), store.form)
               store.store_pk = res.data.store_pk
               const data = {
                 ...res.data,
@@ -199,21 +178,13 @@ export default {
       }
       // 리뷰 생성
       try {
-        const res = await axios.post(api.review.review(store.store_pk), review, {
-          headers: {
-            Authorization: `Bearer ${state.Token}`
-          }
-        })
+        const res = await axios.post(api.review.review(store.store_pk), review)
       } catch(error) {
         console.error(error)
       }
     },
     async deleteReview({commit, state}, review_pk) {
-      await axios.delete(api.review.reviewDetail(review_pk), {
-        headers: {
-          Authorization: `Bearer ${state.Token}`
-        }
-      })      
+      await axios.delete(api.review.reviewDetail(review_pk), )      
       commit('DELETE_REVIEW', review_pk)
     },
   },

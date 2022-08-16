@@ -52,7 +52,9 @@ const accountStore = {
     },
     USER_INFO: (state, userInfo) => {
       state.isLogin = true;
+      console.log("받아오는 userInfo : ", userInfo);
       state.userInfo = userInfo;
+      console.log("state.userInfo : ", state.userInfo);
     },
     SET_KAKAO_USER_INFO: (state, kakaoUserInfo) => {
       state.kakaoUserInfo.email = kakaoUserInfo.email;
