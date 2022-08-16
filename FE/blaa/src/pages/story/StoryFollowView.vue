@@ -21,7 +21,7 @@ export default {
     const store = useStore();
     const images = ref(null);
     const isStory = ref(false);
-    const isFollow = ref(false);
+    const isFollow = ref(true);
     const isFilter = ref(false);
     const FollowTap = ref(true);
     const numberOfPages = ref(0);
@@ -43,9 +43,11 @@ export default {
       if (numberOfPages.value.value > currentPage.value) {
         if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
           setTimeout(function () {
-            // 실행 시킬 함수 구현
-            currentPage.value += 1;
-            getPure();
+            if (numberOfPages.value.value > currentPage.value) {
+              // 실행 시킬 함수 구현
+              currentPage.value += 1;
+              getPure();
+            }
           }, 1000);
         }
       }
@@ -53,15 +55,10 @@ export default {
 
     onBeforeMount(async () => {
       await getPure();
-      if (images.value.length == 1) {
-        // 메세지 하나밖에 없으면
-        if (images.value[0].length == 1) {
-          isFollow.value = false;
-        } else {
-          isFollow.value = true;
-        }
+      // 메세지 하나밖에 없으면
+      if (Object.keys(images.value.value[0]).length == 2) {
+        isFollow.value = false;
       } else {
-        console.log("데이터가 있음");
         isFollow.value = true;
       }
     });
@@ -71,6 +68,7 @@ export default {
       isStory,
       isFilter,
       FollowTap,
+      isFollow
     };
   },
 };

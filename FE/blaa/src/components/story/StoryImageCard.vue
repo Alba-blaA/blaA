@@ -32,6 +32,7 @@ import $ from 'jquery'
 import api from '@/api/api'
 
 export default {
+  components: {},
   props: {
     image: {
       type: Object,
