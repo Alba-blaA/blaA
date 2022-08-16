@@ -1,5 +1,7 @@
 <template>
-  
+  <br /><br />
+  <button type="button" @click="startChat(userProfile.user_pk, userProfile.nickname)">채팅하기</button>
+
   <div id="profile" style="border: 3px solid; text-align: center; margin: auto">
     <img class="imgProfile" :src="HOST + userProfile.image" />
   </div>
@@ -165,9 +167,9 @@ export default {
       params: {
         from_userpk: from_userpk,
         from_usernickname : from_usernickname
-        }}
-        )
-      };
+      }}
+      )
+    };
 
     const btnFollow = async () => {
       console.log("팔로우 버튼");
