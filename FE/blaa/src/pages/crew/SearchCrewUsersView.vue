@@ -21,7 +21,7 @@
               <br>
               <div class="d-flex justify-content-end align-items-center chodaeorchatbutton" style="padding-right : 10px">
                 <button class="w-btn w-btn-yellow" @click="inviteuser(crew_pk, user.user_pk)">초대하기</button>            
-                <button class="w-btn w-btn-green" @click="gochat(user.user_pk)">채팅하기</button>
+                <button class="w-btn w-btn-green" @click="gochat(user.user_pk, user.nickname)">채팅하기</button>
               </div>
             </b-card-text>
           </b-card>
@@ -51,11 +51,12 @@ export default {
     const route = useRoute();
     const userInfo = store.state.account.userInfo;
     const crew_pk = route.params.crew_pk;
-    const gochat = (from_userpk) => {
+    const gochat = (from_userpk, from_usernickname) => {
       router.push({
         name: "chat",
         params: {
           from_userpk: from_userpk,
+          from_usernickname : from_usernickname
         },
       });
     };

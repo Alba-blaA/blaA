@@ -2,8 +2,8 @@
 <div id="review" class="d-flex justify-content-center">
   <div style="width: 90%">
      <div class="d-flex justify-content-between align-items-center mt-3">
-      <h1 style="font-weight:bold">가게 리뷰</h1>
-      <div class="d-flex">
+      <h1 style="font-weight:bold; margin:0;">가게 리뷰</h1>
+      <div class="buttons">
         <!-- 클릭하거나 엔터를 치면 -->
         <div class="search-box">
           <input class="search-txt" type="text" v-model="searchText" @keypress.enter="searchStore">
@@ -11,7 +11,7 @@
           <span class="search-button material-symbols-outlined">search</span>
         </div>
         <div v-if="isSearch"></div>
-        <router-link style="color:black; margin-left:5px; text-align:center;" :to="{name: 'createReview'}"><span class="material-symbols-outlined" style=" font-size:48px;">add</span></router-link>
+        <router-link style="color:black; margin-left:5px; text-align:center;" :to="{name: 'createReview'}"><span class="material-symbols-outlined" style=" font-size:40px; margin-top:3.5px;">add</span></router-link>
       </div>
     </div>
     <div v-if="reviews.value"> 
@@ -67,9 +67,11 @@ export default {
     if (numberOfPages.value > currentPage.value) {
       if((window.innerHeight + window.scrollY) >= document.body.offsetHeight) { 
         setTimeout(function(){
-        // 실행 시킬 함수 구현
-        currentPage.value += 1
-        getReviews(currentPage.value)
+          // 실행 시킬 함수 구현
+          if(numberOfPages.value > currentPage.value) {
+            currentPage.value += 1
+            getReviews(currentPage.value)
+          } 
         }, 1000)}
       }
     }
@@ -86,6 +88,7 @@ export default {
     const searchEnd = async() => {
       isSearch.value = false
       searchText.value = ''
+      currentPage.value = 1
       await getReviews()
     }
 
@@ -104,6 +107,11 @@ export default {
 </script>
 
 <style scoped>
+.buttons {
+  display: flex;
+  align-items: center;
+}
+
 .search-box {
   height: 40px;
   background-color: #949BA0;
@@ -148,7 +156,7 @@ export default {
 
 /* 마우스를 위에 올렸을 때 늘어남 */
 .search-box:hover > .search-txt {
-  width: 200px;
+  width: 150px;
 }
 
 .search-box:hover > .search-btn {
