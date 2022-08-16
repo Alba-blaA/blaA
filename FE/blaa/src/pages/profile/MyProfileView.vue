@@ -89,7 +89,7 @@
 <script>
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import axios from "@/api/axios.js";
 import api from "@/api/api.js";
 
@@ -101,10 +101,13 @@ export default {
 
     const HOST = ref("https://i7b209.p.ssafy.io");
 
-    const userInfo = store.state.account.userInfo;
+    const userInfo = computed(() => {
+      return store.state.account.userInfo;
+    });
+
     console.log(userInfo);
-    console.log("nickname : ", userInfo.nickname);
-    console.log("image : ", userInfo.image);
+    console.log("nickname : ", userInfo.value.nickname);
+    console.log("image : ", userInfo.value.image);
 
     const gochatroom = () => {
       router.push({ path: "/chatroom" });
@@ -115,7 +118,7 @@ export default {
     });
 
     axios
-      .get(api.accounts.myInfo(userInfo.user_pk))
+      .get(api.accounts.myInfo(userInfo.value.user_pk))
       .then((response) => {
         console.log("유저 정보 response : ", response);
         follow.value.followers = response.data.followers;
@@ -154,18 +157,18 @@ export default {
 
           console.log("userInfo value : ", userInfo);
           const updateImg = {
-            name: userInfo.name,
-            nickname: userInfo.nickname,
-            region: userInfo.region,
-            category: userInfo.category,
-            is_alba: userInfo.is_alba,
-            tel: userInfo.tel,
+            name: userInfo.value.name,
+            nickname: userInfo.value.nickname,
+            region: userInfo.value.region,
+            category: userInfo.value.category,
+            is_alba: userInfo.value.is_alba,
+            tel: userInfo.value.tel,
             image: profileImg.value,
           };
 
           try {
             axios
-              .put(api.profile.myInfo(userInfo.user_pk), updateImg, {
+              .put(api.profile.myInfo(userInfo.value.user_pk), updateImg, {
                 headers: {
                   "Content-type": "multipart/form-data",
                 },
@@ -173,6 +176,8 @@ export default {
               .then((response) => {
                 console.log("변경 후 data ", response.data);
                 store.commit("account/USER_INFO", response.data);
+                const res = sessionStorage.getItem("vuex");
+                console.log("sessionStorage : ", res);
                 alert("사진 변경 완료");
               });
           } catch (err) {
@@ -199,44 +204,57 @@ export default {
 
       router.push({
         name: "followList",
-        params: { user_pk: userInfo.user_pk, followType: "follower", page: 1 },
+        params: {
+          user_pk: userInfo.value.user_pk,
+          followType: "follower",
+          page: 1,
+        },
       });
     };
 
     const following = async () => {
       console.log("팔로잉 조회");
-      await store.dispatch("profile/getFollowingList", userInfo.user_pk);
+      await store.dispatch("profile/getFollowingList", userInfo.value.user_pk);
       router.push({
         name: "followList",
-        params: { user_pk: userInfo.user_pk, followType: "following" },
+        params: { user_pk: userInfo.value.user_pk, followType: "following" },
       });
     };
 
     const myStory = async () => {
       console.log("내 스토리 조회");
-      await store.dispatch("profile/getMyStory", userInfo.user_pk);
-      router.push({ name: "mystory", params: { user_pk: userInfo.user_pk } });
+      await store.dispatch("profile/getMyStory", userInfo.value.user_pk);
+      router.push({
+        name: "mystory",
+        params: { user_pk: userInfo.value.user_pk },
+      });
       console.log("스토리 조회 페이지 이동");
     };
 
     const myReview = async () => {
       console.log("내 리뷰 조회");
-      await store.dispatch("profile/getReviewList", userInfo.user_pk);
+      await store.dispatch("profile/getReviewList", userInfo.value.user_pk);
       router.push({
         name: "reviewList",
-        params: { user_pk: userInfo.user_pk },
+        params: { user_pk: userInfo.value.user_pk },
       });
     };
 
     const myCrew = async () => {
       console.log("내 크루 조회");
-      await store.dispatch("profile/getCrewList", userInfo.user_pk);
-      router.push({ name: "crewList", params: { user_pk: userInfo.user_pk } });
+      await store.dispatch("profile/getCrewList", userInfo.value.user_pk);
+      router.push({
+        name: "crewList",
+        params: { user_pk: userInfo.value.user_pk },
+      });
     };
 
     const myInfo = () => {
       console.log("회원정보 조회");
-      router.push({ name: "myinfo", params: { user_pk: userInfo.user_pk } });
+      router.push({
+        name: "myinfo",
+        params: { user_pk: userInfo.value.user_pk },
+      });
     };
 
     const showinvitedcrewlist = () => {
