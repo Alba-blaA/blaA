@@ -4,27 +4,29 @@
       <!-- <br /> -->
       <h1 id="login-text">로그인</h1>
       <br />
-      <b-form>
-        <b-form-group>
-          <b-form-input
-            id="login-id"
-            type="email"
-            v-model="user.email"
-            placeholder="EMAIL"
-          ></b-form-input>
-          <!-- <b>{{ message }}</b> -->
-        </b-form-group>
+      <form>
+        <label for="login-id"></label>
+        <input
+          id="login-id"
+          type="email"
+          v-model="user.email"
+          placeholder="EMAIL"
+        />
+        <!-- <b>{{ message }}</b> -->
+        <small>아이디를 입력해주세요</small>
 
-        <b-form-group>
-          <b-form-input
-            id="login-password"
-            type="password"
-            v-model="user.password"
-            placeholder="PASSWORD"
-            autocomplete="off"
-          ></b-form-input>
-          <!-- <b>{{ message }}</b> -->
-        </b-form-group>
+        <label for="login-password"></label>
+        <input
+          id="login-password"
+          type="password"
+          v-model="user.password"
+          placeholder="PASSWORD"
+          autocomplete="off"
+        />
+        <small>비밀번호를 입력해주세요</small>
+        <br /><br />
+        <!-- <b>{{ message }}</b> -->
+
         <div class="row">
           <b-button
             class="col-sm-12"
@@ -33,14 +35,12 @@
             @click.prevent="confirm"
             ><b>로그인</b></b-button
           >
-        </div>
 
-        <div class="row">
           <b-button class="col-sm-12" pill variant="light" @click="register"
             ><b>회원가입</b></b-button
           >
         </div>
-      </b-form>
+      </form>
 
       <div class="find-account">
         <b class="find">아이디 찾기</b> &nbsp;
@@ -113,6 +113,7 @@ export default {
     const kakaoLogin = () => {
       const params = {
         redirectUri: "https://i7b209.p.ssafy.io/kakao",
+        // redirectUri: "http://localhost:3000/kakao",
         // redirectUri: "http://127.0.0.1:8000/account/sign-in/kakao/callback",
       };
       window.Kakao.Auth.authorize(params);
@@ -153,13 +154,49 @@ export default {
   text-align: center;
 }
 
+label {
+  float: left;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: bold;
+  color: black;
+}
+
+input {
+  width: 100%;
+  height: 50px;
+  padding: 5px;
+  border: solid 2px #d9d9d9;
+  border-radius: 8px;
+}
+
+small {
+  float: left;
+  font-family: Inter;
+  font-style: normal;
+  font-size: 15px;
+}
+
+input::placeholder {
+  color: #d9d9d9;
+}
+
+input:focus {
+  border: 2px #eec95c solid;
+  outline: none;
+}
+
+button {
+  margin-bottom: 10px;
+}
+
 .row {
   padding: 10px;
 }
 
 .find-account {
   float: right;
-  margin-top: 10px;
+  /* margin-top: 10px; */
 }
 
 .find {

@@ -23,7 +23,8 @@
         "
         @click="btnFollow"
       >
-        <p class="mt-1" style="color: white">{{ followMessage }}</p>
+        <p v-show="!isFollow" class="mt-1" style="color: white">Follow</p>
+        <p v-show="isFollow" class="mt-1" style="color: white">Unfollow</p>
       </button>
     </div>
   </div>
@@ -88,7 +89,7 @@
 import axios from "@/api/axios.js";
 import api from "@/api/api.js";
 import { useRoute, useRouter } from "vue-router";
-import { ref, watch, onBeforeMount } from "vue";
+import { ref, computed, onBeforeMount } from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -113,7 +114,7 @@ export default {
       user_pk: null,
     });
 
-    const myFollowingList = watch(() => {
+    const myFollowingList = computed(() => {
       return store.state.profile.followingList.results;
     });
     var followMessage = ref("");
@@ -133,7 +134,7 @@ export default {
           console.log("err", err);
         });
 
-      for (var i = 0; i < myFollowingList.length; i++) {
+      for (var i = 0; i < myFollowingList.value.length; i++) {
         console.log("myfollowingList user_pk", myFollowingList[i].user_pk);
         console.log("userProfile user_pk", userProfile.value.user_pk);
         if (myFollowingList[i].user_pk == userProfile.value.user_pk) {
@@ -148,6 +149,14 @@ export default {
 
     onBeforeMount(() => {
       setProfile();
+      console.log("followMessage : ", followMessage);
+    });
+
+    const follow = true;
+
+    const isFollow = computed(() => {
+      var check = !follow;
+      return check;
     });
 
     const startChat = (from_userpk, from_usernickname) => {
@@ -172,11 +181,33 @@ export default {
           if (arr.length === 3) {
             alert(userProfile.value.nickname + "님을 팔로우합니다.");
             followMessage.value = "Unfollow";
-            router.go();
+            // axios
+            //   .get(api.profile.myInfo(route.params.user_pk))
+            //   .then((response) => {
+            //     console.log("response : ", response);
+            //     userProfile.value = response.data;
+            //     console.log("userProfile : ", userProfile.value);
+            //     console.log("userProfile image : ", userProfile.value.image);
+            //   })
+            //   .catch((err) => {
+            //     console.log("err", err);
+            //   });
+            // router.go();
           } else {
             alert(userProfile.value.nickname + "님을 팔로우 취소합니다.");
             followMessage.value = "Follow";
-            router.go();
+            axios
+              .get(api.profile.myInfo(route.params.user_pk))
+              .then((response) => {
+                console.log("response : ", response);
+                userProfile.value = response.data;
+                console.log("userProfile : ", userProfile.value);
+                console.log("userProfile image : ", userProfile.value.image);
+              })
+              .catch((err) => {
+                console.log("err", err);
+              });
+            // router.go();
           }
         })
         .catch((err) => {
@@ -255,6 +286,8 @@ export default {
       userReview,
       userCrew,
       setBlackList,
+      follow,
+      isFollow,
     };
   },
 };

@@ -9,6 +9,7 @@ const getKakaoToken = async (code) => {
       client_id: process.env.VUE_APP_KAKAO_REST_API,
       // redirect_uri: "http://127.0.0.1:8000/account/sign-in/kakao/callback",
       redirect_uri: "https://i7b209.p.ssafy.io/kakao",
+      // redirect_uri: "http://localhost:3000/kakao",
       code: code,
     };
     console.log("data.client_id : ", data.client_id);
