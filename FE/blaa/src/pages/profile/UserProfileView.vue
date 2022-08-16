@@ -1,6 +1,6 @@
 <template>
   <br /><br />
-  <button type="button" @click="startChat">채팅하기</button>
+  <button type="button" @click="startChat(userProfile.user_pk, userProfile.nickname)">채팅하기</button>
 
   <div id="profile" style="border: 3px solid; text-align: center; margin: auto">
     <img class="imgProfile" :src="HOST + userProfile.image" />
@@ -155,8 +155,14 @@ export default {
       return check;
     });
 
-    const startChat = () => {
+    const startChat = (from_userpk, from_usernickname) => {
       console.log("채팅 시작하기");
+      router.push({ name: 'chat',
+      params: {
+        from_userpk: from_userpk,
+        from_usernickname : from_usernickname
+      }}
+      )
     };
 
     const btnFollow = async () => {

@@ -12,7 +12,7 @@
     <button type="button" class="btn btn-secondary" @click="[isPopUp=false, getPure()]">닫기</button>
     <button type="button" class="btn btn-primary" @click="searchHastTagStory">검색</button>
   </PopUp>
-  <div v-if="images.value.length">
+  <div v-if="images.value">
     <StoryImageCardList :images="images.value"/>
   </div>
   <p v-else>해당하는 게시물이 없어요</p>
@@ -56,7 +56,7 @@ export default {
       howNow
     } = dataChange()
 
-    const getPure = async(page = currentPage.value) => {
+    const getPure = async(page = currentPage.value) => {     
       if (isState.value != "") {currentPage.value = 1}
       if (!hashTag.value.length) {
         isState.value = ""
