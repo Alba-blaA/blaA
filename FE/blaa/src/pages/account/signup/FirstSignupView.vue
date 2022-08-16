@@ -1,36 +1,28 @@
 <template>
-  <!-- <div @click.prevent="back" style="border: 1px solid red"> -->
-  <!-- <button @click.prevent="back"> -->
-  <img
-    class="back"
-    src="@/img/back.png"
-    @click="back()"
-    style="border: 1px solid red"
-  />
-  <!-- </button> -->
-  <!-- </div> -->
-
-  <div id="signup">
-    <div id="signup-top">
-      <h1 class="signup-text">회원가입</h1>
-      <div class="signup-step">
-        <div class="yellow-circle"><b class="signup-num">1</b></div>
-        <img class="arrow" src="@/img/yellow_arrow.png" />
-        <div class="gray-circle"><b class="signup-num">2</b></div>
-        <img class="arrow" src="@/img/gray_arrow.png" />
-        <div class="gray-circle"><b class="signup-num">3</b></div>
-      </div>
-    </div>
-
-    <div id="signup1-form">
-      <br /><br />
-
-      <div id="is-alba-true" @click.prevent="isAlba">
-        <b class="is-alba-text">아르바이트를 하고 있어요</b>
+  <div class="signup-1">
+    <img class="back" src="@/img/back.png" @click="back" />
+    <div id="signup">
+      <div id="signup-top">
+        <h1 class="signup-text">회원가입</h1>
+        <div class="signup-step">
+          <div class="yellow-circle"><b class="signup-num">1</b></div>
+          <img class="arrow" src="@/img/yellow_arrow.png" />
+          <div class="gray-circle"><b class="signup-num">2</b></div>
+          <img class="arrow" src="@/img/gray_arrow.png" />
+          <div class="gray-circle"><b class="signup-num">3</b></div>
+        </div>
       </div>
 
-      <div id="is-alba-false" @click.prevent="isPublic">
-        <b class="is-alba-text">아르바이트를 안 하고 있어요</b>
+      <div id="signup1-form">
+        <br /><br />
+
+        <div class="is-alba-true" @click.prevent="isAlba">
+          <b class="is-alba-text">아르바이트를 하고 있어요</b>
+        </div>
+
+        <div class="is-alba-false" @click.prevent="isPublic">
+          <b class="is-alba-text">아르바이트를 안 하고 있어요</b>
+        </div>
       </div>
     </div>
   </div>
@@ -38,27 +30,27 @@
 
 <script>
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
+import router from "@/router/index.js";
 
 export default {
   setup() {
     const store = useStore();
-    const router = useRouter();
 
     const back = () => {
-      console.log("뒤로가기");
-      router.push({ name: "login" });
+      router.go(-1);
     };
 
     const isAlba = () => {
       store.commit("account/SET_SIGNUP_ALBA", true);
       console.log("isAlba : ", store.state.account.signupUser.is_alba);
+
       router.push({ name: "form" });
     };
 
     const isPublic = () => {
       store.commit("account/SET_SIGNUP_ALBA", false);
       console.log("isAlba : ", store.state.account.signupUser.is_alba);
+
       router.push({ name: "form" });
     };
 
@@ -75,7 +67,6 @@ export default {
 .back {
   margin-left: 10px;
   margin-top: 10px;
-  padding-bottom: 80px;
 }
 
 #signup {
@@ -89,7 +80,6 @@ export default {
   width: 100%;
   height: 100%;
   padding-top: 70px;
-  border: 3px solid yellow;
 }
 
 #signup-top {
@@ -161,7 +151,7 @@ export default {
   width: 100%;
 }
 
-#is-alba-true {
+.is-alba-true {
   float: right;
   width: 65%;
   height: 177px;
@@ -173,9 +163,37 @@ export default {
   line-height: 177px;
   margin-bottom: 25px;
   margin-top: 20px;
+
+  -webkit-animation: slide-in-right 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: slide-in-right 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
-#is-alba-false {
+@-webkit-keyframes slide-in-right {
+  0% {
+    -webkit-transform: translateX(1000px);
+    transform: translateX(1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes slide-in-right {
+  0% {
+    -webkit-transform: translateX(1000px);
+    transform: translateX(1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.is-alba-false {
   float: left;
   width: 65%;
   height: 177px;
@@ -186,6 +204,34 @@ export default {
   text-align: center;
   line-height: 177px;
   margin-top: 25px;
+  -webkit-animation: slide-in-left 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s
+    both;
+  animation: slide-in-left 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s both;
+}
+
+@-webkit-keyframes slide-in-left {
+  0% {
+    -webkit-transform: translateX(-1000px);
+    transform: translateX(-1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes slide-in-left {
+  0% {
+    -webkit-transform: translateX(-1000px);
+    transform: translateX(-1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 .is-alba-text {

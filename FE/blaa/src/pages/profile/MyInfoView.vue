@@ -1,5 +1,25 @@
 <template>
-  <div style="display: flex">
+  <div>
+    <b-button id="show-btn" @click="showModal">Open Modal</b-button>
+
+    <b-modal ref="myInfoModal" hide-footer title="Using Component Methods">
+      <div class="d-block text-center">
+        <h3>Hello From My Modal!</h3>
+      </div>
+      <b-button class="mt-3" variant="outline-danger" block @click="hideModal"
+        >Close Me</b-button
+      >
+      <b-button
+        class="mt-2"
+        variant="outline-warning"
+        block
+        @click="toggleModal"
+        >Toggle Me</b-button
+      >
+    </b-modal>
+  </div>
+
+  <!-- <div style="display: flex">
     <img class="back" src="@/img/back.png" @click="back" /> &nbsp;
     <h1 style="text-align: center">회원정보</h1>
   </div>
@@ -22,12 +42,13 @@
     <button type="button" @click="updateMyInfo">회원정보 수정</button>
     <button type="button" @click="updatePassword">비밀번호 변경</button>
     <button type="button" @click="deleteAccount">회원탈퇴</button>
-  </div>
+  </div> -->
 </template>
 
 <script>
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
+import { ref, onMounted } from "vue";
 
 export default {
   setup() {
@@ -40,9 +61,10 @@ export default {
     };
 
     const logout = () => {
-      store.commit("account/USER_INFO", null);
       store.commit("account/LOGIN", false);
+      store.commit("account/USER_INFO", null);
       sessionStorage.removeItem("token");
+      store.commit("account/RESET_STORAGE");
       router.replace("/");
     };
 
@@ -74,6 +96,19 @@ export default {
       });
     };
 
+    const myInfoModal = ref(null);
+
+    onMounted(() => {
+      const showModal = () => {
+        myInfoModal.value.show();
+      };
+
+      const hideModal = () => {
+        myInfoModal.value.hide();
+      };
+      console.log(myInfoModal.value);
+    });
+
     return {
       back,
       myInfo,
@@ -81,6 +116,9 @@ export default {
       updateMyInfo,
       updatePassword,
       deleteAccount,
+      myInfoModal,
+      // showModal,
+      // hideModal,
     };
   },
 };
