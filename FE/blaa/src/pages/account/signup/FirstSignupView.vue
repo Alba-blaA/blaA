@@ -16,11 +16,11 @@
       <br /><br />
 
       <div id="is-alba-true" @click.prevent="isAlba">
-        아르바이트를 하고 있어요
+        <b class="is-alba-text">아르바이트를 하고 있어요</b>
       </div>
 
       <div id="is-alba-false" @click.prevent="isPublic">
-        아르바이트를 안 하고 있어요
+        <b class="is-alba-text">아르바이트를 안 하고 있어요</b>
       </div>
     </div>
   </div>
@@ -144,29 +144,41 @@ export default {
 }
 
 #signup1-form {
-  display: table-cell;
   vertical-align: middle;
+  width: 100%;
 }
 
 #is-alba-true {
   float: right;
-  width: 258px;
+  width: 65%;
   height: 177px;
   left: 102px;
   top: 261px;
-
   background: #d9d9d9;
   border-radius: 50px 0px 0px 50px;
+  text-align: center;
+  line-height: 177px;
+  margin-bottom: 25px;
+  margin-top: 20px;
 }
 
 #is-alba-false {
   float: left;
-  width: 258px;
+  width: 65%;
   height: 177px;
   left: 102px;
   top: 261px;
-
   background: #d9d9d9;
   border-radius: 0px 50px 50px 0px;
+  text-align: center;
+  line-height: 177px;
+  margin-top: 25px;
+}
+
+.is-alba-text {
+  font-family: "Inter";
+  font-style: normal;
+  text-align: center;
+  font-size: 17px;
 }
 </style>
