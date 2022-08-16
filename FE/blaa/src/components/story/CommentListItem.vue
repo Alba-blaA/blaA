@@ -10,12 +10,12 @@
             <span style="font-weight: 700;">{{ comment.user_pk.nickname }}</span>
             <div>
               <span style="font-weight: 400; font-size: 15px;">{{ comment.created_at }}</span>
+              <div v-if="isUpdate" id="update">
+                <div style="cursor:pointer" @click="[isFix=true, isUpdate=!isUpdate]">수정</div>
+                <div style="cursor:pointer" @click="[popUpOpen=true, isUpdate=!isUpdate]">삭제</div>
+              </div>
               <div style="display:inline-block; margin-left:10px;" v-if="user_pk == comment.user_pk.user_pk">
-                <i class="fa fa-solid fa-bars" @click="isUpdate=!isUpdate"></i>
-                <div v-if="isUpdate" id="update">
-                  <div style="cursor:pointer" @click="[isFix=true, isUpdate=!isUpdate]">수정</div>
-                  <div style="cursor:pointer" @click="[commnetDelete, isUpdate=!isUpdate]">X</div>
-                </div>
+                <i class="fa fa-solid fa-bars hamburger" @click="[isUpdate=!isUpdate]"></i>
                 <PopUp v-if="popUpOpen" @close-modal="popUpOpen=false">
                   <div class="modal-content">
                   <p>정말 삭제하시겠습니까?</p>
@@ -26,20 +26,21 @@
               </div> 
             </div>
           </div>
-          <div v-if="!isFix" style="font-weight: 300;">{{ comment.story_comment }}</div>
+          <div v-if="!isFix" style="font-weight: 300; margin-top: 5px; z-index=1">{{ comment.story_comment }}</div>
           <div v-else>
-            <input type="text" v-model="changeComment" @keyup.enter="commentFix"> <button @click="commentFix">제출</button>
+          <textarea style="margin-top: 5px;" class="updateCommnet" type="text" v-model="changeComment" @keyup.enter="commentFix"> </textarea>
           </div>
         </div>
       </div>
     </li>
-    <div style="height: 1px; background-color:black; opacity:0.5; width:100%; margin: 15px 0;"></div>
+    <div style="height: 1px; background-color:black; width:100%; margin-top: 15px; opacity:0.5; z-index: 1;"></div>
 </template>
 
 <script>
 import PopUp from '@/components/story/PopUp.vue'
 import { useStore } from 'vuex'
 import { ref } from 'vue'
+import $ from 'jquery'
 
 export default {
   props: {
@@ -53,7 +54,7 @@ export default {
   },
   setup(props) {
     const store = useStore()
-    const popUpOpen = ref(true)
+    const popUpOpen = ref(false)
     const user_pk = store.state.account.userInfo.user_pk
     const isFix = ref(false)
     const changeComment = ref('')
@@ -75,8 +76,6 @@ export default {
       isFix.value = false
     }
 
-    
-
     return {
       user_pk,
       popUpOpen,
@@ -85,7 +84,7 @@ export default {
       isFix,
       changeComment,
       isUpdate,
-      host
+      host,
     }
   }
 }
@@ -97,9 +96,35 @@ export default {
   grid-template-columns: 15% 85%;
 }
 
+.hamburger {
+  transform: rotate(0.5turn);
+}
+
 #update {
   position: absolute;
-  display: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  width: 70px;
+  overflow: hidden;
+  border: 1px black solid;
+  border-radius: 12px;
+  padding: 5px;
+  z-index: 10;
+}
 
+#update > div {
+  font-weight: 600;
+  font-size: 18px;
+  padding: 3px;
+}
+
+.updateCommnet {
+  width: 100%;
+  padding: 10px;
+  border-radius: 12px;
+  height: 100%;
 }
 </style>

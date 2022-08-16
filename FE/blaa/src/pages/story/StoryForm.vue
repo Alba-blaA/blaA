@@ -27,7 +27,7 @@
     </div>
     <br>
     <div>
-      <HashTagForm @search-hash-tag="searchHashTag" @reset="reset"/>
+      <HashTagForm @search-hash-tag="searchHashTag"/>
     </div>
   </form>
 </div>
@@ -81,7 +81,7 @@ export default {
 
         // 파일 형식과 3MB의 파일크기 확인
         if (
-          ["jpeg", "png", "gif", "bmp", 'jpg'].includes(fileName) && story_picture.value.size <= 25165824
+          ["jpeg", "png", "gif", "bmp", 'jpg', 'jfif', 'BMP', 'webp'].includes(fileName) && story_picture.value.size <= 400000000
         ) {
           reader.onload = e => {
             preview.src = e.target.result
@@ -95,7 +95,8 @@ export default {
           console.log(width, height)
           let img_height = height / (width / $(window).width() / (10/9))
           preview.height = img_height
-        } else if (story_picture.value.size > 25165824) {
+        } else if (story_picture.value.size > 400000000) {
+          alert('파일이 용량이 너무 큽니다! 더 용량이 작은 이미지를 선택해주세요')
           preview.src = null
         } else {
           alert('파일을 다시 선택해 주세요')
@@ -118,11 +119,6 @@ export default {
     //   const img_height = height / (width / $(window).width() / (10/9))
     //   preview.height = img_height
     // })
-
-    // 초기화 버튼 클릭시
-    const reset = () => {
-      hashTag.value = []
-    }
 
     // 파일버튼 교체
     const fileUpload = (e) => {
@@ -208,7 +204,6 @@ export default {
       story_title,
       previewFile,
       searchHashTag,
-      reset,
       fileUpload
     }
   }

@@ -1,8 +1,10 @@
 <template>
-<div class="comment-form">
-  <div style="background-color:white;">
-    <input type="text" v-model="comment" placeholder="댓글을 입력해주세요" :style="{width: windowWidth.value + 'px'}" @keyup.enter="CommentCreate">
-    <button @click="CommentCreate">등록</button>
+<div id="contain">
+  <div class="comment-form">
+    <div style="background-color:white;">
+      <input type="text" v-model="comment" placeholder="댓글을 입력해주세요" :style="{width: windowWidth.value + 'px'}" @keyup.enter="CommentCreate">
+      <button @click="CommentCreate">등록</button>
+    </div>
   </div>
 </div>
 </template>
@@ -46,7 +48,6 @@ export default {
       formWidth.value = computed(() => {
         return windowWidth.value.value + 64
       })
-      console.log(windowWidth.value.value + 64)
     })
     
 
@@ -61,6 +62,15 @@ export default {
 </script>
 
 <style scoped>
+#contain {
+  position:fixed;
+  width: 100%;
+  background-color: white;
+  height: 3rem;
+  bottom: 68px;
+  left: 0;
+}
+
 input {
   margin-top: 0.75rem;
   border:none;
@@ -68,19 +78,19 @@ input {
 }
 
 .comment-form {
-  background-color: white;
+  /* background-color: white; */
   position:fixed;
   left: 5%;
   width: 87%;
   margin: 0 12px;
-  bottom: 49px;
+  bottom: 68px;
   height: 3rem;
   border-top: 1px solid black;
 }
 
 button {
   position: fixed;
-  bottom: 54px;
+  bottom: 73px;
   right: 8%;
   width: 4rem;
   height: 2.5rem;

@@ -33,7 +33,7 @@
           <img :src="host + story.user_pk.image" height="60" width="60" style="margin: 0 auto; cursor:pointer" @click="moveToProfile">
           <div class="d-flex justify-content-between" style="padding: 20px 0 0 10px;">
             <span>{{ story.user_pk.nickname }} </span>
-            <span>{{ howNow(story.created_at) }}</span>
+            <span>{{ story.created_at }}</span>
           </div>
         </div>
       </div>
@@ -106,6 +106,7 @@ export default {
     }
 
     const goBack = () => {
+      console.log(window.history)
       router.go(-1)
     }
 

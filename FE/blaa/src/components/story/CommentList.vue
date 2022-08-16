@@ -37,14 +37,9 @@ export default {
     const comments = ref([])
 
     onMounted(async () => {
-        await store.dispatch('story/getComment', route.params.story_pk).then(() => {
-          comments.value = store.state.story.comments
-          comments.value.forEach(ele => {
-            ele.created_at = howNow(ele.created_at)
-          })
-          console.log(comments.value)
-        })
-      })
+      await store.dispatch('story/getComment', route.params.story_pk)
+      comments.value = store.state.story.comments
+    })
     
     return {
       comments,
