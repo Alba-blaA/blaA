@@ -1,6 +1,6 @@
 <template>
   <StoryTopNavbar :isStory="isStory" :isFollow="FollowTap" :isFilter="isFilter" @change="change" />
-  <StoryImageCardList :images="images" v-if="isFollow" />
+  <StoryImageCardList :images="images.value" v-if="isFollow" />
   <div v-else>
     <p>팔로우 한 사람이 없어요!</p>
   </div>
@@ -33,7 +33,7 @@ export default {
         page: page,
       };
       await store.dispatch("story/getFollow", data);
-      images.value = store.state.story.images;
+      images.value = computed(() => { return store.state.story.images })
       numberOfPages.value = computed(() => {
         return Math.ceil(store.state.story.totalCount / 10);
       });
