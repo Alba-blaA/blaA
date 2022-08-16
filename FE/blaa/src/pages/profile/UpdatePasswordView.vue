@@ -1,40 +1,51 @@
 <template>
-  <br /><br />
-  <h3>비밀번호 수정 페이지</h3>
-  <form>
-    <input
-      id="myinfo-pw"
-      type="password"
-      v-model="updatePassword.old_password"
-      placeholder="Enter password"
-      autocomplete="off"
-    />
-    <br />
-
-    <input
-      id="update-newpassword"
-      type="password"
-      v-model="updatePassword.password"
-      placeholder="Enter new password"
-      autocomplete="off"
-    />
-    <br />
-
-    <input
-      id="check-newpassword"
-      type="password"
-      v-model="updatePassword.password2"
-      placeholder="Check new password"
-      autocomplete="off"
-    />
-    <br />
-    <br />
-
+  <div id="update-password">
     <div>
-      <button @click.prevent="before">이전</button> &nbsp;
-      <button @click.prevent="update">수정</button>
+      <h1 class="update-text">비밀번호 수정</h1>
+      <hr />
     </div>
-  </form>
+
+    <form>
+      <label for="update-oldpassword">현재 비밀번호</label>
+      <input
+        id="update-oldpassword"
+        type="password"
+        v-model="updatePassword.old_password"
+        placeholder="Password"
+        autocomplete="off"
+      />
+      <small>현재 비밀번호가 올바르지 않습니다.</small>
+      <br />
+
+      <label for="update-newpassword">새로운 비밀번호</label>
+      <input
+        id="update-newpassword"
+        type="password"
+        v-model="updatePassword.password"
+        placeholder="New Password"
+        autocomplete="off"
+      />
+      <small>비밀번호는 6자리 이상이어야 합니다.</small>
+      <br />
+
+      <label for="update-checkpassword">비밀번호 확인</label>
+      <input
+        id="update-checkpassword"
+        type="password"
+        v-model="updatePassword.password2"
+        placeholder="Check new password"
+        autocomplete="off"
+      />
+      <small>비밀번호가 일치하지 않습니다.</small>
+      <br />
+      <br />
+
+      <div style="margin-top: 20px">
+        <button id="btn-before" @click.prevent="before">이전</button> &nbsp;
+        <button id="btn-update" @click.prevent="update">수정</button>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -121,4 +132,92 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+#update-password {
+  padding-left: 40px;
+  padding-right: 40px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: auto;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  padding-top: 40px;
+  padding-bottom: 50px;
+}
+
+.update-text {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 35px;
+  line-height: 30px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+form {
+  align-items: center;
+  width: 100%;
+  vertical-align: middle;
+}
+
+label {
+  float: left;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: bold;
+  color: black;
+}
+
+input {
+  width: 100%;
+  height: 50px;
+  padding: 5px;
+  border: solid 2px #d9d9d9;
+  border-radius: 8px;
+}
+
+small {
+  float: left;
+  font-family: Inter;
+  font-style: normal;
+  font-size: 15px;
+}
+
+input::placeholder {
+  color: #d9d9d9;
+}
+
+input:focus {
+  border: 2px #eec95c solid;
+  outline: none;
+}
+
+#btn-before {
+  width: 100px;
+  height: 40px;
+  border: 2px solid #eec95c;
+  border-radius: 100px;
+  background-color: #ffffff;
+  color: #498d6d;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+}
+
+#btn-update {
+  width: 100px;
+  height: 40px;
+  background: #eec95c;
+  border: #eec95c;
+  border-radius: 100px;
+  color: #498d6d;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+}
+</style>
