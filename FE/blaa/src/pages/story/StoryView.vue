@@ -66,9 +66,6 @@ export default {
         }
         await store.dispatch('story/getImages', data)
         images.value = computed(() => {return store.state.story.images})
-        images.value.value.forEach(ele => {
-          ele.created_at = howNow(ele.created_at)
-        })
         numberOfPages.value = computed(() => {
           return  Math.ceil(store.state.story.totalCount / 10)
         })
@@ -103,9 +100,6 @@ export default {
         }
         await store.dispatch('story/getHashtag', data)
         images.value = computed(() => {return store.state.story.images})
-        images.value.value.forEach(ele => {
-          ele.created_at = howNow(ele.created_at)
-        })
         numberOfPages.value = computed(() => {
           return  Math.ceil(store.state.story.totalCount / 10)
         })
@@ -129,9 +123,6 @@ export default {
         }
         await store.dispatch('story/getCategory', data)
         images.value = computed(() => {return store.state.story.images})
-        images.value.value.forEach(ele => {
-          ele.created_at = howNow(ele.created_at)
-        })
         numberOfPages.value = computed(() => {
           return  Math.ceil(store.state.story.totalCount / 10)
         })
@@ -156,9 +147,6 @@ export default {
         }
         await store.dispatch('story/getRegion', data)
         images.value = computed(() => {return store.state.story.images})
-        images.value.value.forEach(ele => {
-          ele.created_at = howNow(ele.created_at)
-        })
         numberOfPages.value = computed(() => {
           return  Math.ceil(store.state.story.totalCount / 10)
         })
@@ -174,7 +162,6 @@ export default {
     }   
 
     window.onscroll = function(e) {
-      console.log(numberOfPages.value.value, currentPage.value)
     if (numberOfPages.value.value > currentPage.value) {
       if((window.innerHeight + window.scrollY) >= document.body.offsetHeight) { 
         setTimeout(function(){

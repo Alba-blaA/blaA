@@ -16,15 +16,24 @@ export default {
   },
   mutations: {
     GET_IMAGES(state, payload) {
-      console.log(payload)
+      const {
+        howNow
+      } = dataChange()
+
       state.totalCount = payload.count[0]['count']
       if (state.isState == payload.isState.value && payload.page != 1) {
         for (let i=0; i < payload.data.length; i++) {
+          payload.data[i].created_at = howNow(payload.data[i].created_at)
           state.images.push(payload.data[i])
         }
+        console.log(state.images)
       } else {
         state.isState = payload.isState.value
-        state.images = payload.data;
+        state.images = []
+        for (let i=0; i < payload.data.length; i++) {
+          payload.data[i].created_at = howNow(payload.data[i].created_at)
+          state.images.push(payload.data[i])
+        }
       }
     },
     GET_CURRENT_STORY(state, payload) {
