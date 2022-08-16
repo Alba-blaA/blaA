@@ -57,25 +57,31 @@
       </tr>
     </table>
   </div>
-
+  <hr>
+  <div>
+      <button
+        class="profile_list"
+       style="border:0; outline:0; background-color: white; font-size: 1.2rem; "
+       type="button" @click="startChat(userProfile.user_pk, userProfile.nickname)">{{ userProfile.nickname }}와 채팅하기</button>
+  </div>
   <hr />
   <div @click="userReview">
     <h5 class="profile_list">
-      <b>{{ userProfile.nickname }}님의 리뷰</b>
+      <p>{{ userProfile.nickname }}님의 리뷰</p>
     </h5>
   </div>
 
   <hr />
   <div @click="userCrew">
     <h5 class="profile_list">
-      <b>{{ userProfile.nickname }}님의 크루</b>
+      <p>{{ userProfile.nickname }}님의 크루</p>
     </h5>
   </div>
 
   <hr />
   <div @click="setBlackList">
     <h5 class="profile_list">
-      <b>{{ userProfile.nickname }}님 신고하기</b>
+      <p>{{ userProfile.nickname }}님 신고하기</p>
     </h5>
   </div>
   <hr />
