@@ -228,7 +228,7 @@ const router = createRouter({
         },
 
         {
-          path: "user",
+          path: "user/:crew_pk",
           name: "crewmemberlist",
           component: () => import("@/components/crew/member/CrewMemberList.vue"),
         },

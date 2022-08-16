@@ -53,7 +53,7 @@
 
     <div v-show="isInfo">
       <div class="detail">
-        <h4>우리 크루를 소개합니다!</h4>
+        <p id="semi_title_text">우리 크루를 소개합니다!</p>
         <p>
           안녕하세요, {{ crewInfo.crew_name }} 입니다.<br />
           크루 설명: {{ crewInfo.crew_explain }}
@@ -61,12 +61,12 @@
       </div>
       <hr />
       <div class="detail">
-        <h4>위치</h4>
+        <p id="semi_title_text">위치</p>
         <p>박찬 지도 띄워줘</p>
       </div>
       <hr />
       <div class="detail">
-        <h4>크루장</h4>
+        <p id="semi_title_text">크루장</p>
         <p>{{ crewInfo.crew_leader }}</p>
       </div>
     </div>
@@ -194,11 +194,11 @@ export default {
   margin: auto;
   width: 320px;
 
-  background: #ffffff;
+  background-color: #ffffff;
   box-shadow: 0px 4px 80px rgba(0, 0, 0, 0.07), 0px 0.893452px 17.869px rgba(0, 0, 0, 0.0417275), 0px 0.266004px 5.32008px rgba(0, 0, 0, 0.0282725);
   border-radius: 30px;
 
-  animation: fadeInUp 1s;
+  /* animation: fadeInUp 1s; */
 }
 
 .joinBtn_business {
@@ -255,7 +255,12 @@ hr {
   object-fit: cover;
 }
 
-@keyframes fadeInUp {
+#semi_title_text {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+/* @keyframes fadeInUp {
   0% {
     opacity: 0;
     transform: translate3d(0, 20%, 0);
@@ -264,5 +269,5 @@ hr {
     opacity: 1;
     transform: translateZ(0);
   }
-}
+} */
 </style>

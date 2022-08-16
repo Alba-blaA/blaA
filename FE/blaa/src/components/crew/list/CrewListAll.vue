@@ -1,47 +1,25 @@
 <template>
-  <hr />
-  <!-- <div>
-    <button @click="business = true">업무용</button>
-    <button @click="business = false">친목용</button>
-    {{ business }}
-  </div> -->
-
-  <div class="container">
-    <div class="card" v-for="(crew, i) in AllCrews.crews" :key="i" v-bind="crew" @click="moveToDetail(crew.crew_pk)">
-      <div class="col-4" style="text-align: center">
-        <img id="profile" :src="host + crew.crew_img" />
-      </div>
-      <div class="col-8">
-        <div class="row">
-          <h5>{{ crew.crew_name }}</h5>
-          <div>{{ crew.crew_member_count }} 명 참여중</div>
+  <div class="crew_list" v-for="(crew, i) in AllCrews.crews" :key="i" v-bind="crew" @click="moveToDetail(crew.crew_pk)">
+    <div class="col-3" style="text-align: center">
+      <img id="profile" :src="host + crew.crew_img" />
+    </div>
+    <div class="col-9">
+      <div class="row">
+        <p style="font-size: 16px">{{ crew.crew_name }}</p>
+        <div class="row" id="text_line">
+          <div class="col">
+            <img class="member_icon" src="@/assets/icon/person.png" />
+            {{ crew.crew_member_count }}
+            &nbsp;&nbsp;| &nbsp; {{ crew.is_business ? "업무용" : "친목용" }}
+          </div>
+          <!-- <div class="col">|</div>
+            <div class="col">
+              <div>{{ crew.is_business ? "업무용" : "친목용" }}</div>
+            </div> -->
         </div>
       </div>
     </div>
   </div>
-  <!-- <table>
-    <thead>
-      <tr>
-        <th>순번</th>
-        <th>크루명</th>
-        <th>크루설명</th>
-        <th>업무용/친목용</th>
-        <th>크루장</th>
-        <th>가입하기</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(crew, i) in AllCrews.crews" :key="i" v-bind="crew">
-        <td>{{ crew.crew_pk }}</td>
-        <td>
-          <router-link :to="{ name: 'crewboard', params: { crew_pk: crew.crew_pk } }">{{ crew.crew_name }}</router-link>
-        </td>
-        <td>{{ crew.crew_explain }}</td>
-        <td>{{ crew.is_business }}</td>
-        <td>{{ crew.crew_leader }}</td>
-      </tr>
-    </tbody>
-  </table> -->
 </template>
 
 <script>
@@ -110,27 +88,30 @@ export default {
 </script>
 
 <style scoped>
-.card {
+.crew_list {
   display: flex;
   flex-direction: row;
   align-items: center;
-  /* text-align: center; */
-  padding: 0px;
+  margin: 10px;
 
-  /* position: absolute; */
-  /* width: 320px; */
-  /* width: 80%; */
-  height: 70px;
+  height: 80px;
 
-  /* Neutral/Light/Light */
-
-  background: #f8f9fe;
-  border-radius: 16px;
+  font-family: "pretendard";
+  font-style: normal;
+  font-size: 14px;
+  line-height: 17px;
 }
 
+.member_icon {
+  width: 20px;
+  height: 18px;
+}
+#text_line {
+  line-height: 0px;
+}
 #profile {
-  width: 30px;
-  height: 30px;
+  width: 60px;
+  height: 60px;
   border-radius: 70%;
   overflow: hidden;
 }

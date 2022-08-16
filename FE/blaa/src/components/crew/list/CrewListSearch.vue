@@ -1,18 +1,21 @@
 <template>
-  <div>크루 검색하기</div>
-  <label id="search">크루 검색</label>
-  <input type="text" id="crew_search" name="crew_search" v-model="crew_search" />
+  <div class="row" id="top_box">
+    <div class="col-2" id="top_box_text"></div>
+    <h5 class="col-8" id="top_box_text">크루 검색</h5>
+  </div>
+  <!-- <label id="search">크루 검색</label> -->
+  <input type="text" id="crew_search" name="crew_search" v-model="crew_search" placeholder="검색어를 입력하세요." />
 
-  <div>
-    <button @click="business = true">업무용</button>
-    <button @click="business = false">친목용</button>
-    {{ business }}
+  <div class="row">
+    <div class="col-6" id="checkbox" @click="business = true">업무용</div>
+    <div class="col-6" id="checkbox" @click="business = false">친목용</div>
   </div>
 
-  <div v-for="(crew, i) in filtered" :key="i" v-bind="crew">
-    <div @click="moveToCrew(crew.crew_pk)">{{ crew.crew_name }}</div>
+  <div class="crew_search_list">
+    <div v-for="(crew, i) in filtered" :key="i" v-bind="crew">
+      <div @click="moveToCrew(crew.crew_pk)">{{ crew.crew_name }}</div>
+    </div>
   </div>
-  <hr />
 </template>
 
 <script>
@@ -38,7 +41,7 @@ export default {
     const filtered = computed(() => {
       return AllCrews.crews.filter((item) => {
         if (crew_search.value) {
-          return (item.is_business === business.value) && (item.crew_name.includes(crew_search.value));
+          return item.is_business === business.value && item.crew_name.includes(crew_search.value);
         }
         return item.is_business === business.value;
       });
@@ -59,4 +62,43 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+#top_box {
+  height: 55px;
+  margin: auto;
+
+  color: white;
+  background-color: #498d6d;
+  border-bottom: 0.5px solid #bdbdbd;
+}
+
+#top_box_text {
+  /* display: flex; */
+  text-align: center;
+  line-height: 55px;
+}
+
+#crew_search {
+  width: 100%;
+  height: 50px;
+
+  border-top: none;
+  border-left: none;
+  border-right: none;
+
+  padding-left: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+#checkbox {
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  padding: 0;
+  margin: auto;
+}
+
+.crew_search_list {
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+</style>

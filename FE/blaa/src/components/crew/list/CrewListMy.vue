@@ -1,6 +1,4 @@
 <template>
-  <hr />
-  {{ myCrews.crews }}
   <table>
     <thead>
       <tr>
@@ -16,7 +14,7 @@
         <p>가입된 크루가 없습니다.</p>
       </template> -->
       <template>
-        <tr v-for="(crew, i) in myCrews" :key="i" v-bind="crew">
+        <tr v-for="(crew, i) in myCrews" :key="i">
           <td>{{ crew.crew_pk }}</td>
           <td>{{ crew.is_business }}</td>
           <td>{{ crew.crew_name }}</td>
@@ -31,36 +29,27 @@
 <script>
 import { useStore } from "vuex";
 import { onMounted, reactive, ref } from "vue";
+import { useRoute } from "vue-router";
 export default {
   setup() {
     const store = useStore();
-    const myCrews = store.state.profile.crewList.results;
-    const user_pk = ref(null);
-
-    // for (var i = 0; i < myCrews.length; i++) {
-    //   if (myCrews[i].user_pk == route.params.user_pk) {
-    //     user_pk.value = i;
-    //     c(user_pk.value);
-    //   }
-    // }
-
-    // console.log(store.state.account.userInfo.user_pk);
+    const route = useRoute();
+    const myCrews = ref([]);
     const myCrewCnt = ref(null);
+    const user_pk = store.state.account.userInfo.user_pk;
 
     onMounted(() => {
-      store.dispatch("profile/getMyCrew", store.state.account.userInfo.user_pk);
-      myCrews.crews = store.state.profile.myCrew.results;
-      // myCrewCnt.value = myCrews.crews.keys("crews").length;
-      // console.log(myCrews.crews);
-      // console.log(myCrews.crews[0].crews.length);
+      store.dispatch("crew/getMyCrews", user_pk);
+      console.log(myCrews.value);
     });
 
-    // console.log(myCrews.crews);
-    const useEffect = () => {
-      if (myCrews.crews && myCrews.crews.data.count != 0) {
-        // console.log(myCrews.crews[0].crews.length);
-      }
-    };
+    myCrews.value = store.state.crew.myCrews[0].crews;
+    console.log(myCrews.value);
+    // const useEffect = () => {
+    //   if (myCrews.value.crews && myCrews.value.crews.data.count != 0) {
+    //     // console.log(myCrews.crews[0].crews.length);
+    //   }
+    // };
 
     return {
       myCrews,
