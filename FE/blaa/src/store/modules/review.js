@@ -41,12 +41,7 @@ export default {
       state.review.forEach(ele => {
         ele.created_at = yyyyMMdd(ele.created_at)
       })
-      // 버튼 점수의 비율 계산
-      if (state.review.length) {
-        for (let type in state.reviewBtn) {
-          state.reviewBtn[type] = (state.reviewBtn[type] / state.review.length)
-        }
-      }
+
     },
     GET_DETAIL_REVIEW(state, payload){
       const {
