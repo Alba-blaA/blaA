@@ -21,26 +21,25 @@
       style="display: none"
     />
   </div>
-  <h4 class="mt-3" style="text-align: center">{{ userInfo.nickname }}</h4>
-
-  <br />
+  <h4 class="mt-3 mb-2" style="text-align:center; font-weight: bold;">{{ userInfo.nickname }}</h4>
 
   <div class="d-flex justify-content-center">
-    <table>
-      <tr>
-        <td rowspan="4" align="center" @click="follower">
-          <div style="margin-right: 0.5rem">
-            <b style="font-size: large">
+      <table>
+        <tr>
+          <td rowspan="4" align="center" @click="follower">
+          <div style="margin-right: 0.5rem;">
+
+            <b style="font-size:1.2rem">
               {{ follow.followers }}
               <br />
               <p>팔로워</p>
             </b>
           </div>
-        </td>
-        &nbsp; &nbsp;
-        <td rowspan="4" align="center" @click="following">
-          <div style="margin-left: 0.5rem">
-            <b style="font-size: large">
+          </td>
+          &nbsp; &nbsp;
+          <td rowspan="4" align="center" @click="following">
+          <div style="margin-left: 0.5rem;">
+            <b style="font-size:1.2rem">
               {{ follow.followings }}
               <br />
               <p>팔로잉</p>
@@ -53,14 +52,35 @@
 
   <!-- <button @click.prevent="gochatroom">채팅하러가기</button> -->
   <!-- <button @click="showinvitedcrewlist">나를초대한크루리스트</button> -->
-  <hr style="margin-top: 0rem" />
-  <div>
-    <div @click.prevent="gochatroom">
-      <h5 class="profile_list"><b>채팅하러가기</b></h5>
-    </div>
-    <hr />
-    <div @click="myStory">
-      <h5 class="profile_list"><b>내 스토리</b></h5>
+    <hr style="margin-top :0rem">
+    <div>
+      <div @click.prevent="gochatroom">
+        <h5 class="profile_list"><b>채팅하러가기</b></h5>
+      </div>
+      <hr />
+      <div @click="myStory">
+        <h5 class="profile_list"><b>내 스토리</b></h5>
+      </div>
+
+      <hr />
+      <div @click="myReview">
+        <h5 class="profile_list"><b>내 리뷰</b></h5>
+      </div>
+
+      <hr />
+      <div @click="myCrew">
+        <h5 class="profile_list"><b>내 크루</b></h5>
+      </div>
+
+      <hr />
+      <div @click="showinvitedcrewlist">
+        <h5 class="profile_list"><b>초대받은 크루</b></h5>
+      </div>
+
+      <hr />
+      <div @click="myInfo">
+        <h5 class="profile_list"><b>회원정보</b></h5>
+      </div>
     </div>
 
     <hr />
@@ -264,20 +284,16 @@ export default {
 </script>
 
 <style>
-#profile {
-  width: 150px;
-  height: 150px;
-  border-radius: 70%;
-  overflow: hidden;
-}
+
 
 .imgProfile {
-  width: 9rem;
-  height: 9rem;
+  width: 9.6rem;
+  height: 9.6rem;
   object-fit: cover;
 }
 
 .profile_list {
   margin-left: 1rem;
+  font-weight: bold;
 }
 </style>

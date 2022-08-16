@@ -10,7 +10,7 @@
 import StoryImageCardList from '@/components/story/StoryImageCardList.vue'
 import StoryTopNavbar from '@/components/story/StoryTopNavbar.vue'
 import { useStore } from 'vuex'
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, ref, computed } from 'vue'
 
 export default {
   components: {
@@ -24,15 +24,34 @@ export default {
     const isFollow = ref(false)
     const isFilter = ref(false)
     const FollowTap = ref(true)
+    const numberOfPages = ref(0)
+    const currentPage = ref(1)
 
-    const getPure = async() => {
-      await store.dispatch('story/getFollow')
+    const getPure = async(page = currentPage.value) => {
+      data = {
+        isState: 'follow',
+        page: page
+      }
+      await store.dispatch('story/getFollow', data)
       images.value = store.state.story.images
+      numberOfPages.value = computed(() => {
+        return Math.ceil(store.state.story.totalCount / 10)
+      })
+    }
+
+    window.onscroll = function(e) {
+    if (numberOfPages.value.value > currentPage.value) {
+      if((window.innerHeight + window.scrollY) >= document.body.offsetHeight) { 
+        setTimeout(function(){
+        // 실행 시킬 함수 구현
+        currentPage.value += 1
+        getPure()
+        }, 1000)}
+      }
     }
 
     onBeforeMount( async() => {
       await getPure()
-      console.log()
       if (images.value.length == 1){
           // 메세지 하나밖에 없으면
         if (images.value[0].length == 1) {

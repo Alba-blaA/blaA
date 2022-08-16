@@ -1,15 +1,17 @@
 <template>
 <div id="review" class="d-flex justify-content-center">
   <div style="width: 90%">
-     <div class="d-flex justify-content-between">
+     <div class="d-flex justify-content-between align-items-center mt-3">
       <h1 style="font-weight:bold">가게 리뷰</h1>
       <div class="d-flex">
         <!-- 클릭하거나 엔터를 치면 -->
         <div class="search-box">
           <input class="search-txt" type="text" v-model="searchText" @keypress.enter="searchStore">
-          <span class="search-button material-symbols-outlined" @click="isSearch=!isSearch">search</span>
+          <span class="search-end material-symbols-outlined" v-if="isSearch" @click="searchEnd">cancel</span>
+          <span class="search-button material-symbols-outlined">search</span>
         </div>
-        <router-link style="color:black; margin-left:5px; text-align:enter;" :to="{name: 'createReview'}"><i class="fa fa-solid fa-plus fa-2x"></i></router-link>
+        <div v-if="isSearch"></div>
+        <router-link style="color:black; margin-left:5px; text-align:center;" :to="{name: 'createReview'}"><span class="material-symbols-outlined" style=" font-size:48px;">add</span></router-link>
       </div>
     </div>
     <div v-if="reviews.value"> 
@@ -35,23 +37,25 @@ export default {
     const reviews = ref([])
     const currentPage = ref(1)
     const total = ref(0)
-    const searchStoreName = ref('')
     const isSearch = ref(false)
+    const searchText = ref('')
 
     // 데이터를 가져오는 함수
     const getReviews = async(page = currentPage.value) => {
       const data = {
-        searchText: searchStoreName.value,
+        isSearch: isSearch.value,
+        searchText: searchText.value,
         page: page
       }
+      console.log(data)
       await store.dispatch('review/getReviews', data)
+      reviews.value = computed(() => {return store.state.review.reviews})
+      total.value = computed(() => {return store.state.review.total_reviews})
     }
 
     // DOM에 가져오기 전에 데이터 가져오기
     onBeforeMount(async() => {
       await getReviews()
-      reviews.value = computed(() => {return store.state.review.reviews})
-      total.value = computed(() => {return store.state.review.total_reviews})
     })
 
     const numberOfPages = computed(() => {
@@ -72,12 +76,17 @@ export default {
 
     // 필터링 함수
     // 새로 찾을 때 검색 정보 데이터를 다시 받아와야함
-    const searchStore = (searchText) => {
-      console.log(searchText)
-      searchStoreName.value = searchText
+    const searchStore = () => {
       // 새로 찾을 때 
       currentPage.value = 1
+      isSearch.value = true
       getReviews()
+    }
+
+    const searchEnd = async() => {
+      isSearch.value = false
+      searchText.value = ''
+      await getReviews()
     }
 
     return {
@@ -86,7 +95,9 @@ export default {
       currentPage,
       getReviews,
       searchStore,
-      isSearch
+      searchText,
+      isSearch,
+      searchEnd
     }
   }
 }
@@ -113,7 +124,7 @@ export default {
 }
 
 .search-txt {
-  float: left;
+  float: right;
   padding: 0;
   background: none;
   border: none;
@@ -124,6 +135,17 @@ export default {
   width: 0;
   transition: 0.5s;
 }
+
+.search-end {
+  float: right;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  margin: auto 5px;
+  cursor: pointer;
+}
+
 /* 마우스를 위에 올렸을 때 늘어남 */
 .search-box:hover > .search-txt {
   width: 200px;
