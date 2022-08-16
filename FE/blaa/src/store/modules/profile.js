@@ -6,6 +6,7 @@ const profileStore = {
   state: {
     updateMyInfo: [],
     followerList: [],
+    totalFollowers: 0,
     followingList: [],
     myStory: [],
     reviewList: [],
@@ -17,7 +18,17 @@ const profileStore = {
       state.myInfo = myInfo;
     },
     GET_FOLLOWER_LIST: (state, followerList) => {
-      state.followerList = followerList;
+      // state.followerList = followerList;
+      state.followerList.next = followerList.data.next;
+      state.followerList.previous = followerList.data.previous;
+      console.log("followerList result : ", followerList.data.results);
+      console.log("list length : ", followerList.data.results.length);
+      for (let i = 0; i < followerList.data.results.length; i++) {
+        state.followerList.push(followerList.data[i]);
+      }
+    },
+    UPDATE_TOTAL_FOLLOWERS: (state, followers) => {
+      state.totalFollowers = followers;
     },
     GET_FOLLOWING_LIST: (state, followingList) => {
       state.followingList = followingList;
@@ -44,34 +55,53 @@ const profileStore = {
         })
         .catch((err) => {});
     },
-    async getFollowerList(context, user_pk, page) {
-      await axios
-        .get(api.profile.myFollow(user_pk), {
-          params: {
-            type: "follower",
-            page: page,
-          },
-        })
-        .then((response) => {
-          console.log("팔로우 response", response);
-          console.log("response data : ", response.data);
-          const followerData = {
-            count: null,
-            next: null,
-            previous: null,
-            results: [],
-          };
-          console.log(response.data.count);
-          followerData.count = response.data.count;
-          followerData.next = response.data.next;
-          followerData.previous = response.data.previous;
-          followerData.results = response.data.results;
+    async getFollowerList(context, data) {
+      // await axios
+      //   .get(api.profile.myFollow(user_pk), {
+      //     params: {
+      //       type: "follower",
+      //       page: page,
+      //     },
+      //   })
+      //   .then((response) => {
+      //     console.log("팔로우 response", response);
+      //     console.log("response data : ", response.data);
+      //     const followerData = {
+      //       count: null,
+      //       next: null,
+      //       previous: null,
+      //       results: [],
+      //     };
+      //     console.log(response.data.count);
+      //     followerData.count = response.data.count;
+      //     followerData.next = response.data.next;
+      //     followerData.previous = response.data.previous;
+      //     followerData.results = response.data.results;
 
-          context.commit("GET_FOLLOWER_LIST", followerData);
-        })
-        .catch((err) => {
-          console.log("팔로우 err : ", err);
+      //     context.commit("GET_FOLLOWER_LIST", followerData);
+      //   })
+      //   .catch((err) => {
+      //     console.log("팔로우 err : ", err);
+      //   });
+      console.log("받아온 data : ", data);
+      try {
+        const res = await axios.get(api.profile.myFollow(data.user_pk), {
+          params: {
+            type: data.type,
+            page: data.page,
+          },
         });
+        const payload = {
+          type: "follower",
+          data: res.data,
+        };
+        context.commit("UPDATE_TOTAL_FOLLOWERS", res.data.count);
+        console.log("count : ", res.data.count);
+        context.commit("GET_FOLLOWER_LIST", payload);
+        console.log("payload : ", payload);
+      } catch (error) {
+        console.log(error);
+      }
     },
     async getFollowingList(context, user_pk) {
       await axios
