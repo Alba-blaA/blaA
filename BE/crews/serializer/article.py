@@ -17,6 +17,9 @@ class ArticleImageSerializer(serializers.ModelSerializer):
 class CrewArticleSerializer(serializers.ModelSerializer) :
     # crew_pk = CrewSerializerForArticle()
     images = serializers.SerializerMethodField()
+    profile = serializers.ImageField(source='user.image',read_only=True)
+    nickname = serializers.CharField(source='user.nickname',read_only=True)
+
     def get_images(self, obj):
         image = obj.crewarticleimage_set.all()
         return ArticleImageSerializer(instance=image, many=True).data
