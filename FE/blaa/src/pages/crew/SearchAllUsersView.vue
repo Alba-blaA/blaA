@@ -19,7 +19,7 @@
                   </b>          
               </div>
               <br>
-              <div class="d-flex justify-content-end align-items-center " style="padding-right : 70px">                          
+              <div class="d-flex justify-content-end align-items-center " style="padding-right : 90px">                          
                 <button class="w-btn w-btn-green" @click="gochat(user.user_pk, user.nickname)">채팅하기</button>
               </div>
             </b-card-text>

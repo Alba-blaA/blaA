@@ -177,6 +177,18 @@ const router = createRouter({
           path: "m/:crew_pk",
           name: "crewboardmember",
           component: () => import("@/components/crew/manage/CrewBoardMember.vue"),
+          children: [
+            {
+              path: "schedule",
+              name: "schedule",
+              component: () => import("@/components/crew/schedule/ScheduleView.vue"),
+            },
+            {
+              path: "scheduleregister",
+              name: "scheduleregister",
+              component: () => import("@/components/crew/schedule/ScheduleRegisterView.vue"),
+            },
+          ]
         },
         {
           path: "article/:crew_pk",
@@ -203,16 +215,7 @@ const router = createRouter({
               name: "articledelete",
               component: () => import("@/components/crew/article/ArticleDelete.vue"),
             },
-            {
-              path: "schedule",
-              name: "schedule",
-              component: () => import("@/components/crew/schedule/ScheduleView.vue"),
-            },
-            {
-              path: "scheduleregister",
-              name: "scheduleregister",
-              component: () => import("@/components/crew/schedule/ScheduleRegisterView.vue"),
-            },
+            
             // {
             //   path: "crewmember",
             //   name: "crewmember",

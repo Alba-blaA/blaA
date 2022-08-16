@@ -19,14 +19,13 @@
                   </b>          
               </div>
               <br>
-              <div class="d-flex justify-content-end align-items-center chodaeorchatbutton" style="padding-right : 10px">
+              <div class="d-flex justify-content-end align-items-center chodaeorchatbutton" style="padding-right : 20px">
                 <button class="w-btn w-btn-yellow" @click="inviteuser(crew_pk, user.user_pk)">초대하기</button>            
                 <button class="w-btn w-btn-green" @click="gochat(user.user_pk, user.nickname)">채팅하기</button>
               </div>
             </b-card-text>
           </b-card>
         </div>
-
       </section>
       
    
