@@ -151,16 +151,15 @@ export default {
       }
     },
     async getHashtag({ commit, state }, page) {
-      console.log(page.hashtag)
       try {
         const res = await axios.get(api.story.hashtag(), {
           params: {
             page: page.page,
-            id: page.hashtag,
+            id: page.hashtag_content,
           }
         })
         const data = []
-        console.log('해시태그', res.data)
+        console.log(res.data)
         for (const story in res.data) {
           data.push(res.data[story].story_pk)
         }
