@@ -16,6 +16,7 @@ export default {
   },
   mutations: {
     GET_IMAGES(state, payload) {
+      console.log(payload)
       state.totalCount = payload.count[0]['count']
       if (state.isState == payload.isState.value && payload.page != 1) {
         for (let i=0; i < payload.data.length; i++) {
@@ -144,6 +145,7 @@ export default {
           isState: data.isState,
           page: data.page
         }
+
         commit("GET_IMAGES", send);
       } catch (error) {
         // 에러 발생시
@@ -151,26 +153,41 @@ export default {
       }
     },
     async getHashtag({ commit, state }, page) {
-      console.log(page.hashtag)
       try {
         const res = await axios.get(api.story.hashtag(), {
           params: {
             page: page.page,
-            id: page.hashtag,
+            id: page.hashtag_content,
           }
         })
-        const data = []
-        console.log('해시태그', res.data)
-        for (const story in res.data) {
-          data.push(res.data[story].story_pk)
-        }
-        const send = {
-          count: res.data.splice(-1,1),
-          data: res.data,
-          isState: data.isState,
-          page: data.page
-        }
 
+        const res2 = await axios.get(api.story.hashtag(), {
+          params: {
+            page: page.page,
+            id: page.hashtag_content,
+          }
+        })
+
+        let result = []
+
+        if (res.data[-1] == Number) {
+          result = res.data
+        } else {
+          result = res2.data
+        }
+        const count = result.splice(-1,1)
+        
+        const array = []
+        result.forEach(ele => {
+          array.push(ele['story_pk'])
+        })
+
+        const send = {
+          count: count,
+          data: array,
+          isState: page.isState,
+          page: page.page
+        }
         commit('GET_IMAGES', send)
       } catch(error) {
         console.log(error)
