@@ -28,9 +28,11 @@ class Review(TrackingModel,models.Model) :
     store = models.ForeignKey(Store,on_delete=models.CASCADE,related_name='review')
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='reviews')
     star = models.IntegerField(default=5, validators=[MinValueValidator(1), MaxValueValidator(5)])
-    oneline_review = models.TextField()
+    oneline_review = models.TextField(null=True)
     like_users = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='like_reviews',blank=True)
     # chosen_button = models.ManyToManyField(ButtonReview,related_name='review',blank=True)
+    class Meta:
+        ordering = ['-created_at']
 
 
 class StoreButtonReview(models.Model) :

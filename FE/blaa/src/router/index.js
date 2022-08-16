@@ -257,7 +257,7 @@ const router = createRouter({
       ],
     },
     {
-      path: "/chat/:from_userpk",
+      path: "/chat/:from_userpk/:from_usernickname",
       name: "chat",
       component: Chat,
     },
