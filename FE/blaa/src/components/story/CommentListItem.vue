@@ -3,7 +3,7 @@
       <br>
       <div class="comment-info">
         <div>
-          <img :src="comment.user_pk.image" alt="프로필 이미지">
+          <img :src="host + comment.user_pk.image" width>
         </div>
         <div>
           <span>{{ comment.user_pk.nickname }}</span> <span>작성일: {{ comment.created_at }}</span> 
@@ -52,6 +52,7 @@ export default {
     const isFix = ref(false)
     const changeComment = ref('')
     const isUpdate = ref(false)
+    const host = ref('https://i7b209.p.ssafy.io');
     changeComment.value += String(props.comment.story_comment)
 
     const commnetDelete = async() => {

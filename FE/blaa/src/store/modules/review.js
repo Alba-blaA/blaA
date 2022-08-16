@@ -204,14 +204,6 @@ export default {
             Authorization: `Bearer ${state.Token}`
           }
         })
-        const router = useRouter()
-        router.push({
-            name: 'detailReview',
-            params: {
-              store_pk: store.store_pk,
-              store_name: store.form.name
-            }
-          })
       } catch(error) {
         console.error(error)
       }
