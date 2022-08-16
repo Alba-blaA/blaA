@@ -19,9 +19,7 @@
       <button @click="register">회원가입</button>
     </div>
   </div> -->
-  <div>
-    
-  </div>
+  <div></div>
 </template>
 
 <script>
@@ -44,10 +42,6 @@ export default {
 
     const userInfo = computed(() => {
       return store.state.account.userInfo;
-    });
-
-    onMounted(() => {
-      store.dispatch("account/doReadStateFromStorage");
     });
 
     const login = () => {

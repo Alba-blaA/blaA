@@ -25,7 +25,6 @@ export default {
           store.commit("account/LOGIN", false);
           store.commit("account/USER_INFO", null);
           sessionStorage.removeItem("token");
-          store.commit("account/RESET_STORATGE");
           router.replace("/");
         })
         .catch((err) => {
