@@ -1,8 +1,7 @@
 <template>
   <br />
   <h3><b>리뷰</b></h3>
-  <hr />
-  {{reviews}}
+  <hr />  
   <table v-for="review in reviews" :key="review.review_pk" style="width: 100%">
     <tr>
       <td width="10px"></td>
@@ -37,6 +36,7 @@ import { ref } from "vue";
 
 export default {
   setup() {
+    const HOST = ref("https://i7b209.p.ssafy.io");
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
@@ -73,6 +73,7 @@ export default {
       user_pk,
       reviews,
       reviewDetail,
+      HOST
     };
   },
 };
