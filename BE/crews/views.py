@@ -439,7 +439,7 @@ def AcceptUserView(request,crew_pk,user_pk) :
 
     #둘다 아니면 크루에 추가 
     crew.crew_member.add(user) 
-    obj = CrewInvite.objects.get(crew=crew,user=user) 
+    obj = CrewInvite.objects.get(crew=crew,user=user,user_accept=True) 
     obj.delete() 
     Notification.objects.create(type='crew',user=user,content=f'{user.nickname}이 {crew.crew_name}크루에 가입되었습니다.',redirect_pk=crew_pk)
     data = {
@@ -462,7 +462,7 @@ def DenyUserView(request,crew_pk,user_pk) :
         return JsonResponse({'message':"You are already a registered user."},status=status.HTTP_400_BAD_REQUEST)
 
     #둘다 아니면 가입 테이블 삭제
-    obj = CrewInvite.objects.get(crew=crew,user=user) 
+    obj = CrewInvite.objects.get(crew=crew,user=user,user_accept=True) 
     obj.delete() 
     data = {
         'message':f"{user.nickname}님의 {crew.crew_name} 크루 가입을 거절하셨습니다."
@@ -501,7 +501,7 @@ def AcceptCrewView(request,crew_pk) :
 
     #아니면 크루 가입
     crew.crew_member.add(user) 
-    obj = CrewInvite.objects.get(crew=crew,user=user) 
+    obj = CrewInvite.objects.get(crew=crew,user=user,crew_leader_accept=True) 
     obj.delete() 
     Notification.objects.create(type='crew',user=user,content=f'{user.nickname}이 {crew.crew_name}크루에 가입되었습니다.',redirect_pk=crew_pk)
     data = {
@@ -521,7 +521,7 @@ def DenyCrewView(request,crew_pk) :
 
     # 아니면 크루 요청 거절 
     # crew.crew_member.add(user) 
-    obj = CrewInvite.objects.get(crew=crew,user=user) 
+    obj = CrewInvite.objects.get(crew=crew,user=user,crew_leader_accept=True) 
     obj.delete() 
     data = {
         'message':f"{user.nickname}님이 {crew.crew_name}의 가입 요청을 거절했습니다."
