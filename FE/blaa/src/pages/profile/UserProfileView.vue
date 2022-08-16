@@ -9,6 +9,8 @@
   <div class="d-flex justify-content-center row">
     <h5 class="mt-2 mb-2 col-7" style="text-align:right; font-weight: bold;">{{ userProfile.nickname }}</h5>
     <div class="col-5 px-0 mb-2">
+
+      <div>v-if로 고치기</div>
       <button id="follow" type="button" 
       class="rounded-pill "
       style="width:5rem; height:2rem; text-align:center; border-radius: 20%; background-color: #1294F2; border: 0px;"
@@ -31,7 +33,7 @@
             팔로워
           </b>
         </div>
-        </td>
+        </td> 
         &nbsp; &nbsp;
         <td rowspan="4" align="center" @click="following">
         <div style="margin-left: 0.5rem;">
