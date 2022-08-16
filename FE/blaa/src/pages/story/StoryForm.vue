@@ -40,7 +40,7 @@
 import { onMounted, ref} from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import axios from 'axios'
+import axios from '@/api/axios'
 import api from '@/api/api'
 import $ from 'jquery'
 import HashTagForm from '@/components/story/HashTagForm.vue'
@@ -167,7 +167,6 @@ export default {
             , {
             headers: {
               "Content-Type": "multipart/form-data",
-              "Authorization": `Bearer ${token}`
             },
           })
           const index = res.data.story_pk
@@ -177,11 +176,7 @@ export default {
               await axios.post(api.story.story() + 'hashtag/' + index + '/', 
                 {
                 hashtag_content: hashtag_content.value
-                }, {
-                headers: {
-                  "Authorization": `Bearer ${token}`
-                }
-              })
+                })
             } catch(error) {
               console.error(error)
               console.log('해시태그 생성 오류')

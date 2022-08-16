@@ -102,7 +102,6 @@
     <div @click="myInfo">
       <h5 class="profile_list"><b>회원정보</b></h5>
     </div>
-  </div>
   <hr />
 </template>
 

@@ -3,31 +3,37 @@
       <br>
       <div class="comment-info">
         <div>
-          <img :src="host + comment.user_pk.image" width>
+          <img :src="host + comment.user_pk.image" width="50" height="50" style="border-radius: 50%;">
         </div>
         <div>
-          <span>{{ comment.user_pk.nickname }}</span> <span>작성일: {{ comment.created_at }}</span> 
-        </div>
-        <div v-if="user_pk == comment.user_pk.user_pk">
-          <i class="fa fa-solid fa-bars" @click="isUpdate=!isUpdate"></i>
-          <div v-if="isUpdate" id="update">
-            <div style="cursor:pointer" @click="[isFix=true, isUpdate=!isUpdate]">수정</div>
-            <div style="cursor:pointer" @click="[commnetDelete, isUpdate=!isUpdate]">X</div>
+          <div class="d-flex justify-content-between">
+            <span style="font-weight: 700;">{{ comment.user_pk.nickname }}</span>
+            <div>
+              <span style="font-weight: 400; font-size: 15px;">{{ comment.created_at }}</span>
+              <div style="display:inline-block; margin-left:10px;" v-if="user_pk == comment.user_pk.user_pk">
+                <i class="fa fa-solid fa-bars" @click="isUpdate=!isUpdate"></i>
+                <div v-if="isUpdate" id="update">
+                  <div style="cursor:pointer" @click="[isFix=true, isUpdate=!isUpdate]">수정</div>
+                  <div style="cursor:pointer" @click="[commnetDelete, isUpdate=!isUpdate]">X</div>
+                </div>
+                <PopUp v-if="popUpOpen" @close-modal="popUpOpen=false">
+                  <div class="modal-content">
+                  <p>정말 삭제하시겠습니까?</p>
+                  <button class="btn btn-secondary" @click="popUpOpen=false">취소</button> 
+                  <button class="btn btn=danger" @click="commnetDelete">삭제</button>
+                </div>
+                </PopUp>  
+              </div> 
+            </div>
           </div>
-          <PopUp v-if="popUpOpen" @close-modal="popUpOpen=false">
-            <div class="modal-content">
-            <p>정말 삭제하시겠습니까?</p>
-            <button class="btn btn-secondary" @click="popUpOpen=false">취소</button> 
-            <button class="btn btn=danger" @click="commnetDelete">삭제</button>
+          <div v-if="!isFix" style="font-weight: 300;">{{ comment.story_comment }}</div>
+          <div v-else>
+            <input type="text" v-model="changeComment" @keyup.enter="commentFix"> <button @click="commentFix">제출</button>
           </div>
-          </PopUp>  
         </div>
-      </div>
-      <div v-if="!isFix">{{ comment.story_comment }}</div>
-      <div v-else>
-        <input type="text" v-model="changeComment" @keyup.enter="commentFix"> <button @click="commentFix">제출</button>
       </div>
     </li>
+    <div style="height: 1px; background-color:black; opacity:0.5; width:100%; margin: 15px 0;"></div>
 </template>
 
 <script>
@@ -78,7 +84,8 @@ export default {
       commentFix,
       isFix,
       changeComment,
-      isUpdate
+      isUpdate,
+      host
     }
   }
 }
@@ -86,8 +93,8 @@ export default {
 
 <style scoped>
 .comment-info {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 15% 85%;
 }
 
 #update {

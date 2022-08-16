@@ -1,7 +1,7 @@
 <template>
-<div class="d-flex justify-content-center comment-form">
-  <div style="width: 100%; background-color:white;">
-    <input type="text" v-model="comment" placeholder="댓글을 입력해주세요" :style="{width: windowWidth.value + 'px'}">
+<div class="comment-form">
+  <div style="background-color:white;">
+    <input type="text" v-model="comment" placeholder="댓글을 입력해주세요" :style="{width: windowWidth.value + 'px'}" @keyup.enter="CommentCreate">
     <button @click="CommentCreate">등록</button>
   </div>
 </div>
@@ -19,6 +19,7 @@ export default {
     const store = useStore()
     const route = useRoute()
     const windowWidth = ref(0)
+    const formWidth = ref(0)
 
     const CommentCreate = () => {
       const content = {
@@ -31,20 +32,29 @@ export default {
 
 
     windowWidth.value = computed(() => {
-      return $(window).width() - 65
+      return $(window).width() - 215
     }) 
+
+    formWidth.value = computed(() => {
+      return windowWidth.value.value + 64
+    })
 
     $(window).resize(function() {
       windowWidth.value = computed(() => {
-          return $(window).width() - 65
-      })  
+          return $(window).width() - 215
+      })
+      formWidth.value = computed(() => {
+        return windowWidth.value.value + 64
+      })
+      console.log(windowWidth.value.value + 64)
     })
     
 
     return {
       CommentCreate,
       comment,
-      windowWidth
+      windowWidth,
+      formWidth
     }
   }
 }
@@ -54,13 +64,16 @@ export default {
 input {
   margin-top: 0.75rem;
   border:none;
+  margin-left: 2rem;
 }
 
 .comment-form {
   background-color: white;
   position:fixed;
+  left: 5%;
+  width: 87%;
+  margin: 0 12px;
   bottom: 49px;
-  width: 90%;
   height: 3rem;
   border-top: 1px solid black;
 }

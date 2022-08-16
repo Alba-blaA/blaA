@@ -22,12 +22,16 @@ import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { ref } from 'vue'
 import CommentListItem from '@/components/story/CommentListItem.vue'
+import { dataChange } from '@/hooks/dateChange'
 
 export default {
   components: {
     CommentListItem
   },
   setup() {
+    const {
+      howNow
+    } = dataChange()
     const store = useStore()
     const route = useRoute()
     const comments = ref([])
@@ -35,6 +39,9 @@ export default {
     onMounted(async () => {
         await store.dispatch('story/getComment', route.params.story_pk).then(() => {
           comments.value = store.state.story.comments
+          comments.value.forEach(ele => {
+            ele.created_at = howNow(ele.created_at)
+          })
           console.log(comments.value)
         })
       })
