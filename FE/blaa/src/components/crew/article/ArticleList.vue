@@ -1,10 +1,8 @@
 <template>
   <div>
-    <h2>글 목록</h2>
-    <table>
-      <article-list-item v-for="(article, i) in articles.results" :key="i" v-bind="article" />
-    </table>
-    <button @click="moveRegist">글쓰기</button>
+    <h4>글 목록</h4>
+    <article-list-item v-for="(article, i) in articles.results" :key="i" v-bind="article" :isMember="isMember" />
+    <button v-show="isMember" @click="moveRegist">글쓰기</button>
   </div>
 </template>
 
@@ -17,22 +15,14 @@ export default {
   components: {
     ArticleListItem,
   },
+  props: {
+    isMember: Boolean,
+  },
   setup() {
     const store = useStore();
     const router = useRouter();
     const route = useRoute();
     const articles = ref([]);
-    // const Articles = reactive({
-    //   crew_article_pk: "",
-    //   images: [],
-    //   created_at: "",
-    //   updated_at: "",
-    //   crew_title: "",
-    //   crew_content: "",
-    //   crew_private: "",
-    //   crew_pin: "",
-    //   crew: "",
-    // });
 
     const getArticles = async () => {
       await store.dispatch("crew/getCrewArticle", route.params.crew_pk);
