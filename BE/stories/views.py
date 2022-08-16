@@ -275,7 +275,14 @@ def hashtag_filter(request):
     tmp = request.GET.get('id',"")
     tmp3 = tmp.split(" ")
     story = Hashtag.objects.distinct().filter(Q(hashtag_content__in = tmp3))
-    serializer = HashtagFilterSerializer(story, many=True)
+    cnt = {'count':story.count}
+    paginator = Paginator(story, 10) # Show 25 contacts per page.
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    serializer = StorySerializer(page_obj, many=True)
+    # story = get_list_or_404(Story, category= request.user.category)
+    response_data=serializer.data
+    response_data.append(cnt)
     return Response(serializer.data)
 
 @api_view(['GET'])   
