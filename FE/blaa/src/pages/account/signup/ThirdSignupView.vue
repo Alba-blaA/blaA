@@ -86,8 +86,8 @@
       <small>{{ regionMessage }}</small>
 
       <div>
-        <button id="btn-before" @click.prevent="before">이전</button> &nbsp;
-        <button id="btn-signup" @click.prevent="signup">등록</button>
+        <button class="btn-before" @click.prevent="before">이전</button> &nbsp;
+        <button class="btn-next" @click.prevent="signup">등록</button>
       </div>
     </form>
   </div>
@@ -230,7 +230,7 @@ export default {
 
             if (response.status === 201) {
               console.log("회원가입 성공");
-              router.push({ name: "login" });
+              router.push({ name: "home" });
               console.log(
                 "회원가입 후 vuex : ",
                 store.state.account.signupUser
@@ -419,7 +419,7 @@ select:focus {
   border-radius: 5px;
 }
 
-#btn-before {
+.btn-before {
   width: 100px;
   height: 40px;
   border: 2px solid #eec95c;
@@ -431,7 +431,7 @@ select:focus {
   font-weight: 500;
 }
 
-#btn-signup {
+.btn-next {
   width: 100px;
   height: 40px;
   background: #eec95c;
