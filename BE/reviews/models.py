@@ -6,7 +6,7 @@ from Tracking.models import TrackingModel
 # Create your models here.
 class Store(models.Model) :
     store_pk = models.AutoField(primary_key=True,unique=True)
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30,unique=True)
     image = models.ImageField(upload_to='store/logo/',
                 default='store/logo/상점기본.png',
                 null=True,blank=True)

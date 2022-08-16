@@ -6,7 +6,7 @@ from rest_framework.generics import ListCreateAPIView,ListAPIView,CreateAPIView,
 from rest_framework.response import Response
 from reviews.models import ButtonReview, Store,Review, StoreButtonReview
 from reviews.serializers.review import ReviewDetailtSerializer, ReviewListCreateSerializer, ReviewShortListSerializer
-from reviews.serializers.store import StoreListCreateSerializer
+from reviews.serializers.store import StoreListSerializer,StoreNoneImageCreateSerializer,StoryCreateSerializer
 from rest_framework import filters
 from django.http import Http404
 from rest_framework.decorators import api_view
@@ -20,22 +20,33 @@ from rest_framework.permissions import IsAuthenticated
 class StoreListCreateAPIView(ListCreateAPIView):
     #요청한 user_pk로 유저 조회 
     # authentication_classes=[]
-    serializer_class = StoreListCreateSerializer
+    serializer_class = StoreListSerializer
     filter_backends = [filters.SearchFilter]
     queryset=Store.objects.all().order_by('-store_pk')
     search_fields = ['name']
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
-        print(queryset)
+
         page = self.paginate_queryset(queryset)
         if page is not None:
-            serializer = self.get_serializer(page, many=True)
+            serializer = StoreListSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        serializer = self.get_serializer(queryset, many=True)
-        print(serializer.data)
+        serializer = StoreListSerializer(queryset, many=True)
+
         return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        if request.FILES.get('image') :
+            serializer = StoryCreateSerializer(data=request.data)
+            print(request.FILES.get('image'))
+        else : 
+            serializer = StoreNoneImageCreateSerializer(data= request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 class ReviewListAPIView(ListAPIView) :
     authentication_classes=[]
