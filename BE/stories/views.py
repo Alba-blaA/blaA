@@ -278,7 +278,7 @@ def hashtag_filter(request):
     print(tmp3)
     story = Hashtag.objects.distinct().filter(Q(hashtag_content__in = tmp3))
     print(story)
-    cnt = {'count':story.count}
+    cnt = {'count':story.count()}
     paginator = Paginator(story, 10) # Show 25 contacts per page.
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -287,12 +287,12 @@ def hashtag_filter(request):
     # story = get_list_or_404(Story, category= request.user.category)
     response_data=serializer.data
     response_data.append(cnt)
-    return Response(serializer.data)
+    return Response(response_data)
 
 @api_view(['GET'])   
 def story_both_filter(request):
     story = Story.objects.filter(Q(region= request.user.region)&Q(category= request.user.category)&~Q(user_pk = request.user))
-    cnt = {'count':story.count}
+    cnt = {'count':story.count()}
     paginator = Paginator(story, 10) # Show 25 contacts per page.
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
