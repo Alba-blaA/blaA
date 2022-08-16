@@ -35,10 +35,10 @@ export default {
       emit('search-hash-tag', tag.value)
     })
 
-    const reset = () => {
+    const reset = (e) => {
       $('#tag-list').empty()
       tag.value = []
-      emit('reset')
+      e.preventDefault()
     }
     
     // 문서가 준비되었으면 해당 함수를 실행
