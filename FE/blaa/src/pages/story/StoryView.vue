@@ -26,8 +26,9 @@ import StoryImageCardList from '@/components/story/StoryImageCardList.vue'
 import HashTagForm from '@/components/story/HashTagForm.vue'
 import PopUp from '@/components/story/PopUp.vue'
 import { useStore } from 'vuex'
-import { onBeforeMount, ref, computed } from 'vue'
+import { onBeforeMount, ref, computed, watch } from 'vue'
 import { dataChange } from '@/hooks/dateChange'
+import { number } from 'mathjs'
 // import axios from 'axios'
 
 export default {
@@ -48,17 +49,29 @@ export default {
     const isStory = ref(true)
     const isFollow = ref(false)
     const isFilter = ref(false)
+    const isState = ref('')
+    const currentPage = ref(1)
+    const numberOfPages = ref(1)
 
     const {
       howNow
     } = dataChange()
 
-    const getPure = async() => {
+    const getPure = async(page = currentPage.value) => {
+      if (isState.value == "") {currentPage.value = 1}
       if (!hashTag.value.length) {
-        await store.dispatch('story/getImages')
+        isState.value = ""
+        const data = {
+          isState: isState,
+          page: page
+        }
+        await store.dispatch('story/getImages', data)
         images.value = computed(() => {return store.state.story.images})
         images.value.value.forEach(ele => {
           ele.created_at = howNow(ele.created_at)
+        })
+        numberOfPages.value = computed(() => {
+          return  Math.ceil(store.state.story.totalCount / 10)
         })
       }
     }
@@ -73,9 +86,10 @@ export default {
       hashTag.value = hash
     }
 
-    const searchHastTagStory = async() => {
-       hashtag_content.value = ''
-
+    const searchHastTagStory = async(page = currentPage.value) => {
+      if (isState.value == "hashtag") {currentPage.value = 1}
+      hashtag_content.value = ''
+      isState.value = "hashtag"
       if(hashTag.value.length) {
         for (let i = 0; i < hashTag.value.length; i++) {
           hashtag_content.value += hashTag.value[i]
@@ -83,40 +97,100 @@ export default {
             hashtag_content.value += ' '
           }
         }
-        await store.dispatch('story/getHashtag', hashtag_content.value)
+        const data = {
+          hashtag_content: hashtag_content.value,
+          isState: isState,
+          page: page
+        }
+        await store.dispatch('story/getHashtag', data)
         images.value = computed(() => {return store.state.story.images})
+        images.value.value.forEach(ele => {
+          ele.created_at = howNow(ele.created_at)
+        })
+        numberOfPages.value = computed(() => {
+          return  Math.ceil(store.state.story.totalCount / 10)
+        })
         isPopUp.value = false
       } else {
         getPure()
       }
     }
 
-    const onCategory = async() => {
+    const onCategory = async(page = currentPage.value) => {
+      if (isState.value == "category") {currentPage.value = 1}
+      isState.value = "category"
       isCategory.value = !isCategory.value
       isRegion.value = false
+
+      watch(isState.value, (now, pre) => {
+          console.log(now, pre)
+        })
       // 관심업종이 커져있으면 해당 업종 검색
       if (isCategory.value) {
-        await store.dispatch('story/getCategory')
+        const data = {
+          isState: isState,
+          page: page
+        }
+        await store.dispatch('story/getCategory', data)
         images.value = computed(() => {return store.state.story.images})
+        images.value.value.forEach(ele => {
+          ele.created_at = howNow(ele.created_at)
+        })
+        numberOfPages.value = computed(() => {
+          return  Math.ceil(store.state.story.totalCount / 10)
+        })
       } else {
         getPure()
       }
     }
 
-    const onRegion = async() => {
+    const onRegion = async(page = currentPage.value) => {
+      if (isState.value != "region") {currentPage.value = 1}
+      isState.value = "region"
       isRegion.value = !isRegion.value
       isCategory.value = false
+
       // 관심업종이 커져있으면 해당 업종 검색
       if (isRegion.value) {
-        await store.dispatch('story/getRegion')
+        const data = {
+          isState: isState,
+          page: page
+        }
+        await store.dispatch('story/getRegion', data)
         images.value = computed(() => {return store.state.story.images})
+        images.value.value.forEach(ele => {
+          ele.created_at = howNow(ele.created_at)
+        })
+        numberOfPages.value = computed(() => {
+          return  Math.ceil(store.state.story.totalCount / 10)
+        })
       } else {
         getPure()
       }
     }
 
-    const change =  () => {
+    const change = () => {
       isFilter.value = !isFilter.value
+    }   
+
+    window.onscroll = function(e) {
+    if (numberOfPages.value.value > currentPage.value) {
+      if((window.innerHeight + window.scrollY) >= document.body.offsetHeight) { 
+        setTimeout(function(){
+        // 실행 시킬 함수 구현
+        currentPage.value += 1
+        
+        if( isState.value == '') {
+          getPure(currentPage.value)
+        } else if(isState.value == 'region') {
+          onRegion(currentPage.value)
+        } else if (isState.value == 'category') {
+          onCategory(currentPage.value)
+        } else if (isState.value == 'hashtag'){
+          searchHastTagStory(currentPage.value)
+        }
+        }, 1000)}
+      }
     }
 
     return {
