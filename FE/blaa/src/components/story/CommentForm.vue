@@ -59,16 +59,19 @@ input {
 .comment-form {
   background-color: white;
   position:fixed;
-  bottom:0;
-  width:100%;
+  bottom: 49px;
+  width: 90%;
   height: 3rem;
   border-top: 1px solid black;
 }
+
 button {
+  position: fixed;
+  bottom: 54px;
+  right: 8%;
   width: 4rem;
   height: 2.5rem;
   border-radius: 10px;
-  margin-top: 0.25rem;
   background-color: #D9D9D9;
   border-color: #D9D9D9;
 }

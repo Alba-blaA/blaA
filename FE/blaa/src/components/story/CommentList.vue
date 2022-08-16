@@ -5,7 +5,7 @@
       댓글 : {{ comments.length }}
     </div>
   </div>
-  <hr>
+  <div style="height: 1px; background-color:black; width:100%; margin: 15px 0;"></div>
   <div class="d-flex justify-content-center">
     <ul v-if="comments.length" style="width:90%; padding: 0;">
       <CommentListItem  v-for="comment in comments" :key="comment.comment_pk" :comment="comment"/>

@@ -171,6 +171,10 @@ export default {
     /* opacity: 0.5; */
     background-color:rgba(255,255,255,0.5);
   }
+  
+  #store {
+    height: 20px;
+  }
 
   .modal-card {
     position: relative;
@@ -178,7 +182,7 @@ export default {
     margin:auto;
     margin-top: 30px;
     padding: 20px;
-    background-color: white;
+    background-color: #F8F9FE;
     min-height: 300px;
     z-index:10;
   }

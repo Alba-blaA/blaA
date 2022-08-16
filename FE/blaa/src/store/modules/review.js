@@ -1,6 +1,7 @@
 import api from '@/api/api'
 import axios from 'axios'
 import { dataChange } from '@/hooks/dateChange'
+import { useRouter } from 'vue-router'
 
 export default {
   namespaced: true,
@@ -12,13 +13,21 @@ export default {
     reviewStar: 0,
     detailReview: [],
     searchStores: [],
-    Token: sessionStorage.getItem('token')
+    Token: sessionStorage.getItem('token'),
+    isSearch: false,
   },
   mutations: {
     GET_REVIEWS(state, payload){
-      for (let i=0; i<payload.length; i++){
-        state.reviews.push(payload[i])
+      // 검색을 할 떄 초기화
+      if (state.isSearch == payload.isSearch) {
+        for (let i=0; i<payload.data.length; i++){
+          state.reviews.push(payload.data[i])
+        }
+      } else {
+        state.isSearch = payload.isSearch
+        state.reviews = payload.data
       }
+      
     },
     GET_REVIEW(state, payload){
       const {
@@ -45,6 +54,9 @@ export default {
       } = dataChange()
       state.detailReview = payload
       state.detailReview['created_at'] = yyyyMMdd(state.detailReview['created_at'])
+    },
+    NEW_STORE(state, payload) {
+      state.reviews.unshift(payload)
     },
     LIKE_ONE_REIVEW(state, payload){
       const review_pk = payload.review_pk
@@ -77,8 +89,12 @@ export default {
             search: data.searchText
           }
         })
+        const payload = {
+          isSearch : data.isSearch,
+          data: res.data.results,
+        }
         commit('UPDATE_TOTAL_REVIEWS', res.data.count)
-        commit('GET_REVIEWS', res.data.results)
+        commit('GET_REVIEWS', payload)
       } catch(error) {
         console.error(error)
       } 
@@ -130,7 +146,7 @@ export default {
         console.error(error)
       }
     },
-    async makeReviews({state}, data) {
+    async makeReviews({state, commit}, data) {
       const isStore = data.isStore
       
       const store = {
@@ -165,6 +181,12 @@ export default {
                 }
               })
               store.store_pk = res.data.store_pk
+              const data = {
+                ...res.data,
+                star: review.star,
+                button: review.chosen_button
+              }
+              commit('NEW_STORE', data)
             } catch (error) {
               console.error(error)
             }
@@ -182,7 +204,6 @@ export default {
             Authorization: `Bearer ${state.Token}`
           }
         })
-        console.log(res.data)
       } catch(error) {
         console.error(error)
       }

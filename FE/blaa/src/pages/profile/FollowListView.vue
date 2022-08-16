@@ -3,26 +3,24 @@
   <div v-if="isFollower">
     <h3><b>팔로워 페이지</b></h3>
     <hr />
-    <div
-      class="container"
-      v-for="follower in followerList.results"
-      :key="follower.user_pk"
-      style="width: 100%"
-    >
-      <div class="d-flex justify-content-between row">
-        <img
-          :src="follower.image"
-          style="width: 5rem; height: 3.5rem; border-radius: 50%"
-          @click="userProfile(follower.user_pk)"
-        />
-        <h1
-          class="col-9 mt-3 mb-0"
-          style="font-family: 'East Sea Dokdo', cursive"
-        >
-          {{ follower.nickname }}
-        </h1>
+    <div class="container">
+      <div
+        v-for="follower in followerList.results"
+        :key="follower.user_pk"
+        style="width: 100%"
+      >
+          <div class="d-flex justify-content-between row">
+            <img
+              :src="follower.image"
+              style="width:5rem; height:3.5rem; border-radius: 50%;"
+              @click="userProfile(follower.user_pk)"
+            />
+            <h5 class="col-9 mt-3 mb-0"  style="font-weight: bold;">{{ follower.nickname }}</h5>
+          </div>
+          <hr>
+  
       </div>
-      <hr />
+
     </div>
     <!-- <infinite-loading
       @infinite="infiniteHandler"
@@ -45,12 +43,7 @@
           style="width: 5rem; height: 3.5rem; border-radius: 50%"
           @click="userProfile(following.user_pk)"
         />
-        <h1
-          class="col-9 mt-3 mb-0"
-          style="font-family: 'East Sea Dokdo', cursive"
-        >
-          {{ following.nickname }}
-        </h1>
+        <h5 class="col-9 mt-3 mb-0"  style="font-weight: bold;">{{ following.nickname }}</h5>
       </div>
       <hr />
       <!-- <infinite-loading

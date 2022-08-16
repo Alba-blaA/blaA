@@ -6,7 +6,7 @@
     <div v-for="user in filteredUsers" :key="user.user_pk">
       <!-- <img :src= "user.image" alt="#"> -->
       <div>{{ user.nickname }}</div>   
-      <button @click="gochat(user.user_pk)">채팅하기</button>
+      <button @click="gochat(user.user_pk, user.nickname)">채팅하기</button>
     </div>  
   </div>
   <div v-else>로그인이 필요합니다.</div>
@@ -23,11 +23,12 @@ export default {
   setup() {
     const store = useStore();
     const userInfo = store.state.account.userInfo;
-    const gochat = (from_userpk) => {
+    const gochat = (from_userpk, from_usernickname) => {
       router.push({
         name: "chat",
         params: {
           from_userpk: from_userpk,
+          from_usernickname : from_usernickname
         },
       });
     };
@@ -47,11 +48,10 @@ export default {
       users: [],
     });
     onBeforeMount(() => {
-      if (userInfo) {
-        let token = store.state.chat.token;
+      if (userInfo) {        
         axios
           .get(api.accounts.searchallusers())
-          .then((response) => (state.users = response.data));
+          .then((response) => (state.users = response.data.results));
         console.log(state.users);
       }
     });
