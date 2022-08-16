@@ -1,7 +1,5 @@
 <template>
   <br /><br />
-  <button type="button" @click="startChat(userProfile.user_pk, userProfile.nickname)">채팅하기</button>
-
   <div id="profile" style="border: 3px solid; text-align: center; margin: auto">
     <img class="imgProfile" :src="HOST + userProfile.image" />
   </div>
