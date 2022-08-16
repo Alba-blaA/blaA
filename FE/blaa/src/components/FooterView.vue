@@ -2,17 +2,17 @@
   <!-- <div style="width: 100%; height: 500px; background-color: #eea236"></div> -->
   <!-- <div style="width: 100%; height: 500px; background-color: #a94442"></div> -->
 
-  <div class="bottom_menu">
-    <div @click.prevent="gostory">
+  <div class="row" id="bottom_menu">
+    <div class="col" @click.prevent="gostory">
       <img width="25" src="@/assets/Footer/home.png" />
     </div>
-    <div @click.prevent="gocrew">
+    <div class="col" @click.prevent="gocrew">
       <img width="25" src="@/assets/Footer/group.png" />
     </div>
-    <div @click.prevent="goReview">
+    <div class="col" @click.prevent="goReview">
       <img width="25" src="@/assets/Footer/store.png" />
     </div>
-    <div @click.prevent="goMyProfile">
+    <div class="col" @click.prevent="goMyProfile">
       <img width="25" src="@/assets/Footer/gear.png" />
     </div>
   </div>
@@ -51,21 +51,19 @@ export default {
 </script>
 
 <style scoped>
-.bottom_menu {
+#bottom_menu {
   position: fixed;
   bottom: 0px;
   left: 0px;
-  width: 360px; /*화면 가로크기에 따라 변경됨.*/
-  height: 50px;
+  width: 100%;
+  height: 68px;
   z-index: 100;
   border-top: 1px solid black;
   background-color: white;
-}
-.bottom_menu > div {
-  float: left;
-  width: 25%;
-  height: 100%;
+  margin: 0;
+
   text-align: center;
-  padding-top: 13px;
+  align-content: center;
+  overflow-x: hidden;
 }
 </style>

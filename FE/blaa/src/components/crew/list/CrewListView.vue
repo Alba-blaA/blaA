@@ -39,19 +39,20 @@ export default {
 <style scoped>
 .newCrew {
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 10px 24px;
-  gap: 10px;
+  /* padding: 10px 24px; */
+  /* gap: 10px; */
 
-  position: fixed;
-  width: 146px;
+  /* position: relative; */
+  /* width: 100%; */
   height: 40px;
   left: 107px;
+  right: 107px;
   /* margin: auto; */
-  top: 630px;
+  top: 600px;
 
   background: #eec95c;
   border-radius: 100px;

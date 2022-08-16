@@ -1,5 +1,9 @@
 <template>
-  <br /><br />
+  <div style="display: flex">
+    <img class="back" src="@/img/back.png" @click="back" /> &nbsp;
+    <h1 style="text-align: center">회원정보</h1>
+  </div>
+  <hr />
   <div style="border 1px black solid">
     <b>이메일 : {{ myInfo.email }}</b> <br />
     <b>이름 : {{ myInfo.name }}</b> <br />
@@ -31,9 +35,13 @@ export default {
     const route = useRoute();
     const router = useRouter();
 
+    const back = () => {
+      router.go(-1);
+    };
+
     const logout = () => {
-      store.commit("account/LOGIN", false);
       store.commit("account/USER_INFO", null);
+      store.commit("account/LOGIN", false);
       sessionStorage.removeItem("token");
       store.commit("account/RESET_STORAGE");
       router.replace("/");
@@ -68,6 +76,7 @@ export default {
     };
 
     return {
+      back,
       myInfo,
       logout,
       updateMyInfo,
@@ -78,4 +87,4 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped></style>

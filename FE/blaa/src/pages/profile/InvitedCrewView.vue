@@ -121,7 +121,7 @@ export default {
 }
 .w-btn-green-outline {
     border: 3px solid #77af9c;
-    color: #6e6e6e;
+    color: #128b37;
     margin-right: 10px;
 }
 .w-btn-green-outline:hover {
@@ -130,7 +130,7 @@ export default {
 }
 .w-btn-red-outline {
     border: 3px solid #ff5f2e;
-    color: #6e6e6e;
+    color: #8b1313;
     margin-left: 5px;
 }
 .w-btn-red-outline:hover {

@@ -12,7 +12,7 @@ const REVIEW = "reviews/";
 const STORE = "store/";
 const CREW = "crews/";
 const NOTIFICATION = "notifications/";
-const SCHEDULE = "schedule/"
+const SCHEDULE = "schedule/";
 // const CHAT = 'chat/'
 
 export default {
@@ -35,7 +35,6 @@ export default {
     crew: () => HOST + CREW,
     crewInfo: (crew_pk) => HOST + CREW + crew_pk + "/",
     article: (crew_article_pk) => HOST + CREW + "article/edit/" + crew_article_pk + "/",
-    crewmemebers: (crew_pk) => HOST + CREW + "user/" + crew_pk,
     inviteuser: (crew_pk, user_pk) => HOST + CREW + "invite/" + crew_pk + "/" + user_pk + "/",
     articles: (crew_pk) => HOST + CREW + "article/" + crew_pk + "/",
     members: (crew_pk) => HOST + CREW + "user/" + crew_pk + "/",
@@ -50,7 +49,7 @@ export default {
     // myCrew: (user_pk) => HOST + CREW + user_pk + "/",
     acceptcrew: (crew_pk) => HOST + CREW + "accept_crew/" + crew_pk + "/",
     refusecrew: (crew_pk) => HOST + CREW + "deny_crew/" + crew_pk + "/",
-    registercrewschedule: (crew_pk) => HOST + CREW + SCHEDULE + crew_pk + "/"
+    registercrewschedule: (crew_pk) => HOST + CREW + SCHEDULE + crew_pk + "/",
   },
   categorys: {
     job: () => HOST + CATEGORYS + "job/",

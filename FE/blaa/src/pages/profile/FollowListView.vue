@@ -3,85 +3,74 @@
   <div v-if="isFollower">
     <h3><b>팔로워 페이지</b></h3>
     <hr />
-    <table
-      v-for="follower in followerList.results"
-      :key="follower.user_pk"
-      style="width: 100%"
-    >
-      <tr>
-        <td width="10px"></td>
-        <td id="profile">
-          <img
-            id="imgProfile"
-            :src="follower.image"
-            @click="userProfile(follower.user_pk)"
-          />
-        </td>
-        <td width="20px"></td>
-        <td>
-          <b>{{ follower.nickname }}</b>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="100%"><hr /></td>
-      </tr>
-    </table>
-    <infinite-loading
+    <div class="container">
+      <div
+        v-for="follower in followerList.results"
+        :key="follower.user_pk"
+        style="width: 100%"
+      >
+          <div class="d-flex justify-content-between row">
+            <img
+              :src="follower.image"
+              style="width:5rem; height:3.5rem; border-radius: 50%;"
+              @click="userProfile(follower.user_pk)"
+            />
+            <h5 class="col-9 mt-3 mb-0"  style="font-weight: bold;">{{ follower.nickname }}</h5>
+          </div>
+          <hr>
+  
+      </div>
+
+    </div>
+    <!-- <infinite-loading
       @infinite="infiniteHandler"
       spinner="waveDots"
-    ></infinite-loading>
+    ></infinite-loading> -->
   </div>
 
   <div v-else>
     <h3><b>팔로잉 페이지</b></h3>
     <hr />
-    <table
+    <div
+      class="container"
       v-for="following in followingList.results"
       :key="following.user_pk"
       style="width: 100%"
     >
-      <tr>
-        <td width="10px"></td>
-        <td id="profile">
-          <img
-            id="imgProfile"
-            :src="following.image"
-            @click="userProfile(following.user_pk)"
-          />
-        </td>
-        <td width="20px"></td>
-        <td>
-          <b>{{ following.nickname }}</b>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="100%"><hr /></td>
-      </tr>
-    </table>
-    <infinite-loading
-      @infinite="infiniteHandler"
-      spinner="waveDots"
-    ></infinite-loading>
+      <div class="d-flex justify-content-between row">
+        <img
+          :src="following.image"
+          style="width: 5rem; height: 3.5rem; border-radius: 50%"
+          @click="userProfile(following.user_pk)"
+        />
+        <h5 class="col-9 mt-3 mb-0"  style="font-weight: bold;">{{ following.nickname }}</h5>
+      </div>
+      <hr />
+      <!-- <infinite-loading
+        @infinite="infiniteHandler"
+        spinner="waveDots"
+      ></infinite-loading> -->
+    </div>
   </div>
 </template>
 
 <script>
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { ref, computed } from "vue";
+import { ref, computed, onBeforeMount } from "vue";
 import axios from "@/api/axios.js";
-import InfiniteLoading from "v3-infinite-loading";
+// import InfiniteLoading from "v3-infinite-loading";
 
 export default {
   components: {
-    InfiniteLoading,
+    // InfiniteLoading,
   },
   setup() {
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
 
-    const followerList = store.state.profile.followerList;
+    const followerList = ref([]);
     const followingList = store.state.profile.followingList;
 
     if (route.params.followType === "follower") {
@@ -99,29 +88,73 @@ export default {
       return false;
     });
 
-    const infiniteHandler = async ($state) => {
-      if (store.state.profile.followerList.next) {
-        await axios
-          .get(store.state.profile.followerList.next)
-          .then((response) => {
-            console.log("추가 팔로워리스트 : ", response.data);
-            const followerData = ref({});
-            followerData.value = response.data;
+    const followerCurrentPage = ref(1);
+    const totalFollowers = ref(0);
 
-            store.commit("profile/GET_FOLLOWER_LIST", followerData);
-          });
-        setTimeout(() => {
-          console.log(
-            "페이지 추가 followerlist : ",
-            store.state.profile.followerList
-          );
-          followerList.value = store.state.profile.followerList.results;
-          $state.loaded();
-        }, 1000);
-      } else {
-        $state.complete();
+    const getFollowers = async (page = followerCurrentPage.value) => {
+      const data = {
+        user_pk: route.params.user_pk,
+        type: "follower",
+        page: 1,
+      };
+      await store.dispatch("profile/getFollowerList", data);
+      console.log(data);
+      followerList.value = computed(() => {
+        console.log(
+          "profile followerList : ",
+          store.state.profile.followerList
+        );
+        return store.state.profile.followerList;
+      });
+      totalFollowers.value = computed(() => {
+        console.log("totalFollowers : ", store.state.profile.totalFollowers);
+        return store.state.profile.totalFollowers;
+      });
+    };
+
+    onBeforeMount(async () => {
+      await getFollowers();
+    });
+
+    const numberOfPages = computed(() => {
+      return Math.ceil(totalFollowers.value / 10);
+    });
+
+    window.onscroll = function (e) {
+      if (numberOfPages.value > followerCurrentPage.value) {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+          setTimeout(function () {
+            followerCurrentPage.value += 1;
+            console.log("followerCurrentPage : ", followerCurrentPage.value);
+            getFollowers(followerCurrentPage.value);
+          }, 1000);
+        }
       }
     };
+
+    // const infiniteHandler = async ($state) => {
+    //   if (store.state.profile.followerList.next) {
+    //     await axios
+    //       .get(store.state.profile.followerList.next)
+    //       .then((response) => {
+    //         console.log("추가 팔로워리스트 : ", response.data);
+    //         const followerData = ref({});
+    //         followerData.value = response.data;
+
+    //         store.commit("profile/GET_FOLLOWER_LIST", followerData);
+    //       });
+    //     setTimeout(() => {
+    //       console.log(
+    //         "페이지 추가 followerlist : ",
+    //         store.state.profile.followerList
+    //       );
+    //       followerList.value = store.state.profile.followerList.results;
+    //       $state.loaded();
+    //     }, 1000);
+    //   } else {
+    //     $state.complete();
+    //   }
+    // };
 
     const userProfile = (user_pk) => {
       console.log("다른 유저 프로필 페이지 이동");
@@ -137,7 +170,11 @@ export default {
       followerList,
       followingList,
       isFollower,
-      infiniteHandler,
+      followerCurrentPage,
+      totalFollowers,
+      numberOfPages,
+      getFollowers,
+      // infiniteHandler,
       userProfile,
     };
   },

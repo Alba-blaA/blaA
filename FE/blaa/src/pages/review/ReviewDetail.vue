@@ -1,26 +1,36 @@
 <template>
-  <div>
-    <router-link :to="{name: 'review'}">뒤로</router-link><h2>{{store_name}}</h2>
-    <!-- 별점  -->
-    <div class="star">
-      <p>전체 리뷰 평균 ({{person}} 명)</p>
-      <span>{{star}} 점</span>
-      <div class="star-ratings">
-        <div 
-          class="star-ratings-fill space-x-2 text-lg"
-          :style="{ width: score + '%' }"
-        >
-          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+  <div class="d-flex justify-content-center">
+    <div style="width: 90%">
+      <!-- 상단 가게 정보 div -->
+      <div>
+        <div class="d-flex justify-content-between align-items-center">
+          <router-link :to="{name: 'review'}"><span class="material-symbols-outlined" style="color: black; font-size:36px;">arrow_back</span></router-link>
+          <h2 style="margin:0; font-weight: 700;">{{store_name}}</h2>
+          <div style="width:36px"></div>
         </div>
-        <div class="star-ratings-base space-x-2 text-lg">
-          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        <div style="background:black; height:1px; width:100%"></div>
+        <!-- 별점  -->
+        <div class="star">
+          <p style="font-weight: bold;">전체 리뷰 평균 ({{person}} 명)</p>
+          <span style="font-size: 24px; font-weight:bold;  margin-right:6px;">{{star}} 점</span>
+          <div class="star-ratings">
+            <div 
+              class="star-ratings-fill space-x-2 text-lg"
+              :style="{ width: score + '%' }"
+            >
+              <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+            </div>
+            <div class="star-ratings-base space-x-2 text-lg">
+              <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+            </div>
+          </div>
+          <span style="display: inline-block; font-weight:700; font-size:15px; margin-top:5px;">으로 평가했어요!</span>
         </div>
       </div>
-      <span>으로 평가했어요!</span>
-    </div>
+      
     <br>
     <!-- 버튼식 리뷰 -->
-    <div v-for="(value, name) of types.value" :key="name.id">
+    <div class="button-review" v-for="(value, name) of types.value" :key="name.id">
       <p style="margin: 0;">{{name}}</p>
       <div style="display: flex;">
         <div style="
@@ -33,7 +43,7 @@
           border-radius: 20px;
           height:15px;"
 
-          :style="{width: (value * 64/100) + '%'}"
+          :style="{width: (value * (77/100)) + '%'}"
           >
           
         </div>
@@ -41,28 +51,26 @@
           background: #D6D6D6;
           border-radius: 20px;
           height:15px;
-          width: 64%
+          width: 85%
           z-index: 0;
           padding: 0;
           margin-right: 20px;"
           >
         </div>
-        <span>{{value}}%</span>
+        <span style="font-weight: 700; font-size: 15px;">{{value}}%</span>
       </div> 
       <br>
       </div>
 
     <br>
     <!-- 한줄평 -->
-    <h3>한줄평</h3>
+    <h3 style="font-weight: 700; margin-left: 5px;">한줄평</h3>
     <div v-if="review">
       <CommentDetail class="userReview" v-for="userReview in review.value" :key="userReview.review_pk" :review="userReview" :isDetail="false" @update="update"/>
     </div>
     <p v-else>아직 리뷰가 없어요</p>
+    </div>
   </div>
-  
-  
-
 </template>
 
 <script>
@@ -95,7 +103,7 @@ export default {
       // 별점, 버튼, 날짜 변환
       star.value = computed(() => {return store.state.review.reviewStar})
       types.value = computed(() => {return store.state.review.reviewBtn})
-      score.value = (star.value.value * 20) + 1.5
+      score.value = (star.value.value * 20)
       person.value = computed(() => {return review.value.value.length})
     })
 
@@ -117,25 +125,33 @@ export default {
 <style scoped>
 /* 유저 리뷰 css */
 .userReview {
-  background-color: lightgray;
+  background-color:  #F8F9FE;
   border-radius: 20px;
-  padding: 5px;
+  padding: 20px;
   z-index: 1;
+}
+
+.star{
+  padding: 20px 0;
 }
 /* 별점 css */
 .star-ratings {
-  color: #aaa9a9; 
+  margin-bottom: 2px;
+  color: #DADADA; 
   position: relative;
   display: inline-block;
   unicode-bidi: bidi-override;
   width: max-content;
-  -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
-  -webkit-text-stroke-width: 1.3px;
-  -webkit-text-stroke-color: #2b2a29;
+  -webkit-text-fill-color: #DADADA; /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: 1px;
+}
+
+.star-ratings span {
+  margin-right: 3px;
 }
  
 .star-ratings-fill {
-  color: #fff58c;
+  color: #E58D1F;
   padding: 0;
   position: absolute;
   z-index: 1;
@@ -143,12 +159,17 @@ export default {
   top: 0;
   left: 0;
   overflow: hidden;
-  -webkit-text-fill-color: gold;
+  -webkit-text-fill-color: #E58D1F;
 }
  
 .star-ratings-base {
   z-index: 0;
   padding: 0;
+}
+
+.button-review p {
+  font-weight: 700;
+  font-size: 15px;
 }
 
 /* 하트 css */

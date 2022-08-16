@@ -1,6 +1,6 @@
 <template>
   <header-view></header-view>
-  <div class="container" style="padding-top: 80px; padding-bottom: 80px">
+  <div class="container" style="padding-bottom: 80px">
     <router-view></router-view>
   </div>
   <footer-view></footer-view>
@@ -11,11 +11,11 @@ import HeaderView from "@/components/HeaderView.vue";
 import FooterView from "@/components/FooterView.vue";
 
 export default {
-components: {
+  components: {
     FooterView,
     HeaderView,
-}
-}
+  },
+};
 </script>
 
 <style>

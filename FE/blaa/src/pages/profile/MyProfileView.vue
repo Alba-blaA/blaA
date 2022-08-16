@@ -1,41 +1,50 @@
 <template>
   <br /><br />
 
-  <div id="profile">
+  <!-- <div id="profile">
     <img class="imgProfile" :src="HOST + userInfo.image" />
-  </div>
+  </div> -->
+  <div
+    class="image-upload"
+    style="border: 3px solid; text-align: center; margin: auto"
+    id="profile"
+  >
+    <label for="update-profileImg">
+      <img class="imgProfile" :src="HOST + userInfo.image" />
+    </label>
 
-  <div>
-    <h3 style="float: left">{{ userInfo.nickname }}</h3>
-    &nbsp;
-    <!-- <label for="update-profileImg">프로필 사진 수정</label> -->
     <input
       id="update-profileImg"
       class="update-profileImg"
-      type="file"
       @change="updateProfileImg"
+      type="file"
+      style="display: none"
     />
   </div>
+  <h4 class="mt-3 mb-2" style="text-align:center; font-weight: bold;">{{ userInfo.nickname }}</h4>
 
-  <br />
+  <div class="d-flex justify-content-center">
+      <table>
+        <tr>
+          <td rowspan="4" align="center" @click="follower">
+          <div style="margin-right: 0.5rem;">
 
-  <div>
-    <table>
-      <tr>
-        <td rowspan="2" align="center" @click="follower">
-          <b>
-            {{ follow.followers }}
-            <br />
-            팔로워
-          </b>
-        </td>
-        &nbsp; &nbsp;
-        <td rowspan="2" align="center" @click="following">
-          <b>
-            {{ follow.followings }}
-            <br />
-            팔로잉
-          </b>
+            <b style="font-size:1.2rem">
+              {{ follow.followers }}
+              <br />
+              <p>팔로워</p>
+            </b>
+          </div>
+          </td>
+          &nbsp; &nbsp;
+          <td rowspan="4" align="center" @click="following">
+          <div style="margin-left: 0.5rem;">
+            <b style="font-size:1.2rem">
+              {{ follow.followings }}
+              <br />
+              <p>팔로잉</p>
+            </b>
+          </div>
         </td>
       </tr>
     </table>
@@ -43,41 +52,64 @@
 
   <!-- <button @click.prevent="gochatroom">채팅하러가기</button> -->
   <!-- <button @click="showinvitedcrewlist">나를초대한크루리스트</button> -->
-  <hr />
-  <div @click.prevent="gochatroom">
-    <h5><b>채팅하러가기</b></h5>
-  </div>
-  <hr />
-  <div @click="myStory">
-    <h5><b>내 스토리</b></h5>
-  </div>
+    <hr style="margin-top :0rem">
+    <div>
+      <div @click.prevent="gochatroom">
+        <h5 class="profile_list"><b>채팅하러가기</b></h5>
+      </div>
+      <hr />
+      <div @click="myStory">
+        <h5 class="profile_list"><b>내 스토리</b></h5>
+      </div>
 
-  <hr />
-  <div @click="myReview">
-    <h5><b>내 리뷰</b></h5>
-  </div>
+      <hr />
+      <div @click="myReview">
+        <h5 class="profile_list"><b>내 리뷰</b></h5>
+      </div>
 
-  <hr />
-  <div @click="myCrew">
-    <h5><b>내 크루</b></h5>
-  </div>
+      <hr />
+      <div @click="myCrew">
+        <h5 class="profile_list"><b>내 크루</b></h5>
+      </div>
 
-  <hr />
-  <div @click="showinvitedcrewlist">
-    <h5><b>나를초대한크루리스트</b></h5>
-  </div>
+      <hr />
+      <div @click="showinvitedcrewlist">
+        <h5 class="profile_list"><b>초대받은 크루</b></h5>
+      </div>
 
-  <hr />
-  <div @click="myInfo">
-    <h5><b>회원정보</b></h5>
-  </div>
+      <hr />
+      <div @click="myInfo">
+        <h5 class="profile_list"><b>회원정보</b></h5>
+      </div>
+    </div>
+
+    <hr />
+    <div @click="myReview">
+      <h5 class="profile_list"><b>내 리뷰</b></h5>
+    </div>
+
+    <hr />
+    <div @click="myCrew">
+      <h5 class="profile_list"><b>내 크루</b></h5>
+    </div>
+
+    <hr />
+    <div @click="showinvitedcrewlist">
+      <h5 class="profile_list"><b>나를초대한크루리스트</b></h5>
+    </div>
+
+    <hr />
+    <div @click="myInfo">
+      <h5 class="profile_list"><b>회원정보</b></h5>
+    </div>
+  
   <hr />
 </template>
 
 <script>
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import axios from "@/api/axios.js";
 import api from "@/api/api.js";
 
@@ -89,10 +121,13 @@ export default {
 
     const HOST = ref("https://i7b209.p.ssafy.io");
 
-    const userInfo = store.state.account.userInfo;
+    const userInfo = computed(() => {
+      return store.state.account.userInfo;
+    });
+
     console.log(userInfo);
-    console.log("nickname : ", userInfo.nickname);
-    console.log("image : ", userInfo.image);
+    console.log("nickname : ", userInfo.value.nickname);
+    console.log("image : ", userInfo.value.image);
 
     const gochatroom = () => {
       router.push({ path: "/chatroom" });
@@ -103,7 +138,7 @@ export default {
     });
 
     axios
-      .get(api.accounts.myInfo(userInfo.user_pk))
+      .get(api.accounts.myInfo(userInfo.value.user_pk))
       .then((response) => {
         console.log("유저 정보 response : ", response);
         follow.value.followers = response.data.followers;
@@ -142,18 +177,18 @@ export default {
 
           console.log("userInfo value : ", userInfo);
           const updateImg = {
-            name: userInfo.name,
-            nickname: userInfo.nickname,
-            region: userInfo.region,
-            category: userInfo.category,
-            is_alba: userInfo.is_alba,
-            tel: userInfo.tel,
+            name: userInfo.value.name,
+            nickname: userInfo.value.nickname,
+            region: userInfo.value.region,
+            category: userInfo.value.category,
+            is_alba: userInfo.value.is_alba,
+            tel: userInfo.value.tel,
             image: profileImg.value,
           };
 
           try {
             axios
-              .put(api.profile.myInfo(userInfo.user_pk), updateImg, {
+              .put(api.profile.myInfo(userInfo.value.user_pk), updateImg, {
                 headers: {
                   "Content-type": "multipart/form-data",
                 },
@@ -161,6 +196,8 @@ export default {
               .then((response) => {
                 console.log("변경 후 data ", response.data);
                 store.commit("account/USER_INFO", response.data);
+                const res = sessionStorage.getItem("vuex");
+                console.log("sessionStorage : ", res);
                 alert("사진 변경 완료");
               });
           } catch (err) {
@@ -182,49 +219,62 @@ export default {
       }
     };
 
-    const follower = async () => {
+    const follower = () => {
       console.log("팔로워 조회");
-      await store.dispatch("profile/getFollowerList", userInfo.user_pk);
+
       router.push({
         name: "followList",
-        params: { user_pk: userInfo.user_pk, followType: "follower", page: 1 },
+        params: {
+          user_pk: userInfo.value.user_pk,
+          followType: "follower",
+          page: 1,
+        },
       });
     };
 
     const following = async () => {
       console.log("팔로잉 조회");
-      await store.dispatch("profile/getFollowingList", userInfo.user_pk);
+      await store.dispatch("profile/getFollowingList", userInfo.value.user_pk);
       router.push({
         name: "followList",
-        params: { user_pk: userInfo.user_pk, followType: "following" },
+        params: { user_pk: userInfo.value.user_pk, followType: "following" },
       });
     };
 
     const myStory = async () => {
       console.log("내 스토리 조회");
-      await store.dispatch("profile/getMyStory", userInfo.user_pk);
-      router.push({ name: "mystory", params: { user_pk: userInfo.user_pk } });
+      await store.dispatch("profile/getMyStory", userInfo.value.user_pk);
+      router.push({
+        name: "mystory",
+        params: { user_pk: userInfo.value.user_pk },
+      });
       console.log("스토리 조회 페이지 이동");
     };
 
     const myReview = async () => {
       console.log("내 리뷰 조회");
-      await store.dispatch("profile/getReviewList", userInfo.user_pk);
+      await store.dispatch("profile/getReviewList", userInfo.value.user_pk);
       router.push({
         name: "reviewList",
-        params: { user_pk: userInfo.user_pk },
+        params: { user_pk: userInfo.value.user_pk },
       });
     };
 
     const myCrew = async () => {
       console.log("내 크루 조회");
-      await store.dispatch("profile/getCrewList", userInfo.user_pk);
-      router.push({ name: "crewList", params: { user_pk: userInfo.user_pk } });
+      await store.dispatch("profile/getCrewList", userInfo.value.user_pk);
+      router.push({
+        name: "crewList",
+        params: { user_pk: userInfo.value.user_pk },
+      });
     };
 
     const myInfo = () => {
       console.log("회원정보 조회");
-      router.push({ name: "myinfo", params: { user_pk: userInfo.user_pk } });
+      router.push({
+        name: "myinfo",
+        params: { user_pk: userInfo.value.user_pk },
+      });
     };
 
     const showinvitedcrewlist = () => {
@@ -252,16 +302,16 @@ export default {
 </script>
 
 <style>
-#profile {
-  width: 150px;
-  height: 150px;
-  border-radius: 70%;
-  overflow: hidden;
-}
+
 
 .imgProfile {
-  width: 100%;
-  height: 100%;
+  width: 9.6rem;
+  height: 9.6rem;
   object-fit: cover;
+}
+
+.profile_list {
+  margin-left: 1rem;
+  font-weight: bold;
 }
 </style>
