@@ -3,12 +3,7 @@
   <h3><b>크루</b></h3>
   <hr />
 
-  <table
-    v-for="crew in crews"
-    :key="crew.crew_pk"
-    style="width: 100%"
-    @click.prevent="crewDetail(crew.crew_pk)"
-  >
+  <table v-for="crew in crews" :key="crew.crew_pk" style="width: 100%" @click.prevent="crewDetail(crew.crew_pk)">
     <tr>
       <td width="10px"></td>
       <td id="crew">
@@ -51,7 +46,7 @@ export default {
 
     const crewDetail = (crew_pk) => {
       router.push({
-        name: "crewboard",
+        name: "crewboardmember",
         params: {
           crew_pk: crew_pk,
         },

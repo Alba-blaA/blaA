@@ -178,7 +178,7 @@ export default {
       }
     };
     const moveList = () => {
-      router.push({ name: "allcrewlist" });
+      router.push({ name: "crewlist" });
     };
     return {
       moveToBusiness,
