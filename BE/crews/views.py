@@ -255,7 +255,7 @@ class CrewCommentUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
         return Response(serializer.data)
 
     def perform_update(self, serializer,crew_id,crew_article_pk ):
-        print(crew_id,crew_article_pk)
+        #print(crew_id,crew_article_pk)
         crew = Crew.objects.get(crew_pk=crew_id)
         article = CrewArticle.objects.get(crew_article_pk=crew_article_pk)
         serializer.save(user=self.request.user,crew=crew,article=article)
@@ -358,7 +358,7 @@ def CrewInviteView(request,crew_pk,user_pk) :
     crew = Crew.objects.get(crew_pk=crew_pk) 
     user = User.objects.get(user_pk=user_pk)
     
-    print(crew,user)
+    #print(crew,user)
     #초대하려는 사람이 이미 크루에 있으면 
     if crew.crew_member.filter(user_pk=user_pk).exists() :
         return Response({'message':"The user you want to invite has already joined the crew. Invalid request."},status=status.HTTP_409_CONFLICT)
@@ -403,7 +403,6 @@ from drf_yasg  import openapi
 @swagger_auto_schema(tags=['데이터를 검색합니다.'],query_serializer=GetRequestSerializer,responses={200: 'Success'})  
 def InviteSignListCrewView(request,crew_pk) :
     crew = Crew.objects.get(crew_pk=crew_pk)
-    user = request.user
     if request.user != crew.crew_leader :
         return Response({'message':"The request is not authorized."},status=status.HTTP_401_UNAUTHORIZED)   
 
@@ -551,7 +550,7 @@ def DenyCrewView(request,crew_pk) :
             'message':"Error"
         }
         return JsonResponse(data)
-        
+
 @api_view(['POST'])
 def CrewLeaveAPIView(request,crew_pk) :
 
@@ -585,7 +584,7 @@ class CrewChatApiView(ListCreateAPIView) :
         crew = Crew.objects.get(crew_pk=crew_pk)
         if request.user in crew.crew_member.all() :
             serializer = self.get_serializer(data=request.data)
-            print(request.data)
+           #print(request.data)
             serializer.is_valid(raise_exception=True)
             self.perform_create(crew_pk,serializer)
             headers = self.get_success_headers(serializer.data)

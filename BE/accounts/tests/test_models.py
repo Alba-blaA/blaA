@@ -49,7 +49,7 @@ class TestModel(APITestCase) :
             User.objects.create_superuser(name='',email='test@gmail.com',password='password123!@#')
             
     def test_raises_error_when_no_email_is_supplied2(self) :
-        print('test')
+        #print('test')
         self.assertRaises(ValueError,User.objects.create_superuser, username="test",email='',password='password123!@#')
     
 class SignupAPITestCase(APITestCase) :
@@ -63,7 +63,7 @@ class SignupAPITestCase(APITestCase) :
         response = self.client.post(reverse("accounts:signup"),
         {'name':'test','email':'','password':'password','tel':'01046509260',
         'nickname':'nickname','region':'대전광역시 유성구 덕명동','category':'음식점','is_alba':True})
-        print(response.data)
+        #print(response.data)
         self.assertEqual(response.status_code,status.HTTP_400_BAD_REQUEST)
     
 
