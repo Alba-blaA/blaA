@@ -1,8 +1,29 @@
 <template>
-  <hr>
-  <AlarmView></AlarmView>
-  <router-view></router-view>
+    <hr>
+    <div class="notification">
+        <div v-if="state.isUnread">   
+        <span @click="gotonotification" class="material-symbols-outlined">
+            notification_important
+            </span>
+        </div >
+        <div v-else>
+        <div v-if="state.notifications.length != 0 ">
+            <span @click="gotonotification" class="material-symbols-outlined">
+            notifications_active
+            </span>
+        </div>
+        <div v-else>
+            <span  @click="gotonotification" class="material-symbols-outlined">
+            notifications
+            </span>
+        </div>    
+        </div> 
+    </div>
 </template>
+    
+
+
+
 
 <script>
 import { onMounted, reactive , ref } from 'vue'
@@ -10,13 +31,9 @@ import { useStore } from 'vuex'
 import axios from "@/api/axios.js";
 import api from "@/api/api.js";
 import router from '@/router';
-import { onClickOutside } from '@vueuse/core';
-import AlarmView from '@/components/AlarmView.vue';
-
-export default {
-  components: {   
-    AlarmView
-},   
+import { onClickOutside } from '@vueuse/core'
+export default { 
+  
   setup () {
     let isModalOpen = ref(false)
     const modal = ref(null)   
@@ -105,13 +122,11 @@ export default {
                     axios.get(api.notification.getinvitedcrewlist()).then((response) =>                        
                     state.crews = response.data          
                 )                    
-                )
-                    
+                )                    
             } catch(error){
                 alert("가입거절에 성공하셨습니다.")
             }
         })
-
     const gotonotification = () => {
       router.push({ name : 'notifications'})
     }
@@ -130,6 +145,7 @@ export default {
     }
     
   }
+
 }
 </script>
 
