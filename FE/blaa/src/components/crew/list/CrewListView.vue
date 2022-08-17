@@ -3,7 +3,7 @@
     <div class="col-2" id="top_box_text"></div>
     <h5 class="col-8" id="top_box_text">크루</h5>
     <div class="col-2" id="top_box_text" @click="moveListSearch">
-      <img src="@/assets/icon/search.png" />
+      <img src="@/assets/icons/search.png" />
     </div>
   </div>
   <div class="container" style="margin-bottom: 20px">
@@ -14,10 +14,10 @@
       </div>
     </div>
   </div>
-  <div class="container">
+  <!-- <div class="container">
     <p id="semi_title_text">내 크루</p>
-    <!-- <crew-list-my style="margin-bottom: 20px"></crew-list-my> -->
-  </div>
+    <crew-list-my style="margin-bottom: 20px"></crew-list-my>
+  </div> -->
   <div class="container">
     <p id="semi_title_text">전체 크루</p>
   </div>
@@ -60,14 +60,18 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+* {
+  font-family: "Pretendard-Regular" ;
+}
+
 .newCrewBtn {
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+  margin: 0;
 
-  width: 90%;
   height: 40px;
   left: 107px;
   right: 107px;
