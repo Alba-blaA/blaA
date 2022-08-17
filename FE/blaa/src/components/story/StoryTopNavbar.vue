@@ -1,12 +1,11 @@
 <template>
 <div class="nav">
   <div class="page-change">
-    <router-link :to="{name: 'followStory'}" :class="{activate: isFollow, deactivate: isStory}">팔로우</router-link>
-    <router-link :to="{name: 'story'}" :class="{activate: isStory, deactivate: isFollow}">오출완</router-link>
+    <router-link :to="{name: 'followStory'}" :class="{activate: isFollow, deactivate: isStory}" style="font-weight:700;">팔로우</router-link>
+    <router-link :to="{name: 'story'}" :class="{activate: isStory, deactivate: isFollow}" style="font-weight:700;">오출완</router-link>
   </div>
   <div class="alpha-feature">
     <div class="plus-btn" @click="change" v-if="isStory"><span class="material-symbols-outlined" style="font-size: 32px;" @click="isSearch=!isSearch">search</span></div>
-    <router-link :to="{name: 'createStory'}"><i class="fa fa-regular fa-plus fa-2x"></i></router-link>
   </div>
 </div>
   
@@ -14,6 +13,7 @@
 
 <script>
 export default {
+  components: {},
   props: {
     isStory: Boolean,
     isFollow: Boolean,

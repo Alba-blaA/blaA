@@ -3,15 +3,20 @@
     <div class="overlay">
       <div class="modal-card" style="opacity: 1">
         <div>
-          <p>장소를 검색하세요 <span  @click="$emit('close-modal')" style="cursor:pointer"> 닫기</span></p>
-          <input type="text" v-model="searchWord" @keypress.enter="firstSearchStore">
-          <input type="checkbox" v-model="isStore" id="store" @click="switchIsStore"><label for="store">가게추가하기</label>
+          <div class="d-flex justify-content-between" style="margin-bottom: 10px">
+            <span style="font-weight: 700; font-size:20px;">장소를 검색하세요</span>
+            <span @click="$emit('close-modal')" style="cursor:pointer; font-weight: 700; font-size:20px;">X</span>
+          </div>
+          <div class="storeSearch">
+            <input class="storeInput" type="text" v-model="searchWord" @keypress.enter="firstSearchStore">
+            <input type="checkbox" v-model="isStore" id="store" @click="switchIsStore" style="display: none"><label id="addStore" for="store" :class="{isStore: isStore, isNotStore: !isStore}">가게추가</label>
+          </div>
         </div>
-        <div v-if="searchList.length">
+        <div v-if="searchList.length" style="margin-top:10px;" class="modal-content">
           <ReviewMapList :isStore="isStore" v-for="searchChild in searchList" :key="searchChild.id" :searchChild="searchChild" @select-store="selectStore"/>
           <PaginationBar :currentPage="currentPage" :numberOfPages="numberOfPages" :idx="idx" @click="searchStore"/>
         </div>
-        <p v-else>검색결과가 없습니다.</p>
+        <p style="margin-top:10px;" v-else>검색결과가 없습니다.</p>
       </div>
     </div>
   </div>
@@ -176,13 +181,49 @@ export default {
   }
 
   .modal-card {
+    overflow-y: initial !important;
     position: relative;
     max-width: 80%;
     margin:auto;
-    margin-top: 30px;
     padding: 20px;
+    margin-bottom: 60px;
     background-color: #F8F9FE;
-    min-height: 300px;
+    border-radius: 20px;
+    min-height: 635px;
     z-index:10;
+  }
+
+  .modal-content {
+    height: 600px;
+    overflow-y: auto;
+  }
+
+  .storeSearch {
+    display: grid;
+    grid-template-columns: 60% 40%;
+  }
+
+  .storeInput {
+    padding: 6px 10px;
+    border-radius: 12px;
+  }
+
+  #addStore {
+    border-radius: 16px;
+    padding: 6px 10px;
+    margin-left: 10px;
+    font-weight: 700;
+    max-width: 90px;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .isStore {
+    background-color:#498D6D;
+    color: white;
+  }
+
+  .isNotStore {
+    background-color: #c9c9c9;
   }
 </style>

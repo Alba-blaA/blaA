@@ -1,9 +1,16 @@
 <template>
+<div style="padding:10px"> 
   <StoryTopNavbar :isStory="isStory" :isFollow="FollowTap" :isFilter="isFilter" @change="change" />
-  <StoryImageCardList :images="images.value" v-if="isFollow" />
+</div>
+  <div v-if="isFollow && images.value" >
+    <StoryImageCardList :images="images.value" />
+  </div>
+  
   <div v-else>
     <p>팔로우 한 사람이 없어요!</p>
   </div>
+
+  
 </template>
 
 <script>

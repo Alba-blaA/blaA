@@ -50,6 +50,7 @@ export default {
     acceptcrew: (crew_pk) => HOST + CREW + "accept_crew/" + crew_pk + "/",
     refusecrew: (crew_pk) => HOST + CREW + "deny_crew/" + crew_pk + "/",
     registercrewschedule: (crew_pk) => HOST + CREW + SCHEDULE + crew_pk + "/",
+    getworklist: (crew_pk,date) => HOST + CREW + SCHEDULE + "work/" + crew_pk +"/"+ date + "/"
   },
   categorys: {
     job: () => HOST + CATEGORYS + "job/",

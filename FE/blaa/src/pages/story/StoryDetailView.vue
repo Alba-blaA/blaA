@@ -9,18 +9,18 @@
         </div>
     </PopUp>
     <div id="story"> 
-      <div class="d-flex justify-content-center">
+      <div class="d-flex justify-content-center align-items-center">
         <div class="d-flex justify-content-between" style="width:90%">
-          <span class="material-symbols-outlined" style="color:black; cursor:pointer;" @click="goBack">arrow_back</span>
-          <h2 class="m-0; font-weight: 700;">{{ story.story_title }}</h2>
+          <span class="material-symbols-outlined" style="color:black; cursor:pointer; font-size:36px;" @click="goBack">arrow_back</span>
+          <h2 style="margin:0; font-weight: 700;">{{ story.story_title }}</h2>
           <!-- 좋아요 기능 구현 -->
           <div class="like">
-            <span style="margin-left:5px;">{{story.like_user_count}}</span>
+            <span style="margin-right:5px;">{{story.like_user_count}}</span>
             <div>
               <i class="fa fa-solid fa-heart" :class="{activate: isLike, deactivate: !isLike}" 
               @click="likeStory" style="cursor:pointer; maring-left: 5px;"></i>
             </div>
-            <div style="margin-left:10px;"><i class="fa fa-solid fa-trash" @click="popUpOpen=true"></i></div>
+            <div style="margin-left:10px;"  v-if="story.user_pk.user_pk == user_pk"><i class="fa fa-solid fa-trash" @click="popUpOpen=true"></i></div>
           </div>
         </div>
       </div>
@@ -139,7 +139,8 @@ export default {
       likeStory,
       goBack,
       howNow,
-      moveToProfile
+      moveToProfile,
+      user_pk
     }
   }
 }
@@ -175,7 +176,70 @@ export default {
 
 
 .activate {
-  color: pink;
+  color: #f36e5d;
+  -webkit-animation: jello-horizontal 0.6s both;
+  animation: jello-horizontal 0.6s both;
+}
+
+@-webkit-keyframes jello-horizontal {
+  0% {
+    -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+  }
+  30% {
+    -webkit-transform: scale3d(1.25, 0.75, 1);
+            transform: scale3d(1.25, 0.75, 1);
+  }
+  40% {
+    -webkit-transform: scale3d(0.75, 1.25, 1);
+            transform: scale3d(0.75, 1.25, 1);
+  }
+  50% {
+    -webkit-transform: scale3d(1.15, 0.85, 1);
+            transform: scale3d(1.15, 0.85, 1);
+  }
+  65% {
+    -webkit-transform: scale3d(0.95, 1.05, 1);
+            transform: scale3d(0.95, 1.05, 1);
+  }
+  75% {
+    -webkit-transform: scale3d(1.05, 0.95, 1);
+            transform: scale3d(1.05, 0.95, 1);
+  }
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+  }
+}
+@keyframes jello-horizontal {
+  0% {
+    -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+  }
+  30% {
+    -webkit-transform: scale3d(1.25, 0.75, 1);
+            transform: scale3d(1.25, 0.75, 1);
+  }
+  40% {
+    -webkit-transform: scale3d(0.75, 1.25, 1);
+            transform: scale3d(0.75, 1.25, 1);
+  }
+  50% {
+    -webkit-transform: scale3d(1.15, 0.85, 1);
+            transform: scale3d(1.15, 0.85, 1);
+  }
+  65% {
+    -webkit-transform: scale3d(0.95, 1.05, 1);
+            transform: scale3d(0.95, 1.05, 1);
+  }
+  75% {
+    -webkit-transform: scale3d(1.05, 0.95, 1);
+            transform: scale3d(1.05, 0.95, 1);
+  }
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+  }
 }
 
 .deactivate {

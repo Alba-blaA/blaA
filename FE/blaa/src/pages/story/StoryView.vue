@@ -1,8 +1,8 @@
 <template>
-<div>
+<div style="z-index:5;">
   <div style="padding:10px;">
     <StoryTopNavbar :isStory="isStory" :isFollow="isFollow" :isFilter="isFilter" @change="change"/>
-    <div v-if="isFilter" style="margin: 10px 0px;">
+    <div class="search-component" v-if="isFilter" style="margin: 10px 0px;">
       <button class="button" @click="isPopUp=true">검색</button>
       <button class="button" @click="onCategory" :class="{ activate: isCategory }">관심업종</button>
       <button class="button" @click="onRegion" :class="{ activate: isRegion }">근무지</button>
@@ -13,14 +13,21 @@
   <PopUp v-if="isPopUp">
     <HashTagForm @search-hash-tag="searchHastTag" @closeModal="[isPopUp=false, getPure()]"/>
     <div class="buttons">
-      <button class="button" type="button" @click="[isPopUp=false, getPure()]">닫기</button>
-      <button class="button" type="button" @click="searchHastTagStory">검색</button>
+      <button class="hashbutton" type="button" @click="[isPopUp=false, getPure()]">닫기</button>
+      <button class="hashbutton" style="background-color: #498D6D;" type="button" @click="searchHastTagStory">검색</button>
     </div>
   </PopUp>
   <div v-if="images.value">
     <StoryImageCardList :images="images.value"/>
   </div>
   <p v-else>해당하는 게시물이 없어요</p>
+  <router-link class="plusbutton" :to="{name: 'createStory'}"><span class="material-symbols-outlined" style="font-size:30px; font-weight:bold;">add</span></router-link>
+  <!-- <div v-if="isLoading" class="circles">
+    로딩중
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+  </div> -->
 </div>
 </template>
 
@@ -56,12 +63,13 @@ export default {
     const isState = ref('')
     const currentPage = ref(1)
     const numberOfPages = ref(1)
+    const isLoading = ref(false)
 
     const {
       howNow
     } = dataChange()
 
-    const getPure = async(page = currentPage.value) => {     
+    const getPure = async(page = currentPage.value) => { 
       if (isState.value != "") {currentPage.value = 1}
       if (!hashTag.value.length) {
         isState.value = ""
@@ -74,11 +82,13 @@ export default {
         numberOfPages.value = computed(() => {
           return  Math.ceil(store.state.story.totalCount / 10)
         })
+        isLoading.value = false
       }
     }
 
     // 시작할 떄
     onBeforeMount(() => {
+      isLoading.value = true
       getPure()
     })
 
@@ -109,6 +119,7 @@ export default {
           return  Math.ceil(store.state.story.totalCount / 10)
         })
         isPopUp.value = false
+        isLoading.value = false
       } else {
         getPure()
       }
@@ -131,6 +142,7 @@ export default {
         numberOfPages.value = computed(() => {
           return  Math.ceil(store.state.story.totalCount / 10)
         })
+        isLoading.value = false
       } else {
         currentPage.value = 1
         isState.value = ''
@@ -155,6 +167,7 @@ export default {
         numberOfPages.value = computed(() => {
           return  Math.ceil(store.state.story.totalCount / 10)
         })
+        isLoading.value = false
       } else {
         currentPage.value = 1
         isState.value = ''
@@ -175,6 +188,7 @@ export default {
         // 오류 방지 조건문
         if (numberOfPages.value.value > currentPage.value) {
           currentPage.value += 1
+          isLoading.value = true
           
           if( isState.value == '') {
             getPure(currentPage.value)
@@ -204,13 +218,46 @@ export default {
       isStory,
       isFollow,
       isFilter,
-      change
+      change,
+      isLoading
     }
   }
 }
 </script>
 
 <style scoped>
+/* 애니메이션 */
+.search-component {
+  -webkit-animation: slide-bottom 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	animation: slide-bottom 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+ @-webkit-keyframes slide-bottom {
+  0% {
+    -webkit-transform: translateY(-15px);
+            transform: translateY(-15px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+
+    opacity: 1;
+  }
+}
+@keyframes slide-bottom {
+  0% {
+    -webkit-transform: translateY(-15px);
+            transform: translateY(-15px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .activate {
   background-color: #498D6D;
 }
@@ -228,4 +275,33 @@ export default {
   border-radius: 10px;
   font-weight: 600;
 }
+
+.hashbutton {
+  border: 0;
+  padding: 5px 8px;
+  margin: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  width: 40%;
+}
+
+.plusbutton {
+  position: fixed;
+  z-index: 10;
+  bottom: 80px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background-color: #EEC95C;
+  color: black;
+  border-radius: 50%;
+  padding: 10px;
+}
+
+/* .circle {
+  width:20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #c9c9c9;
+} */
 </style>

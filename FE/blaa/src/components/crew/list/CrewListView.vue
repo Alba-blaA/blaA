@@ -6,20 +6,28 @@
       <img src="@/assets/icons/search.png" />
     </div>
   </div>
-  <div class="container" style="margin-bottom: 20px">
-    <div class="row" style="margin-top: 10px">
+  <div class="container">
+    <div class="row" style="margin-top: 20px">
       <div class="col-8" id="title_text" style="display: flex; align-items: center">새로운 크루를 만들어봐요!</div>
       <div class="col-4">
         <div class="newCrewBtn" @click="createCrew">+ 만들기</div>
       </div>
     </div>
   </div>
+  <hr/>
   <div class="container">
-    <p id="semi_title_text">내 크루</p>
-    <!-- <crew-list-my style="margin-bottom: 20px"></crew-list-my> -->
+    <div class="row">
+      <div class="col-8" id="semi_title_text" style="margin-bottom:15px">내 크루</div>
+      <div class="col-4" style="text-align:right">더보기</div>
+    </div>
   </div>
+  <crew-list-my style="margin-bottom: 20px"></crew-list-my>
+  <hr />
   <div class="container">
-    <p id="semi_title_text">전체 크루</p>
+    <div class="row">
+      <div class="col-8" id="semi_title_text">전체 크루</div>
+      <div class="col-4" style="text-align:right">더보기</div>
+    </div>
   </div>
   <crew-list-all></crew-list-all>
 </template>
@@ -31,7 +39,7 @@ import { useRouter } from "vue-router";
 export default {
   components: {
     CrewListAll,
-    // CrewListMy,
+    CrewListMy,
   },
   setup() {
     const router = useRouter();
@@ -60,14 +68,18 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+* {
+  font-family: "Pretendard-Regular" ;
+}
+
 .newCrewBtn {
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+  margin: 0;
 
-  width: 90%;
   height: 40px;
   left: 107px;
   right: 107px;

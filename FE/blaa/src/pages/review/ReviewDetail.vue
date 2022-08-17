@@ -8,7 +8,7 @@
           <h2 style="margin:0; font-weight: 700;">{{store_name}}</h2>
           <div style="width:36px"></div>
         </div>
-        <div style="background:black; height:1px; width:100%"></div>
+        <div style="background:black; height:1px; width:100%; margin-top: 10px"></div>
         <!-- 별점  -->
         <div class="star">
           <p style="font-weight: bold;">전체 리뷰 평균 ({{person}} 명)</p>
@@ -44,6 +44,8 @@
           height:15px;"
 
           :style="{width: barWidth.value * value / 100 + 'px'}"
+
+          class="progressbar"
           >
           
         </div>
@@ -185,6 +187,33 @@ export default {
   z-index: 0;
   padding: 0;
 }
+
+/* 버튼 리뷰 애니메이션 및 css */
+.progressbar {
+	-webkit-animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+@-webkit-keyframes slide-in-left {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes slide-in-left {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+
 
 .button-review p {
   font-weight: 700;
