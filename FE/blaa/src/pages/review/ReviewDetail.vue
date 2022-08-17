@@ -44,6 +44,8 @@
           height:15px;"
 
           :style="{width: barWidth.value * value / 100 + 'px'}"
+
+          class="progressbar"
           >
           
         </div>
@@ -185,6 +187,33 @@ export default {
   z-index: 0;
   padding: 0;
 }
+
+/* 버튼 리뷰 애니메이션 및 css */
+.progressbar {
+	-webkit-animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+@-webkit-keyframes slide-in-left {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes slide-in-left {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+
 
 .button-review p {
   font-weight: 700;
