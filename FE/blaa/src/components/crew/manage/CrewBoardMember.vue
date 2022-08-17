@@ -110,7 +110,7 @@ export default {
     };
 
     const moveToCalendar = () => {
-      router.push({ name: "schedule" });
+      router.push({ name: "schedule" , parmas: {crew_pk: route.params.crew_pk}});
     };
 
     const moveToDetail = () => {

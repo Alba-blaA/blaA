@@ -2,7 +2,7 @@
   <div>
     <div class="row" id="top_box">
       <div class="col-2" style="line-height: 55px" @click="moveList">
-        <img src="@/assets/icon/close_w.png" />
+        <img src="@/assets/icons/close_w.png" />
       </div>
       <h5 class="col-8" id="top_box_text">게시글 작성</h5>
       <div class="col-2"></div>
