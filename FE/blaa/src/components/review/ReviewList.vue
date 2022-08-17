@@ -43,7 +43,7 @@ export default {
 
     // 버튼
     const buttonType = ['친절한 사장님', '깨끗한 매장', '좋은 분위기', '교통 접근성', '칼퇴근 가능', '유니폼 제공']
-    const score = props.review.star * 20 + 1.5
+    const score = props.review.star * 20
     const high_button = ref([])
     for (let i=0; i < 3; i++){
       let max_idx = 0
@@ -68,14 +68,14 @@ export default {
     onMounted(() => {
       setTimeout(() => {
         starWidth.value = computed(() => {
-          return $('.store').width() - 120
+          return $('.store').width() * 0.8
         })
       }, 50)
     })
    
     $(window).resize(function() {
       starWidth.value = computed(() => {
-        return $('.store').width() - 120
+        return $('.store').width() * 0.8
       })
     })
     
