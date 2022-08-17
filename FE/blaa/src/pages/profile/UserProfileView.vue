@@ -304,5 +304,7 @@ export default {
   width: 9.6rem;
   height: 9.6rem;
   object-fit: cover;
+  margin-left: -5px;
+  margin-top: -6px;
 }
 </style>
