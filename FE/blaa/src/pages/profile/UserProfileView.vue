@@ -135,9 +135,9 @@ export default {
         });
 
       for (var i = 0; i < myFollowingList.value.length; i++) {
-        console.log("myfollowingList user_pk", myFollowingList[i].user_pk);
+        console.log("myfollowingList user_pk", myFollowingList.value[i].user_pk);
         console.log("userProfile user_pk", userProfile.value.user_pk);
-        if (myFollowingList[i].user_pk == userProfile.value.user_pk) {
+        if (myFollowingList.value[i].user_pk == userProfile.value.user_pk) {
           followMessage.value = "Unfollow";
 
           return;
@@ -151,6 +151,10 @@ export default {
       setProfile();
       console.log("followMessage : ", followMessage);
     });
+
+    if(route.params.user_pk == store.state.account.userInfo.user_pk) {
+      router.push({name: 'Profile'});
+    }
 
     const follow = true;
 
@@ -174,29 +178,29 @@ export default {
       // followMessage.value = "Unfollow";
       await axios
         .post(api.profile.follow(route.params.user_pk))
-        .then((response) => {
+        .then(async(response) => {
           console.log("follow start response : ", response);
           const result = response.data.result;
           const arr = result.split(" ");
           if (arr.length === 3) {
             alert(userProfile.value.nickname + "님을 팔로우합니다.");
             followMessage.value = "Unfollow";
-            // axios
-            //   .get(api.profile.myInfo(route.params.user_pk))
-            //   .then((response) => {
-            //     console.log("response : ", response);
-            //     userProfile.value = response.data;
-            //     console.log("userProfile : ", userProfile.value);
-            //     console.log("userProfile image : ", userProfile.value.image);
-            //   })
-            //   .catch((err) => {
-            //     console.log("err", err);
-            //   });
+            await axios
+              .get(api.profile.myInfo(route.params.user_pk))
+              .then((response) => {
+                console.log("response : ", response);
+                userProfile.value = response.data;
+                console.log("userProfile : ", userProfile.value);
+                console.log("userProfile image : ", userProfile.value.image);
+              })
+              .catch((err) => {
+                console.log("err", err);
+              });
             // router.go();
           } else {
             alert(userProfile.value.nickname + "님을 팔로우 취소합니다.");
             followMessage.value = "Follow";
-            axios
+            await axios
               .get(api.profile.myInfo(route.params.user_pk))
               .then((response) => {
                 console.log("response : ", response);

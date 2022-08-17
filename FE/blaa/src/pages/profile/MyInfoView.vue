@@ -85,9 +85,10 @@ export default {
     const logout = () => {
       store.commit("account/USER_INFO", null);
       store.commit("account/LOGIN", false);
+      store.commit("account/KAKAO_LOGIN", false);
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("vuex");
-      router.replace("/");
+      router.replace("/login");
     };
 
     const myInfo = store.state.account.userInfo;
