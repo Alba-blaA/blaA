@@ -36,7 +36,7 @@ export default {
     margin-top: 30px;
     padding: 20px;
     background-color: white;
-    min-height: 300px;
+    min-height: 100px;
     z-index:10;
     opacity: 1 !important;
   }

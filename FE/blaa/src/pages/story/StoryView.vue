@@ -2,7 +2,7 @@
 <div>
   <div style="padding:10px;">
     <StoryTopNavbar :isStory="isStory" :isFollow="isFollow" :isFilter="isFilter" @change="change"/>
-    <div v-if="isFilter" style="margin: 10px 0px;">
+    <div class="search-component" v-if="isFilter" style="margin: 10px 0px;">
       <button class="button" @click="isPopUp=true">검색</button>
       <button class="button" @click="onCategory" :class="{ activate: isCategory }">관심업종</button>
       <button class="button" @click="onRegion" :class="{ activate: isRegion }">근무지</button>
@@ -13,8 +13,8 @@
   <PopUp v-if="isPopUp">
     <HashTagForm @search-hash-tag="searchHastTag" @closeModal="[isPopUp=false, getPure()]"/>
     <div class="buttons">
-      <button class="button" type="button" @click="[isPopUp=false, getPure()]">닫기</button>
-      <button class="button" type="button" @click="searchHastTagStory">검색</button>
+      <button class="hashbutton" type="button" @click="[isPopUp=false, getPure()]">닫기</button>
+      <button class="hashbutton" style="background-color: #498D6D;" type="button" @click="searchHastTagStory">검색</button>
     </div>
   </PopUp>
   <div v-if="images.value">
@@ -211,6 +211,41 @@ export default {
 </script>
 
 <style scoped>
+/* 애니메이션 */
+.search-component {
+  -webkit-animation: slide-bottom 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	animation: slide-bottom 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+ @-webkit-keyframes slide-bottom {
+  0% {
+    -webkit-transform: translateY(-15px);
+            transform: translateY(-15px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+
+    opacity: 1;
+  }
+}
+@keyframes slide-bottom {
+  0% {
+    -webkit-transform: translateY(-15px);
+            transform: translateY(-15px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+
+
+
 .activate {
   background-color: #498D6D;
 }
@@ -227,5 +262,14 @@ export default {
   margin-right: 20px;
   border-radius: 10px;
   font-weight: 600;
+}
+
+.hashbutton {
+  border: 0;
+  padding: 5px 8px;
+  margin: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  width: 40%;
 }
 </style>
