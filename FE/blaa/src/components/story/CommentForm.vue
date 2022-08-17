@@ -2,7 +2,7 @@
 <div id="contain">
   <div class="comment-form">
     <div style="background-color:white;">
-      <input type="text" v-model="comment" placeholder="댓글을 입력해주세요" :style="{width: windowWidth.value + 'px'}" @keyup.enter="CommentCreate">
+      <input type="text" v-model="comment" placeholder="댓글을 입력해주세요" :style="{width: windowWidth.value + 'px'}">
       <button @click="CommentCreate">등록</button>
     </div>
   </div>
@@ -64,10 +64,11 @@ export default {
 <style scoped>
 #contain {
   position:fixed;
+  padding-bottom: 6px;
   width: 100%;
   background-color: white;
-  height: 3.1rem;
-  bottom: 68px;
+  height: 3.3rem;
+  bottom: 65px;
   left: 0;
   border-top: 1px solid black;
 }
@@ -93,7 +94,7 @@ button {
   bottom: 73px;
   right: 8%;
   width: 4rem;
-  height: 2.5rem;
+  height: 2.4rem;
   border-radius: 10px;
   background-color: #D9D9D9;
   border-color: #D9D9D9;

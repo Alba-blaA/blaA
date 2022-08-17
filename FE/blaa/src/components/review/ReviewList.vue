@@ -68,14 +68,14 @@ export default {
     onMounted(() => {
       setTimeout(() => {
         starWidth.value = computed(() => {
-          return $('.store').width() - 120
+          return $('.store').width() * 0.8
         })
       }, 50)
     })
    
     $(window).resize(function() {
       starWidth.value = computed(() => {
-        return $('.store').width() - 120
+        return $('.store').width() * 0.8
       })
     })
     

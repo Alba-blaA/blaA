@@ -106,7 +106,8 @@ export default {
       // 별점, 버튼, 날짜 변환
       star.value = computed(() => {return store.state.review.reviewStar})
       types.value = computed(() => {return store.state.review.reviewBtn})
-      score.value = (star.value.value * 20)
+      // 조정
+      score.value = (star.value.value * 20) - 1.5
       person.value = computed(() => {return review.value.value.length})
       // for문으로 인해 바로 로딩이 안되서 대기 시간을 부여
       setTimeout(() => {
@@ -188,6 +189,10 @@ export default {
 .button-review p {
   font-weight: 700;
   font-size: 15px;
+}
+
+.userReview {
+  margin-bottom: 10px;
 }
 
 /* 하트 css */

@@ -27,8 +27,8 @@
         <span style="font-weight:600; font-size:24px;">{{review.value.star}}.0점</span>
       </div>
       <div class="buttonReview">
-        <div v-for="(value, name) of review.value.button" :key="name.id">
-          <div v-if="value == 1" class="buttonDetail" >{{name}}</div>
+        <div v-for="type of check_button" :key="type.id">
+          <div class="buttonDetail" >{{type}}</div>
         </div>
       </div>
     </div>
@@ -66,13 +66,18 @@ export default {
     const score = ref(0)
     const review = ref({})
     const user_name = store.state.account.userInfo.nickname
+    const check_button = ref([])
 
     const start = async() => {
       await store.dispatch('review/getDetailReview', review_pk)
       review.value = computed(() => {return store.state.review.detailReview})
+      const button = ['친절한 사장님', '깨끗한 매장', '좋은 분위기', '교통 접근성', '칼퇴근 가능', '유니폼 제공']
+      button.forEach(ele => {
+        if (review.value.value.button[ele] == 1) {
+          check_button.value.push(ele)
+        }
+      })
       score.value = (review.value.value.star * 20) + 1.5
-
-      console.log(review.value.value.user.nickname)
     }
 
     start()
@@ -116,7 +121,8 @@ export default {
       store_name,
       update,
       deleteReview,
-      user_name
+      user_name,
+      check_button
     } 
   }
 }
