@@ -1,16 +1,21 @@
 <template>
 <div>
-  <StoryTopNavbar :isStory="isStory" :isFollow="isFollow" :isFilter="isFilter" @change="change"/>
-  <div v-if="isFilter" style="margin: 10px 0px;">
-    <button class="button" @click="isPopUp=true">검색</button>
-    <button class="button" @click="onCategory" :class="{ activate: isCategory }">관심업종</button>
-    <button class="button" @click="onRegion" :class="{ activate: isRegion }">근무지</button>
+  <div style="padding:10px;">
+    <StoryTopNavbar :isStory="isStory" :isFollow="isFollow" :isFilter="isFilter" @change="change"/>
+    <div v-if="isFilter" style="margin: 10px 0px;">
+      <button class="button" @click="isPopUp=true">검색</button>
+      <button class="button" @click="onCategory" :class="{ activate: isCategory }">관심업종</button>
+      <button class="button" @click="onRegion" :class="{ activate: isRegion }">근무지</button>
+    </div>
   </div>
+
   <!-- Modal -->
   <PopUp v-if="isPopUp">
     <HashTagForm @search-hash-tag="searchHastTag" @closeModal="[isPopUp=false, getPure()]"/>
-    <button type="button" class="btn btn-secondary" @click="[isPopUp=false, getPure()]">닫기</button>
-    <button type="button" class="btn btn-primary" @click="searchHastTagStory">검색</button>
+    <div class="buttons">
+      <button class="button" type="button" @click="[isPopUp=false, getPure()]">닫기</button>
+      <button class="button" type="button" @click="searchHastTagStory">검색</button>
+    </div>
   </PopUp>
   <div v-if="images.value">
     <StoryImageCardList :images="images.value"/>
@@ -208,6 +213,12 @@ export default {
 <style scoped>
 .activate {
   background-color: #498D6D;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
 .button {
