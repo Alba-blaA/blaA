@@ -56,6 +56,10 @@ const accountStore = {
       state.userInfo = userInfo;
       console.log("state.userInfo : ", state.userInfo);
     },
+    ADD_MY_CREW: (state, crewList) => {
+      state.userInfo.crew = crewList;
+      console.log("크루 추가 후 userInfo : ", state.userInfo);
+    },
     SET_KAKAO_USER_INFO: (state, kakaoUserInfo) => {
       state.kakaoUserInfo.email = kakaoUserInfo.email;
       state.kakaoUserInfo.name = kakaoUserInfo.name;
@@ -138,10 +142,10 @@ const accountStore = {
         }
       );
     },
-    getUserInfo({ commit }, token) {
+    async getUserInfo({ commit }, token) {
       // let decode_token = jwt_decode(token);
       console.log("token : ", token);
-      findByToken(
+      await findByToken(
         token,
         (response) => {
           if (response.status === 200) {
