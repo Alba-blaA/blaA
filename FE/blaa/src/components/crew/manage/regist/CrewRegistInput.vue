@@ -5,6 +5,8 @@
     <div class="category2" v-show="check" @click="moveToFriends">친목용</div>
   </div>
   <!-- <router-view></router-view> -->
+
+  <ReviewMap v-if="isModalOpen" @close-modal="isModalOpen=false" @select-store="selectStore"/>
   <div v-show="!check">
     <button @click="back">뒤로가기</button>
   </div>
@@ -23,6 +25,16 @@
 
       <label for="crew_explain">크루 설명</label><br />
       <textarea id="crew_explain" name="crew_explain" v-model="crew_explain" cols="35" rows="5"></textarea><br />
+      <div class="row"> 
+        <div class="col-8">
+          <label for="crew_region">크루 지역</label><br />
+          <input type="text" id="crew_region" name="crew_region" v-model="crew_region" disabled />
+        </div>
+        <div class="col-4" style="display:flex; align-items: end;">
+          <div class="submit_button3" @click="isModalOpen=true" >검색</div>
+        </div>
+
+      </div>
       <label for="crew_region">크루 지역</label><br />
       <input type="text" id="crew_region" name="crew_region" v-model="crew_region" />
       <div class="row" style="text-align: center; padding-top: 20px">
@@ -54,28 +66,6 @@
 
       <label for="crew_region">크루 활동 지역</label><br />
       <input type="text" id="crew_region" name="crew_region" v-model="crew_region" />
-      <!-- <select id="crew_sido" class="select-value" v-model="crew_sido" @change="getGu(crew_sido)">
-        <option value="null">시/도</option>
-        <option :key="s" v-for="(si, s) in si_list" :value="si.sido_code">
-          {{ si.sido_name }}
-        </option>
-      </select>
-      &nbsp;
-
-      <select id="crew_gugun" v-model="crew_gugun" @change="getDong(crew_sido, crew_gugun)">
-        <option value="null">구/군</option>
-        <option :key="g" v-for="(gu, g) in gu_list" :value="gu.gugun_code">
-          {{ gu.gugun_name }}
-        </option>
-      </select>
-      &nbsp;
-
-      <select id="crew_dong" v-model="crew_dong">
-        <option value="null">동/면/리</option>
-        <option :key="d" v-for="(dong, d) in dong_list" :value="dong.dong_code">
-          {{ dong.dong_name }}
-        </option>
-      </select> -->
 
       <div class="row" style="text-align: center; padding-top: 20px">
         <div class="col">
@@ -89,11 +79,18 @@
   </div>
 </template>
 
+
 <script>
+import ReviewMap from '@/components/review/ReviewMap.vue'
+import PopUp from '@/components/story/PopUp.vue'
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { ref, computed } from "vue";
 export default {
+  emits: ['select-store'], 
+  components: {
+    ReviewMap,
+  },
   setup() {
     const router = useRouter();
     const store = useStore();
@@ -104,25 +101,23 @@ export default {
     const crew_region = ref("");
     const crew_img = ref(null);
     const is_business = ref(false);
-    // const crew_sido = ref("");
-    // const crew_gugun = ref("");
-    // const crew_dong = ref("");
 
-    // const category_list = computed(() => {
-    //   return store.state.account.category;
-    // });
+    const isModalOpen = ref(false);
+    const isStore = ref(false)
+    const store_pk = ref(0)
+    const storeName = ref('')
+    const storeAddress = ref('')
 
-    // const si_list = computed(() => {
-    //   return store.state.account.si;
-    // });
+    const selectStore = (data) => {
+      store_pk.value = data.store_pk
+      isStore.value = data.isStore
+      console.log(isStore.value)
+      storeName.value = data.name
+      storeAddress.value = data.region
 
-    // const gu_list = computed(() => {
-    //   return store.state.account.gu;
-    // });
+      isModalOpen.value = false
+    }
 
-    // const dong_list = computed(() => {
-    //   return store.getters["account/dong_list"];
-    // });
 
     const moveToBusiness = () => {
       check.value = false;
@@ -154,15 +149,6 @@ export default {
       }
     };
     const crewRegist = async () => {
-      // var sido = document.getElementById("crew_sido");
-      // const sido_name = sido.options[sido.selectedIndex].text;
-      // var gugun = document.getElementById("crew_gugun");
-      // const gugun_name = gugun.options[gugun.selectedIndex].text;
-      // var dong = document.getElementById("crew_dong");
-      // const dong_name = dong.options[dong.selectedIndex].text;
-
-      // const region = sido_name + " " + gugun_name + " " + dong_name;
-      // console.log(region);
 
       const crewData = new FormData();
       crewData.append("crew_name", crew_name.value);
@@ -194,13 +180,11 @@ export default {
       is_business,
       previewFile,
       moveList,
-      // crew_sido,
-      // crew_dong,
-      // crew_gugun,
-      // category_list,
-      // si_list,
-      // gu_list,
-      // dong_list,
+
+      isModalOpen,
+      selectStore,
+      storeName,
+      storeAddress,
     };
   },
 };
@@ -348,4 +332,22 @@ export default {
   border-radius: 100px;
   border: 0px;
 }
+
+.submit_button3 {
+  display: inline-block;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 10px 24px;
+  margin: auto;
+  /* gap: 10px; */
+
+  width: 80px;
+  background: #498d6d;
+  color: #ffcd38;
+  border-radius: 100px;
+  border: 0px;
+}
+
+
 </style>

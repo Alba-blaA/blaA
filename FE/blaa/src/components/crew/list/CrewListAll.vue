@@ -3,7 +3,7 @@
     <div class="col-3" style="text-align: center">
       <img id="profile" :src="host + crew.crew_img" />
     </div>
-    <div class="col-9">
+    <div class="col-8">
       <div class="row">
         <p style="font-size: 16px">{{ crew.crew_name }}</p>
         <div class="row" id="text_line">

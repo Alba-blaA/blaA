@@ -117,12 +117,12 @@ const router = createRouter({
           path: "regist",
           name: "crewregistview",
           redirect: { name: "crewregist" },
-          component: () => import("@/components/crew/manage/CrewRegistView.vue"),
+          component: () => import("@/components/crew/manage/regist/CrewRegistView.vue"),
           children: [
             {
               path: "",
               name: "crewregist",
-              component: () => import("@/components/crew/manage/CrewRegistInput.vue"),
+              component: () => import("@/components/crew/manage/regist/CrewRegistInput.vue"),
             },
           ],
         },
