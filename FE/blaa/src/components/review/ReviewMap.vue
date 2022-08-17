@@ -12,7 +12,7 @@
             <input type="checkbox" v-model="isStore" id="store" @click="switchIsStore" style="display: none"><label id="addStore" for="store" :class="{isStore: isStore, isNotStore: !isStore}">가게추가</label>
           </div>
         </div>
-        <div v-if="searchList.length" style="margin-top:10px;">
+        <div v-if="searchList.length" style="margin-top:10px;" class="modal-content">
           <ReviewMapList :isStore="isStore" v-for="searchChild in searchList" :key="searchChild.id" :searchChild="searchChild" @select-store="selectStore"/>
           <PaginationBar :currentPage="currentPage" :numberOfPages="numberOfPages" :idx="idx" @click="searchStore"/>
         </div>
@@ -181,15 +181,21 @@ export default {
   }
 
   .modal-card {
+    overflow-y: initial !important;
     position: relative;
     max-width: 80%;
     margin:auto;
-    margin-top: 30px;
     padding: 20px;
+    margin-bottom: 60px;
     background-color: #F8F9FE;
     border-radius: 20px;
     min-height: 635px;
     z-index:10;
+  }
+
+  .modal-content {
+    height: 600px;
+    overflow-y: auto;
   }
 
   .storeSearch {

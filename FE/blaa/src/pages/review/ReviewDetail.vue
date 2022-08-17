@@ -8,7 +8,7 @@
           <h2 style="margin:0; font-weight: 700;">{{store_name}}</h2>
           <div style="width:36px"></div>
         </div>
-        <div style="background:black; height:1px; width:100%"></div>
+        <div style="background:black; height:1px; width:100%; margin-top: 10px"></div>
         <!-- 별점  -->
         <div class="star">
           <p style="font-weight: bold;">전체 리뷰 평균 ({{person}} 명)</p>
