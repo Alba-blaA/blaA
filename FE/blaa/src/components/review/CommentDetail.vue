@@ -1,15 +1,15 @@
 <template>
   <div>
     <div class="oneReview">
-      <div class="oneLine" @click="moveToDetailPage" v-if="!isDetail">{{ review.oneline_review}}</div>
-      <div v-else>{{ review.oneline_review}}</div>
+      <div class="oneLine" @click="moveToDetailPage" v-if="!isDetail">{{ review.oneline_review }}</div>
+      <div class="oneLine" v-else>{{ review.oneline_review}}</div>
       <div class="heart">
         <span style="margin: 0 auto; margin-bottom:3px;">{{review.like_user_count}}</span>
         <i  class="fa fa-solid fa-heart" :class="{activate: isLike, deactivate:!isLike}"
         @click="likeOneReview" style="cursor:pointer; font-size:30px; margin: 0 auto;"></i>
       </div>
     </div>
-    <div class="user_info"><span>{{review.user.nickname}}</span> <span>{{review.created_at}} </span></div> 
+    <div class="user_info"><span style="cursor:pointer" @click="moveToProfile(review.user.user_pk)">{{review.user.nickname}}</span> <span>{{review.created_at}} </span></div> 
   </div>
 </template>
 
@@ -65,11 +65,21 @@ export default {
         }
       })
     }
+    
+    const moveToProfile = (user_pk) => {
+      router.push({
+        name: 'userProfile',
+        params: {
+          user_pk: user_pk
+        }
+      })
+    }
 
     return {
       likeOneReview,
       moveToDetailPage,
-      isLike
+      isLike,
+      moveToProfile,
     }
   }
 }
@@ -86,7 +96,7 @@ export default {
   cursor:pointer; 
   align-items:center; 
   font-weight:800; 
-  font-size:16px; 
+  font-size:16px;
 }
 
 .user_info {

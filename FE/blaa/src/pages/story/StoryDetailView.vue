@@ -139,7 +139,8 @@ export default {
       likeStory,
       goBack,
       howNow,
-      moveToProfile
+      moveToProfile,
+      user_pk
     }
   }
 }

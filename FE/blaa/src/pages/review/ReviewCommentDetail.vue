@@ -1,6 +1,13 @@
 <template>
 <div v-if="review.value"> 
   <div class="d-flex justify-content-center main">
+    <PopUp v-if="popUpOpen" @close-modal="popUpOpen=false">
+        <div class="modal-content">
+          <p>정말 삭제하시겠습니까?</p>
+            <button class="btn btn-secondary" @click="popUpOpen=false">취소</button> 
+            <button class="btn btn=danger" @click="deleteReview">삭제</button>
+          </div>
+      </PopUp>
   <div style="width: 90%">
     <div class="d-flex justify-content-between align-items-center">
       <span class="material-symbols-outlined" style="color: black; font-size:36px; cursor:pointer;" @click="moveToPrevious">arrow_back</span>
@@ -9,7 +16,7 @@
     </div>
     <div style="background:black; height:1px; width:100%; margin: 10px 0;"></div>
     <br>
-    <p class="nickname">{{review.value.user.nickname}} 님은이렇게 평가했어요.</p>
+    <p class="nickname">{{review.value.user.nickname}} 님은 이렇게 평가했어요.</p>
     <br>
     <div class="userReviewDetail">
       <div>
@@ -37,8 +44,9 @@
     <CommentDetail class="userReview" :review="review.value" :isDetail="true" @update="update"/>
 
     
-    <div class="updateButton" v-if="review.value.user.nickname == user_name"> 
-      <button class="deleteButton" @click="deleteReview">삭제</button>
+    <div class="udbutton" v-if="review.value.user.nickname == user_name"> 
+      <button class="delete button" @click="popUpOpen=true">삭제</button>
+      <!-- <button class="update button" @click="moveToForm">수정</button> -->
     </div>
     
   </div>
@@ -52,10 +60,12 @@ import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import CommentDetail from '@/components/review/CommentDetail.vue'
 import $ from 'jquery'
+import PopUp from '@/components/story/PopUp.vue'
 
 export default {
   components: {
-    CommentDetail
+    CommentDetail,
+    PopUp
   },
   setup() {
     const route = useRoute()
@@ -67,6 +77,7 @@ export default {
     const review = ref({})
     const user_name = store.state.account.userInfo.nickname
     const check_button = ref([])
+    const popUpOpen = ref(false)
 
     const start = async() => {
       await store.dispatch('review/getDetailReview', review_pk)
@@ -122,7 +133,8 @@ export default {
       update,
       deleteReview,
       user_name,
-      check_button
+      check_button,
+      popUpOpen
     } 
   }
 }
@@ -228,19 +240,30 @@ export default {
   font-weight: 600;
 }
 
-.updateButton{
-  position: fixed;
-  bottom: 30px;
+.udbutton {
+  width:90%;
+  position: absolute;
+  bottom: 70px;
+  display: flex;
+  justify-content: space-around;
 }
 
-.deleteButton {
+.button{
   border: 0;
-  background-color: #CB2A2A;
-  color: white;
-  width: 80px;
-  /* height: 30px; */
-  padding: 6px;
+  width: 100%;
+  padding: 10px 0;
   border-radius: 16px;
   cursor: pointer;
+  font-weight: 600;
+  
+}
+
+.update {
+  background-color: #EEC95C;
+}
+
+.delete {
+  background: #c25243;
+  color: white;
 }
 </style>
