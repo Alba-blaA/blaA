@@ -1,10 +1,10 @@
 <template>
   <!-- 가게 주소 -->
-  <div class="d-flex justify-content-center">
+  <div class="d-flex justify-content-center" style="padding-top:24px;">
     <ReviewMap v-if="isModalOpen" @close-modal="isModalOpen=false" @select-store="selectStore"/>
     <div style="width:90%">
       <div div class="d-flex justify-content-between align-items-center" style="padding:4px;">
-        <router-link :to="{name: 'review'}" style="text-decoration:none; color:black; font-size:16px; font-weight:bold; width:60px;">X</router-link>
+        <router-link :to="{name: 'review'}" style="text-decoration:none; color:black; font-size:24px; font-weight:bold; width:60px;">X</router-link>
         <h2 style="font-weight:bold; margin:0;">리뷰 작성 폼</h2>
         <button class="submit-btn" @click="sumbitReview">제출</button>
       </div>
