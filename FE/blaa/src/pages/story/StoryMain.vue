@@ -30,7 +30,6 @@
     </div>
 
   </div> -->
-  <hr>
   <div class="notification">
     <div v-if="state.isUnread">   
       <span @click="gotonotification" class="material-symbols-outlined">

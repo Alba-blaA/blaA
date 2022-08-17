@@ -190,11 +190,6 @@ const router = createRouter({
               component: () => import("@/components/crew/article/ArticleList.vue"),
             },
             {
-              path: "/crew/m/:crew_pk/detail/:crew_article_pk",
-              name: "articledetail",
-              component: () => import("@/components/crew/article/ArticleDetail.vue"),
-            },
-            {
               path: ":crew_article_pk",
               name: "articlemodify",
               component: () => import("@/components/crew/article/ArticleModify.vue"),
@@ -212,6 +207,11 @@ const router = createRouter({
             //     import("@/components/crew/crewmember/CrewMemberView.vue"),
             // },
           ],
+        },
+        {
+          path: "article/detail/:crew_article_pk",
+          name: "articledetail",
+          component: () => import("@/components/crew/article/ArticleDetail.vue"),
         },
         {
           path: "regist/:crew_pk",
