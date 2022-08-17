@@ -1,13 +1,40 @@
 <template>
-  <div>스케줄 보여주는 컴포넌트 입니다.</div>
-
+  <br>
   <div class="calendarbox" >
     <DatePicker :attributes='state.schedules' v-model ="date" is-expanded />   
   </div>
   <div>
     <hr>     
-   <span @click="moveToRegisterSchedule" class="material-symbols-outlined d-flex justify-content-center">add_circle</span>
-   <p>{{ date }}</p>   
+    <div class="d-flex justify-content-between ">
+      <p  class="d-flex justify-content-between align-items-center" style="padding-top:4.2px; padding-left : 5px "><b>근무정보</b></p>
+      <span style="  padding-right : 10px " @click="moveToRegisterSchedule" class="material-symbols-outlined">edit_calendar</span>
+    </div>
+    <div id="schedulebuttons" class="d-flex justify-content-center">
+   
+    <div v-if="state.isworkbuttonon">      
+        <button @click="workon(date.getFullYear(),date.getMonth(),date.getDate())" class="scheduleworkbuttonon"><b >근무 보기</b></button>
+        <button @click="breakon()" class="schedulebreakbuttonoff"><b>휴무 보기</b></button>            
+    </div>
+    <div v-else>
+      <button @click="workon(date.getFullYear(),date.getMonth(),date.getDate())" class="scheduleworkbuttonoff"><b >근무 보기</b></button>
+      <button @click="breakon()" class="schedulebreakbuttonon"><b>휴무 보기</b></button>
+    </div>
+    </div>
+     <br>  
+    <div v-if="state.isworkbuttonon">      
+      <div v-for="(worker, i) in state.workers" :key="i">
+        <div class="workbreakbox d-flex justify-content-center align-items-center">
+          <div>
+            <b>              
+              근무   | <img id = "chatprofile" class="imgProfile" :src="HOST + worker.image" alt="">{{ worker.nickname }} | {{worker.crew_starthour.substr(0,5)}}~{{worker.crew_endhour.substr(0,5)}}
+            </b>            
+          </div>
+        </div>
+        <br>
+      </div>
+    </div>
+    <div v-else></div> 
+
    
   
   </div>
@@ -23,16 +50,19 @@ import popover from "bootstrap/js/dist/popover";
 
 
 export default {
-  setup() {    
+  setup() {
+    const HOST = ref("https://i7b209.p.ssafy.io");    
     const router = useRouter();
     const route = useRoute()
     const date = ref(new Date())
-    const crew_pk = route.params.crew_pk
+    const crew_pk = Number(route.params.crew_pk)    
     const moveToRegisterSchedule = () => {
       router.push({ name: "scheduleregister" });
     };
     const state = reactive({
-      schedules : []
+      schedules : [],
+      isworkbuttonon : false,
+      workers : [], 
     })
 
     onMounted( async () => {
@@ -44,7 +74,9 @@ export default {
             dot : element.color,
             dates : element.crew_day, 
             popover : {
-              label : element.name+ ":"+ element.crew_starthour + "~" + element.crew_endhour
+              label : element.name+ " : "+ element.crew_starthour + "~" + element.crew_endhour,
+              slot: 'todo-row',
+               visibility: 'focus'
             }   
 
           })
@@ -57,14 +89,52 @@ export default {
       console.log("hello");
     })
 
+    const onedigittotwodigitmonth = ((month)=> {
+      if ( Number(month) < 9) {
+        return 0 + String(month+1)        
+      } else {
+        return month
+      }
+      
+    })
+    const onedigittotwodigitday = ((month)=> {
+      if ( Number(month) < 10) {
+        return 0 + String(month)        
+      } else {
+        return month
+      }
+      
+    })
+
+    const workon = (async (workyear,workmonth,workdate) => {
+      state.isworkbuttonon = true
+      const finddate = workyear +"-"+ onedigittotwodigitmonth(workmonth) +"-"+ onedigittotwodigitday(workdate)       
+      await axios.get(api.crew.getworklist(crew_pk, finddate),  {
+        params : {
+        work : 1
+      }}).then((response)=>{
+        state.workers = response.data
+      } )
+
+    })
+
+    const breakon = (() => {
+      state.isworkbuttonon = false
+    })
+
     return {
      moveToRegisterSchedule,
      date,
      crew_pk,
      state,
-     logcon
-    }
-  
+     logcon,
+     breakon,
+     workon,
+     onedigittotwodigitmonth,
+     onedigittotwodigitday,
+     HOST
+ 
+    }  
 }
 }
 </script>
@@ -75,6 +145,54 @@ export default {
   justify-content: center;
   margin-left : 20px;
   margin-right: 20px;
+  border : solid seagreen;
+  border-radius: 10px;
 }
+
+.scheduleworkbuttonon{
+width: 131px;
+height: 38px;
+background: #1294F2;
+border : solid rgb(120, 183, 238) 2px ;
+border-radius: 20px;
+margin-right : 13px;
+}
+
+.scheduleworkbuttonoff{
+width: 131px;
+height: 38px;
+background: #D9D9D9;
+border : solid rgb(164, 161, 161) 2px ;
+border-radius: 20px;
+margin-right : 13px;
+}
+
+.schedulebreakbuttonon{
+  width: 131px;
+  height: 38px;
+  background: #1294F2;
+  border : solid rgb(120, 183, 238) 2px;
+  border-radius: 20px;
+  margin-left : 13px;
+}
+
+.schedulebreakbuttonoff{
+width: 131px;
+height: 38px;
+background: #D9D9D9;
+border : solid rgb(164, 161, 161) 2px;
+border-radius: 20px;
+margin-left : 13px;
+
+}
+
+.workbreakbox {
+  height: 100px ; 
+  background-color: rgba(229, 141, 31, 0.55);
+  border-radius: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 
 </style>

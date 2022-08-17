@@ -35,17 +35,18 @@ export default {
 
       const emailCheck = { email: store.state.account.kakaoUserInfo.email };
 
-      axios
+      await axios
         .post(api.accounts.emailCheck(), emailCheck)
         .then(() => {
           alert("회원가입 페이지로 이동");
+          store.commit("account/KAKAO_LOGIN", false);
           router.push({ name: "choice" });
         })
-        .catch(() => {
+        .catch(async() => {
           console.log("email : ", store.state.account.kakaoUserInfo.email);
-          axios
+          await axios
             .post(api.accounts.kakaoLogin(), emailCheck)
-            .then((response) => {
+            .then(async(response) => {
               if (response.status === 200) {
                 console.log("accounts/kakao 성공 : ", response);
 
@@ -53,12 +54,16 @@ export default {
                 console.log("kakao token : ", token);
                 store.commit("account/LOGIN", true);
                 store.commit("account/LOGIN_ERROR", false);
-
                 sessionStorage.setItem("token", token);
                 store.commit("account/SET_LOGIN_TOKEN", token);
+                await store.dispatch("account/getUserInfo", token);
+              
                 console.log("로그인 성공");
+                
+                await getMyCrewList();
                 alert("카카오 로그인 완료!");
-                store.dispatch("account/getUserInfo", token);
+                
+                // router.push("/story");
               } else {
                 store.commit("account/LOGIN", false);
                 store.commit("account/LOGIN_ERROR", true);
@@ -72,7 +77,9 @@ export default {
               }
             });
 
-          router.replace("/story");
+            
+
+          // router.replace("/story");
         });
     };
 
@@ -100,11 +107,23 @@ export default {
       setKakaoToken();
     }
 
+    const getMyCrewList = async() => {
+      console.log("user_pk : ", store.state.account.userInfo.user_pk)
+      await axios.get(api.profile.myCrew(store.state.account.userInfo.user_pk)).then((response) => {
+        console.log("crew list : ",response.data);
+        const crew = response.data;
+        store.commit("account/ADD_MY_CREW", crew);
+      }).catch((err) => {
+        console.log(err);
+      })
+    }
+
     return {
       setKakaoToken,
       setUserInfo,
       isLogin,
       isLoginError,
+      getMyCrewList
     };
   },
 };
