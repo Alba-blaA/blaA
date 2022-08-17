@@ -159,6 +159,7 @@ export default {
       try {
         console.log(crewData);
         await store.dispatch("crew/registcrew", crewData);
+        store.commit("account/ADD_NEW_CREW", crewData);
       } catch (error) {
         console.log(error);
       }
