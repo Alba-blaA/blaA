@@ -51,7 +51,7 @@ export default {
 
     const crewDetail = (crew_pk) => {
       router.push({
-        name: "crewboard",
+        name: "crewboardmember",
         params: {
           crew_pk: crew_pk,
         },
