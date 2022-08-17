@@ -1,5 +1,5 @@
 <template>
-<div>
+<div style="margin-bottom: 100px;">
   <div class="d-flex justify-content-center">
     <div style="width: 90%">
       댓글 : {{ comments.length }}

@@ -3,7 +3,7 @@
     <div class="col-2" id="top_box_text"></div>
     <h5 class="col-8" id="top_box_text">크루</h5>
     <div class="col-2" id="top_box_text" @click="moveListSearch">
-      <img src="@/assets/icon/search.png" />
+      <img src="@/assets/icons/search.png" />
     </div>
   </div>
   <div class="container" style="margin-bottom: 20px">

@@ -15,7 +15,7 @@
           <h2 class="m-0; font-weight: 700;">{{ story.story_title }}</h2>
           <!-- 좋아요 기능 구현 -->
           <div class="like">
-            <span>{{story.like_user_count}}</span>
+            <span style="margin-left:5px;">{{story.like_user_count}}</span>
             <div>
               <i class="fa fa-solid fa-heart" :class="{activate: isLike, deactivate: !isLike}" 
               @click="likeStory" style="cursor:pointer; maring-left: 5px;"></i>
@@ -30,7 +30,7 @@
           <img :src="host + story.story_picture" alt="이미지 영역입니다." style="width:100%">
         </div>
         <div id="story-info">
-          <img :src="host + story.user_pk.image" height="60" width="60" style="margin: 0 auto; cursor:pointer" @click="moveToProfile">
+          <img :src="host + story.user_pk.image" height="60" width="60" style="margin: 0 auto; cursor:pointer; border-radius: 30px;" @click="moveToProfile">
           <div class="d-flex justify-content-between" style="padding: 20px 0 0 10px;">
             <span>{{ story.user_pk.nickname }} </span>
             <span>{{ story.created_at }}</span>
@@ -169,6 +169,7 @@ export default {
   width: 90%;
   display: grid;
   grid-template-columns: 15% auto;
+  margin-top: 10px;
 }
 
 
