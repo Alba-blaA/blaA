@@ -35,6 +35,33 @@ class StoreNoneImageCreateSerializer(serializers.ModelSerializer) :
     class Meta : 
         model = Store
         fields = '__all__'
+    
+    def create(self, validated_data):
+        instance = Store.objects.create(**validated_data)
+        if '맥주' in instance.name :
+            if '역전할머니맥주' in instance.name : 
+                instance.image = 'store/logo/맥주.png'
+            else : 
+                instance.image = 'store/logo/역전할머니맥주.jpg'
+        elif '스타벅스' in instance.name : 
+            instance.image = 'store/logo/스타벅스.jpeg'
+        elif '메가커피' in instance.name : 
+            instance.image = 'store/logo/메가커피.jpg'
+        elif '버거킹' in instance.name : 
+            instance.image = 'store/logo/버거킹.jpg'
+        elif '빽다방' in instance.name : 
+            instance.image = 'store/logo/빽다방.jpeg'
+        elif '서브웨이' in instance.name : 
+            instance.image = 'store/logo/서브웨이.jpg'
+        elif '아임일리터' in instance.name : 
+            instance.image = 'store/logo/아임일리터.png'
+        elif '이디야' in instance.name : 
+            instance.image = 'store/logo/이디야.jpeg'
+        elif '투썸플레이스' in instance.name : 
+            instance.image = 'store/logo/투썸플레이스.png'
+
+        instance.save()
+        return instance
 
 class StoryCreateSerializer(serializers.ModelSerializer) :
     class Meta : 
