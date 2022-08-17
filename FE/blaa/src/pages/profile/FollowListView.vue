@@ -213,16 +213,5 @@ export default {
 </script>
 
 <style>
-#profile {
-  width: 70px;
-  height: 70px;
-  border-radius: 70%;
-  overflow: hidden;
-}
 
-#imgProfile {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
 </style>

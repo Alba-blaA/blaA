@@ -1,23 +1,28 @@
 <template>
   <br />
-  <h3><b>크루</b></h3>
+ <h3 style="font-weight:bold;">내가 가입한 크루</h3>
   <hr />
 
-  <table v-for="crew in crews" :key="crew.crew_pk" style="width: 100%" @click.prevent="crewDetail(crew.crew_pk)">
-    <tr>
-      <td width="10px"></td>
-      <td id="crew">
-        <img id="imgCrew" :src="crew.crew_img" />
-      </td>
-      <td width="20px"></td>
-      <td>
+  <div class="container">
+    <div
+      v-for="crew in crews"
+      :key="crew.crew_pk"
+      style="width: 100%"
+      @click.prevent="crewDetail(crew.crew_pk)"
+    >
+      <div class="d-flex justify-content-around row" @click="crewDetail(crew.crew_pk)">
+      <img class="col-2" style="width: 5rem; height: 3.5rem; border-radius: 50%"  :src="crew.crew_img" />
+
+      <h5 class="col-5 mt-3 mb-0" style="font-weight: bold">
         <b>{{ crew.crew_name }}</b>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="100%"><hr /></td>
-    </tr>
-  </table>
+      </h5>
+      <div style="padding: 0%; margin-top: 4%;" class="col-2 material-symbols-outlined" >
+      arrow_forward_ios
+        </div>
+      </div>
+        <hr>
+    </div>
+  </div>  
 </template>
 
 <script>
@@ -63,16 +68,5 @@ export default {
 </script>
 
 <style>
-#crew {
-  width: 70px;
-  height: 70px;
-  border-radius: 70%;
-  overflow: hidden;
-}
 
-#imgCrew {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
 </style>
