@@ -35,7 +35,7 @@ export default {
 
     onMounted(async () => {
       await store.dispatch("crew/getCrewMembers", route.params.crew_pk);
-      All.members = store.state.crew.members.results;
+      All.members = store.state.crew.members;
     });
 
     const getMembers = async () => {

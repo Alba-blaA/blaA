@@ -51,8 +51,32 @@
 
       <label for="crew_explain">크루 설명</label><br />
       <textarea id="crew_explain" name="crew_explain" v-model="crew_explain" cols="35" rows="5"></textarea><br />
-      <label for="crew_region">크루 지역</label><br />
+
+      <label for="crew_region">크루 활동 지역</label><br />
       <input type="text" id="crew_region" name="crew_region" v-model="crew_region" />
+      <!-- <select id="crew_sido" class="select-value" v-model="crew_sido" @change="getGu(crew_sido)">
+        <option value="null">시/도</option>
+        <option :key="s" v-for="(si, s) in si_list" :value="si.sido_code">
+          {{ si.sido_name }}
+        </option>
+      </select>
+      &nbsp;
+
+      <select id="crew_gugun" v-model="crew_gugun" @change="getDong(crew_sido, crew_gugun)">
+        <option value="null">구/군</option>
+        <option :key="g" v-for="(gu, g) in gu_list" :value="gu.gugun_code">
+          {{ gu.gugun_name }}
+        </option>
+      </select>
+      &nbsp;
+
+      <select id="crew_dong" v-model="crew_dong">
+        <option value="null">동/면/리</option>
+        <option :key="d" v-for="(dong, d) in dong_list" :value="dong.dong_code">
+          {{ dong.dong_name }}
+        </option>
+      </select> -->
+
       <div class="row" style="text-align: center; padding-top: 20px">
         <div class="col">
           <button class="submit_button2" @click="moveList">목록</button>
@@ -68,7 +92,7 @@
 <script>
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 export default {
   setup() {
     const router = useRouter();
@@ -80,6 +104,26 @@ export default {
     const crew_region = ref("");
     const crew_img = ref(null);
     const is_business = ref(false);
+    // const crew_sido = ref("");
+    // const crew_gugun = ref("");
+    // const crew_dong = ref("");
+
+    // const category_list = computed(() => {
+    //   return store.state.account.category;
+    // });
+
+    // const si_list = computed(() => {
+    //   return store.state.account.si;
+    // });
+
+    // const gu_list = computed(() => {
+    //   return store.state.account.gu;
+    // });
+
+    // const dong_list = computed(() => {
+    //   return store.getters["account/dong_list"];
+    // });
+
     const moveToBusiness = () => {
       check.value = false;
       is_business.value = true;
@@ -110,6 +154,16 @@ export default {
       }
     };
     const crewRegist = async () => {
+      // var sido = document.getElementById("crew_sido");
+      // const sido_name = sido.options[sido.selectedIndex].text;
+      // var gugun = document.getElementById("crew_gugun");
+      // const gugun_name = gugun.options[gugun.selectedIndex].text;
+      // var dong = document.getElementById("crew_dong");
+      // const dong_name = dong.options[dong.selectedIndex].text;
+
+      // const region = sido_name + " " + gugun_name + " " + dong_name;
+      // console.log(region);
+
       const crewData = new FormData();
       crewData.append("crew_name", crew_name.value);
       crewData.append("crew_explain", crew_explain.value);
@@ -124,7 +178,7 @@ export default {
       }
     };
     const moveList = () => {
-      router.push({ name: "allcrewlist" });
+      router.push({ name: "crewlist" });
     };
     return {
       moveToBusiness,
@@ -140,6 +194,13 @@ export default {
       is_business,
       previewFile,
       moveList,
+      // crew_sido,
+      // crew_dong,
+      // crew_gugun,
+      // category_list,
+      // si_list,
+      // gu_list,
+      // dong_list,
     };
   },
 };

@@ -19,7 +19,7 @@ export default {
   mutations: {
     GET_REVIEWS(state, payload){
       // 검색을 할 떄 초기화
-      if (state.isSearch == payload.isSearch) {
+      if (state.isSearch == payload.isSearch && payload.page != 1 ) {
         for (let i=0; i<payload.data.length; i++){
           state.reviews.push(payload.data[i])
         }
@@ -41,12 +41,7 @@ export default {
       state.review.forEach(ele => {
         ele.created_at = yyyyMMdd(ele.created_at)
       })
-      // 버튼 점수의 비율 계산
-      if (state.review.length) {
-        for (let type in state.reviewBtn) {
-          state.reviewBtn[type] = (state.reviewBtn[type] / state.review.length)
-        }
-      }
+
     },
     GET_DETAIL_REVIEW(state, payload){
       const {
@@ -90,6 +85,7 @@ export default {
         const payload = {
           isSearch : data.isSearch,
           data: res.data.results,
+          page: data.page,
         }
         commit('UPDATE_TOTAL_REVIEWS', res.data.count)
         commit('GET_REVIEWS', payload)

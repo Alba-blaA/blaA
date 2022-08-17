@@ -53,6 +53,7 @@ export default {
                 console.log("kakao token : ", token);
                 store.commit("account/LOGIN", true);
                 store.commit("account/LOGIN_ERROR", false);
+
                 sessionStorage.setItem("token", token);
                 store.commit("account/SET_LOGIN_TOKEN", token);
                 console.log("로그인 성공");
@@ -77,6 +78,7 @@ export default {
 
     const setUserInfo = async () => {
       const data = await getKakaoUserInfo();
+      console.log("data : ", data);
       const kakaoUserInfo = {
         email: data.kakao_account.email,
         name: data.kakao_account.profile.nickname,

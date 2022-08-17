@@ -109,25 +109,6 @@ const accountStore = {
     SET_LOGIN_TOKEN: (state, token) => {
       state.loginToken = token;
     },
-    SAVE_STATE_TO_STORAGE: (state) => {
-      console.log("state.userInfo : ", state.userInfo);
-      sessionStorage.setItem("login-userInfo", JSON.stringify(state.userInfo));
-      sessionStorage.setItem("login-token", state.loginToken);
-    },
-    READ_STATE_FROM_STORAGE: (state) => {
-      if (JSON.parse(sessionStorage.getItem("login-userInfo")) != null) {
-        state.userInfo = JSON.parse(sessionStorage.getItem("login-userInfo"));
-      }
-      if (sessionStorage.getItem("login-token") != null) {
-        state.loginToken = sessionStorage.getItem("login-token");
-      }
-    },
-    RESET_STORAGE: (state) => {
-      state.userInfo = null;
-      state.loginToken = "";
-      sessionStorage.removeItem("login-userInfo");
-      sessionStorage.removeItem("login-token");
-    },
   },
   actions: {
     async userConfirm({ commit }, user) {
@@ -170,7 +151,6 @@ const accountStore = {
             console.log("변경된 userInfo", userInfo);
             commit("USER_INFO", userInfo);
             console.log("userInfo : ", userInfo);
-            commit("SAVE_STATE_TO_STORAGE");
           } else {
             console.log("유저 정보 없음");
           }
@@ -180,9 +160,6 @@ const accountStore = {
           console.log("getUserInfo 에러", error);
         }
       );
-    },
-    doReadStateFromStorage({ commit }) {
-      commit("READ_STATE_FROM_STORAGE");
     },
     getCategoryList(context) {
       axios.get(api.categorys.job()).then(({ data }) => {

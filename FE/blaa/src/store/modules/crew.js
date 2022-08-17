@@ -8,6 +8,7 @@ export default {
   state: {
     Token: sessionStorage.getItem("token"),
     AllCrews: [],
+    myCrews: [],
     articles: [],
     article: [],
     crewInfo: [],
@@ -18,6 +19,9 @@ export default {
   mutations: {
     GET_ALL_CREWS(state, payload) {
       state.AllCrews = payload;
+    },
+    GET_MY_CREW(state, payload) {
+      state.myCrews = payload;
     },
     IS_BUSINESS(state, payload) {
       state.crewInfo.is_business = payload;
@@ -57,7 +61,7 @@ export default {
     async getCrewArticle({ commit, state }, crew_pk) {
       try {
         const instance = await axios.get(api.crew.articles(crew_pk));
-        commit("GET_CREW_ARTICLES", instance.data);
+        commit("GET_CREW_ARTICLES", instance.data.results);
       } catch (error) {
         console.log(error);
       }
@@ -176,6 +180,7 @@ export default {
     async getCrewMembers({ commit, state }, crew_pk) {
       try {
         const instance = await axios.get(api.crew.members(crew_pk));
+        console.log(instance.data.results);
         commit("GET_CREW_MEMBERS", instance.data.results);
       } catch (error) {
         console.log(error);
@@ -278,6 +283,17 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    async getMyCrews(context, user_pk) {
+      await axios
+        .get(api.profile.myCrew(user_pk), {})
+        .then((response) => {
+          console.log("crew response", response);
+          context.commit("GET_MY_CREW", response.data.results);
+        })
+        .catch((err) => {
+          console.log("crew error : ", err);
+        });
     },
   },
   getters: {},

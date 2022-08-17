@@ -9,18 +9,18 @@
         :key="follower.user_pk"
         style="width: 100%"
       >
-          <div class="d-flex justify-content-between row">
-            <img
-              :src="follower.image"
-              style="width:5rem; height:3.5rem; border-radius: 50%;"
-              @click="userProfile(follower.user_pk)"
-            />
-            <h5 class="col-9 mt-3 mb-0"  style="font-weight: bold;">{{ follower.nickname }}</h5>
-          </div>
-          <hr>
-  
+        <div class="d-flex justify-content-between row">
+          <img
+            :src="follower.image"
+            style="width: 5rem; height: 3.5rem; border-radius: 50%"
+            @click="userProfile(follower.user_pk)"
+          />
+          <h5 class="col-9 mt-3 mb-0" style="font-weight: bold">
+            {{ follower.nickname }}
+          </h5>
+        </div>
+        <hr />
       </div>
-
     </div>
     <!-- <infinite-loading
       @infinite="infiniteHandler"
@@ -43,7 +43,9 @@
           style="width: 5rem; height: 3.5rem; border-radius: 50%"
           @click="userProfile(following.user_pk)"
         />
-        <h5 class="col-9 mt-3 mb-0"  style="font-weight: bold;">{{ following.nickname }}</h5>
+        <h5 class="col-9 mt-3 mb-0" style="font-weight: bold">
+          {{ following.nickname }}
+        </h5>
       </div>
       <hr />
       <!-- <infinite-loading
@@ -59,22 +61,24 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { ref, computed, onBeforeMount } from "vue";
 import axios from "@/api/axios.js";
+import api from "@/api/api.js";
 // import InfiniteLoading from "v3-infinite-loading";
 
 export default {
-  components: {
-    // InfiniteLoading,
-  },
+  // components: {
+  //   InfiniteLoading,
+  // },
   setup() {
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
 
-    const followerList = ref([]);
+    const followerList = store.state.profile.followerList;
     const followingList = store.state.profile.followingList;
 
     if (route.params.followType === "follower") {
       followerList.value = store.state.profile.followerList;
+      // store.dispatch("profile/getFollowerList", route.params.user_pk);
       console.log("followerList : ", followerList.value);
     } else {
       followingList.value = store.state.profile.followingList;
@@ -88,49 +92,76 @@ export default {
       return false;
     });
 
-    const followerCurrentPage = ref(1);
-    const totalFollowers = ref(0);
+    // const followerCurrentPage = ref(1);
+    // const totalFollowers = ref(0);
 
-    const getFollowers = async (page = followerCurrentPage.value) => {
-      const data = {
-        user_pk: route.params.user_pk,
-        type: "follower",
-        page: 1,
-      };
-      await store.dispatch("profile/getFollowerList", data);
-      console.log(data);
-      followerList.value = computed(() => {
-        console.log(
-          "profile followerList : ",
-          store.state.profile.followerList
-        );
-        return store.state.profile.followerList;
-      });
-      totalFollowers.value = computed(() => {
-        console.log("totalFollowers : ", store.state.profile.totalFollowers);
-        return store.state.profile.totalFollowers;
-      });
-    };
+    // const getFollowers = async (page = followerCurrentPage.value) => {
+    //   const data = {
+    //     user_pk: route.params.user_pk,
+    //     type: "follower",
+    //     page: 1,
+    //   };
+    //   await store.dispatch("profile/getFollowerList", route.params.user_pk, 1);
+    //   console.log("followerList data : ");
+    //   followerList.value = computed(() => {
+    //     console.log(
+    //       "profile followerList : ",
+    //       store.state.profile.followerList
+    //     );
+    //     return store.state.profile.followerList.results;
+    //   });
+    //   totalFollowers.value = computed(() => {
+    //     console.log("totalFollowers : ", store.state.profile.totalFollowers);
+    //     return store.state.profile.totalFollowers;
+    //   });
+    // };
 
-    onBeforeMount(async () => {
-      await getFollowers();
-    });
+    // onBeforeMount(async () => {
+    //   await getFollowers();
+    // });
 
-    const numberOfPages = computed(() => {
-      return Math.ceil(totalFollowers.value / 10);
-    });
+    // const numberOfPages = computed(() => {
+    //   return Math.ceil(totalFollowers.value / 10);
+    // });
 
-    window.onscroll = function (e) {
-      if (numberOfPages.value > followerCurrentPage.value) {
-        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-          setTimeout(function () {
-            followerCurrentPage.value += 1;
-            console.log("followerCurrentPage : ", followerCurrentPage.value);
-            getFollowers(followerCurrentPage.value);
-          }, 1000);
-        }
-      }
-    };
+    // window.onscroll = function (e) {
+    //   if (numberOfPages.value > followerCurrentPage.value) {
+    //     if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+    //       setTimeout(function () {
+    //         followerCurrentPage.value += 1;
+    //         console.log("followerCurrentPage : ", followerCurrentPage.value);
+    //         getFollowers(followerCurrentPage.value);
+    //       }, 1000);
+    //     }
+    //   }
+    // };
+    // const page = ref(1);
+    // const infiniteHandler = (state) => {
+    //   axios
+    //     .get(api.profile.myFollow(route.params.user_pk), {
+    //       params: {
+    //         type: "followers",
+    //         page: page.value,
+    //       },
+    //     })
+    //     .then((res) => {
+    //       setTimeout(() => {
+    //         if (res.data.results.length) {
+    //           followerList.value = followerList.value.concat(res.data.results);
+    //           state.loaded();
+    //           page.value += 1;
+    //           if (!res.data.next) {
+    //             state.complete();
+    //           }
+    //         } else {
+    //           state.complete();
+    //         }
+    //       }, 1000);
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // };
 
     // const infiniteHandler = async ($state) => {
     //   if (store.state.profile.followerList.next) {
@@ -170,10 +201,10 @@ export default {
       followerList,
       followingList,
       isFollower,
-      followerCurrentPage,
-      totalFollowers,
-      numberOfPages,
-      getFollowers,
+      // followerCurrentPage,
+      // totalFollowers,
+      // numberOfPages,
+      // getFollowers,
       // infiniteHandler,
       userProfile,
     };
@@ -182,16 +213,5 @@ export default {
 </script>
 
 <style>
-#profile {
-  width: 70px;
-  height: 70px;
-  border-radius: 70%;
-  overflow: hidden;
-}
 
-#imgProfile {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
 </style>

@@ -1,22 +1,26 @@
 <template>
 <div>
-  <StoryTopNavbar :isStory="isStory" :isFollow="isFollow" :isFilter="isFilter" @change="change"/>
-  <div v-if="isFilter">
-    <button class="btn" @click="isPopUp=true">검색</button>
-    <button class="btn m-1" @click="onCategory" :class="{ activate: isCategory, deactivate: !isCategory}">관심업종</button>
-    <button class="btn m-1" @click="onRegion" :class="{ activate: isRegion, deactivate: !isRegion}">근무지</button>
+  <div style="padding:10px;">
+    <StoryTopNavbar :isStory="isStory" :isFollow="isFollow" :isFilter="isFilter" @change="change"/>
+    <div v-if="isFilter" style="margin: 10px 0px;">
+      <button class="button" @click="isPopUp=true">검색</button>
+      <button class="button" @click="onCategory" :class="{ activate: isCategory }">관심업종</button>
+      <button class="button" @click="onRegion" :class="{ activate: isRegion }">근무지</button>
+    </div>
   </div>
+
   <!-- Modal -->
   <PopUp v-if="isPopUp">
     <HashTagForm @search-hash-tag="searchHastTag" @closeModal="[isPopUp=false, getPure()]"/>
-    <button type="button" class="btn btn-secondary" @click="[isPopUp=false, getPure()]">닫기</button>
-    <button type="button" class="btn btn-primary" @click="searchHastTagStory">검색</button>
+    <div class="buttons">
+      <button class="button" type="button" @click="[isPopUp=false, getPure()]">닫기</button>
+      <button class="button" type="button" @click="searchHastTagStory">검색</button>
+    </div>
   </PopUp>
   <div v-if="images.value">
     <StoryImageCardList :images="images.value"/>
   </div>
-  <p v-else>아직 불러오는 중이에요
-  </p>
+  <p v-else>해당하는 게시물이 없어요</p>
 </div>
 </template>
 
@@ -57,19 +61,16 @@ export default {
       howNow
     } = dataChange()
 
-    const getPure = async(page = currentPage.value) => {
-      if (isState.value == "") {currentPage.value = 1}
+    const getPure = async(page = currentPage.value) => {     
+      if (isState.value != "") {currentPage.value = 1}
       if (!hashTag.value.length) {
         isState.value = ""
         const data = {
           isState: isState,
-          page: page
+          page: currentPage.value
         }
         await store.dispatch('story/getImages', data)
         images.value = computed(() => {return store.state.story.images})
-        images.value.value.forEach(ele => {
-          ele.created_at = howNow(ele.created_at)
-        })
         numberOfPages.value = computed(() => {
           return  Math.ceil(store.state.story.totalCount / 10)
         })
@@ -87,7 +88,7 @@ export default {
     }
 
     const searchHastTagStory = async(page = currentPage.value) => {
-      if (isState.value == "hashtag") {currentPage.value = 1}
+      if (isState.value != "hashtag") {currentPage.value = 1}
       hashtag_content.value = ''
       isState.value = "hashtag"
       if(hashTag.value.length) {
@@ -100,13 +101,10 @@ export default {
         const data = {
           hashtag_content: hashtag_content.value,
           isState: isState,
-          page: page
+          page: currentPage.value
         }
         await store.dispatch('story/getHashtag', data)
         images.value = computed(() => {return store.state.story.images})
-        images.value.value.forEach(ele => {
-          ele.created_at = howNow(ele.created_at)
-        })
         numberOfPages.value = computed(() => {
           return  Math.ceil(store.state.story.totalCount / 10)
         })
@@ -117,29 +115,25 @@ export default {
     }
 
     const onCategory = async(page = currentPage.value) => {
-      if (isState.value == "category") {currentPage.value = 1}
+      if (isState.value != "category") {currentPage.value = 1}
       isState.value = "category"
       isCategory.value = !isCategory.value
       isRegion.value = false
 
-      watch(isState.value, (now, pre) => {
-          console.log(now, pre)
-        })
       // 관심업종이 커져있으면 해당 업종 검색
       if (isCategory.value) {
         const data = {
           isState: isState,
-          page: page
+          page: currentPage.value
         }
         await store.dispatch('story/getCategory', data)
         images.value = computed(() => {return store.state.story.images})
-        images.value.value.forEach(ele => {
-          ele.created_at = howNow(ele.created_at)
-        })
         numberOfPages.value = computed(() => {
           return  Math.ceil(store.state.story.totalCount / 10)
         })
       } else {
+        currentPage.value = 1
+        isState.value = ''
         getPure()
       }
     }
@@ -154,17 +148,16 @@ export default {
       if (isRegion.value) {
         const data = {
           isState: isState,
-          page: page
+          page: currentPage.value
         }
         await store.dispatch('story/getRegion', data)
         images.value = computed(() => {return store.state.story.images})
-        images.value.value.forEach(ele => {
-          ele.created_at = howNow(ele.created_at)
-        })
         numberOfPages.value = computed(() => {
           return  Math.ceil(store.state.story.totalCount / 10)
         })
       } else {
+        currentPage.value = 1
+        isState.value = ''
         getPure()
       }
     }
@@ -178,17 +171,22 @@ export default {
       if((window.innerHeight + window.scrollY) >= document.body.offsetHeight) { 
         setTimeout(function(){
         // 실행 시킬 함수 구현
-        currentPage.value += 1
-        
-        if( isState.value == '') {
-          getPure(currentPage.value)
-        } else if(isState.value == 'region') {
-          onRegion(currentPage.value)
-        } else if (isState.value == 'category') {
-          onCategory(currentPage.value)
-        } else if (isState.value == 'hashtag'){
-          searchHastTagStory(currentPage.value)
+
+        // 오류 방지 조건문
+        if (numberOfPages.value.value > currentPage.value) {
+          currentPage.value += 1
+          
+          if( isState.value == '') {
+            getPure(currentPage.value)
+          } else if(isState.value == 'region') {
+            onRegion(currentPage.value)
+          } else if (isState.value == 'category') {
+            onCategory(currentPage.value)
+          } else if (isState.value == 'hashtag'){
+            searchHastTagStory(currentPage.value)
+          }
         }
+
         }, 1000)}
       }
     }
@@ -214,10 +212,20 @@ export default {
 
 <style scoped>
 .activate {
-  background-color: greenyellow;
+  background-color: #498D6D;
 }
 
-.deactivate {
-  background-color: gray;
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.button {
+  border: 0;
+  padding: 5px 8px;
+  margin-right: 20px;
+  border-radius: 10px;
+  font-weight: 600;
 }
 </style>

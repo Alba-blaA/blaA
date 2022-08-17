@@ -1,9 +1,15 @@
 <template>
-  <div class="back_ground"></div>
+  <div
+    :class="{
+      back_ground_business: crewInfo.is_business,
+      back_ground_friends: !crewInfo.is_business,
+    }"
+  ></div>
   <div class="info_desk">
-    <!-- <img :src="host + crewInfo.crew_img" /> -->
     <div style="text-align: center; padding: 20px">
-      <img src="@/assets/crew_default1.png" />
+      <!-- <div v-if=""></div> -->
+      <img class="imgProfile" :src="crewInfo.crew_img" />
+      <!-- <img src="@/assets/crew_default1.png" /> -->
     </div>
     <div style="text-align: center">
       <h2 style="margin: 0">{{ crewInfo.crew_name }}</h2>
@@ -13,7 +19,7 @@
       <div class="col-5" style="padding-left: 40px">
         <!-- <p>{{ crewInfo.created_at }}</p> -->
         <h4>30일</h4>
-        <p>내 활동기간</p>
+        <p>활동기간</p>
       </div>
       <div class="col-2" style="display: flex; justify-content: center">
         <div class="v-line"></div>
@@ -23,7 +29,15 @@
         <p>참여인원</p>
       </div>
     </div>
-    <div class="joinBtn" @click="crewJoin(crewInfo.crew_pk)">가입하기</div>
+    <div
+      :class="{
+        joinBtn_business: crewInfo.is_business,
+        joinBtn_friends: !crewInfo.is_business,
+      }"
+      @click="crewJoin(crewInfo.crew_pk)"
+    >
+      가입하기
+    </div>
   </div>
   <br />
   <div style="position: relative; margin-top: 200px">
@@ -39,7 +53,7 @@
 
     <div v-show="isInfo">
       <div class="detail">
-        <h4>우리 크루를 소개합니다!</h4>
+        <p id="semi_title_text">우리 크루를 소개합니다!</p>
         <p>
           안녕하세요, {{ crewInfo.crew_name }} 입니다.<br />
           크루 설명: {{ crewInfo.crew_explain }}
@@ -47,17 +61,19 @@
       </div>
       <hr />
       <div class="detail">
-        <h4>위치</h4>
+        <p id="semi_title_text">위치</p>
         <p>박찬 지도 띄워줘</p>
       </div>
       <hr />
       <div class="detail">
-        <h4>크루장</h4>
+        <p id="semi_title_text">크루장</p>
         <p>{{ crewInfo.crew_leader }}</p>
       </div>
     </div>
+
     <div v-show="isFeed">
-      <router-view :isMember="isMember" style="margin: 30px"></router-view>
+      <article-list :isMember="isMember" style="margin: 0"></article-list>
+      <!-- <router-view :isMember="isMember" style="margin: 30px"></router-view> -->
     </div>
 
     <!-- <button @click="moveToArticle">Article</button>
@@ -72,7 +88,11 @@
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { onMounted, reactive, ref } from "vue";
+import ArticleList from "@/components/crew/article/ArticleList.vue";
 export default {
+  components: {
+    ArticleList,
+  },
   setup() {
     const store = useStore();
     const route = useRoute();
@@ -91,6 +111,7 @@ export default {
     onMounted(async () => {
       await store.dispatch("crew/getCrewInfo", route.params.crew_pk);
       await store.dispatch("crew/getCrewMembers", route.params.crew_pk);
+      // await store.dispatch("")
 
       Object.assign(crewInfo, store.state.crew.crewInfo);
       Object.assign(crewMember.value, store.state.crew.members);
@@ -118,20 +139,8 @@ export default {
       isFeed.value = true;
     };
 
-    const moveToArticle = () => {
-      router.push({ name: "articlelist" });
-    };
-
-    const moveToCalendar = () => {
-      router.push({ name: "schedule" });
-    };
-
     const moveToDetail = () => {
       router.push({ name: "crewdetail", params: { crew_pk: crewInfo.crew_pk } });
-    };
-
-    const moveToMember = () => {
-      router.push({ name: "crewmemberlist", params: { crew_pk: crewInfo.crew_pk } });
     };
 
     // getCrewInfo();
@@ -150,10 +159,7 @@ export default {
     return {
       crewInfo,
       // getCrewInfo,
-      moveToArticle,
-      moveToCalendar,
       moveToDetail,
-      moveToMember,
       crewJoin,
       Info,
       Feed,
@@ -166,11 +172,18 @@ export default {
 </script>
 
 <style scoped>
-.back_ground {
+.back_ground_business {
   height: 179px;
   z-index: -1;
 
   background-color: #498d6d;
+}
+
+.back_ground_friends {
+  height: 179px;
+  z-index: -1;
+
+  background-color: #ffcd38;
 }
 
 .info_desk {
@@ -181,14 +194,14 @@ export default {
   margin: auto;
   width: 320px;
 
-  background: #ffffff;
+  background-color: #ffffff;
   box-shadow: 0px 4px 80px rgba(0, 0, 0, 0.07), 0px 0.893452px 17.869px rgba(0, 0, 0, 0.0417275), 0px 0.266004px 5.32008px rgba(0, 0, 0, 0.0282725);
   border-radius: 30px;
 
   /* animation: fadeInUp 1s; */
 }
 
-.joinBtn {
+.joinBtn_business {
   display: flex;
   width: 207px;
   height: 30px;
@@ -199,6 +212,21 @@ export default {
   margin-bottom: 20px;
 
   background: #498d6d;
+  color: #ffffff;
+  border-radius: 20px;
+}
+
+.joinBtn_friends {
+  display: flex;
+  width: 207px;
+  height: 30px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: auto;
+  margin-bottom: 20px;
+
+  background: #ffcd38;
   color: #ffffff;
   border-radius: 20px;
 }
@@ -220,10 +248,22 @@ hr {
 .detail {
   margin: 30px;
 }
+
+.imgProfile {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+#semi_title_text {
+  font-weight: 600;
+  font-size: 18px;
+}
+
 /* @keyframes fadeInUp {
   0% {
     opacity: 0;
-    transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 20%, 0);
   }
   to {
     opacity: 1;

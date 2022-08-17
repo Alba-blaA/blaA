@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex justify-content-center">
+  <div class="d-flex justify-content-center main">
     <div style="width: 90%">
       <!-- 상단 가게 정보 div -->
       <div>
@@ -43,7 +43,7 @@
           border-radius: 20px;
           height:15px;"
 
-          :style="{width: (value * (77/100)) + '%'}"
+          :style="{width: barWidth.value * value / 100 + 'px'}"
           >
           
         </div>
@@ -55,6 +55,8 @@
           z-index: 0;
           padding: 0;
           margin-right: 20px;"
+
+          id="barWidth"
           >
         </div>
         <span style="font-weight: 700; font-size: 15px;">{{value}}%</span>
@@ -78,7 +80,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { computed, onMounted, ref } from 'vue'
 import CommentDetail from '@/components/review/CommentDetail.vue'
-// import $ from 'jquery'
+import $ from 'jquery'
 
 export default {
   components: {
@@ -95,6 +97,7 @@ export default {
     const like = ref(false)
     const user_pk = store.state.account.userInfo.user_pk
     const person = ref(0)
+    const barWidth = ref(0)
 
     // 처음 시작될 때 실행
     onMounted(async() => {
@@ -103,11 +106,23 @@ export default {
       // 별점, 버튼, 날짜 변환
       star.value = computed(() => {return store.state.review.reviewStar})
       types.value = computed(() => {return store.state.review.reviewBtn})
-      score.value = (star.value.value * 20)
+      // 조정
+      score.value = (star.value.value * 20) - 1.5
       person.value = computed(() => {return review.value.value.length})
+      // for문으로 인해 바로 로딩이 안되서 대기 시간을 부여
+      setTimeout(() => {
+        barWidth.value = computed(() => {
+          return $('#barWidth').width()
+        })
+      }, 50)
     })
 
-
+    $(window).resize(function() {
+      barWidth.value = computed(() => {
+        return $('#barWidth').width()
+      })
+    })
+    
     return {
       like,
       star,
@@ -116,13 +131,17 @@ export default {
       store_name,
       score,
       user_pk,
-      person
+      person,
+      barWidth
     }
   }
 }
 </script>
 
 <style scoped>
+.main {
+  padding-top:24px;
+}
 /* 유저 리뷰 css */
 .userReview {
   background-color:  #F8F9FE;
@@ -170,6 +189,10 @@ export default {
 .button-review p {
   font-weight: 700;
   font-size: 15px;
+}
+
+.userReview {
+  margin-bottom: 10px;
 }
 
 /* 하트 css */

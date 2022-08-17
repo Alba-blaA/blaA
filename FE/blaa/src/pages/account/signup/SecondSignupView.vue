@@ -31,26 +31,28 @@
       <small>{{ emailMessage }}</small>
       <br />
 
-      <label for="signup-password"> 비밀번호 </label>
-      <input
-        id="signup-password"
-        type="password"
-        v-model="user.password"
-        placeholder="Password"
-        autocomplete="off"
-      />
-      <small>{{ passwordMessage }}</small>
-      <br /><br />
+      <b id="password-form">
+        <label v-if="!kakaoLogin" for="signup-password"> 비밀번호 </label>
+        <input
+          id="signup-password"
+          type="password"
+          v-model="user.password"
+          placeholder="Password"
+          autocomplete="off"
+        />
+        <small>{{ passwordMessage }}</small>
+        <br /><br />
 
-      <label for="signup-checkpassword"> 비밀번호 확인 </label>
-      <input
-        id="signup-checkpassword"
-        type="password"
-        placeholder="Password"
-        autocomplete="off"
-      />
-      <small>{{ checkPasswordMessage }}</small>
-      <br /><br />
+        <label for="signup-checkpassword"> 비밀번호 확인 </label>
+        <input
+          id="signup-checkpassword"
+          type="password"
+          placeholder="Password"
+          autocomplete="off"
+        />
+        <small>{{ checkPasswordMessage }}</small>
+        <br /><br />
+      </b>
 
       <label for="signup-name"> 이름 </label>
       <input
@@ -74,17 +76,10 @@
       <small>{{ telMessage }}</small>
       <br /><br />
       <div>
-        <button id="btn-before" @click.prevent="before">이전</button> &nbsp;
-        <button id="btn-next" @click.prevent="next">다음</button>
+        <button class="btn-before" @click.prevent="before">이전</button> &nbsp;
+        <button class="btn-next" @click.prevent="next">다음</button>
       </div>
     </form>
-
-    <!-- 
-
-      <b id="password-form">
-        
-      </b>
- -->
   </div>
 </template>
 
@@ -121,13 +116,14 @@ export default {
       console.log("kakaoLogin : ", kakaoLogin);
       if (kakaoLogin) {
         user.value.email = store.state.account.kakaoUserInfo.email;
+        console.log(user.value.email);
         document.getElementById("signup-email").disabled = true;
         document.getElementById("btnEmailCheck");
 
         user.value.password = cookies.get("access-token");
         document.getElementById("signup-password").style.display = "none";
         document.getElementById("signup-checkpassword").style.display = "none";
-        document.getElementById("password-form").innerHTML = "";
+        document.getElementById("password-form").textContent = "";
 
         user.value.name = store.state.account.kakaoUserInfo.name;
         document.getElementById("signup-name").disabled = true;
@@ -290,7 +286,36 @@ export default {
   width: 100%;
   height: 100%;
   padding-top: 70px;
+
+  /* -webkit-animation: slide-in-right 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    both;
+  animation: slide-in-right 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; */
 }
+/* 
+@-webkit-keyframes slide-in-right {
+  0% {
+    -webkit-transform: translateX(1000px);
+    transform: translateX(1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes slide-in-right {
+  0% {
+    -webkit-transform: translateX(1000px);
+    transform: translateX(1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    opacity: 1;
+  }
+} */
 
 #signup-top {
   margin-top: 40px;
@@ -426,7 +451,7 @@ input:focus {
   color: #d9d9d9;
 }
 
-#btn-before {
+.btn-before {
   width: 100px;
   height: 40px;
   border: 2px solid #eec95c;
@@ -438,7 +463,7 @@ input:focus {
   font-weight: 500;
 }
 
-#btn-next {
+.btn-next {
   width: 100px;
   height: 40px;
   background: #eec95c;
