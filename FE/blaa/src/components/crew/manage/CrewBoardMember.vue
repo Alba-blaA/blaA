@@ -35,10 +35,10 @@
   <div style="position: relative; margin-top: 150px">
     <hr />
     <div class="row" style="margin-left: 20px; margin-right: 20px">
-      <h5 style="color: #498d6d">내가 고정한 게시물</h5>
+      <h6 style="color: #498d6d">고정 게시물</h6>
     </div>
 
-    <div class="pin_article" style="margin: 20px">
+    <div class="pin_article">
       <p>여기 고정된 게ㅣ시물</p>
     </div>
     <hr />
@@ -179,7 +179,7 @@ export default {
   box-shadow: 0px 4px 80px rgba(0, 0, 0, 0.07), 0px 0.893452px 17.869px rgba(0, 0, 0, 0.0417275), 0px 0.266004px 5.32008px rgba(0, 0, 0, 0.0282725);
   border-radius: 30px;
 
-  animation: fadeInUp 1s;
+  /* animation: fadeInUp 1s; */
 }
 
 .joinBtn_business {
@@ -239,7 +239,8 @@ hr {
 .pin_article {
   height: 150px;
   text-align: center;
-  padding: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
 
   background-color: #498d6d;
   border-radius: 20px;
@@ -259,7 +260,12 @@ hr {
   margin-left: 30px;
 }
 
-@keyframes fadeInUp {
+#semi_title_text {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+/* @keyframes fadeInUp {
   0% {
     opacity: 0;
     transform: translate3d(0, 20%, 0);
@@ -268,5 +274,5 @@ hr {
     opacity: 1;
     transform: translateZ(0);
   }
-}
+} */
 </style>

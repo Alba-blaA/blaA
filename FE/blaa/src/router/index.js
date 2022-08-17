@@ -110,7 +110,7 @@ const router = createRouter({
     {
       path: "/crew",
       name: "crew",
-      redirect: "/crew/list/alllist",
+      redirect: "/crew/list",
       component: Crew,
       children: [
         {
@@ -225,13 +225,13 @@ const router = createRouter({
           ],
         },
         {
-          path: "regist:crew_pk",
+          path: "regist/:crew_pk",
           name: "articleregist",
           component: () => import("@/components/crew/article/ArticleRegist.vue"),
         },
 
         {
-          path: "user",
+          path: "user/:crew_pk",
           name: "crewmemberlist",
           component: () => import("@/components/crew/member/CrewMemberList.vue"),
         },

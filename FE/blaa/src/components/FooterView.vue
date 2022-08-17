@@ -56,7 +56,7 @@ export default {
   bottom: 0px;
   left: 0px;
   width: 100%;
-  height: 68px;
+  height: 65px;
   z-index: 100;
   border-top: 1px solid black;
   background-color: white;

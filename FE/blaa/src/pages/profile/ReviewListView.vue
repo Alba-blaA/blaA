@@ -1,32 +1,25 @@
 <template>
   <br />
-  <h3><b>리뷰</b></h3>
+  <h3 style="font-weight:bold;">내가 쓴 리뷰</h3>
   <hr />  
-  <table v-for="review in reviews" :key="review.review_pk" style="width: 100%">
-    <tr>
-      <td width="10px"></td>
-      <td id="store">
-        <img id="imgStore" :src="review.store_image" />
-      </td>
-      <td width="20px"></td>
-      <td>
+
+  <div class="container">
+  <div v-for="review in reviews" :key="review.review_pk" style="width: 100%">
+    <div class="d-flex justify-content-around row" @click="
+          reviewDetail(review.store_pk, review.store_name, review.review_pk)">
+        <img class="col-2" style="width: 5rem; height: 3.5rem; border-radius: 50%" :src="review.store_image" />
+
+      <h5 class="col-5 mt-3 mb-0" style="font-weight: bold">
         <b>{{ review.store_name }}</b>
-      </td>
-      <td
-        rowspan="2"
-        @click="
-          reviewDetail(review.store_pk, review.store_name, review.review_pk)
-        "
-      >
-        <h3>
-          <b>></b>
-        </h3>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="100%"><hr /></td>
-    </tr>
-  </table>
+      </h5>
+      <div style="padding: 0%; margin-top: 4%;" class="col-2 material-symbols-outlined" >
+      arrow_forward_ios
+      </div>
+
+    </div>
+    <hr>
+  </div> 
+  </div>
 </template>
 
 <script>
@@ -80,16 +73,12 @@ export default {
 </script>
 
 <style>
-#store {
-  width: 70px;
-  height: 70px;
-  border-radius: 70%;
-  overflow: hidden;
-}
 
-#imgStore {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
 }
 </style>
