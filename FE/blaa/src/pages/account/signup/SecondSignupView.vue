@@ -67,11 +67,11 @@
       <label for="signup-tel"> 휴대폰 </label> <br />
 
       <div id="input-tel">
-        <input id="signup-tel1" type="number" v-model="user.tel1" />
+        <input id="signup-tel1" type="text" v-model="user.tel1" />
         <b class="tel-text"> - </b>
-        <input id="signup-tel2" type="number" v-model="user.tel2" />
+        <input id="signup-tel2" type="text" v-model="user.tel2" />
         <b class="tel-text"> - </b>
-        <input id="signup-tel3" type="number" v-model="user.tel3" />
+        <input id="signup-tel3" type="text" v-model="user.tel3" />
       </div>
       <small>{{ telMessage }}</small>
       <br /><br />

@@ -69,6 +69,8 @@
 import { useStore } from "vuex";
 import { ref, computed } from "vue";
 import router from "@/router/index.js";
+import axios from "@/api/axios.js";
+import api from "@/api/api.js";
 
 export default {
   setup() {
@@ -119,6 +121,10 @@ export default {
       window.Kakao.Auth.authorize(params);
     };
 
+    const getMyCrewList = async() => {
+      await axios.get()
+    }
+
     return {
       user,
       isLoginError,
@@ -126,6 +132,7 @@ export default {
       confirm,
       register,
       kakaoLogin,
+      getMyCrewList,
     };
   },
 };
