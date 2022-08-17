@@ -33,7 +33,12 @@ const profileStore = {
       state.totalFollowers = followers;
     },
     GET_FOLLOWING_LIST: (state, followingList) => {
-      state.followingList = followingList;
+      state.followingList.count = followingList.count;
+      state.followingList.previous = followingList.previous;
+      state.followingList.next = followingList.next;
+      for (var i = 0; i < followingList.results.length; i++) {
+        state.followingList.results.push(followingList.results[i]);
+      }
     },
     GET_MY_STORY: (state, myStory) => {
       state.myStory = myStory;
@@ -57,11 +62,12 @@ const profileStore = {
         })
         .catch((err) => {});
     },
-    async getFollowerList(context, user_pk) {
+    async getFollowerList(context, data) {
       await axios
-        .get(api.profile.myFollow(user_pk), {
+        .get(api.profile.myFollow(data.user_pk), {
           params: {
             type: "follower",
+            page: data.page,
           },
         })
         .then((response) => {
@@ -84,11 +90,12 @@ const profileStore = {
           console.log(err);
         });
     },
-    async getFollowingList(context, user_pk) {
+    async getFollowingList(context, data) {
       await axios
-        .get(api.profile.myFollow(user_pk), {
+        .get(api.profile.myFollow(data.user_pk), {
           params: {
             type: "following",
+            page: data.page,
           },
         })
         .then((response) => {

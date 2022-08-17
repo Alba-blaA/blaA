@@ -88,7 +88,7 @@ import { ref, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useCookies } from "vue3-cookies";
 import router from "@/router/index.js";
-import axios from "axios";
+import axios from "@/api/axios.js";
 import api from "@/api/api.js";
 
 export default {

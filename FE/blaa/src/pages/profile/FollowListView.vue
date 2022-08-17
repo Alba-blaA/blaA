@@ -22,10 +22,6 @@
         <hr />
       </div>
     </div>
-    <!-- <infinite-loading
-      @infinite="infiniteHandler"
-      spinner="waveDots"
-    ></infinite-loading> -->
   </div>
 
   <div v-else>
@@ -48,10 +44,6 @@
         </h5>
       </div>
       <hr />
-      <!-- <infinite-loading
-        @infinite="infiniteHandler"
-        spinner="waveDots"
-      ></infinite-loading> -->
     </div>
   </div>
 </template>
@@ -62,12 +54,8 @@ import { useStore } from "vuex";
 import { ref, computed, onBeforeMount } from "vue";
 import axios from "@/api/axios.js";
 import api from "@/api/api.js";
-// import InfiniteLoading from "v3-infinite-loading";
 
 export default {
-  // components: {
-  //   InfiniteLoading,
-  // },
   setup() {
     const route = useRoute();
     const router = useRouter();
@@ -76,13 +64,16 @@ export default {
     const followerList = store.state.profile.followerList;
     const followingList = store.state.profile.followingList;
 
+    const currentPage = ref(1);
+    const numberOfPages = ref(1);
+
     if (route.params.followType === "follower") {
       followerList.value = store.state.profile.followerList;
       // store.dispatch("profile/getFollowerList", route.params.user_pk);
       console.log("followerList : ", followerList.value);
     } else {
       followingList.value = store.state.profile.followingList;
-      console.log("followwingList : ", followingList.value);
+      console.log("followingList : ", followingList.value);
     }
 
     const isFollower = computed(() => {
@@ -92,100 +83,38 @@ export default {
       return false;
     });
 
-    // const followerCurrentPage = ref(1);
-    // const totalFollowers = ref(0);
+    const getMoreList = async(page = currentPage.value) => {
+      const data = {
+          page: currentPage.value,
+          user_pk: route.params.user_pk,
+      };
+      
+      if(isFollower.value) {  
+        await store.dispatch("profile/getFollowerList", data);
+        numberOfPages.value = computed(() => {
+          return Math.ceil(followerList.value.count / 10);
+        });
+      } else {
+        await store.dispatch("profile/getFollowingList", data);
+        numberOfPages.value = computed(() => {
+          return Math.ceil(followingList.value.count / 10);
+        });
+      }
+    };
 
-    // const getFollowers = async (page = followerCurrentPage.value) => {
-    //   const data = {
-    //     user_pk: route.params.user_pk,
-    //     type: "follower",
-    //     page: 1,
-    //   };
-    //   await store.dispatch("profile/getFollowerList", route.params.user_pk, 1);
-    //   console.log("followerList data : ");
-    //   followerList.value = computed(() => {
-    //     console.log(
-    //       "profile followerList : ",
-    //       store.state.profile.followerList
-    //     );
-    //     return store.state.profile.followerList.results;
-    //   });
-    //   totalFollowers.value = computed(() => {
-    //     console.log("totalFollowers : ", store.state.profile.totalFollowers);
-    //     return store.state.profile.totalFollowers;
-    //   });
-    // };
+    window.onscroll = function(e) {
+      if(numberOfPages.value.value > currentPage.value) {
+        if((window.innerHeight + window.scrollY) >= document.body.offsetHeight) { 
+          setTimeout(function(){
+            if(numberOfPages.value.value > currentPage.value) {
+              currentPage.value += 1;
 
-    // onBeforeMount(async () => {
-    //   await getFollowers();
-    // });
-
-    // const numberOfPages = computed(() => {
-    //   return Math.ceil(totalFollowers.value / 10);
-    // });
-
-    // window.onscroll = function (e) {
-    //   if (numberOfPages.value > followerCurrentPage.value) {
-    //     if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-    //       setTimeout(function () {
-    //         followerCurrentPage.value += 1;
-    //         console.log("followerCurrentPage : ", followerCurrentPage.value);
-    //         getFollowers(followerCurrentPage.value);
-    //       }, 1000);
-    //     }
-    //   }
-    // };
-    // const page = ref(1);
-    // const infiniteHandler = (state) => {
-    //   axios
-    //     .get(api.profile.myFollow(route.params.user_pk), {
-    //       params: {
-    //         type: "followers",
-    //         page: page.value,
-    //       },
-    //     })
-    //     .then((res) => {
-    //       setTimeout(() => {
-    //         if (res.data.results.length) {
-    //           followerList.value = followerList.value.concat(res.data.results);
-    //           state.loaded();
-    //           page.value += 1;
-    //           if (!res.data.next) {
-    //             state.complete();
-    //           }
-    //         } else {
-    //           state.complete();
-    //         }
-    //       }, 1000);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // };
-
-    // const infiniteHandler = async ($state) => {
-    //   if (store.state.profile.followerList.next) {
-    //     await axios
-    //       .get(store.state.profile.followerList.next)
-    //       .then((response) => {
-    //         console.log("추가 팔로워리스트 : ", response.data);
-    //         const followerData = ref({});
-    //         followerData.value = response.data;
-
-    //         store.commit("profile/GET_FOLLOWER_LIST", followerData);
-    //       });
-    //     setTimeout(() => {
-    //       console.log(
-    //         "페이지 추가 followerlist : ",
-    //         store.state.profile.followerList
-    //       );
-    //       followerList.value = store.state.profile.followerList.results;
-    //       $state.loaded();
-    //     }, 1000);
-    //   } else {
-    //     $state.complete();
-    //   }
-    // };
+              getMoreList();
+            }
+          }, 1000)
+        }
+      }
+    } 
 
     const userProfile = (user_pk) => {
       console.log("다른 유저 프로필 페이지 이동");
@@ -201,11 +130,9 @@ export default {
       followerList,
       followingList,
       isFollower,
-      // followerCurrentPage,
-      // totalFollowers,
-      // numberOfPages,
-      // getFollowers,
-      // infiniteHandler,
+      getMoreList,
+      currentPage,
+      numberOfPages,
       userProfile,
     };
   },

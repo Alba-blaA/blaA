@@ -98,7 +98,6 @@ export default {
       console.log("Login Token : ", token);
       if (isLogin.value) {
         await store.dispatch("account/getUserInfo", token);
-        // await store.commit("account/USER_INFO")
         console.log("로그인 성공!!!!!");
         await getMyCrewList();
         router.push("/story");
@@ -115,9 +114,8 @@ export default {
 
     const kakaoLogin = () => {
       const params = {
-        redirectUri: "https://i7b209.p.ssafy.io/kakao",
-        // redirectUri: "http://localhost:3000/kakao",
-        // redirectUri: "http://127.0.0.1:8000/account/sign-in/kakao/callback",
+        // redirectUri: "https://i7b209.p.ssafy.io/kakao",
+        redirectUri: "http://localhost:3000/kakao",
       };
       window.Kakao.Auth.authorize(params);
     };
