@@ -14,11 +14,12 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 # Create your views here.
 from .serializers.hashtag import HashtagSerializer,HashtagFilterSerializer
-
+from datetime import datetime
 @api_view(['GET', 'POST'])
 def story_list_or_create(request):
     
     def story_list():
+        print(datetime.today().day )
         story = Story.objects.all().order_by('-created_at')
         cnt = {'count':story.count()}
         paginator = Paginator(story, 10) # Show 25 contacts per page.
