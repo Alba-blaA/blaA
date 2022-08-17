@@ -55,12 +55,16 @@
       </tr>
     </table>
   </div>
-  <hr>
+  <hr />
   <div>
-      <button
-        class="profile_list"
-       style="border:0; outline:0; background-color: white; font-size: 1.2rem; "
-       type="button" @click="startChat(userProfile.user_pk, userProfile.nickname)">{{ userProfile.nickname }}와 채팅하기</button>
+    <button
+      class="profile_list"
+      style="border: 0; outline: 0; background-color: white; font-size: 1.2rem"
+      type="button"
+      @click="startChat(userProfile.user_pk, userProfile.nickname)"
+    >
+      {{ userProfile.nickname }}와 채팅하기
+    </button>
   </div>
   <hr />
   <div @click="userReview">
@@ -134,8 +138,11 @@ export default {
           console.log("err", err);
         });
 
-      for (var i = 0; i < myFollowingList.value.length; i++) {
-        console.log("myfollowingList user_pk", myFollowingList.value[i].user_pk);
+      for (var i = 0; i < myFollowingList.value[i].length; i++) {
+        console.log(
+          "myfollowingList user_pk",
+          myFollowingList.value[i].user_pk
+        );
         console.log("userProfile user_pk", userProfile.value.user_pk);
         if (myFollowingList.value[i].user_pk == userProfile.value.user_pk) {
           followMessage.value = "Unfollow";
@@ -152,8 +159,8 @@ export default {
       console.log("followMessage : ", followMessage);
     });
 
-    if(route.params.user_pk == store.state.account.userInfo.user_pk) {
-      router.push({name: 'Profile'});
+    if (route.params.user_pk == store.state.account.userInfo.user_pk) {
+      router.push({ name: "Profile" });
     }
 
     const follow = true;
@@ -165,12 +172,13 @@ export default {
 
     const startChat = (from_userpk, from_usernickname) => {
       console.log("채팅 시작하기");
-      router.push({ name: 'chat',
-      params: {
-        from_userpk: from_userpk,
-        from_usernickname : from_usernickname
-      }}
-      )
+      router.push({
+        name: "chat",
+        params: {
+          from_userpk: from_userpk,
+          from_usernickname: from_usernickname,
+        },
+      });
     };
 
     const btnFollow = async () => {
@@ -178,7 +186,7 @@ export default {
       // followMessage.value = "Unfollow";
       await axios
         .post(api.profile.follow(route.params.user_pk))
-        .then(async(response) => {
+        .then(async (response) => {
           console.log("follow start response : ", response);
           const result = response.data.result;
           const arr = result.split(" ");

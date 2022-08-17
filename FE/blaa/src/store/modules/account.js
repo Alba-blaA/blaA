@@ -190,6 +190,19 @@ const accountStore = {
           context.commit("GET_DONG_LIST", data);
         });
     },
+    async getMyCrewList(context, user_pk) {
+      console.log("user_pk : ", user_pk);
+      await axios
+        .get(api.profile.myCrew(user_pk))
+        .then((response) => {
+          console.log("crew list : ", response.data);
+          const crew = response.data;
+          context.commit("ADD_MY_CREW", crew);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
 };
 

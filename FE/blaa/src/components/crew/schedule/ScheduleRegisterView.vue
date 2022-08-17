@@ -1,16 +1,10 @@
 <template>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br> 
+  <br>  
    
-    <div class="calendarbox ">
+    <div class="calendarbox">
       <br>
-      <DatePicker v-model="range" mode = "dateTime" is-range  is-expanded>
+      <DatePicker style="overflow: scroll;" v-model="range" mode = "dateTime" is-range  is-expanded>
         <template v-slot = "{ inputValue, inputEvents }">
-        <br>        
-        <h1 class="d-flex justify-content-center"><b>스케줄 등록</b></h1>        
         <hr>
           <div class="group">
             <label class="button groupItem" for="start">Start &nbsp;</label>
@@ -36,8 +30,7 @@
           <div class="d-flex justify-content-center">
             <b-button pill variant="success" @click.prevent="showtime(inputValue.start, inputValue.end)">등록하기</b-button>
             <div>&nbsp;</div>  
-            <b-button pill variant="outline-danger" @click="moveToSchedule">뒤로가기</b-button>
-            
+            <b-button pill variant="outline-danger" @click="moveToSchedule">뒤로가기</b-button>            
           </div>
           <br>
         </template>
