@@ -110,19 +110,19 @@ const router = createRouter({
     {
       path: "/crew",
       name: "crew",
-      redirect: "/crew/list/alllist",
+      redirect: "/crew/list",
       component: Crew,
       children: [
         {
           path: "regist",
           name: "crewregistview",
           redirect: { name: "crewregist" },
-          component: () => import("@/components/crew/manage/CrewRegistView.vue"),
+          component: () => import("@/components/crew/manage/regist/CrewRegistView.vue"),
           children: [
             {
               path: "",
               name: "crewregist",
-              component: () => import("@/components/crew/manage/CrewRegistInput.vue"),
+              component: () => import("@/components/crew/manage/regist/CrewRegistInput.vue"),
             },
           ],
         },
@@ -190,11 +190,6 @@ const router = createRouter({
               component: () => import("@/components/crew/article/ArticleList.vue"),
             },
             {
-              path: "/crew/m/:crew_pk/detail/:crew_article_pk",
-              name: "articledetail",
-              component: () => import("@/components/crew/article/ArticleDetail.vue"),
-            },
-            {
               path: ":crew_article_pk",
               name: "articlemodify",
               component: () => import("@/components/crew/article/ArticleModify.vue"),
@@ -214,13 +209,18 @@ const router = createRouter({
           ],
         },
         {
-          path: "regist:crew_pk",
+          path: "article/detail/:crew_article_pk",
+          name: "articledetail",
+          component: () => import("@/components/crew/article/ArticleDetail.vue"),
+        },
+        {
+          path: "regist/:crew_pk",
           name: "articleregist",
           component: () => import("@/components/crew/article/ArticleRegist.vue"),
         },
 
         {
-          path: "user",
+          path: "user/:crew_pk",
           name: "crewmemberlist",
           component: () => import("@/components/crew/member/CrewMemberList.vue"),
         },

@@ -69,6 +69,8 @@
 import { useStore } from "vuex";
 import { ref, computed } from "vue";
 import router from "@/router/index.js";
+import axios from "@/api/axios.js";
+import api from "@/api/api.js";
 
 export default {
   setup() {
@@ -98,6 +100,7 @@ export default {
         await store.dispatch("account/getUserInfo", token);
         // await store.commit("account/USER_INFO")
         console.log("로그인 성공!!!!!");
+        await getMyCrewList();
         router.push("/story");
       } else {
         console.log("isLogin : ", store.state.account.isLogin);
@@ -119,6 +122,17 @@ export default {
       window.Kakao.Auth.authorize(params);
     };
 
+    const getMyCrewList = async() => {
+      console.log("user_pk : ", store.state.account.userInfo.user_pk)
+      await axios.get(api.profile.myCrew(store.state.account.userInfo.user_pk)).then((response) => {
+        console.log("crew list : ",response.data);
+        const crew = response.data;
+        store.commit("account/ADD_MY_CREW", crew);
+      }).catch((err) => {
+        console.log(err);
+      })
+    }
+
     return {
       user,
       isLoginError,
@@ -126,6 +140,7 @@ export default {
       confirm,
       register,
       kakaoLogin,
+      getMyCrewList,
     };
   },
 };

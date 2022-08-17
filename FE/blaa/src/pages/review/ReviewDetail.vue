@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex justify-content-center">
+  <div class="d-flex justify-content-center main">
     <div style="width: 90%">
       <!-- 상단 가게 정보 div -->
       <div>
@@ -8,7 +8,7 @@
           <h2 style="margin:0; font-weight: 700;">{{store_name}}</h2>
           <div style="width:36px"></div>
         </div>
-        <div style="background:black; height:1px; width:100%"></div>
+        <div style="background:black; height:1px; width:100%; margin-top: 10px"></div>
         <!-- 별점  -->
         <div class="star">
           <p style="font-weight: bold;">전체 리뷰 평균 ({{person}} 명)</p>
@@ -44,6 +44,8 @@
           height:15px;"
 
           :style="{width: barWidth.value * value / 100 + 'px'}"
+
+          class="progressbar"
           >
           
         </div>
@@ -106,7 +108,8 @@ export default {
       // 별점, 버튼, 날짜 변환
       star.value = computed(() => {return store.state.review.reviewStar})
       types.value = computed(() => {return store.state.review.reviewBtn})
-      score.value = (star.value.value * 20)
+      // 조정
+      score.value = (star.value.value * 20) - 1.5
       person.value = computed(() => {return review.value.value.length})
       // for문으로 인해 바로 로딩이 안되서 대기 시간을 부여
       setTimeout(() => {
@@ -138,6 +141,9 @@ export default {
 </script>
 
 <style scoped>
+.main {
+  padding-top:24px;
+}
 /* 유저 리뷰 css */
 .userReview {
   background-color:  #F8F9FE;
@@ -182,9 +188,40 @@ export default {
   padding: 0;
 }
 
+/* 버튼 리뷰 애니메이션 및 css */
+.progressbar {
+	-webkit-animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+@-webkit-keyframes slide-in-left {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes slide-in-left {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+
+
 .button-review p {
   font-weight: 700;
   font-size: 15px;
+}
+
+.userReview {
+  margin-bottom: 10px;
 }
 
 /* 하트 css */

@@ -4,7 +4,7 @@
       <img :src="HOST + review.image" alt="이미지">
       <p style="width: 100%">{{review.name}}</p>  
     </div>
-    <div class="star-ratings" :style="{ left : starWidth.value }" >
+    <div class="star-ratings" >
         <div 
           class="star-ratings-fill space-x-2 text-lg"
           :style="{ width: score + '%' }"
@@ -43,7 +43,7 @@ export default {
 
     // 버튼
     const buttonType = ['친절한 사장님', '깨끗한 매장', '좋은 분위기', '교통 접근성', '칼퇴근 가능', '유니폼 제공']
-    const score = props.review.star * 20 + 1.5
+    const score = props.review.star * 20
     const high_button = ref([])
     for (let i=0; i < 3; i++){
       let max_idx = 0
@@ -68,14 +68,14 @@ export default {
     onMounted(() => {
       setTimeout(() => {
         starWidth.value = computed(() => {
-          return $('.store').width() - 120
+          return $('.store').width() * 0.6
         })
       }, 50)
     })
    
     $(window).resize(function() {
       starWidth.value = computed(() => {
-        return $('.store').width() - 120
+        return $('.store').width() * 0.6
       })
     })
     
@@ -102,9 +102,9 @@ export default {
 <style scoped>
 .store {
   cursor:pointer;
-  padding: 5px;
   margin: 5px;
   border-radius: 10px;
+  padding: 3px;
   background-color: #F8F9FE;
 }
 
@@ -123,7 +123,7 @@ img {
 p {
   padding: 5px 0 0 10px;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 22px;
 }
 
 span {
@@ -139,8 +139,7 @@ span {
   unicode-bidi: bidi-override;
   width: max-content;
   margin-bottom: 10px;
-  
-  left: 70%;
+  left: 63%;
   /* margin-right: 20px; */
   -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
   -webkit-text-stroke-width: 1.3px;
@@ -175,12 +174,12 @@ span {
   background-color: #F5F5F5;
   text-align: center;
   border-radius: 12px;
-  width: 115px;
+  font-size: 12px;
   height: 24px;
-  padding: 0px 4px;
-  margin-left: 4px;
+  padding: 0px 10px;
+  margin-left: 6px;
   font-weight: bold;
-  color: #E58D1F;
+  color: #4D8d4d;
 }
 
 </style>
