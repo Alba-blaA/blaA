@@ -66,9 +66,10 @@ export default {
   position:fixed;
   width: 100%;
   background-color: white;
-  height: 3rem;
+  height: 3.1rem;
   bottom: 68px;
   left: 0;
+  border-top: 1px solid black;
 }
 
 input {
@@ -85,7 +86,6 @@ input {
   margin: 0 12px;
   bottom: 68px;
   height: 3rem;
-  border-top: 1px solid black;
 }
 
 button {

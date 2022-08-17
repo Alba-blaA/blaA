@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex justify-content-center">
+  <div class="d-flex justify-content-center main">
     <div style="width: 90%">
       <!-- 상단 가게 정보 div -->
       <div>
@@ -138,6 +138,9 @@ export default {
 </script>
 
 <style scoped>
+.main {
+  padding-top:24px;
+}
 /* 유저 리뷰 css */
 .userReview {
   background-color:  #F8F9FE;
