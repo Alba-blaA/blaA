@@ -8,7 +8,7 @@
         <p style="font-size: 16px">{{ crew.crew_name }}</p>
         <div class="row" id="text_line">
           <div class="col">
-            <img class="member_icon" src="@/assets/icon/person.png" />
+            <img class="member_icon" src="@/assets/icons/person.png" />
             {{ crew.crew_member_count }}
             &nbsp;&nbsp;| &nbsp; {{ crew.is_business ? "업무용" : "친목용" }}
           </div>
