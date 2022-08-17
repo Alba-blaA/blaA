@@ -1,6 +1,6 @@
 <template>
-  <!-- <header-view></header-view> -->
-  <div style="padding-bottom: 80px">
+  <header-view></header-view>
+  <div class="app" style="padding-bottom: 80px">
     <router-view></router-view>
   </div>
   <footer-view v-if="isLogin"></footer-view>
