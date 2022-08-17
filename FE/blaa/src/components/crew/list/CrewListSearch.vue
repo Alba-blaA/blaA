@@ -13,7 +13,7 @@
 
   <div class="crew_search_list">
     <div v-for="(crew, i) in filtered" :key="i" v-bind="crew">
-      <div @click="moveToCrew(crew.crew_pk)">{{ crew.crew_name }}</div>
+      <div @click="moveToDetail(crew.crew_pk)">{{ crew.crew_name }}</div>
     </div>
   </div>
 </template>
@@ -31,6 +31,9 @@ export default {
     });
     const crew_search = ref("");
     let business = ref(true);
+    let isMember = ref(false);
+    const crewMember = ref([]);
+    const user_pk = store.state.account.userInfo.user_pk;
 
     onMounted(() => {
       AllCrews.crews = store.state.crew.AllCrews.results;
@@ -47,15 +50,31 @@ export default {
       });
     });
 
-    const moveToCrew = (crew_pk) => {
-      router.push({ name: "crewboard", params: { crew_pk: crew_pk } });
+   const moveToDetail = async (crew_pk) => {
+      await store.dispatch("crew/getCrewMembers", crew_pk);
+
+      Object.assign(crewMember.value, store.state.crew.members);
+      if (crewMember.value.length > 0) {
+        for (var i = 0; i < crewMember.value.length; i++) {
+          if (crewMember.value[i].user_pk == user_pk) {
+            isMember.value = true;
+            break;
+          }
+        }
+      }
+      console.log(isMember.value);
+      if (isMember.value) {
+        router.push({ name: "crewboardmember", params: { crew_pk: crew_pk } });
+      } else if (!isMember.value) {
+        router.push({ name: "crewboardnonmember", params: { crew_pk: crew_pk } });
+      }
     };
 
     return {
       AllCrews,
       filtered,
       crew_search,
-      moveToCrew,
+      moveToDetail,
       business,
     };
   },

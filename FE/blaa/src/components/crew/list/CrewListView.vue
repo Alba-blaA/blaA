@@ -16,7 +16,7 @@
   </div>
   <div class="container">
     <p id="semi_title_text">내 크루</p>
-    <crew-list-my style="margin-bottom: 20px"></crew-list-my>
+    <!-- <crew-list-my style="margin-bottom: 20px"></crew-list-my> -->
   </div>
   <div class="container">
     <p id="semi_title_text">전체 크루</p>
@@ -31,7 +31,7 @@ import { useRouter } from "vue-router";
 export default {
   components: {
     CrewListAll,
-    CrewListMy,
+    // CrewListMy,
   },
   setup() {
     const router = useRouter();

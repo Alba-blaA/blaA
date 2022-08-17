@@ -8,7 +8,7 @@
     <article-list></article-list>
     <div @click="moveRegist">
       <div class="rectangle"></div>
-      <img class="regist_btn" src="@/assets/icon/edit-2.png" />
+      <img class="regist_btn" src="@/assets/icon/edit-2_w.png" />
     </div>
   </div>
 </template>
