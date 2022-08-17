@@ -15,7 +15,7 @@ import { useStore } from "vuex";
 export default {
   components: {
     FooterView,
-    HeaderView,
+    HeaderView,    
   },
 
   setup() {
