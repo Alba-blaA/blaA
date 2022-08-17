@@ -1,5 +1,5 @@
 <template>
-<div>
+<div style="z-index:5;">
   <div style="padding:10px;">
     <StoryTopNavbar :isStory="isStory" :isFollow="isFollow" :isFilter="isFilter" @change="change"/>
     <div class="search-component" v-if="isFilter" style="margin: 10px 0px;">
@@ -21,6 +21,7 @@
     <StoryImageCardList :images="images.value"/>
   </div>
   <p v-else>해당하는 게시물이 없어요</p>
+  <router-link class="plusbutton" :to="{name: 'createStory'}"><span class="material-symbols-outlined" style="font-size:30px; font-weight:bold;">add</span></router-link>
   <!-- <div v-if="isLoading" class="circles">
     로딩중
     <div class="circle"></div>
@@ -282,6 +283,19 @@ export default {
   border-radius: 10px;
   font-weight: 600;
   width: 40%;
+}
+
+.plusbutton {
+  position: fixed;
+  z-index: 10;
+  bottom: 80px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background-color: #EEC95C;
+  color: black;
+  border-radius: 50%;
+  padding: 10px;
 }
 
 /* .circle {
