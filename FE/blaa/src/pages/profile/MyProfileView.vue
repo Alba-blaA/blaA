@@ -202,11 +202,11 @@ export default {
     const follower = async () => {
       console.log("팔로워 조회");
 
-      const data = {
-        user_pk: userInfo.value.user_pk,
-        page: 1,
-      };
-      await store.dispatch("profile/getFollowerList", data);
+      // const data = {
+      //   user_pk: userInfo.value.user_pk,
+      //   page: 1,
+      // };
+      // await store.dispatch("profile/getFollowerList", data);
       router.push({
         name: "followList",
         params: {
@@ -218,11 +218,11 @@ export default {
 
     const following = async () => {
       console.log("팔로잉 조회");
-      const data = {
-        user_pk: userInfo.value.user_pk,
-        page: 1,
-      };
-      await store.dispatch("profile/getFollowingList", data);
+      // const data = {
+      //   user_pk: userInfo.value.user_pk,
+      //   page: 1,
+      // };
+      // await store.dispatch("profile/getFollowingList", data);
       router.push({
         name: "followList",
         params: { user_pk: userInfo.value.user_pk, followType: "following" },

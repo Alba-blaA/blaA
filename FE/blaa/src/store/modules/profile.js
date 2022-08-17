@@ -7,7 +7,14 @@ const profileStore = {
     updateMyInfo: [],
     followerList: [],
     totalFollowers: 0,
-    followingList: [],
+    followingList: [
+      {
+        count: null,
+        previous: null,
+        next: null,
+        results: [],
+      },
+    ],
     myStory: [],
     reviewList: [],
     crewList: [],
@@ -33,12 +40,16 @@ const profileStore = {
       state.totalFollowers = followers;
     },
     GET_FOLLOWING_LIST: (state, followingList) => {
-      state.followingList.count = followingList.count;
-      state.followingList.previous = followingList.previous;
-      state.followingList.next = followingList.next;
-      for (var i = 0; i < followingList.results.length; i++) {
-        state.followingList.results.push(followingList.results[i]);
-      }
+      state.followingList = followingList;
+      // state.followingList.count = followingList.count;
+      // state.followingList.previous = followingList.previous;
+      // state.followingList.next = followingList.next;
+      // console.log("length : ", followingList.results.length);
+      // console.log("followingList.results : ", state.followingList.results);
+      // for (var i = 0; i < followingList.results.length; i++) {
+      //   console.log("배열 : ", followingList.results[i]);
+      //   state.followingList.results.push([followingList.results[i]]);
+      // }
     },
     GET_MY_STORY: (state, myStory) => {
       state.myStory = myStory;

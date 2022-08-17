@@ -99,7 +99,10 @@ export default {
       if (isLogin.value) {
         await store.dispatch("account/getUserInfo", token);
         console.log("로그인 성공!!!!!");
-        await getMyCrewList();
+        await store.dispatch(
+          "account/getMyCrewList",
+          store.state.account.userInfo.user_pk
+        );
         router.push("/story");
       } else {
         console.log("isLogin : ", store.state.account.isLogin);
@@ -114,22 +117,11 @@ export default {
 
     const kakaoLogin = () => {
       const params = {
-        // redirectUri: "https://i7b209.p.ssafy.io/kakao",
-        redirectUri: "http://localhost:3000/kakao",
+        redirectUri: "https://i7b209.p.ssafy.io/kakao",
+        // redirectUri: "http://localhost:3000/kakao",
       };
       window.Kakao.Auth.authorize(params);
     };
-
-    const getMyCrewList = async() => {
-      console.log("user_pk : ", store.state.account.userInfo.user_pk)
-      await axios.get(api.profile.myCrew(store.state.account.userInfo.user_pk)).then((response) => {
-        console.log("crew list : ",response.data);
-        const crew = response.data;
-        store.commit("account/ADD_MY_CREW", crew);
-      }).catch((err) => {
-        console.log(err);
-      })
-    }
 
     return {
       user,
@@ -138,7 +130,6 @@ export default {
       confirm,
       register,
       kakaoLogin,
-      getMyCrewList,
     };
   },
 };

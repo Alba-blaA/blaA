@@ -83,13 +83,13 @@ export default {
       return false;
     });
 
-    const getMoreList = async(page = currentPage.value) => {
+    const getMoreList = async (page = currentPage.value) => {
       const data = {
-          page: currentPage.value,
-          user_pk: route.params.user_pk,
+        page: currentPage.value,
+        user_pk: route.params.user_pk,
       };
-      
-      if(isFollower.value) {  
+
+      if (isFollower.value) {
         await store.dispatch("profile/getFollowerList", data);
         numberOfPages.value = computed(() => {
           return Math.ceil(followerList.value.count / 10);
@@ -102,19 +102,19 @@ export default {
       }
     };
 
-    window.onscroll = function(e) {
-      if(numberOfPages.value.value > currentPage.value) {
-        if((window.innerHeight + window.scrollY) >= document.body.offsetHeight) { 
-          setTimeout(function(){
-            if(numberOfPages.value.value > currentPage.value) {
+    window.onscroll = function (e) {
+      if (numberOfPages.value.value > currentPage.value) {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+          setTimeout(function () {
+            if (numberOfPages.value.value > currentPage.value) {
               currentPage.value += 1;
 
               getMoreList();
             }
-          }, 1000)
+          }, 1000);
         }
       }
-    } 
+    };
 
     const userProfile = (user_pk) => {
       console.log("다른 유저 프로필 페이지 이동");
@@ -125,6 +125,8 @@ export default {
         },
       });
     };
+
+    getMoreList();
 
     return {
       followerList,
@@ -139,6 +141,4 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
+<style></style>
