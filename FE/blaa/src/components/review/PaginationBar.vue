@@ -1,5 +1,5 @@
 <template>
-<div class="d-flex justify-content-center">
+<div class="d-flex justify-content-center pagenavigation">
 <nav aria-label="Page navigation example">
   <ul class="pagination">
     <li v-if="currentPage !== 1 && numberOfPages > 5" class="page-item"><a class="page-link" href="#" @click="Onclick(1)">&lt;&lt;</a></li>
@@ -64,6 +64,10 @@ export default {
 </script>
 
 <style scoped>
+.pagenavigation {
+  margin-bottom: 60px;
+}
+
 a{
   color: black;
   padding: 6px 11px;

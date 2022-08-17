@@ -1,13 +1,13 @@
 <template>
 <div id="review" class="d-flex justify-content-center">
   <div style="width: 90%">
-     <div class="d-flex justify-content-between align-items-center mt-3">
-      <h1 style="font-weight:bold; margin:0;">가게 리뷰</h1>
+     <div class="d-flex justify-content-between align-items-center">
+      <h2 style="font-weight:bold; margin:0;">가게 리뷰</h2>
       <div class="buttons">
         <!-- 클릭하거나 엔터를 치면 -->
+        <span class="search-end material-symbols-outlined" v-if="isSearch" @click="searchEnd">cancel</span>
         <div class="search-box">
           <input class="search-txt" type="text" v-model="searchText" @keypress.enter="searchStore">
-          <span class="search-end material-symbols-outlined" v-if="isSearch" @click="searchEnd">cancel</span>
           <span class="search-button material-symbols-outlined">search</span>
         </div>
         <div v-if="isSearch"></div>
@@ -107,6 +107,10 @@ export default {
 </script>
 
 <style scoped>
+#review {
+  margin-top: 24px;
+}
+
 .buttons {
   display: flex;
   align-items: center;
@@ -114,7 +118,7 @@ export default {
 
 .search-box {
   height: 40px;
-  background-color: #949BA0;
+  background-color: #4d8d4d;
   padding: 0 10px;
   border-radius: 40px;
 }
@@ -125,7 +129,7 @@ export default {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #949BA0;
+  background: #4d8d4d;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -156,7 +160,7 @@ export default {
 
 /* 마우스를 위에 올렸을 때 늘어남 */
 .search-box:hover > .search-txt {
-  width: 150px;
+  width: 75%;
 }
 
 .search-box:hover > .search-btn {

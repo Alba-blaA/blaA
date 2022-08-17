@@ -9,7 +9,7 @@
     </div>
     <div style="background:black; height:1px; width:100%; margin: 10px 0;"></div>
     <br>
-    <p class="nickname">{{review.value.user.nickname}} 님은이렇게 평가했어요.</p>
+    <p class="nickname">{{review.value.user.nickname}} 님은 이렇게 평가했어요.</p>
     <br>
     <div class="userReviewDetail">
       <div>
@@ -37,8 +37,9 @@
     <CommentDetail class="userReview" :review="review.value" :isDetail="true" @update="update"/>
 
     
-    <div class="updateButton" v-if="review.value.user.nickname == user_name"> 
-      <button class="deleteButton" @click="deleteReview">삭제</button>
+    <div class="udbutton" v-if="review.value.user.nickname == user_name"> 
+      <button class="delete button" @click="deleteReview">삭제</button>
+      <!-- <button class="update button" @click="moveToForm">수정</button> -->
     </div>
     
   </div>
@@ -228,19 +229,30 @@ export default {
   font-weight: 600;
 }
 
-.updateButton{
-  position: fixed;
-  bottom: 30px;
+.udbutton {
+  width:90%;
+  position: absolute;
+  bottom: 70px;
+  display: flex;
+  justify-content: space-around;
 }
 
-.deleteButton {
+.button{
   border: 0;
-  background-color: #CB2A2A;
-  color: white;
-  width: 80px;
-  /* height: 30px; */
-  padding: 6px;
+  width: 100%;
+  padding: 10px 0;
   border-radius: 16px;
   cursor: pointer;
+  font-weight: 600;
+  
+}
+
+.update {
+  background-color: #EEC95C;
+}
+
+.delete {
+  background: #c25243;
+  color: white;
 }
 </style>

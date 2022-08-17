@@ -21,6 +21,12 @@
     <StoryImageCardList :images="images.value"/>
   </div>
   <p v-else>해당하는 게시물이 없어요</p>
+  <!-- <div v-if="isLoading" class="circles">
+    로딩중
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+  </div> -->
 </div>
 </template>
 
@@ -56,12 +62,13 @@ export default {
     const isState = ref('')
     const currentPage = ref(1)
     const numberOfPages = ref(1)
+    const isLoading = ref(false)
 
     const {
       howNow
     } = dataChange()
 
-    const getPure = async(page = currentPage.value) => {     
+    const getPure = async(page = currentPage.value) => { 
       if (isState.value != "") {currentPage.value = 1}
       if (!hashTag.value.length) {
         isState.value = ""
@@ -74,11 +81,13 @@ export default {
         numberOfPages.value = computed(() => {
           return  Math.ceil(store.state.story.totalCount / 10)
         })
+        isLoading.value = false
       }
     }
 
     // 시작할 떄
     onBeforeMount(() => {
+      isLoading.value = true
       getPure()
     })
 
@@ -109,6 +118,7 @@ export default {
           return  Math.ceil(store.state.story.totalCount / 10)
         })
         isPopUp.value = false
+        isLoading.value = false
       } else {
         getPure()
       }
@@ -131,6 +141,7 @@ export default {
         numberOfPages.value = computed(() => {
           return  Math.ceil(store.state.story.totalCount / 10)
         })
+        isLoading.value = false
       } else {
         currentPage.value = 1
         isState.value = ''
@@ -155,6 +166,7 @@ export default {
         numberOfPages.value = computed(() => {
           return  Math.ceil(store.state.story.totalCount / 10)
         })
+        isLoading.value = false
       } else {
         currentPage.value = 1
         isState.value = ''
@@ -175,6 +187,7 @@ export default {
         // 오류 방지 조건문
         if (numberOfPages.value.value > currentPage.value) {
           currentPage.value += 1
+          isLoading.value = true
           
           if( isState.value == '') {
             getPure(currentPage.value)
@@ -204,7 +217,8 @@ export default {
       isStory,
       isFollow,
       isFilter,
-      change
+      change,
+      isLoading
     }
   }
 }
@@ -243,9 +257,6 @@ export default {
   }
 }
 
-
-
-
 .activate {
   background-color: #498D6D;
 }
@@ -272,4 +283,11 @@ export default {
   font-weight: 600;
   width: 40%;
 }
+
+/* .circle {
+  width:20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #c9c9c9;
+} */
 </style>
