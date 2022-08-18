@@ -226,12 +226,12 @@ export default {
         (err = false));
 
       err &&
-        (!user.value.tel1 || !user.value.tel2 || !user.value.tel3) &
-          ((telMessage.value = "휴대폰 번호를 입력해주세요."),
-          setTimeout(() => {
-            telMessage.value = "";
-          }, 3000),
-          (err = false));
+        (!user.value.tel1 || !user.value.tel2 || !user.value.tel3) &&
+        ((telMessage.value = "휴대폰 번호를 입력해주세요."),
+        setTimeout(() => {
+          telMessage.value = "";
+        }, 3000),
+        (err = false));
 
       if (!err) {
         return;
