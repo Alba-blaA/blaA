@@ -1,5 +1,9 @@
 <template>
-  <br>
+  <div class="row" id="top_box">
+    <div class="col-2" id="top_box_text" @click="moveToPrevious"><img src="@/assets/icons/arrow-left.png" /></div>
+    <h5 class="col-8" id="top_box_text">스케줄</h5>
+    <div class="col-2" id="top_box_text"></div>
+  </div>
   <div class="calendarbox" >
     <DatePicker :attributes='state.schedules' v-model ="date" is-expanded />   
   </div>
@@ -150,6 +154,10 @@ export default {
          
     })
 
+    const moveToPrevious = () => {
+      router.go(-1)
+    }
+
     return {
      moveToRegisterSchedule,
      date,
@@ -161,7 +169,8 @@ export default {
      onedigittotwodigitmonth,
      onedigittotwodigitday,
      HOST,
-     longnicknametoshort
+     longnicknametoshort,
+     moveToPrevious
  
     }  
 }
@@ -169,11 +178,26 @@ export default {
 </script>
 
 <style>
+#top_box_text {
+  /* display: flex; */
+  text-align: center;
+  line-height: 55px;
+} 
+
+#top_box {
+  height: 55px;
+  margin: auto;
+
+  color: white;
+  background-color: #498d6d;
+}
+
 .calendarbox{
   display : flex;
   justify-content: center;
   margin-left : 20px;
   margin-right: 20px;
+  margin-top: 20px;
   border : solid seagreen;
   border-radius: 10px;
 }

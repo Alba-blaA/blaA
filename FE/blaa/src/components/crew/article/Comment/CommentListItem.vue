@@ -1,23 +1,28 @@
 <template>
-  <li>
-    <br />
+  <li class="comment">
     <div class="comment-info">
-      <div>
-        <span>{{ comment.nickname }}</span> <span>작성일: {{ comment.created_at }}</span>
-      </div>
-      <div v-if="user_pk == comment.user">
-        <span style="display: inline-block; margin-right: 10px; cursor: pointer" @click="modiComment">수정</span>
-        <span style="display: inline-block; cursor: pointer" @click="deleComment">삭제</span>
-        <!-- <PopUp v-if="popUpOpen" @close-modal="popUpOpen = false">
-          <div class="modal-content">
-            <p>정말 삭제하시겠습니까?</p>
-            <button class="btn btn-secondary" @click="popUpOpen = false">취소</button>
-            <button class="btn btn=danger" @click="commnetDelete">삭제</button>
-          </div>
-        </PopUp> -->
+      <div class="d-flex justify-content-between align-items-center" style="height: 30px;">
+        <span style="font-weight: 700">{{ comment.nickname }}</span> 
+        <div class="d-flex align-items-center">
+          <span style="margin-right: 5px; margin-top: 5px;">{{ howNow(comment.created_at) }}</span>
+          <div v-if="user_pk == comment.user" style=" margin: auto 0; display:inline-block; height: 30px;">
+            <span @click="isUpdtae=!isUpdate" style="font-size:30px;" class="material-symbols-outlined">menu</span>
+              <div v-if="isUpdate" id="update" style="">
+                <span style="display: inline-block; margin-right: 10px; cursor: pointer" @click="modiComment">수정</span>
+                <span style="display: inline-block; cursor: pointer" @click="deleComment">삭제</span>
+                  <!-- <PopUp v-if="popUpOpen" @close-modal="popUpOpen = false">
+                    <div class="modal-content">
+                      <p>정말 삭제하시겠습니까?</p>
+                      <button class="btn btn-secondary" @click="popUpOpen = false">취소</button>
+                      <button class="btn btn=danger" @click="commnetDelete">삭제</button>
+                    </div>
+                  </PopUp> -->
+              </div>
+            </div>
+        </div>
       </div>
     </div>
-    <div>{{ comment.comment_content }}</div>
+    <div style="margin-top: 5px;">{{ comment.comment_content }}</div>
   </li>
 </template>
 
@@ -25,6 +30,7 @@
 // import PopUp from "@/components/story/PopUp.vue";
 import { useStore } from "vuex";
 import { ref } from "vue";
+import {dataChange} from '@/hooks/dateChange'
 
 export default {
   props: {
@@ -40,6 +46,11 @@ export default {
     const store = useStore();
     const popUpOpen = ref(true);
     const user_pk = store.state.account.userInfo.user_pk;
+    const isUpdate = ref(false)
+
+    const {
+      howNow
+    } = dataChange()
 
     // const commnetDelete = async() => {
     //   const comment_pk = props.comment.comment_pk
@@ -55,14 +66,26 @@ export default {
       user_pk,
       popUpOpen,
       deleComment,
+      howNow,
+      isUpdate
     };
   },
 };
 </script>
 
 <style scoped>
-.comment-info {
-  display: flex;
-  justify-content: space-between;
+li {
+  list-style: none;
 }
+
+#update {
+
+}
+
+.comment {
+  background-color: #f8f9fe;
+  border-radius: 16px;
+  padding: 12px;
+}
+
 </style>
