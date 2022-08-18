@@ -9,10 +9,10 @@
       </div>
     </PopUp>
     <div id="story">
-      <div class="d-flex justify-content-center align-items-center">
-        <div class="d-flex justify-content-between" style="width: 90%">
+      <div class="d-flex justify-content-center align-items-center" style="margin-top:20px;">
+        <div class="d-flex justify-content-between align-items-center" style="width: 90%">
           <span class="material-symbols-outlined" style="color: black; cursor: pointer; font-size: 36px" @click="goBack">arrow_back</span>
-          <h2 style="margin: 0; font-weight: 700">{{ story.story_title }}</h2>
+          <h2 style="margin: 0; font-weight: 700; margin: 0 5px;">{{ story.story_title }}</h2>
           <!-- 좋아요 기능 구현 -->
           <div class="like">
             <span style="margin-right: 5px">{{ story.like_user_count }}</span>

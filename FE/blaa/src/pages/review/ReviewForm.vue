@@ -17,8 +17,8 @@
           <img class="img_test" src="https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg" height="60" width="60" style="border-radius:50%" @click="fileUpload"/>
         </div>
         <div>
-          <p class="form-input">가게명 : {{storeName}}</p>
-          <p class="form-input">가게주소 : {{storeAddress}}</p>
+          <div style="font-weight: 600;">가게명 : {{storeName}}</div>
+          <div style="font-weight: 600; margin-top: 3px;">가게주소 : {{storeAddress}}</div>
           <p v-if="storeError" class="error">가게를 검색해주세요</p>
         </div>
         <button @click="isModalOpen=true">검색</button>
@@ -53,7 +53,7 @@
       <!-- 한줄평 -->
       <div class="d-flex justify-content-center">
         <div class="oneReview">
-          <p>한줄평</p>
+          <p style="font-weight:600;">한줄평</p>
           <textarea v-model="oneReview" cols="30" rows="10"></textarea>
         </div>
       </div>
@@ -264,6 +264,7 @@ export default {
 </script>
 
 <style scoped>
+
 .wrapper {
   position:fixed;
   width:100%;
@@ -359,7 +360,6 @@ input[type=checkbox]{
 }
 
 .store-picture {
-  margin: 0 12px;
   border-radius: 20px;
 }
 
