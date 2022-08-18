@@ -13,7 +13,7 @@
     <div class="storyInfo">
       <div class="row">
         <div class="col-2">
-          <img
+          <img v-if="image"
             :src="host + image.user_pk.image"
             alt="프로필"
             @click="moveToProfile"
