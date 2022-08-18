@@ -13,7 +13,7 @@
           placeholder="EMAIL"
         />
         <!-- <b>{{ message }}</b> -->
-        <small>아이디를 입력해주세요</small>
+        <small>{{ emailMessage }}</small> <br /><br />
 
         <label for="login-password"></label>
         <input
@@ -23,7 +23,7 @@
           placeholder="PASSWORD"
           autocomplete="off"
         />
-        <small>비밀번호를 입력해주세요</small>
+        <small>{{ passwordMessage }}</small>
         <br /><br />
         <!-- <b>{{ message }}</b> -->
 
@@ -81,6 +81,9 @@ export default {
       password: null,
     });
 
+    const emailMessage = ref(null);
+    const passwordMessage = ref(null);
+
     const isLogin = computed(() => {
       return store.state.account.isLogin;
     });
@@ -92,22 +95,46 @@ export default {
     // store.dispatch("account/userConfirm");
 
     const confirm = async () => {
-      await store.dispatch("account/userConfirm", user.value);
+      let err = true;
 
-      let token = sessionStorage.getItem("token");
-      console.log("Login Token : ", token);
-      if (isLogin.value) {
-        await store.dispatch("account/getUserInfo", token);
-        console.log("로그인 성공!!!!!");
-        await store.dispatch(
-          "account/getMyCrewList",
-          store.state.account.userInfo.user_pk
-        );
-        router.push("/story");
+      if (!user.value.email) {
+        err = true;
+        emailMessage.value = "이메일을 입력해주세요";
+        setTimeout(() => {
+          emailMessage.value = "";
+          err = false;
+        }, 3000);
+      }
+
+      if (!user.value.password) {
+        err = true;
+        passwordMessage.value = "비밀번호를 입력해주세요.";
+        setTimeout(() => {
+          passwordMessage.value = "";
+          err = false;
+        }, 3000);
+      }
+
+      if (!err) {
+        return;
       } else {
-        console.log("isLogin : ", store.state.account.isLogin);
-        console.log("isLoginError : ", store.state.account.isLoginError);
-        console.log("로그인 안됨??????");
+        await store.dispatch("account/userConfirm", user.value);
+
+        let token = sessionStorage.getItem("token");
+        console.log("Login Token : ", token);
+        if (isLogin.value) {
+          await store.dispatch("account/getUserInfo", token);
+          console.log("로그인 성공!!!!!");
+          await store.dispatch(
+            "account/getMyCrewList",
+            store.state.account.userInfo.user_pk
+          );
+          router.push("/story");
+        } else {
+          console.log("isLogin : ", store.state.account.isLogin);
+          console.log("isLoginError : ", store.state.account.isLoginError);
+          console.log("로그인 안됨??????");
+        }
       }
     };
 
@@ -125,6 +152,8 @@ export default {
 
     return {
       user,
+      emailMessage,
+      passwordMessage,
       isLoginError,
       isLogin,
       confirm,
@@ -179,6 +208,7 @@ small {
   font-family: Inter;
   font-style: normal;
   font-size: 15px;
+  color: red;
 }
 
 input::placeholder {

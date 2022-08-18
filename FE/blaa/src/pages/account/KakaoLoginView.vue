@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <h2>카카오 로그인 페이지</h2>
-  </div>
+  <div></div>
 </template>
 
 <script>
