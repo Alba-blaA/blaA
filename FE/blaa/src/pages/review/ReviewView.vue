@@ -4,13 +4,11 @@
     <h5 class="col-8" id="top_box_text">지점별 리뷰</h5>
     <div class="col-2" id="top_box_text"></div>
   </div>
-  <div style="margin-top: 20px; margin-left: 20px">
-    <div id="title_text" style="display: flex; align-items: center; padding-right: 0">다양한 리뷰를 확인해보세요!</div>
-  </div>
 
   <div id="review" class="d-flex justify-content-center">
     <div style="width: 90%">
       <div class="d-flex justify-content-between align-items-center">
+        <div></div>
         <div class="buttons">
           <!-- 클릭하거나 엔터를 치면 -->
           <span class="search-end material-symbols-outlined" v-if="isSearch" @click="searchEnd">cancel</span>
@@ -24,6 +22,9 @@
           >
         </div>
       </div>
+      <div style="margin-left: 10px">
+        <div id="title_text" style="display: flex; align-items: center; padding-right: 0">다양한 리뷰를 확인해보세요!</div>
+      </div>
       <div v-if="reviews.value">
         <ReviewList v-for="review in reviews.value" :key="review" :review="review" />
         <div class="end-list"></div>
@@ -34,10 +35,10 @@
 </template>
 
 <script>
-import { useStore } from 'vuex'
-import { computed, onBeforeMount, ref } from 'vue'
-import ReviewList from '@/components/review/ReviewList.vue'
-import $ from 'jquery'
+import { useStore } from "vuex";
+import { computed, onBeforeMount, ref } from "vue";
+import ReviewList from "@/components/review/ReviewList.vue";
+import $ from "jquery";
 
 export default {
   components: {
@@ -74,16 +75,16 @@ export default {
     });
 
     const numberOfPages = computed(() => {
-      return Math.ceil(total.value.value / 5)
-    })
+      return Math.ceil(total.value.value / 5);
+    });
 
     // 화면이 길어서 스크롤 바가 안나올 떄
-    $(window).ready(function() {
-      if ($('#review').height() < $(window).height()) {
-        currentPage.value += 1
-        getReviews(currentPage.value)
+    $(window).ready(function () {
+      if ($("#review").height() < $(window).height()) {
+        currentPage.value += 1;
+        getReviews(currentPage.value);
       }
-    }) 
+    });
 
     // 무한 스크롤 구현
     window.onscroll = function (e) {
@@ -184,7 +185,7 @@ export default {
 
 /* 마우스를 위에 올렸을 때 늘어남 */
 .search-box:hover {
-  width: 180px;
+  width: 100%;
 }
 
 .search-box:hover > .search-txt {

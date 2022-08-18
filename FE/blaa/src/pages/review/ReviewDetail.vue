@@ -15,6 +15,7 @@
         </div>
         <div style="background: black; height: 1px; width: 100%; margin-top: 10px"></div> -->
         <!-- 별점  -->
+        <p id="title_text" style="margin-left: 5px">알바생들이 어떻게 평가했냐면요,</p>
         <div class="star">
           <p style="font-weight: bold">총 {{ person }}명이</p>
           <span style="font-size: 24px; font-weight: bold; margin-right: 6px">{{ star }} 점</span>
@@ -28,8 +29,11 @@
         </div>
       </div>
 
-      <br />
+      <hr />
       <!-- 버튼식 리뷰 -->
+      <span id="title_text" style="margin-left: 5px">{{ store_name }}의</span>
+      <p id="title_text" style="margin-left: 5px; margin-top: 0">어떤 점이 좋았냐면요,</p>
+
       <div class="star">
         <div class="button-review" v-for="(value, name) of types.value" :key="name.id">
           <p style="margin: 0">{{ name }}</p>
@@ -56,9 +60,10 @@
         </div>
       </div>
 
-      <br />
+      <hr />
+
       <!-- 한줄평 -->
-      <h3 style="font-weight: 700; margin-left: 5px">한줄평</h3>
+      <p id="title_text" style="margin-left: 5px">알바생들의 생생 한줄평 🔥</p>
       <div v-if="review">
         <CommentDetail
           class="userReview"
@@ -164,7 +169,7 @@ export default {
 }
 
 .star {
-  padding: 20px 0;
+  padding: 20px;
   background: #ffffff;
   box-shadow: 0px 4px 80px rgba(0, 0, 0, 0.07), 0px 0.893452px 17.869px rgba(0, 0, 0, 0.0417275), 0px 0.266004px 5.32008px rgba(0, 0, 0, 0.0282725);
   /* border-radius: 10px; */

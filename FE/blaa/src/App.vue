@@ -89,4 +89,21 @@ export default {
   width: 16px;
   height: 14px;
 }
+
+.submit-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 60px;
+  height: 36px;
+
+  background: #e58d1f;
+  color: white;
+  border-radius: 20px;
+  border: 0;
+
+  font-family: "Pretendard-Regular";
+  font-weight: 400;
+}
 </style>
