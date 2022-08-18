@@ -35,16 +35,16 @@
   <div style="position: relative; margin-top: 150px">
     <hr />
     <div class="row" style="margin-left: 20px; margin-right: 20px">
-      <h6 style="color: #498d6d">고정 게시물</h6>
+      <p id="semi_title_text" style="color: #498d6d">고정 게시물</p>
     </div>
 
-    <div class="pin_article">
-      <p>여기 고정된 게ㅣ시물</p>
+    <div>
+      <article-pin></article-pin>
     </div>
     <hr />
 
     <div class="row" style="margin-left: 20px; margin-right: 20px">
-      <h5 style="color: #498d6d">바로가기</h5>
+      <p id="semi_title_text" style="color: #498d6d">바로가기</p>
     </div>
     <div class="col" style="margin-left: 20px; margin-right: 20px">
       <div class="buttons" @click="moveToArticle">
@@ -58,20 +58,18 @@
     <!-- <div v-show="isFeed">
       <router-view :isMember="isMember" style="margin: 30px"></router-view>
     </div> -->
-
-    <!-- <button @click="moveToArticle">Article</button>
-    <button @click="moveToCalendar">Calendar</button>
-    <button @click="moveToDetail">크루 정보</button>
-    <button @click="moveToMember">사용자</button>
-    <router-view></router-view> -->
   </div>
 </template>
 
 <script>
+import ArticlePin from "../article/Items/ArticlePin.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { onMounted, reactive, ref } from "vue";
 export default {
+  components: {
+    ArticlePin,
+  },
   setup() {
     const store = useStore();
     const route = useRoute();
@@ -95,22 +93,12 @@ export default {
       await store.dispatch("crew/crewJoin", crew_pk);
     };
 
-    const Info = () => {
-      isFeed.value = false;
-      isInfo.value = true;
-    };
-
-    const Feed = () => {
-      isInfo.value = false;
-      isFeed.value = true;
-    };
-
     const moveToArticle = () => {
       router.push({ name: "articlelist" });
     };
 
     const moveToCalendar = () => {
-      router.push({ name: "schedule" , parmas: {crew_pk: route.params.crew_pk}});
+      router.push({ name: "schedule", parmas: { crew_pk: route.params.crew_pk } });
     };
 
     const moveToDetail = () => {
@@ -142,16 +130,16 @@ export default {
       moveToDetail,
       moveToMember,
       crewJoin,
-      Info,
-      Feed,
-      isInfo,
-      isFeed,
     };
   },
 };
 </script>
 
 <style scoped>
+* {
+  font-family: "Pretendard-Regular";
+}
+
 .back_ground_business {
   height: 179px;
   z-index: -1;
@@ -263,6 +251,12 @@ hr {
 #semi_title_text {
   font-weight: 600;
   font-size: 18px;
+}
+
+#small_title_text {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 0;
 }
 
 /* @keyframes fadeInUp {

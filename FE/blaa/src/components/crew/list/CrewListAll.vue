@@ -5,9 +5,9 @@
     </div>
     <div class="col-8">
       <div class="row">
-        <p style="font-size: 16px">{{ crew.crew_name }}</p>
+        <p id="small_title_text" style="height: 30px">{{ crew.crew_name }}</p>
         <div class="row" id="text_line">
-          <div class="col">
+          <div class="col" id="small_text">
             <img class="member_icon" src="@/assets/icons/person.png" />
             {{ crew.crew_member_count }}
             &nbsp;&nbsp;| &nbsp; {{ crew.is_business ? "업무용" : "친목용" }}
@@ -93,26 +93,24 @@ export default {
   flex-direction: row;
   align-items: center;
   margin: 10px;
-
   height: 80px;
 
-  font-family: "pretendard";
   font-style: normal;
   font-size: 14px;
   line-height: 17px;
+
+  background: #ffffff;
+  /* box-shadow: 0px 4px 80px rgba(0, 0, 0, 0.07), 0px 0.893452px 17.869px rgba(0, 0, 0, 0.0417275), 0px 0.266004px 5.32008px rgba(0, 0, 0, 0.0282725); */
+  border-radius: 20px;
 }
 
-.member_icon {
-  width: 20px;
-  height: 18px;
-}
 #text_line {
   line-height: 0px;
 }
 #profile {
-  width: 60px;
-  height: 60px;
-  border-radius: 70%;
+  width: 70px;
+  height: 70px;
+  border-radius: 20%;
   overflow: hidden;
 }
 </style>

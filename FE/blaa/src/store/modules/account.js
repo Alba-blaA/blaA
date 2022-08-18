@@ -60,6 +60,10 @@ const accountStore = {
       state.userInfo.crew = crewList;
       console.log("크루 추가 후 userInfo : ", state.userInfo);
     },
+    ADD_NEW_CREW: (state, crew) => {
+      state.userInfo.crew.push(crew);
+      console.log(state.userInfo.crew);
+    },
     SET_KAKAO_USER_INFO: (state, kakaoUserInfo) => {
       state.kakaoUserInfo.email = kakaoUserInfo.email;
       state.kakaoUserInfo.name = kakaoUserInfo.name;

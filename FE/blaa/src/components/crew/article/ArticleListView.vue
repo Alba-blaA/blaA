@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row" id="top_box">
-      <div class="col-2" id="top_box_text"><img src="@/assets/icons/arrow-left.png" /></div>
+      <div class="col-2" id="top_box_text" @click="back"><img src="@/assets/icons/arrow-left.png" /></div>
       <h5 class="col-8" id="top_box_text">게시글</h5>
       <div class="col-2" id="top_box_text"><img src="@/assets/icons/search.png" /></div>
     </div>
@@ -25,8 +25,12 @@ export default {
     const moveRegist = () => {
       router.push({ name: "articleregist" });
     };
+    const back = () => {
+      router.go(-1);
+    };
     return {
       moveRegist,
+      back,
     };
   },
 };
