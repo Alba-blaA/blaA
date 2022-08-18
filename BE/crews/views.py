@@ -5,7 +5,7 @@ from notifications.models import Notification
 from crews.serializer.crew import (CrewNonImageSerializer,CrewChatSerializer,CrewNoneImageCreateSerializer,
                                         CrewCreateSerializer, CrewInviteListSerializer, CrewListSerializer, CrewSerializer, 
                                         CrewUserListSerializer, UserInviteListSerializer,GetRequestSerializer)
-from accounts.pagination import CustomPageNumberPagination
+from accounts.pagination import CustomPageNumberPagination, CustomPagehundredNumberPagination
 from crews.serializer.schedule import CrewScheduleListSerializer,UserScheduleSerializer,CrewScheduleSerializer
 from crews.models import Crew, CrewArticle, CrewArticleComment, CrewInvite, CrewSchedule,CrewChat
 from rest_framework import filters
@@ -26,7 +26,7 @@ class CrewListCreateAPIView(ListCreateAPIView):
     queryset=Crew.objects.all()
     search_fields = ['crew_name']
     filterset_fields = ['is_business']
-    pagination_class = None 
+    pagination_class = CustomPagehundredNumberPagination 
 
     
     def list(self, request, *args, **kwargs):
@@ -102,7 +102,7 @@ class CrewArticleListCreateAPIView(ListCreateAPIView):
     serializer_class = CrewArticleSerializer
     queryset=CrewArticle.objects.all()
     lookup_field = 'crew_id'
-    pagination_class = CustomPageNumberPagination 
+    pagination_class = CustomPagehundredNumberPagination 
 
     def list(self, request, crew_id,*args, **kwargs):
         crew = Crew.objects.get(crew_pk=crew_id)
@@ -201,7 +201,7 @@ class CrewCommentListCreateAPIView(ListCreateAPIView):
     serializer_class = CrewCommentSerializer
     queryset=CrewArticleComment.objects.all()
     lookup_field = 'crew_article_pk'
-    pagination_class = CustomPageNumberPagination 
+    pagination_class = CustomPagehundredNumberPagination 
 
     def list(self, request, crew_article_pk,*args, **kwargs):
         queryset = CrewArticleComment.objects.filter(article=crew_article_pk)
@@ -340,7 +340,7 @@ class CrewUserAPIView(ListAPIView) :
     lookup_field = 'crew_pk' 
     queryset = Crew.objects.all()
     serializer_class = CrewUserListSerializer
-    pagination_class = CustomPageNumberPagination 
+    pagination_class = CustomPagehundredNumberPagination 
 
     def list(self, request, *args, **kwargs):
         crew = self.get_object()
