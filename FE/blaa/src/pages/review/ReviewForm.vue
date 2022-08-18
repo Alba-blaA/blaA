@@ -54,7 +54,7 @@
             </fieldset>
           </form>
         </div>
-        <p v-if="starError" class="error">별점을 입력해주세요</p>
+        <p v-if="starError" class="error" style="margin-left:10px;">별점을 입력해주세요</p>
 
         <hr />
         <p id="semi_title_text" style="margin: 0 0 0 10px">어떤 점이 좋으셨나요?</p>
@@ -77,6 +77,7 @@
             <textarea v-model="oneReview" cols="30" rows="10"></textarea>
           </div>
         </div>
+        <p v-if="isReview" style="color:red; margin-left:10px;">한줄평을 작성해주세요</p>
       </div>
     </div>
   </div>
@@ -102,6 +103,7 @@ export default {
     // 6개의 버튼으로 이루어짐
     const storeButton = ref([0, 0, 0, 0, 0, 0]);
     const oneReview = ref("");
+    const isReview = ref(false)
     const isModalOpen = ref(false);
     const star = ref(0);
     const starError = ref(false);
@@ -205,7 +207,7 @@ export default {
     });
 
     const sumbitReview = async () => {
-      if (storeName.value && storeAddress.value && star.value) {
+      if (storeName.value && storeAddress.value && star.value && oneReview.value) {
         // Array => [1,4,6] 선택한 인자만 넘어감
         const buttonType = [];
         for (let idx = 0; idx < 6; idx++) {
@@ -256,6 +258,7 @@ export default {
         // 에러 발생시 에러 문구 출력
         storeError.value = storeName.value == "" ? true : false;
         starError.value = star.value == 0 ? true : false;
+        isReview.value = isReview.value == "" ? true : false;
       }
     };
 
@@ -280,6 +283,7 @@ export default {
       isSubmit,
       fileUpload,
       back,
+      isReview
     };
   },
 };
