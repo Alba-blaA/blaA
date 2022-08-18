@@ -91,8 +91,11 @@ export default {
 
 <style scoped>
 .comment-info {
+  background-color: #f8f9fe;
   display: grid;
   grid-template-columns: 15% 85%;
+  padding: 10px;
+  border-radius: 16px;
 }
 
 .hamburger {

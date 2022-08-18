@@ -7,11 +7,11 @@
       <div class="col-10">
         <div class="row">
           <div class="col" style="padding-left: 25px">
-            <div class="row" style="font-weight: bold">
+            <div class="row mb-1" style="font-weight: bold">
               {{ nickname }}
             </div>
-            <div class="row">
-              {{ created_at }}
+            <div class="row mb-1">
+              {{ yyyyMMdd(created_at) }}
             </div>
           </div>
         </div>
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { dataChange } from '@/hooks/dateChange'
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 export default {
@@ -56,6 +57,10 @@ export default {
     isMember: Boolean,
   },
   setup(props) {
+    const {
+      yyyyMMdd
+    } = dataChange()
+
     const router = useRouter();
     const host = ref("https://i7b209.p.ssafy.io/");
     const create_date = ref("");
@@ -66,6 +71,7 @@ export default {
     return {
       moveToArticle,
       host,
+      yyyyMMdd
     };
   },
 };
@@ -93,4 +99,5 @@ export default {
   margin-top: 20px;
   margin-bottom: 20px;
 }
+
 </style>

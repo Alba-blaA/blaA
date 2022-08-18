@@ -219,9 +219,10 @@ export default {
 
 .search-box {
   height: 40px;
-  background-color: #4d8d4d;
+  background-color: #4d8d6d;
   padding: 0 10px;
   border-radius: 40px;
+  margin-bottom: 5px;
 }
 
 .search-button {
@@ -230,7 +231,7 @@ export default {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #4d8d4d;
+  background: #4d8d6d;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -265,7 +266,7 @@ export default {
 }
 
 .search-box:hover > .search-txt {
-  width: 75%;
+  width: 77%;
 }
 
 .search-box:hover > .search-btn {

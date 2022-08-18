@@ -1,6 +1,6 @@
 <template>
-  <div>댓글 : {{ comments.length }}</div>
-  <ul v-if="comments.length">
+  <div style="margin-bottom: 8px; font-weight: 700;">댓글 : {{ comments.length }}</div>
+  <ul v-if="comments.length" style="padding: 0;">
     <CommentListItem v-for="(comment, i) in comments" :key="i" :comment="comment" />
   </ul>
   <p v-else>댓글이 아직 없어요!</p>

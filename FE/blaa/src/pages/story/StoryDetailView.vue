@@ -156,6 +156,11 @@ export default {
 </script>
 
 <style scoped>
+#topView {
+  background-color: #4D8D6D;
+  color: white;
+  padding-bottom: 10px;
+}
 .my-modal {
   overflow: hidden;
 }
@@ -167,6 +172,7 @@ export default {
 .story-content {
   display: grid;
   place-items: center;
+  margin-top: 20px;
 }
 
 #image {
@@ -250,7 +256,7 @@ export default {
 }
 
 .deactivate {
-  color: gray;
+  color: darkgray;
 }
 
 .like {
