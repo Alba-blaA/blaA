@@ -1,37 +1,39 @@
 <template>
-  <div style="z-index: 5">
-    <div style="padding: 10px; padding-bottom: 0">
-      <StoryTopNavbar :isStory="isStory" :isFollow="isFollow" :isFilter="isFilter" @change="change" />
-      <div class="search-component" v-if="isFilter" style="margin: 10px 0px">
-        <button class="button" @click="isPopUp = true">검색</button>
-        <button class="button" @click="onCategory" :class="{ activate: isCategory }">관심업종</button>
-        <button class="button" @click="onRegion" :class="{ activate: isRegion }">근무지</button>
+  <div style="background-color: #498d6d; padding-top: 20px">
+    <div style="z-index: 5">
+      <div style="padding: 10px; padding-bottom: 0">
+        <StoryTopNavbar :isStory="isStory" :isFollow="isFollow" :isFilter="isFilter" @change="change" />
+        <div class="search-component" v-if="isFilter" style="margin: 10px 0px">
+          <button class="button" @click="isPopUp = true">검색</button>
+          <button class="button" @click="onCategory" :class="{ activate: isCategory }">관심업종</button>
+          <button class="button" @click="onRegion" :class="{ activate: isRegion }">근무지</button>
+        </div>
       </div>
-    </div>
 
-    <!-- Modal -->
-    <PopUp v-if="isPopUp">
-      <HashTagForm @search-hash-tag="searchHastTag" @closeModal="[(isPopUp = false), getPure()]" />
-      <div class="buttons">
-        <button class="hashbutton" type="button" @click="[(isPopUp = false), getPure()]">닫기</button>
-        <button class="hashbutton" style="background-color: #498d6d" type="button" @click="searchHastTagStory">검색</button>
-      </div>
-    </PopUp>
+      <!-- Modal -->
+      <PopUp v-if="isPopUp">
+        <HashTagForm @search-hash-tag="searchHastTag" @closeModal="[(isPopUp = false), getPure()]" />
+        <div class="buttons">
+          <button class="hashbutton" type="button" @click="[(isPopUp = false), getPure()]">닫기</button>
+          <button class="hashbutton" style="background-color: #498d6d" type="button" @click="searchHastTagStory">검색</button>
+        </div>
+      </PopUp>
 
-    <div style="background-color: white; margin-top: 0; padding-top: 10px; padding-bottom: 10px; border-radius: 20px">
-      <div v-if="images.value">
-        <StoryImageCardList :images="images.value" />
-      </div>
-      <p v-else>해당하는 게시물이 없어요</p>
-      <router-link class="plusbutton" :to="{ name: 'createStory' }"
-        ><span class="material-symbols-outlined" style="font-size: 30px; font-weight: bold">add</span></router-link
-      >
-      <!-- <div v-if="isLoading" class="circles">
+      <div style="background-color: white; margin-top: 0; padding-top: 10px; padding-bottom: 10px; border-radius: 20px">
+        <div v-if="images.value">
+          <StoryImageCardList :images="images.value" />
+        </div>
+        <p v-else>해당하는 게시물이 없어요</p>
+        <router-link class="plusbutton" :to="{ name: 'createStory' }"
+          ><span class="material-symbols-outlined" style="font-size: 30px; font-weight: bold">add</span></router-link
+        >
+        <!-- <div v-if="isLoading" class="circles">
       로딩중
       <div class="circle"></div>
       <div class="circle"></div>
       <div class="circle"></div>
     </div> -->
+      </div>
     </div>
   </div>
 </template>

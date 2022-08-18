@@ -1,6 +1,5 @@
 <template>
-  <hr>
-  <AlarmView></AlarmView>
+  <!-- <AlarmView></AlarmView> -->
   <router-view></router-view>
 </template>
 
@@ -9,19 +8,19 @@ import { onMounted, reactive, ref } from "vue";
 import { useStore } from "vuex";
 import axios from "@/api/axios.js";
 import api from "@/api/api.js";
-import router from '@/router';
-import { onClickOutside } from '@vueuse/core';
-import AlarmView from '@/components/AlarmView.vue';
+import router from "@/router";
+import { onClickOutside } from "@vueuse/core";
+import AlarmView from "@/components/AlarmView.vue";
 
 export default {
-  components: {   
-    AlarmView
-},   
-  setup () {
-    let isModalOpen = ref(false)
-    const modal = ref(null)   
-    const store = useStore()
-    
+  components: {
+    // AlarmView,
+  },
+  setup() {
+    let isModalOpen = ref(false);
+    const modal = ref(null);
+    const store = useStore();
+
     const userInfo = store.state.account.userInfo;
     const state = reactive({
       notifications: [],
