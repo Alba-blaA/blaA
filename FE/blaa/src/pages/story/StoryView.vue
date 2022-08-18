@@ -19,7 +19,7 @@
         </div>
       </PopUp>
 
-      <div style="background-color: white; margin-top: 0; padding-top: 10px; padding-bottom: 10px; border-radius: 20px">
+      <div style="background-color: white; margin-top: 0; padding-top: 10px; padding-bottom: 10px; border-radius: 20px 20px 0 0;">
         <div v-if="images.value">
           <StoryImageCardList :images="images.value" />
         </div>

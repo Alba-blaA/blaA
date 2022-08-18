@@ -34,9 +34,10 @@
 </template>
 
 <script>
-import { useStore } from "vuex";
-import { computed, onBeforeMount, ref } from "vue";
-import ReviewList from "@/components/review/ReviewList.vue";
+import { useStore } from 'vuex'
+import { computed, onBeforeMount, ref } from 'vue'
+import ReviewList from '@/components/review/ReviewList.vue'
+import $ from 'jquery'
 
 export default {
   components: {
@@ -73,8 +74,16 @@ export default {
     });
 
     const numberOfPages = computed(() => {
-      return Math.ceil(total.value.value / 5);
-    });
+      return Math.ceil(total.value.value / 5)
+    })
+
+    // 화면이 길어서 스크롤 바가 안나올 떄
+    $(window).ready(function() {
+      if ($('#review').height() < $(window).height()) {
+        currentPage.value += 1
+        getReviews(currentPage.value)
+      }
+    }) 
 
     // 무한 스크롤 구현
     window.onscroll = function (e) {
@@ -174,6 +183,10 @@ export default {
 }
 
 /* 마우스를 위에 올렸을 때 늘어남 */
+.search-box:hover {
+  width: 180px;
+}
+
 .search-box:hover > .search-txt {
   width: 75%;
 }
