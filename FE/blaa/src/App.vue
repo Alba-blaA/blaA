@@ -72,7 +72,7 @@ export default {
 
 #semi_title_text {
   font-weight: 600;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 #small_title_text {
