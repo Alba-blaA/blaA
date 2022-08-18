@@ -7,8 +7,8 @@
       <StoryImageCardList :images="images.value" />
     </div>
     
-    <div v-else  style="background-color: white; margin-top: 0; padding-top: 10px; padding-bottom: 10px; border-radius: 20px 20px 0 0">
-      <p>팔로우 한 사람이 없어요!</p>
+    <div v-else  style="background-color: white; margin-top: 0; padding:20px 10px; border-radius: 20px 20px 0 0; font-weight: 700;">
+      <p>팔로우 한 사람이 없습니다</p>
     </div>
 </div>
 
@@ -66,6 +66,15 @@ export default {
       // 메세지 하나밖에 없으면
       if (Object.keys(images.value.value[0]).length == 2) {
         isFollow.value = false;
+        images.value = {
+          created_at: '',
+          story_picture: '',
+          story_title: "",
+          user_pk: {
+            image: "",
+            nickname: "",
+          }
+        }
       } else {
         isFollow.value = true;
       }

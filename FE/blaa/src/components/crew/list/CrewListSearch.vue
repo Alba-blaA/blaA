@@ -1,7 +1,8 @@
 <template>
   <div class="row" id="top_box">
-    <div class="col-2" id="top_box_text"></div>
-    <h5 class="col-8" id="top_box_text">크루 검색</h5>
+    <div class="col-3" id="top_box_text" style="padding-right: 30px; margin-bottom: 8px" @click="back"><img src="@/assets/icons/arrow-left.png" /></div>
+    <h5 class="col-6" id="top_box_text">크루 검색</h5>
+    <div class="col-3" id="top_box_text"></div>
   </div>
   <!-- <label id="search">크루 검색</label> -->
   <input type="text" id="crew_search" name="crew_search" v-model="crew_search" placeholder="검색어를 입력하세요." />
@@ -50,7 +51,7 @@ export default {
       });
     });
 
-   const moveToDetail = async (crew_pk) => {
+    const moveToDetail = async (crew_pk) => {
       await store.dispatch("crew/getCrewMembers", crew_pk);
 
       Object.assign(crewMember.value, store.state.crew.members);
@@ -69,6 +70,9 @@ export default {
         router.push({ name: "crewboardnonmember", params: { crew_pk: crew_pk } });
       }
     };
+    const back = () => {
+      router.go(-1);
+    };
 
     return {
       AllCrews,
@@ -76,6 +80,7 @@ export default {
       crew_search,
       moveToDetail,
       business,
+      back,
     };
   },
 };
