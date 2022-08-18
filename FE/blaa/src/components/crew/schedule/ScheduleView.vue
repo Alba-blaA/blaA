@@ -13,11 +13,11 @@
    
     <div v-if="state.isworkbuttonon">      
         <button @click="workon(date.getFullYear(),date.getMonth(),date.getDate())" class="scheduleworkbuttonon"><b >근무 보기</b></button>
-        <button @click="breakon()" class="schedulebreakbuttonoff"><b>휴무 보기</b></button>            
+        <button @click="breakon(date.getFullYear(),date.getMonth(),date.getDate())" class="schedulebreakbuttonoff"><b>휴무 보기</b></button>            
     </div>
     <div v-else>
       <button @click="workon(date.getFullYear(),date.getMonth(),date.getDate())" class="scheduleworkbuttonoff"><b >근무 보기</b></button>
-      <button @click="breakon()" class="schedulebreakbuttonon"><b>휴무 보기</b></button>
+      <button @click="breakon(date.getFullYear(),date.getMonth(),date.getDate())" class="schedulebreakbuttonon"><b>휴무 보기</b></button>
     </div>
     </div>
      <br>  
@@ -26,14 +26,25 @@
         <div class="workbreakbox d-flex justify-content-center align-items-center">
           <div>
             <b>              
-              근무   | <img id = "chatprofile" class="imgProfile" :src="HOST + worker.image" alt="">{{ worker.nickname }} | {{worker.crew_starthour.substr(0,5)}}~{{worker.crew_endhour.substr(0,5)}}
+              근무   | <img id = "chatprofile" class="imgProfile" :src="HOST + worker.image" alt="">{{ longnicknametoshort(worker.nickname) }} | {{worker.crew_starthour.substr(0,5)}}~{{worker.crew_endhour.substr(0,5)}}
             </b>            
           </div>
         </div>
         <br>
       </div>
     </div>
-    <div v-else></div> 
+    <div v-else>
+      <div v-for="(worker, i) in state.workers" :key="i">
+        <div class="breakworkbox d-flex justify-content-center align-items-center">
+          <div>
+            <b>              
+              휴무   | <img id = "chatprofile" class="imgProfile" :src="HOST + worker.image" alt="">{{ longnicknametoshort(worker.nickname) }}</b>            
+          </div>
+        </div>
+        <br>
+      </div>     
+
+    </div> 
 
    
   
@@ -106,6 +117,14 @@ export default {
       
     })
 
+    const longnicknametoshort= ((nickname) => {
+      if (nickname.length > 8) {
+        return nickname.substr(0,5) + "..."        
+      }
+      return nickname
+
+    })
+
     const workon = (async (workyear,workmonth,workdate) => {
       state.isworkbuttonon = true
       const finddate = workyear +"-"+ onedigittotwodigitmonth(workmonth) +"-"+ onedigittotwodigitday(workdate)       
@@ -118,8 +137,17 @@ export default {
 
     })
 
-    const breakon = (() => {
+    const breakon = (async (workyear,workmonth,workdate) => {
       state.isworkbuttonon = false
+      const finddate = workyear +"-"+ onedigittotwodigitmonth(workmonth) +"-"+ onedigittotwodigitday(workdate)
+      await axios.get(api.crew.getworklist(crew_pk, finddate),  {
+        params : {
+        work : 0
+      }}).then((response)=>{
+        console.log(response.data);
+        state.workers = response.data
+      } )
+         
     })
 
     return {
@@ -132,7 +160,8 @@ export default {
      workon,
      onedigittotwodigitmonth,
      onedigittotwodigitday,
-     HOST
+     HOST,
+     longnicknametoshort
  
     }  
 }
@@ -189,6 +218,14 @@ margin-left : 13px;
 .workbreakbox {
   height: 100px ; 
   background-color: rgba(229, 141, 31, 0.55);
+  border-radius: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.breakworkbox {
+  height: 100px ; 
+  background-color: #D9D9D9;
   border-radius: 20px;
   margin-left: 10px;
   margin-right: 10px;

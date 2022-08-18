@@ -69,26 +69,36 @@
 <script>
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
-import { ref, onMounted } from "vue";
-import { mod } from "mathjs";
+import { kakaoLogout, deleteKakaoAccount } from "@/hooks/kakaologin.js";
+import { useCookies } from "vue3-cookies";
 
 export default {
   setup() {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
+    const { cookies } = useCookies();
 
     const back = () => {
       router.go(-1);
     };
 
-    const logout = () => {
+    const logout = async () => {
+      router.replace("/");
+
+      if(store.state.account.kakaoLogin) {
+        console.log("kakao getaccesstoken : ", window.Kakao.Auth.getAccessToken())
+        await kakaoLogout();
+        cookies.remove('access-token');
+        cookies.remove('refresh-token');
+      }
+    
       store.commit("account/USER_INFO", null);
+      store.commit("account/SET_LOGIN_TOKEN", null);
       store.commit("account/LOGIN", false);
       store.commit("account/KAKAO_LOGIN", false);
-      sessionStorage.removeItem("token");
-      sessionStorage.removeItem("vuex");
-      router.replace("/login");
+    
+      sessionStorage.clear();
     };
 
     const myInfo = store.state.account.userInfo;
@@ -113,6 +123,11 @@ export default {
     };
 
     const deleteAccount = () => {
+      if(store.state.account.kakaoLogin) {
+        deleteKakaoAccount();
+        cookies.remove('access-token');
+        cookies.remove('refresh-token');
+      }
       router.push({
         name: "deleteAccount",
         params: { user_pk: route.params.user_pk },

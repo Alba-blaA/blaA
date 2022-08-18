@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "@/api/axios.js";
 import VueCookies from "vue3-cookies";
 
 const getKakaoToken = async (code) => {
@@ -7,7 +7,6 @@ const getKakaoToken = async (code) => {
     const data = {
       grant_type: "authorization_code",
       client_id: process.env.VUE_APP_KAKAO_REST_API,
-      // redirect_uri: "http://127.0.0.1:8000/account/sign-in/kakao/callback",
       redirect_uri: "https://i7b209.p.ssafy.io/kakao",
       // redirect_uri: "http://localhost:3000/kakao",
       code: code,
@@ -55,4 +54,37 @@ const refreshToken = async () => {
   }
 };
 
-export { getKakaoToken, getKakaoUserInfo, refreshToken };
+const kakaoLogout = () => {
+  window.Kakao.isInitialized();
+
+  if (!window.Kakao.Auth.getAccessToken()) {
+    console.log("Not logged in");
+    return;
+  }
+
+  window.Kakao.Auth.logout(function () {
+    console.log(window.Kakao.Auth.getAccessToken());
+  });
+};
+
+const deleteKakaoAccount = () => {
+  window.Kakao.isInitialized();
+
+  window.Kakao.API.request({
+    url: "/v1/user/unlink",
+    success: function (response) {
+      console.log(response);
+    },
+    fail: function (error) {
+      console.log(error);
+    },
+  });
+};
+
+export {
+  getKakaoToken,
+  getKakaoUserInfo,
+  refreshToken,
+  kakaoLogout,
+  deleteKakaoAccount,
+};

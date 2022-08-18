@@ -1,56 +1,7 @@
 <template>
-  <!-- <div v-if="state.notifications">
-  <div v-if="state.isUnread">
-    <button @click="isModalOpen = true">안읽은 알림있음</button>
-  </div >
-  <div v-else>
-    <button @click="isModalOpen = true">안읽은 알림 없음</button>
-  </div>  
-</div>
-  <div class="black-bg" v-if="isModalOpen">
-    <div class="white-bg" ref="modal">
-      <h4>알림창임</h4>
-      <div v-for="(notification, i) in state.notifications" :key="i">        
-          <b-card >       
-            <b-card-text  @click="clicknotification(notification), isModalOpen = false, deleteclicknotification(notification.pk)"> 
-              <div >
-                {{ notification.content }}
-              </div>             
-            </b-card-text>
-            <b-card-text>
-              <div v-if="notification.type == 'crew_invite'">
-                <button @click="acceptinvitation(notification.redirect_pk), deleteclicknotification(notification.pk)">수락하기</button>
-                <button @click="refuseinvitation(notification.redirect_pk), deleteclicknotification(notification.pk)">거절하기</button>
-              </div>    
-
-            </b-card-text>
-          </b-card>
-      </div>
-      <button @click="isModalOpen = false" class="close-btn">close</button>
-    </div>
-
-  </div> -->
-  <!-- <div style="background-color: #498d6d; z-index: -1">
-    <div class="notification">
-      <div v-if="state.isUnread">
-        <span @click="gotonotification" class="material-symbols-outlined"> notification_important </span>
-      </div>
-      <div v-else>
-        <div v-if="state.notifications.length != 0">
-          <span @click="gotonotification" class="material-symbols-outlined"> notifications_active </span>
-        </div>
-        <div v-else>
-          <span @click="gotonotification" class="material-symbols-outlined"> notifications </span>
-        </div>
-      </div>
-    </div>
-  </div> -->
-  <!-- <div></div> -->
-  <div style="background-color: #498d6d; z-index: -1">
-    <div style="padding: 10px">
-      <router-view></router-view>
-    </div>
-  </div>
+  <hr>
+  <AlarmView></AlarmView>
+  <router-view></router-view>
 </template>
 
 <script>
@@ -58,14 +9,19 @@ import { onMounted, reactive, ref } from "vue";
 import { useStore } from "vuex";
 import axios from "@/api/axios.js";
 import api from "@/api/api.js";
-import router from "@/router";
-import { onClickOutside } from "@vueuse/core";
-export default {
-  setup() {
-    let isModalOpen = ref(false);
-    const modal = ref(null);
-    const store = useStore();
+import router from '@/router';
+import { onClickOutside } from '@vueuse/core';
+import AlarmView from '@/components/AlarmView.vue';
 
+export default {
+  components: {   
+    AlarmView
+},   
+  setup () {
+    let isModalOpen = ref(false)
+    const modal = ref(null)   
+    const store = useStore()
+    
     const userInfo = store.state.account.userInfo;
     const state = reactive({
       notifications: [],
