@@ -285,6 +285,9 @@ export default {
   width: 100%;
   text-align: center;
   margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .signup-text {
@@ -299,9 +302,11 @@ export default {
 
 .signup-step {
   text-align: center;
-  display: inline-block;
+  display: flex;
   height: 50px;
   line-height: 50px;
+  align-items: center;
+  justify-content: center;
 }
 
 .yellow-circle {
