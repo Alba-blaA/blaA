@@ -53,6 +53,9 @@
       <div class="buttons" @click="moveToCalendar">
         <p class="button_text">스케줄</p>
       </div>
+      <div class="buttons" @click="moveToDetail">
+        <p class="button_text">크루 정보</p>
+      </div>
     </div>
 
     <!-- <div v-show="isFeed">
@@ -84,6 +87,7 @@ export default {
     //   await store.dispatch("crew/getCrewInfo", route.params.crew_pk);
     //   Object.assign(crewInfo, store.state.crew.crewInfo);
     // };
+
     onMounted(async () => {
       await store.dispatch("crew/getCrewInfo", route.params.crew_pk);
       Object.assign(crewInfo, store.state.crew.crewInfo);
