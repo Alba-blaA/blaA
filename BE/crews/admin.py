@@ -12,8 +12,20 @@ admin.site.register(Crew,CrewAdmin)
 
 class CrewArticleAdmin(admin.ModelAdmin) :
     list_display = ('crew_article_pk','crew_title')
+
 admin.site.register(CrewArticle,CrewArticleAdmin)
+
+
 admin.site.register(CrewArticleImage)
 admin.site.register(CrewArticleComment)
-admin.site.register(CrewSchedule)
-admin.site.register(CrewInvite)
+
+class CrewScheduleeAdmin(admin.ModelAdmin) :
+    list_display = ('crew','user','crew_day')
+
+admin.site.register(CrewSchedule,CrewScheduleeAdmin)
+
+class CrewInviteAdmin(admin.ModelAdmin) :
+    list_display = ('crew','user','crew_leader_accept','user_accept')
+
+
+admin.site.register(CrewInvite,CrewInviteAdmin)
