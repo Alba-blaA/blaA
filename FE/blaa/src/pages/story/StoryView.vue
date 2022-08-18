@@ -23,7 +23,7 @@
         <div v-if="images.value">
           <StoryImageCardList :images="images.value" />
         </div>
-        <p v-else>해당하는 게시물이 없어요</p>
+        <p v-else style="padding: 20px; font-weight:700;">해당하는 게시물이 없어요</p>
         <router-link class="plusbutton" :to="{ name: 'createStory' }"
           ><span class="material-symbols-outlined" style="font-size: 30px; font-weight: bold">add</span></router-link
         >
