@@ -17,8 +17,8 @@
  
   
   <div class="view chat"  v-if="userInfo">
-    <header class="d-flex justify-content-center">
-      <h1>{{ from_usernickname}}</h1>         
+    <header class="d-flex justify-content-center align-items-center" style="padding-bottom : 0px">
+      <h1 style="margin : 0">{{ from_usernickname}}</h1>         
     </header>    
     <section class = "chat-box">
       <div 
@@ -275,7 +275,7 @@ export default {
     position: relative;
     display: block;
     width: 100%;
-    padding: 50px 30px 10px;
+    padding: 80px 30px 10px;
   }
   .view.chat header .logout {
     position: absolute;
@@ -298,7 +298,7 @@ export default {
     background-color: #FFF;
     box-shadow: 0px 0px 12px rgba(100, 100, 100, 0.2);
     flex: 1 1 100%;
-    padding: 12px;
+    padding: 12px;    
   }
   .view.chat .chat-box .message {
     display: flex;
