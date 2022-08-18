@@ -1,6 +1,5 @@
 <template>
   <li>
-    <br />
     <div class="comment-info">
       <div>
         <span>{{ comment.nickname }}</span> <span>작성일: {{ comment.created_at }}</span>
