@@ -1,4 +1,9 @@
 <template>
+  <div class="row" id="top_box">
+    <div class="col-3" id="top_box_text" style="padding-right: 30px; margin-bottom: 8px" @click="goBack"><img src="@/assets/icons/arrow-left.png" /></div>
+    <h5 class="col-6" id="top_box_text">오출완</h5>
+    <div class="col-3" id="top_box_text" style="display: flex; justify-content: center; align-items: center; margin-bottom: 8px"></div>
+  </div>
   <!-- 뒤로, 하트 이모지 추가 -->
   <div v-if="!isError">
     <PopUp v-if="popUpOpen" @close-modal="popUpOpen = false">
@@ -9,13 +14,25 @@
       </div>
     </PopUp>
     <div id="story">
-      <div id="topView" class="d-flex justify-content-center align-items-center" style="padding-top:20px;">
+      <div class="story-content">
+        <div id="story-info">
+          <img :src="host + story.user_pk.image" height="60" width="60" style="margin: 0 auto; cursor: pointer; border-radius: 30px" @click="moveToProfile" />
+          <div class="d-flex justify-content-between" style="padding: 15px 0 0 10px">
+            <span style="margin-left: 10px; font-size: 18px">{{ story.user_pk.nickname }} </span>
+            <span>{{ story.created_at }}</span>
+          </div>
+        </div>
+      </div>
+      <p style="margin: 20px">{{ story.story_title }}</p>
+      <div class="story-content">
+        <div id="image">
+          <img :src="host + story.story_picture" alt="이미지 영역입니다." style="width: 100%" />
+        </div>
+      </div>
+      <div class="d-flex justify-content-center align-items-center" style="margin-top: 20px">
         <div class="d-flex justify-content-between align-items-center" style="width: 90%">
-          <span class="material-symbols-outlined" style="cursor: pointer; font-size: 36px" @click="goBack">arrow_back</span>
-          <h2 style="margin: 0; font-weight: 700; margin: 0 5px;">{{ story.story_title }}</h2>
           <!-- 좋아요 기능 구현 -->
           <div class="like">
-            <span style="margin-right: 5px">{{ story.like_user_count }}</span>
             <div>
               <i
                 class="fa fa-solid fa-heart"
@@ -24,23 +41,12 @@
                 style="cursor: pointer; maring-left: 5px"
               ></i>
             </div>
-            <div style="margin-left: 10px" v-if="story.user_pk.user_pk == user_pk"><i class="fa fa-solid fa-trash" @click="popUpOpen = true"></i></div>
+            <span style="margin-left: 5px">{{ story.like_user_count }}</span>
           </div>
+          <div style="margin-left: 10px" v-if="story.user_pk.user_pk == user_pk"><i class="fa fa-solid fa-trash" @click="popUpOpen = true"></i></div>
         </div>
       </div>
-      <div class="story-content">
-        <div id="image">
-          <img :src="host + story.story_picture" alt="이미지 영역입니다." style="width: 100%; border-radius: 12px;" />
-        </div>
-        <div id="story-info">
-          <img :src="host + story.user_pk.image" height="60" width="60" style="margin: 0 auto; cursor: pointer; border-radius: 30px" @click="moveToProfile" />
-          <div class="d-flex justify-content-between" style="padding: 20px 0 0 10px">
-            <span style="font-weight: 700;">{{ story.user_pk.nickname }} </span>
-            <span>{{ story.created_at }}</span>
-          </div>
-        </div>
-      </div>
-      <br />
+      <hr />
       <CommentList />
       <CommentForm />
     </div>
@@ -254,8 +260,11 @@ export default {
 }
 
 .like {
+  padding: 5px 10px 5px 10px;
+  background-color: #ffe2e5;
+  border-radius: 20px;
   display: flex;
-  font-size: 24px;
+  font-size: 18px;
   text-align: center;
 }
 </style>

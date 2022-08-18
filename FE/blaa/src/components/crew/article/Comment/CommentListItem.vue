@@ -1,5 +1,5 @@
 <template>
-  <li class="comment">
+  <li>
     <div class="comment-info">
       <div class="d-flex justify-content-between align-items-center" style="height: 30px;">
         <span style="font-weight: 700">{{ comment.nickname }}</span> 
