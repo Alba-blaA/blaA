@@ -19,11 +19,14 @@
         </div>
       </div>
     </div>
-    <div class="star-ratings">
-      <div class="star-ratings-fill space-x-2 text-lg" :style="{ width: score + '%' }">
-        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+    <div class="d-flex justify-content-between">
+      <div></div>
+      <div class="star-ratings">
+        <div class="star-ratings-fill space-x-2 text-lg" :style="{ width: score + '%' }">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        </div>
+        <div class="star-ratings-base space-x-2 text-lg"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
       </div>
-      <div class="star-ratings-base space-x-2 text-lg"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
     </div>
     <div id="buttons">
       <div v-for="button in high_button" :key="button.id">
@@ -76,14 +79,14 @@ export default {
     onMounted(() => {
       setTimeout(() => {
         starWidth.value = computed(() => {
-          return $(".store").width() * 0.6;
+          return $(".store").width() - 120;
         });
       }, 50);
     });
 
     $(window).resize(function () {
       starWidth.value = computed(() => {
-        return $(".store").width() * 0.6;
+        return $(".store").width() - 120;
       });
     });
 
@@ -152,8 +155,7 @@ span {
   unicode-bidi: bidi-override;
   width: max-content;
   margin-bottom: 10px;
-  left: 63%;
-  /* margin-right: 20px; */
+  margin-right: 10px;
   -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
   -webkit-text-stroke-width: 1.3px;
   -webkit-text-stroke-color: #e58d1f;
