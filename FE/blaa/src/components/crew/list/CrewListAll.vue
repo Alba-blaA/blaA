@@ -110,7 +110,7 @@ export default {
 #profile {
   width: 70px;
   height: 70px;
-  border-radius: 20%;
+  border-radius: 50%;
   overflow: hidden;
   object-fit: cover;
 }
