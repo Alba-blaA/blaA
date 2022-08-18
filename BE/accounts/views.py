@@ -251,7 +251,7 @@ class FollowAPIView(ListAPIView) :
     serializer_class = UserListSerializer
     lookup_field = 'user_pk'
     queryset = User.objects.all()
-    pagination_class = CustomPageNumberPagination
+    pagination_class = None
     
     def list(self, request, *args, **kwargs):
         user = self.get_object()
