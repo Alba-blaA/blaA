@@ -169,7 +169,6 @@ export default {
             id: page.hashtag_content,
           }
         })
-
         const res2 = await axios.get(api.story.hashtag(), {
           params: {
             page: page.page,
@@ -197,6 +196,7 @@ export default {
           isState: page.isState,
           page: page.page
         }
+
         commit('GET_IMAGES', send)
       } catch(error) {
         console.log(error)

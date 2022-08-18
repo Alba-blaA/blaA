@@ -149,6 +149,7 @@ export default {
 <style scoped>
 .main {
   padding-top: 24px;
+  padding-bottom: 60px;
 }
 .nickname {
   font-weight: 800;
@@ -247,8 +248,8 @@ export default {
 }
 
 .udbutton {
-  width: 90%;
-  position: absolute;
+  width:90%;
+  position: fixed;
   bottom: 70px;
   display: flex;
   justify-content: space-around;
