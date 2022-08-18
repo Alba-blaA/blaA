@@ -1,23 +1,43 @@
 <template>
   <div class="row" id="top_box">
-    <div class="col-2" id="top_box_text" @click="moveBack"><img src="@/assets/icons/arrow-left.png" /></div>
+    <div class="col-2" id="top_box_text" @click="moveBack">
+      <img src="@/assets/icons/arrow-left.png" />
+    </div>
     <h5 class="col-8" id="top_box_text">게시글</h5>
     <div class="col-2" id="top_box_text"></div>
   </div>
   <div style="padding: 20px 20px 0px 20px">
     <div>
-      <h3 style="margin: 0; font-weight: 800">{{ article.crew_title }}</h3>
+      <h3 id="title_text" style="margin: 0; font-weight: 800">
+        {{ article.crew_title }}
+      </h3>
       <div class="row">
-        <div class="col-2" style="padding-bottom: 10px">
-          <img :src="article.profile" width="50" style="float: right; margin-top: 15px; padding-right: 0" />
+        <div id="profile" class="col-2" style="padding-bottom: 10px">
+          <img
+            class="imgProfile"
+            :src="article.profile"
+            width="40"
+            height="40"
+            style="float: right; margin-top: 15px; padding-right: 0"
+          />
         </div>
-        <div class="col-10 d-flex justify-content-between" style="padding-top: 10px; padding-left: 0">
+        <div
+          class="col-10 d-flex justify-content-between"
+          style="padding-top: 10px; padding-left: 0"
+        >
           <div>
-            <p style="margin: 0">{{ article.nickname }}</p>
-            <p>{{ yyyyMMdd(article.created_at) }}</p>
+            <p id="semi_title_text" style="margin: 0">
+              {{ article.nickname }}
+            </p>
+            <p id="small_title_text">{{ yyyyMMdd(article.created_at) }}</p>
           </div>
           <div v-if="article.user == now_user" style="margin: auto 0">
-            <span @click="isUpdtae = !isUpdate" style="font-size: 30px" class="material-symbols-outlined">menu</span>
+            <span
+              @click="isUpdtae = !isUpdate"
+              style="font-size: 30px"
+              class="material-symbols-outlined"
+              >menu</span
+            >
             <div id="update" v-if="isUpdtae">
               <button class="button" @click="articlemodify">수정</button>
               <button class="button" @click="articledele">삭제</button>
@@ -31,7 +51,7 @@
 
   <div style="padding: 20px 20px 0px 20px">
     <div>
-      <div style="">{{ article.crew_content }}</div>
+      <div style="font-size: 13px">{{ article.crew_content }}</div>
       <template v-for="image in article.images" :key="image">
         <img class="contentImg" :src="host + image.article_picture" />
         {{ image.crew_article_pk }}
@@ -66,7 +86,10 @@ export default {
     const isUpdtae = ref(false);
 
     onMounted(async () => {
-      await store.dispatch("crew/getArticleDetail", route.params.crew_article_pk);
+      await store.dispatch(
+        "crew/getArticleDetail",
+        route.params.crew_article_pk
+      );
       article.value = store.state.crew.article;
       console.log("이미지", article.value.images);
     });
@@ -169,6 +192,18 @@ export default {
 
 .contentImg {
   width: 100%;
-  
+}
+
+#profile {
+  width: 50px;
+  height: 50px;
+  border-radius: 70%;
+  overflow: hidden;
+}
+
+.imgProfile {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 </style>

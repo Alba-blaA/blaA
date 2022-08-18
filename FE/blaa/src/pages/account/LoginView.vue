@@ -4,16 +4,16 @@
       <!-- <br /> -->
       <h1 id="login-text">로그인</h1>
       <br />
-      <form>
+      <!-- <form>
         <label for="login-id"></label>
         <input
           id="login-id"
           type="email"
           v-model="user.email"
           placeholder="EMAIL"
-        />
-        <!-- <b>{{ message }}</b> -->
-        <small>{{ emailMessage }}</small> <br /><br />
+        /> -->
+      <!-- <b>{{ message }}</b> -->
+      <!-- <small>{{ emailMessage }}</small> <br /><br />
 
         <label for="login-password"></label>
         <input
@@ -25,10 +25,10 @@
           @keyup.enter="confirm"
         />
         <small>{{ passwordMessage }}</small>
-        <br /><br />
-        <!-- <b>{{ message }}</b> -->
+        <br /><br /> -->
+      <!-- <b>{{ message }}</b> -->
 
-        <div class="row">
+      <!-- <div class="row">
           <b-button
             class="col-sm-12"
             pill
@@ -41,12 +41,12 @@
             ><b>회원가입</b></b-button
           >
         </div>
-      </form>
+      </form> -->
 
-      <div class="find-account">
+      <!-- <div class="find-account">
         <b class="find">아이디 찾기</b> &nbsp;
         <b class="find">비밀번호 찾기</b>
-      </div>
+      </div> -->
 
       <br />
       <br />
@@ -145,8 +145,8 @@ export default {
 
     const kakaoLogin = () => {
       const params = {
-        // redirectUri: "https://i7b209.p.ssafy.io/kakao",
-        redirectUri: "http://localhost:3000/kakao",
+        redirectUri: "https://i7b209.p.ssafy.io/kakao",
+        // redirectUri: "http://localhost:3000/kakao",
       };
       window.Kakao.Auth.authorize(params);
     };
