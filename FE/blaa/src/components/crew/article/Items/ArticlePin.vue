@@ -1,7 +1,7 @@
 <template>
   <div v-if="articles.length > 0">
     <div v-for="(article, i) in articleFilter" :key="i">
-      <div class="card" @click="moveToArticle(article.crew_article_pk)">
+      <div class="card-view" @click="moveToArticle(article.crew_article_pk)">
         <div class="row">
           <div class="col-8">
             <p class="card_text">{{ article.crew_title }}</p>
@@ -59,7 +59,7 @@ export default {
 </script>
 
 <style scoped>
-.card {
+.card-view {
   width: 90%;
   height: 50px;
   margin: auto;
