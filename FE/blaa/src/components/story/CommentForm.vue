@@ -71,6 +71,7 @@ export default {
   bottom: 65px;
   left: 0;
   border-top: 1px solid black;
+  border-bottom: 1px solid black;
 }
 
 input {
