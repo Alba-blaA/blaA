@@ -1,6 +1,10 @@
 <template>
   <br />
- <h3 style="font-weight:bold;">내가 가입한 크루</h3>
+  <h3 v-if="myCrew" style="font-weight: bold">내가 가입한 크루</h3>
+  <h3 v-else style="font-weight: bold">
+    <b style="color: #498d6d">{{ userNickname }}</b
+    >님이 가입한 크루
+  </h3>
   <hr />
 
   <div class="container">
@@ -10,26 +14,36 @@
       style="width: 100%"
       @click.prevent="crewDetail(crew.crew_pk)"
     >
-      <div class="d-flex justify-content-around row" @click="crewDetail(crew.crew_pk)">
-      <img class="col-2" style="width: 5rem; height: 3.5rem; border-radius: 50%"  :src="crew.crew_img" />
+      <div
+        class="d-flex justify-content-around row"
+        @click="crewDetail(crew.crew_pk)"
+      >
+        <img
+          class="col-2"
+          style="width: 5rem; height: 3.5rem; border-radius: 50%"
+          :src="crew.crew_img"
+        />
 
-      <h5 class="col-5 mt-3 mb-0" style="font-weight: bold">
-        <b>{{ crew.crew_name }}</b>
-      </h5>
-      <div style="padding: 0%; margin-top: 4%;" class="col-2 material-symbols-outlined" >
-      arrow_forward_ios
+        <h5 class="col-5 mt-3 mb-0" style="font-weight: bold">
+          <b>{{ crew.crew_name }}</b>
+        </h5>
+        <div
+          style="padding: 0%; margin-top: 4%"
+          class="col-2 material-symbols-outlined"
+        >
+          arrow_forward_ios
         </div>
       </div>
-        <hr>
+      <hr />
     </div>
-  </div>  
+  </div>
 </template>
 
 <script>
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { ref } from "vue";
-import axios from "axios";
+import { ref, computed } from "vue";
+import axios from "@/api/axios.js";
 import api from "@/api/api.js";
 
 export default {
@@ -47,6 +61,23 @@ export default {
       }
     }
 
+    const myCrew = computed(() => {
+      if (store.state.account.userInfo.user_pk == route.params.user_pk) {
+        return true;
+      }
+      return false;
+    });
+
+    const userNickname = ref(null);
+    axios
+      .get(api.profile.myInfo(route.params.user_pk))
+      .then((response) => {
+        userNickname.value = response.data.nickname;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     const crews = store.state.profile.crewList.results[user_pk.value].crews;
 
     const crewDetail = (crew_pk) => {
@@ -60,6 +91,8 @@ export default {
 
     return {
       crewList,
+      myCrew,
+      userNickname,
       crews,
       crewDetail,
     };
@@ -67,6 +100,4 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
+<style></style>

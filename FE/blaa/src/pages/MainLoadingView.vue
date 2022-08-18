@@ -52,6 +52,35 @@ export default {
   bottom: 0;
   right: 0;
   overflow: auto;
+
+  -webkit-animation: slide-out-left 0.8s cubic-bezier(0.55, 0.085, 0.68, 0.53)
+    4s both;
+  animation: slide-out-left 0.8s cubic-bezier(0.55, 0.085, 0.68, 0.53) 4s both;
+}
+
+@-webkit-keyframes slide-out-left {
+  0% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateX(-1000px);
+    transform: translateX(-1000px);
+    opacity: 0;
+  }
+}
+@keyframes slide-out-left {
+  0% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateX(-1000px);
+    transform: translateX(-1000px);
+    opacity: 0;
+  }
 }
 
 #loading-text {

@@ -67,6 +67,25 @@ export default {
 .back {
   margin-left: 10px;
   margin-top: 10px;
+  -webkit-animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+}
+
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 #signup {
@@ -92,6 +111,26 @@ export default {
   display: flex;
   justify-content: center;
   flex-direction: column;
+
+  -webkit-animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+}
+
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .signup-text {
@@ -101,7 +140,7 @@ export default {
   font-size: 35px;
   line-height: 30px;
   text-align: center;
-  /* margin-bottom: 30px; */
+  margin-bottom: 30px;
 }
 
 .signup-step {

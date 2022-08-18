@@ -22,6 +22,7 @@
           v-model="user.password"
           placeholder="PASSWORD"
           autocomplete="off"
+          @keyup.enter="confirm"
         />
         <small>{{ passwordMessage }}</small>
         <br /><br />
@@ -144,8 +145,8 @@ export default {
 
     const kakaoLogin = () => {
       const params = {
-        redirectUri: "https://i7b209.p.ssafy.io/kakao",
-        // redirectUri: "http://localhost:3000/kakao",
+        // redirectUri: "https://i7b209.p.ssafy.io/kakao",
+        redirectUri: "http://localhost:3000/kakao",
       };
       window.Kakao.Auth.authorize(params);
     };
@@ -177,7 +178,28 @@ export default {
   display: table;
   width: 100%;
   height: 100%;
+
+  -webkit-animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
 }
+
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 #login-text {
   font-family: "Inter";
   font-style: normal;
