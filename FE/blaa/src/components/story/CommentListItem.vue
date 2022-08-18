@@ -33,7 +33,6 @@
         </div>
       </div>
     </li>
-    <div style="height: 1px; background-color:black; width:100%; margin-top: 15px; opacity:0.5; z-index: 1;"></div>
 </template>
 
 <script>
@@ -92,8 +91,11 @@ export default {
 
 <style scoped>
 .comment-info {
+  background-color: #f8f9fe;
   display: grid;
   grid-template-columns: 15% 85%;
+  padding: 10px;
+  border-radius: 16px;
 }
 
 .hamburger {
