@@ -146,7 +146,7 @@ export default {
 
         // 파일 형식과 3MB의 파일크기 확인
         if (
-          ["jpeg", "png", "gif", "bmp"].includes(fileName) &&
+          ["jpeg", "png", "gif", "bmp", "jpg"].includes(fileName) &&
           profileImg.value.size <= 25165824
         ) {
           reader.onload = (e) => {
@@ -173,11 +173,15 @@ export default {
                   "Content-type": "multipart/form-data",
                 },
               })
-              .then((response) => {
+              .then(async (response) => {
                 console.log("변경 후 data ", response.data);
                 store.commit("account/USER_INFO", response.data);
-                const res = sessionStorage.getItem("vuex");
-                console.log("sessionStorage : ", res);
+                await store.dispatch(
+                  "account/getMyCrewList",
+                  userInfo.value.user_pk
+                );
+                // const res = sessionStorage.getItem("vuex");
+                // console.log("sessionStorage : ", res);
                 alert("사진 변경 완료");
               });
           } catch (err) {
