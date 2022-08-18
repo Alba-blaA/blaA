@@ -27,11 +27,24 @@
      <br>  
     <div v-if="state.isworkbuttonon">      
       <div v-for="(worker, i) in state.workers" :key="i">
-        <div class="workbreakbox d-flex justify-content-center align-items-center">
-          <div>
-            <b>              
-              근무   | &nbsp;  <img id = "chatprofile" class="imgProfile" :src="HOST + worker.image" alt="">{{ longnicknametoshort(worker.nickname) }} | {{worker.crew_starthour.substr(0,5)}}~{{worker.crew_endhour.substr(0,5)}}
+        <div class="workbreakbox d-flex  align-items-center">
+          <div style="padding-left: 20px">
+            <b>                            
+              근무  &nbsp;&nbsp; |  &nbsp;&nbsp;&nbsp;&nbsp;               
             </b>            
+          </div >
+          <div>
+            <img id = "chatprofile" class="imgProfile" :src="HOST + worker.image" alt="">           
+          </div>
+          <div>
+            <b>
+              {{ longnicknametoshort(worker.nickname) }} &nbsp;&nbsp;:  &nbsp;&nbsp;   
+            </b>
+          </div>
+          <div>
+            <b>
+              {{worker.crew_starthour.substr(0,5)}}~{{worker.crew_endhour.substr(0,5)}}
+            </b>
           </div>
         </div>
         <br>
@@ -39,10 +52,16 @@
     </div>
     <div v-else>
       <div v-for="(worker, i) in state.workers" :key="i">
-        <div class="breakworkbox d-flex justify-content-center align-items-center">
-          <div>
+        <div class="breakworkbox d-flex  align-items-center">
+          <div style="padding-left: 20px">
             <b>              
-              휴무   | &nbsp;  <img id = "chatprofile" class="imgProfile" :src="HOST + worker.image" alt="">{{ longnicknametoshort(worker.nickname) }}</b>            
+              휴무  &nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;  
+            </b>            
+          </div>
+          <div>
+            <b>
+              <img id = "chatprofile" class="imgProfile" :src="HOST + worker.image" alt="">{{ longnicknametoshort(worker.nickname) }}
+            </b>
           </div>
         </div>
         <br>
