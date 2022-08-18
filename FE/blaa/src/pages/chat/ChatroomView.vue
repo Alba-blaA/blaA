@@ -229,5 +229,13 @@ body {
   border-radius: 50%;
   background: #e51c23;
 }
+#chatprofile{
+  width: 35px;
+  height: 35px;
+  border-radius: 70%;
+  overflow: hidden;
+  margin-right : 13px
+
+}
 
 </style>
