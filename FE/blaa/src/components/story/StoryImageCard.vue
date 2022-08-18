@@ -1,6 +1,7 @@
 <template>
   <!-- 작성자프로필, 제목, 작성자와 좋아요 현황 추가해야 됨 -->
-  <div
+    <div
+    v-if="image.story_picture"
     class="grid-item"
     :style="{
       height: tH.value + 'px',
@@ -17,7 +18,7 @@
             :src="host + image.user_pk.image"
             alt="프로필"
             @click="moveToProfile"
-            style="width: 40px; height: 40px; cursor: pointer; border-radius: 50%; object-fit: cover"
+            style="width: 34px; height: 34px; cursor: pointer; border-radius: 50%; object-fit: cover"
           />
         </div>
         <div class="col-10">
@@ -33,6 +34,8 @@
       </div>
     </div>
   </div>
+
+
 </template>
 
 <script>
