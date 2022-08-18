@@ -1,7 +1,7 @@
 <template>
 <div style="margin-bottom: 100px;">
   <div class="d-flex justify-content-center">
-    <div style="width: 90%">
+    <div style="width: 90%; font-weight:700">
       댓글 : {{ comments.length }}
     </div>
   </div>

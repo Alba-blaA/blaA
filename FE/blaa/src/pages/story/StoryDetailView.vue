@@ -9,9 +9,9 @@
       </div>
     </PopUp>
     <div id="story">
-      <div class="d-flex justify-content-center align-items-center" style="margin-top:20px;">
+      <div id="topView" class="d-flex justify-content-center align-items-center" style="padding-top:20px;">
         <div class="d-flex justify-content-between align-items-center" style="width: 90%">
-          <span class="material-symbols-outlined" style="color: black; cursor: pointer; font-size: 36px" @click="goBack">arrow_back</span>
+          <span class="material-symbols-outlined" style="cursor: pointer; font-size: 36px" @click="goBack">arrow_back</span>
           <h2 style="margin: 0; font-weight: 700; margin: 0 5px;">{{ story.story_title }}</h2>
           <!-- 좋아요 기능 구현 -->
           <div class="like">
@@ -28,15 +28,14 @@
           </div>
         </div>
       </div>
-      <div style="height: 1px; background-color: black; width: 100%; margin: 15px 0"></div>
       <div class="story-content">
         <div id="image">
-          <img :src="host + story.story_picture" alt="이미지 영역입니다." style="width: 100%" />
+          <img :src="host + story.story_picture" alt="이미지 영역입니다." style="width: 100%; border-radius: 12px;" />
         </div>
         <div id="story-info">
           <img :src="host + story.user_pk.image" height="60" width="60" style="margin: 0 auto; cursor: pointer; border-radius: 30px" @click="moveToProfile" />
           <div class="d-flex justify-content-between" style="padding: 20px 0 0 10px">
-            <span>{{ story.user_pk.nickname }} </span>
+            <span style="font-weight: 700;">{{ story.user_pk.nickname }} </span>
             <span>{{ story.created_at }}</span>
           </div>
         </div>
@@ -151,6 +150,11 @@ export default {
 </script>
 
 <style scoped>
+#topView {
+  background-color: #4D8D6D;
+  color: white;
+  padding-bottom: 10px;
+}
 .my-modal {
   overflow: hidden;
 }
@@ -162,6 +166,7 @@ export default {
 .story-content {
   display: grid;
   place-items: center;
+  margin-top: 20px;
 }
 
 #image {
@@ -245,7 +250,7 @@ export default {
 }
 
 .deactivate {
-  color: gray;
+  color: darkgray;
 }
 
 .like {
