@@ -81,7 +81,6 @@ export default {
   text-align: right;
 }
 .article {
-  font-family: "pretendard";
   width: 100%;
   padding: 30px;
   background-color: white;

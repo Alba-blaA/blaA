@@ -1,16 +1,17 @@
 <template>
-<div style="padding:10px"> 
-  <StoryTopNavbar :isStory="isStory" :isFollow="FollowTap" :isFilter="isFilter" @change="change" />
+<div style="background-color: #498d6d; padding-top: 20px">
+  <div style="padding:10px"> 
+    <StoryTopNavbar :isStory="isStory" :isFollow="FollowTap" :isFilter="isFilter" @change="change" />
+  </div>
+    <div v-if="isFollow && images.value" style="background-color: white; margin-top: 0; padding-top: 10px; padding-bottom: 10px; border-radius: 20px 20px 0 0" >
+      <StoryImageCardList :images="images.value" />
+    </div>
+    
+    <div v-else  style="background-color: white; margin-top: 0; padding-top: 10px; padding-bottom: 10px; border-radius: 20px 20px 0 0">
+      <p>팔로우 한 사람이 없어요!</p>
+    </div>
 </div>
-  <div v-if="isFollow && images.value" >
-    <StoryImageCardList :images="images.value" />
-  </div>
-  
-  <div v-else>
-    <p>팔로우 한 사람이 없어요!</p>
-  </div>
 
-  
 </template>
 
 <script>
@@ -26,7 +27,7 @@ export default {
   },
   setup() {
     const store = useStore();
-    const images = ref(null);
+    const images = ref([]);
     const isStory = ref(false);
     const isFollow = ref(true);
     const isFilter = ref(false);

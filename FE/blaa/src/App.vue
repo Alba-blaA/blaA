@@ -34,23 +34,59 @@ export default {
 
 <style>
 @font-face {
-    font-family: 'Pretendard-ExtraLight';
-    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraLight.woff') format('woff');
-    font-weight: 200;
-    font-style: normal;
+  font-family: "Pretendard-ExtraLight";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraLight.woff") format("woff");
+  font-weight: 200;
+  font-style: normal;
 }
 @font-face {
-    font-family: 'Pretendard-Regular';
-    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-    font-weight: 200;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Pretendard-ExtraLight';
-    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraLight.woff') format('woff');
-    font-weight: 200;
-    font-style: normal;
+  font-family: "Pretendard-Regular";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff") format("woff");
+  font-weight: 200;
+  font-style: normal;
 }
 
+* {
+  font-family: "Pretendard-Regular";
+}
 
+#top_box {
+  height: 55px;
+  margin: auto;
+
+  color: white;
+  background-color: #498d6d;
+  border-bottom: 0.5px solid #bdbdbd;
+}
+
+#top_box_text {
+  /* display: flex; */
+  text-align: center;
+  line-height: 55px;
+}
+
+#title_text {
+  font-weight: 800;
+  font-size: 18px;
+}
+
+#semi_title_text {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+#small_title_text {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+#small_text {
+  font-size: 12px;
+}
+
+.member_icon {
+  width: 16px;
+  height: 14px;
+}
 </style>

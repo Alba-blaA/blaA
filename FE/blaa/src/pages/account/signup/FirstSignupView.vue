@@ -71,7 +71,7 @@ export default {
 
 #signup {
   position: fixed;
-  top: 0;
+  top: 70px;
   left: 0;
   bottom: 0;
   right: 0;
@@ -79,14 +79,16 @@ export default {
   text-align: center;
   width: 100%;
   height: 100%;
-  padding-top: 70px;
+  padding-top: 20px;
+  /* border: 2px solid red; */
+  /* margin-top: 10px; */
 }
 
 #signup-top {
-  margin-top: 40px;
+  /* margin-top: 50px; */
   width: 100%;
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -99,7 +101,7 @@ export default {
   font-size: 35px;
   line-height: 30px;
   text-align: center;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
 }
 
 .signup-step {
@@ -147,13 +149,14 @@ export default {
   float: center;
   max-height: 100%;
   vertical-align: middle;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 #signup1-form {
   vertical-align: middle;
   width: 100%;
+  /* margin-top: 20px; */
 }
 
 .is-alba-true {

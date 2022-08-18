@@ -7,26 +7,28 @@
     </div>
   </div>
   <div class="container">
-    <div class="row" style="margin-top: 20px">
-      <div class="col-8" id="title_text" style="display: flex; align-items: center">새로운 크루를 만들어봐요!</div>
+    <div class="row" style="margin-top: 20px; text-align: center">
+      <div class="col-8" id="title_text" style="display: flex; align-items: center; font-size: 16px">새로운 크루를 만들어봐요! 💫</div>
       <div class="col-4">
-        <div class="newCrewBtn" @click="createCrew">+ 만들기</div>
+        <div class="newCrewBtn" @click="createCrew">
+          <p id="small_title_text">+ 만들기</p>
+        </div>
       </div>
     </div>
   </div>
-  <hr/>
+  <hr />
   <div class="container">
     <div class="row">
-      <div class="col-8" id="semi_title_text" style="margin-bottom:15px">내 크루</div>
-      <div class="col-4" style="text-align:right">더보기</div>
+      <div class="col-8" id="semi_title_text">내 크루</div>
+      <div class="col-4" style="text-align: right">더보기</div>
     </div>
   </div>
-  <crew-list-my style="margin-bottom: 20px"></crew-list-my>
+  <crew-list-my style="padding: 10px"></crew-list-my>
   <hr />
   <div class="container">
     <div class="row">
       <div class="col-8" id="semi_title_text">전체 크루</div>
-      <div class="col-4" style="text-align:right">더보기</div>
+      <div class="col-4" style="text-align: right">더보기</div>
     </div>
   </div>
   <crew-list-all></crew-list-all>
@@ -69,17 +71,13 @@ export default {
 </script>
 
 <style>
-* {
-  font-family: "Pretendard-Regular" ;
-}
-
 .newCrewBtn {
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
-  margin: 0;
+  margin: auto;
 
+  width: 80%;
   height: 40px;
   left: 107px;
   right: 107px;
@@ -88,29 +86,5 @@ export default {
   background: #eec95c;
   border-radius: 100px;
   color: #498d6d;
-}
-#top_box {
-  height: 55px;
-  margin: auto;
-
-  color: white;
-  background-color: #498d6d;
-  border-bottom: 0.5px solid #bdbdbd;
-}
-
-#top_box_text {
-  /* display: flex; */
-  text-align: center;
-  line-height: 55px;
-}
-
-#title_text {
-  font-weight: 800;
-  font-size: 18px;
-}
-
-#semi_title_text {
-  font-weight: 600;
-  font-size: 18px;
 }
 </style>

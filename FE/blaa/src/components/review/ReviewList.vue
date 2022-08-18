@@ -38,7 +38,6 @@ export default {
   setup(props) {
     const HOST = ref("https://i7b209.p.ssafy.io");
     const router = useRouter()
-    const host = ref('https://i7b209.p.ssafy.io')
     const starWidth = ref(0)
 
     // 버튼
