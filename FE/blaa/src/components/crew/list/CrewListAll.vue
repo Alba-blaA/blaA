@@ -112,5 +112,6 @@ export default {
   height: 70px;
   border-radius: 20%;
   overflow: hidden;
+  object-fit: cover;
 }
 </style>

@@ -6,7 +6,7 @@
       </div>
       <div class="col-10">
         <div class="row">
-          <div class="col" style="padding-left: 25px">
+          <div class="col" style="padding: 0 0 0 25px">
             <div class="row mb-1" style="font-weight: bold">
               {{ nickname }}
             </div>
@@ -15,14 +15,14 @@
             </div>
           </div>
         </div>
-        <div class="row">
-          <div @click="moveToArticle(crew_article_pk)">
-            <div v-if="images.length > 0">
-              <img class="postImg" :src="host + images[0].article_picture" />
-            </div>
-            <div style="word-break: normal">
-              {{ crew_content }}
-            </div>
+      </div>
+      <div class="row">
+        <div @click="moveToArticle(crew_article_pk)">
+          <div v-if="images.length > 0">
+            <img class="postImg" :src="host + images[0].article_picture" />
+          </div>
+          <div style="word-break: normal; font-size: 14px">
+            {{ crew_content }}
           </div>
         </div>
       </div>
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { dataChange } from '@/hooks/dateChange'
+import { dataChange } from "@/hooks/dateChange";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 export default {
@@ -57,9 +57,7 @@ export default {
     isMember: Boolean,
   },
   setup(props) {
-    const {
-      yyyyMMdd
-    } = dataChange()
+    const { yyyyMMdd } = dataChange();
 
     const router = useRouter();
     const host = ref("https://i7b209.p.ssafy.io/");
@@ -71,7 +69,7 @@ export default {
     return {
       moveToArticle,
       host,
-      yyyyMMdd
+      yyyyMMdd,
     };
   },
 };
@@ -82,9 +80,8 @@ export default {
   width: 50px;
   height: 50px;
   border-radius: 70%;
-  overflow: hidden;
-
-  text-align: right;
+  object-fit: cover;
+  margin-top: 1px;
 }
 .article {
   width: 100%;
@@ -96,8 +93,7 @@ export default {
   height: 250px;
   border-radius: 10%;
   object-fit: cover;
-  margin-top: 20px;
+  margin-top: px;
   margin-bottom: 20px;
 }
-
 </style>

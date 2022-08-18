@@ -17,9 +17,9 @@
               </div> -->
           </div>
 
-          <div class="row" id="small_text" style="margin-top: 5px; margin-left: 10px">
-            <div class="col">
-              <img class="member_icon" src="@/assets/icons/person.png" />
+          <div class="row" id="small_text" style="margin-top: 5px">
+            <div class="col" style="text-align: center">
+              <img class="member_icon" src="@/assets/icons/person.png" style="margin-bottom: 2px" />
               {{ crew.crew_member_count }}
               &nbsp;&nbsp;| &nbsp; {{ crew.is_business ? "업무용" : "친목용" }}
             </div>
@@ -82,6 +82,7 @@ export default {
 <style scoped>
 .crew_border {
   padding: 10px;
+  margin: 10px;
   background: #ffffff;
   box-shadow: 0px 4px 80px rgba(0, 0, 0, 0.07), 0px 0.893452px 17.869px rgba(0, 0, 0, 0.0417275), 0px 0.266004px 5.32008px rgba(0, 0, 0, 0.0282725);
   border-radius: 20px;
@@ -91,6 +92,7 @@ export default {
   width: 100px;
   height: 100px;
   margin-bottom: 10px;
+  object-fit: cover;
 }
 .crew_info {
   display: inline-block;

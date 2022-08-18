@@ -7,14 +7,26 @@
     <div style="display: flex">
       <div class="notification">
         <div v-if="state.isUnread">
-          <span @click="gotonotification" class="material-symbols-outlined"> notification_important </span>
+          <div class="position-relative" @click="gotonotification">
+            <img src="@/assets/icons/bell.png" />
+            <span class="position-absolute top-0 start-100 translate-middle p-1 bg-light border-light rounded-circle">
+              <span class="visually-hidden">New alerts</span>
+            </span>
+          </div>
+          <!-- <span @click="gotonotification" class="material-symbols-outlined"> notification_important </span> -->
         </div>
         <div v-else>
           <div v-if="state.notifications.length != 0">
-            <span @click="gotonotification" class="material-symbols-outlined"> notifications_active </span>
+            <!-- <span @click="gotonotification" class="material-symbols-outlined"> notifications_active </span> -->
+            <div @click="gotonotification">
+              <img src="@/assets/icons/bell.png" />
+            </div>
           </div>
           <div v-else>
-            <span @click="gotonotification" class="material-symbols-outlined"> notifications </span>
+            <!-- <span @click="gotonotification" class="material-symbols-outlined"> notifications </span> -->
+            <div @click="gotonotification">
+              <img src="@/assets/icons/bell.png" />
+            </div>
           </div>
         </div>
       </div>
