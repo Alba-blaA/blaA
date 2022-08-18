@@ -93,6 +93,7 @@ export default {
   height: 100px;
   margin-bottom: 10px;
   object-fit: cover;
+  border-radius: 50%;
 }
 .crew_info {
   display: inline-block;

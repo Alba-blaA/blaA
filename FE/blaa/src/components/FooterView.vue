@@ -23,15 +23,15 @@
       <p>Home</p>
     </div>
     <div class="tab" @click.prevent="gocrew">
-      <i class="far fa-heart"></i>
+      <i class="fas fa-users"></i>
       <p>Crew</p>
     </div>
     <div class="tab" @click.prevent="goReview">
-      <i class="fas fa-search"></i>
+      <i class="fas fa-star"></i>
       <p>Review</p>
     </div>
     <div class="tab" @click.prevent="goMyProfile">
-      <i class="far fa-bell"></i>
+      <i class="fas fa-user"></i>
       <p>Profile</p>
     </div>
   </div>
@@ -119,7 +119,7 @@ export default {
   left: 0px;
   width: 100%;
   height: 65px;
-  z-index:10;
+  z-index: 10;
 }
 .tab {
   background-color: white;
