@@ -149,7 +149,7 @@ export default {
               .post(api.profile.follow(route.params.user_pk))
               .then((response) => {
                 console.log("follow response : ", response);
-                userProfile.value.isFollow = "Follow";
+                userProfile.value.isFollow = "Unfollow";
                 console.log("isFollow : ", userProfile.value.isFollow);
               })
               .catch((err) => {
@@ -159,7 +159,7 @@ export default {
             await axios
               .post(api.profile.follow(route.params.user_pk))
               .then((response) => {
-                userProfile.value.isFollow = "Unfollow";
+                userProfile.value.isFollow = "Follow";
                 console.log("isFollow : ", userProfile.value.isFollow);
                 console.log("Unfollow response : ", response);
               })
@@ -205,7 +205,7 @@ export default {
               .then((response) => {
                 console.log("response : ", response);
                 userProfile.value = response.data;
-                userProfile.value.isFollow = "UnFollow";
+                userProfile.value.isFollow = "Unfollow";
                 console.log("userProfile : ", userProfile.value);
                 console.log("userProfile image : ", userProfile.value.image);
               })
@@ -222,7 +222,7 @@ export default {
               .then((response) => {
                 console.log("response : ", response);
                 userProfile.value = response.data;
-                userProfile.value.isFollow = "Follow";
+                userProfile.value.isFollow = "Unfollow";
                 console.log("userProfile : ", userProfile.value);
                 console.log("userProfile image : ", userProfile.value.image);
               })
