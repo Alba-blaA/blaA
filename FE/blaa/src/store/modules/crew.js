@@ -66,7 +66,7 @@ export default {
         console.log(error);
       }
     },
-    async getArtileDetail({ commit, state }, crew_article_pk) {
+    async getArticleDetail({ commit, state }, crew_article_pk) {
       try {
         const instance = await axios.get(api.crew.article(crew_article_pk));
         commit("GET_ARTICLE_DETAIL", instance.data);

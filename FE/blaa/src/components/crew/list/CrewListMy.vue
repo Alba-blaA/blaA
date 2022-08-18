@@ -1,36 +1,33 @@
 <template>
-    <!-- <template v-if="myCrewCnt == null">
+  <!-- <template v-if="myCrewCnt == null">
       <p>가입된 크루가 없습니다.</p>
     </template> -->
 
-    <div class="wrap-vertical">
-      <div style="display: flex;">
-
-        <div v-for="(crew, i) in myCrews" :key="i">
-          <div class="crew_border"  @click="moveToDetail(crew.crew_pk)">
-            
-            <div class="crew_info">
-              <img class="crew_img" :src="crew.crew_img"/>
-              <!-- <div>
+  <div class="wrap-vertical">
+    <div style="display: flex">
+      <div v-for="(crew, i) in myCrews" :key="i">
+        <div class="crew_border" @click="moveToDetail(crew.crew_pk)">
+          <div class="crew_info" style="display: flex; align-items: center; justify-content: center">
+            <div>
+              <img class="crew_img" :src="crew.crew_img" />
+              <p id="small_title_text" style="white-space: normal">{{ crew.crew_name }}</p>
+            </div>
+            <!-- <div>
                 <p class="text_crew_name" >{{crew.crew_name}}</p>
               </div> -->
-              <div>
-                <p style="white-space:normal">{{crew.crew_name}}</p>
-              </div>
-            </div>
-            
-            <div class="row" style="margin-top: 5px; margin-left: 10px; font-size:12px;" >
-              <div class="col" >
-                <img class="member_icon" src="@/assets/icons/person.png" />
-                {{ crew.crew_member_count }}
-                &nbsp;&nbsp;| &nbsp; {{ crew.is_business ? "업무용" : "친목용" }}
-              </div>
+          </div>
+
+          <div class="row" id="small_text" style="margin-top: 5px; margin-left: 10px">
+            <div class="col">
+              <img class="member_icon" src="@/assets/icons/person.png" />
+              {{ crew.crew_member_count }}
+              &nbsp;&nbsp;| &nbsp; {{ crew.is_business ? "업무용" : "친목용" }}
             </div>
           </div>
         </div>
-
       </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -83,33 +80,28 @@ export default {
 </script>
 
 <style scoped>
-
-.crew_border{
-  /* border: 2px solid #498d6d;
-  border-radius: 10px; */
-
+.crew_border {
+  padding: 10px;
+  background: #ffffff;
+  box-shadow: 0px 4px 80px rgba(0, 0, 0, 0.07), 0px 0.893452px 17.869px rgba(0, 0, 0, 0.0417275), 0px 0.266004px 5.32008px rgba(0, 0, 0, 0.0282725);
+  border-radius: 20px;
 }
-.divstyle{
-  background-color: blueviolet;
-  width: 100px;
-  height: 100px;
-  word-break: break-all;
-}
+
 .crew_img {
   width: 100px;
   height: 100px;
-  margin-bottom: 2px;
+  margin-bottom: 10px;
 }
-.crew_info{
-  display: block; 
+.crew_info {
+  display: inline-block;
   width: 150px;
   height: 150px;
   text-align: center;
-  word-break:break-all;
-  
+  word-break: break-all;
+
   /* border: 1px solid black; */
 }
-.text_crew_name{
+.text_crew_name {
   width: 150px;
   height: 100px;
   overflow: hidden;
@@ -117,25 +109,21 @@ export default {
   white-space: nowrap;
 }
 
-.wrap-vertical{
+.wrap-vertical {
   width: 100%;
   overflow: scroll;
   /* color: #112031;
   background: #F0D9FF;
   border: 1px solid #000; */
-   /* 가로 스크롤 */
+  /* 가로 스크롤 */
   white-space: nowrap;
-  overflow-x:scroll;
+  overflow-x: scroll;
 }
 
-.wrap-vertical::-webkit-scrollbar{
-    display: none; 
+.wrap-vertical::-webkit-scrollbar {
+  display: none;
 }
 
-.member_icon {
-  width: 22px;
-  height: 18px;
-}
 #text_line {
   line-height: 0px;
 }

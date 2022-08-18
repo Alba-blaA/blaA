@@ -4,19 +4,40 @@
     <h5 class="col-8" id="top_box_text">게시글</h5>
     <div class="col-2" id="top_box_text"></div>
   </div>
-  <div>
-    {{article}}
-    <h2>제목 : {{ article.crew_title }}</h2>
-    <p>작성자: {{ article.nickname }}</p>
-    <template v-for="image in article.images" :key="image">
-      <img :src="host + image.article_picture" width="200" />
-      {{ image.crew_article_pk }} </template
-    ><br />
-    <p>{{ article.crew_content }}</p>
-    <button @click="articlemodify">수정</button>
-    <button @click="articledele">삭제</button>
+  <div style="padding: 20px 20px 0px 20px">
+    <div>
+      <h3 style="margin: 0">{{ article.crew_title }}</h3>
+      <div class="row">
+        <div class="col-2" style="padding-bottom: 10px">
+          <img :src="article.profile" width="50" style="float: right; margin-top: 15px; padding-right: 0" />
+        </div>
+        <div class="col-10" style="padding-top: 10px; padding-left: 0">
+          <p style="margin: 0">{{ article.nickname }}</p>
+          <p>{{ article.created_at }}</p>
+        </div>
+      </div>
+    </div>
   </div>
-  <comment-list></comment-list>
+  <hr style="margin: 0" />
+
+  <div style="padding: 20px 20px 0px 20px">
+    <div>
+      <template v-for="image in article.images" :key="image">
+        <img :src="host + image.article_picture" width="200" />
+        {{ image.crew_article_pk }}
+      </template>
+      <div style="white-space: pre">{{ article.crew_content }}</div>
+    </div>
+  </div>
+  <hr />
+
+  <div style="padding: 0px 20px 0px 20px">
+    <div>
+      <button @click="articlemodify">수정</button>
+      <button @click="articledele">삭제</button>
+    </div>
+    <comment-list></comment-list>
+  </div>
 </template>
 
 <script>
@@ -35,11 +56,11 @@ export default {
     const article = ref([]);
     const host = ref("https://i7b209.p.ssafy.io");
 
-    onMounted ( async () => {
-      await store.dispatch("crew/getArtileDetail", route.params.crew_article_pk);
+    onMounted(async () => {
+      await store.dispatch("crew/getArticleDetail", route.params.crew_article_pk);
       article.value = store.state.crew.article;
       console.log("이미지", article.value.images);
-    })
+    });
 
     const articlemodify = () => {
       router.push({ name: "articlemodify" });
@@ -56,8 +77,7 @@ export default {
 
     const moveBack = () => {
       router.go(-1);
-    }
-
+    };
 
     return {
       article,
