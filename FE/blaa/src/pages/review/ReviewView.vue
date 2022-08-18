@@ -92,9 +92,7 @@
         <div class="end-list"></div>
       </div>
       <p v-else>아직 리뷰가 없어요 ㅠㅠ</p>
-      <div class="plusbutton"
-        ><span class="material-symbols-outlined" style="font-size: 30px; font-weight: bold" @click="isModalOpen=true">add</span></div
-      >
+      <div class="plusbutton"><span class="material-symbols-outlined" style="font-size: 30px; font-weight: bold" @click="isModalOpen = true">add</span></div>
     </div>
   </div>
 </template>
