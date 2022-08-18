@@ -1,5 +1,5 @@
 <template>
-  <hr>
+    <br/><br/>
   <div><h5 class="d-flex justify-content-center align-items-center chodaecardtitle"><b>나를 초대한 크루리스트들</b></h5></div>
   <hr>
 
@@ -89,6 +89,7 @@ export default {
                 )
                     
             } catch(error){
+                console.log(error);
                 alert("가입거절에 성공하셨습니다.")
             }
         })

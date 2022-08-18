@@ -1,12 +1,15 @@
 <template>
   <div class="tr_hashTag_area">
-    <p><strong>해시태그</strong></p>
+    <div class="d-flex justify-content-between align-items-center">
+      <h3 style="margin:0; font-weight:700;">해시태그</h3>
+      <button id="reset" @click="reset">초기화</button>
+    </div>
+    
     <div class="form-group">
       <input type="hidden" value="" name="tag" id="rdTag" />
     </div>
-    <div>
-      <button @click="reset">초기화</button>
-      <ul id="tag-list"></ul>
+    <div style="margin: 12px 0;">
+      <div id="tag-list" :style="{minHeight: adjustHeight.value}"></div>
     </div>
                 
     <div class="form-group">
@@ -17,8 +20,7 @@
 
 <script>
 import $ from 'jquery'
-import { ref, onBeforeMount } from 'vue'
-
+import { ref, onBeforeMount, computed} from 'vue'
 
 export default {
   props: {
@@ -27,6 +29,7 @@ export default {
   emits: ['search-hash-tag'],
   setup(props, {emit}) {
     const tag = ref([])
+    const adjustHeight = ref(0)
     
     onBeforeMount(() => {
       // 값 초기화
@@ -38,6 +41,7 @@ export default {
     const reset = (e) => {
       $('#tag-list').empty()
       tag.value = []
+      $('#tag').val('')
       e.preventDefault()
     }
     
@@ -82,7 +86,15 @@ export default {
             // 태그 중복방지 (바로 전것과 비교)
             if (result.length == 0){
               // 태그 추가 및 개별 css 적용
-              $('#tag-list').append("<li class='tag-item' style='display: inline; margin-left: 5px; background-color:greenyellow; border-radius: 5px; padding: 5px; '>" + tagValue + "<span class='del-btn' style='cursor:pointer; margin:0px 3px;' idx='"+counter.value+"'>x</span></li>")
+              $('#tag-list').append("<span class='tag-item' style='margin: 0 8px 7px 0; display: inline; background-color:rgb(101, 172, 139); border-radius: 5px; padding: 8px; font-weight:400; '>" + tagValue + "<span class='del-btn' style='cursor:pointer; margin:0px 3px;' idx='"+counter.value+"'>X</span></span>")
+              let totalWidth = 0
+              $('#tag-list > span').each((index, item) => {
+                totalWidth += $(item).width() + 8
+              })
+              adjustHeight.value = computed(() => {
+                return Math.ceil(totalWidth / $('#tag-list').width()) * 40
+              })
+              console.log(adjustHeight.value.value)
               addTag(tagValue)
               self.val("")
               emit('search-hash-tag', tag.value)
@@ -106,7 +118,8 @@ export default {
       })
     }) 
     return {
-      reset
+      reset,
+      adjustHeight,
     }
   }
 }
@@ -114,16 +127,26 @@ export default {
 
 <style scoped>
 /* li 태그 앞에 점 제거 */
-ul {
-  list-style: none;
+#tag-list {
+  padding: 0px;
+  max-width: 100%;
+  max-height: 100%;
 }
-.tag-item {
-  background-color: greenyellow;
-  border-radius: 50%;
+
+ul > li {
+  margin-bottom: 20px;
 }
+
 #tag {
   border: 1px solid #C5C6CC;
   border-radius: 12px;
   padding: 8px;
+}
+
+#reset {
+  border: 0;
+  background-color: #C5C6CC;
+  border-radius: 16px;
+  padding: 6px 8px;
 }
 </style>

@@ -49,6 +49,10 @@ class UserListAPIView(ListAPIView) :
     serializer_class = UserListSerializer
     queryset = User.objects.all()
     pagination_class = None
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = UserListSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 #회원가입 API (POST)
 class RegisterAPIView(GenericAPIView) :

@@ -1,26 +1,28 @@
 <template>
-  <img class="back" src="@/img/back.png" @click="back" />
-  <div id="signup">
-    <div id="signup-top">
-      <h1 class="signup-text">회원가입</h1>
-      <div class="signup-step">
-        <div class="yellow-circle"><b class="signup-num">1</b></div>
-        <img class="arrow" src="@/img/yellow_arrow.png" />
-        <div class="gray-circle"><b class="signup-num">2</b></div>
-        <img class="arrow" src="@/img/gray_arrow.png" />
-        <div class="gray-circle"><b class="signup-num">3</b></div>
-      </div>
-    </div>
-
-    <div id="signup1-form">
-      <br /><br />
-
-      <div id="is-alba-true" @click.prevent="isAlba">
-        <b class="is-alba-text">아르바이트를 하고 있어요</b>
+  <div class="signup-1">
+    <img class="back" src="@/img/back.png" @click="back" />
+    <div id="signup">
+      <div id="signup-top">
+        <h1 class="signup-text">회원가입</h1>
+        <div class="signup-step">
+          <div class="yellow-circle"><b class="signup-num">1</b></div>
+          <img class="arrow" src="@/img/yellow_arrow.png" />
+          <div class="gray-circle"><b class="signup-num">2</b></div>
+          <img class="arrow" src="@/img/gray_arrow.png" />
+          <div class="gray-circle"><b class="signup-num">3</b></div>
+        </div>
       </div>
 
-      <div id="is-alba-false" @click.prevent="isPublic">
-        <b class="is-alba-text">아르바이트를 안 하고 있어요</b>
+      <div id="signup1-form">
+        <br /><br />
+
+        <div class="is-alba-true" @click.prevent="isAlba">
+          <b class="is-alba-text">아르바이트를 하고 있어요</b>
+        </div>
+
+        <div class="is-alba-false" @click.prevent="isPublic">
+          <b class="is-alba-text">아르바이트를 안 하고 있어요</b>
+        </div>
       </div>
     </div>
   </div>
@@ -41,12 +43,14 @@ export default {
     const isAlba = () => {
       store.commit("account/SET_SIGNUP_ALBA", true);
       console.log("isAlba : ", store.state.account.signupUser.is_alba);
+
       router.push({ name: "form" });
     };
 
     const isPublic = () => {
       store.commit("account/SET_SIGNUP_ALBA", false);
       console.log("isAlba : ", store.state.account.signupUser.is_alba);
+
       router.push({ name: "form" });
     };
 
@@ -67,7 +71,7 @@ export default {
 
 #signup {
   position: fixed;
-  top: 0;
+  top: 70px;
   left: 0;
   bottom: 0;
   right: 0;
@@ -75,15 +79,19 @@ export default {
   text-align: center;
   width: 100%;
   height: 100%;
-  padding-top: 70px;
-  border: 3px solid yellow;
+  padding-top: 20px;
+  /* border: 2px solid red; */
+  /* margin-top: 10px; */
 }
 
 #signup-top {
-  margin-top: 40px;
+  /* margin-top: 50px; */
   width: 100%;
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .signup-text {
@@ -93,14 +101,16 @@ export default {
   font-size: 35px;
   line-height: 30px;
   text-align: center;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
 }
 
 .signup-step {
   text-align: center;
-  display: inline-block;
+  display: flex;
   height: 50px;
   line-height: 50px;
+  align-items: center;
+  justify-content: center;
 }
 
 .yellow-circle {
@@ -136,19 +146,20 @@ export default {
 }
 
 .arrow {
-  float: left;
+  float: center;
   max-height: 100%;
   vertical-align: middle;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 #signup1-form {
   vertical-align: middle;
   width: 100%;
+  /* margin-top: 20px; */
 }
 
-#is-alba-true {
+.is-alba-true {
   float: right;
   width: 65%;
   height: 177px;
@@ -160,9 +171,37 @@ export default {
   line-height: 177px;
   margin-bottom: 25px;
   margin-top: 20px;
+
+  -webkit-animation: slide-in-right 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: slide-in-right 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
-#is-alba-false {
+@-webkit-keyframes slide-in-right {
+  0% {
+    -webkit-transform: translateX(1000px);
+    transform: translateX(1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes slide-in-right {
+  0% {
+    -webkit-transform: translateX(1000px);
+    transform: translateX(1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.is-alba-false {
   float: left;
   width: 65%;
   height: 177px;
@@ -173,6 +212,34 @@ export default {
   text-align: center;
   line-height: 177px;
   margin-top: 25px;
+  -webkit-animation: slide-in-left 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s
+    both;
+  animation: slide-in-left 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s both;
+}
+
+@-webkit-keyframes slide-in-left {
+  0% {
+    -webkit-transform: translateX(-1000px);
+    transform: translateX(-1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes slide-in-left {
+  0% {
+    -webkit-transform: translateX(-1000px);
+    transform: translateX(-1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 .is-alba-text {

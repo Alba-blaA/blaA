@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" >
+  <div class="wrapper">
     <div class="cards" v-if="images">
       <StroyImageCard v-for="image in images" :key="image.story_pk" :image="image" />
     </div>
@@ -9,23 +9,22 @@
 
 <script>
 // import { useStore } from 'vuex'
-import StroyImageCard from '@/components/story/StoryImageCard.vue'
-import {computed, onBeforeMount, ref} from 'vue'
-import $ from 'jquery'
+import StroyImageCard from "@/components/story/StoryImageCard.vue";
+import { computed, onBeforeMount, ref } from "vue";
+import $ from "jquery";
 
 export default {
   components: {
-    StroyImageCard
+    StroyImageCard,
   },
   props: {
-      images: {
-          type: Array,
-          required: true
-      }
+    images: {
+      type: Array,
+      required: true,
+    },
   },
-  setup() {
-  }
-}
+  setup() {},
+};
 </script>
 
 <style scoped>

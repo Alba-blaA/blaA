@@ -1,17 +1,18 @@
 <template>
-  <div>스케줄 작성 컴포넌트 입니다.</div>
-  <div> {{ crew_pk }}</div>
-    
+  <br>  
+   
     <div class="calendarbox">
-      <DatePicker v-model="range" mode = "dateTime" is-range  is-expanded>
+      <br>
+      <DatePicker style="overflow: scroll;" v-model="range" mode = "dateTime" is-range  is-expanded>
         <template v-slot = "{ inputValue, inputEvents }">
+        <hr>
           <div class="group">
             <label class="button groupItem" for="start">Start &nbsp;</label>
             <input type="text" id="start" :value="inputValue.start" v-on="inputEvents.start" class="input">
             <hr>
             <label class="button groupItem" for="end">End &nbsp;&nbsp;</label>
             <input type="text" id="end" :value="inputValue.end" readonly class="input">  
-          </div>         
+          </div>              
           <hr>
           <form style="m">  
             <div class="form-group">
@@ -26,12 +27,15 @@
             </div>                    
           </form>
           <br>
-          <div>
-            <button @click.prevent="showtime(inputValue.start, inputValue.end)">등록하기</button>  
-            <button @click="moveToSchedule">뒤로가기</button>
+          <div class="d-flex justify-content-center">
+            <b-button pill variant="success" @click.prevent="showtime(inputValue.start, inputValue.end)">등록하기</b-button>
+            <div>&nbsp;</div>  
+            <b-button pill variant="outline-danger" @click="moveToSchedule">뒤로가기</b-button>            
           </div>
+          <br>
         </template>
-      </DatePicker>         
+      </DatePicker>
+      <br>         
     </div>
 
  
@@ -111,6 +115,7 @@ export default {
         user : Number(userInfo.user_pk)             
       }).then((response) => {
         console.log(response);
+        moveToSchedule()
 
       })
     })

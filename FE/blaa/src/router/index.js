@@ -110,19 +110,19 @@ const router = createRouter({
     {
       path: "/crew",
       name: "crew",
-      redirect: "/crew/list/alllist",
+      redirect: "/crew/list",
       component: Crew,
       children: [
         {
           path: "regist",
           name: "crewregistview",
           redirect: { name: "crewregist" },
-          component: () => import("@/components/crew/manage/CrewRegistView.vue"),
+          component: () => import("@/components/crew/manage/regist/CrewRegistView.vue"),
           children: [
             {
               path: "",
               name: "crewregist",
-              component: () => import("@/components/crew/manage/CrewRegistInput.vue"),
+              component: () => import("@/components/crew/manage/regist/CrewRegistInput.vue"),
             },
           ],
         },
@@ -169,25 +169,25 @@ const router = createRouter({
           component: () => import("@/components/crew/member/CrewMemberLeave.vue"),
         },
         {
-          path: ":crew_pk",
-          name: "crewboard",
-          redirect: { name: "articlelist" },
-          component: () => import("@/components/crew/list/CrewBoard.vue"),
+          path: "nm/:crew_pk",
+          name: "crewboardnonmember",
+          component: () => import("@/components/crew/manage/CrewBoardNonMember.vue"),
+        },
+        {
+          path: "m/:crew_pk",
+          name: "crewboardmember",
+          component: () => import("@/components/crew/manage/CrewBoardMember.vue"),
+          
+        },
+        {
+          path: "article/:crew_pk",
+          name: "article",
+          component: () => import("@/components/crew/article/ArticleListView.vue"),
           children: [
             {
-              path: "list",
+              path: "",
               name: "articlelist",
               component: () => import("@/components/crew/article/ArticleList.vue"),
-            },
-            {
-              path: "regist",
-              name: "articleregist",
-              component: () => import("@/components/crew/article/ArticleRegist.vue"),
-            },
-            {
-              path: ":crew_article_pk",
-              name: "articledetail",
-              component: () => import("@/components/crew/article/ArticleDetail.vue"),
             },
             {
               path: ":crew_article_pk",
@@ -199,16 +199,7 @@ const router = createRouter({
               name: "articledelete",
               component: () => import("@/components/crew/article/ArticleDelete.vue"),
             },
-            {
-              path: "schedule",
-              name: "schedule",
-              component: () => import("@/components/crew/schedule/ScheduleView.vue"),
-            },
-            {
-              path: "scheduleregister",
-              name: "scheduleregister",
-              component: () => import("@/components/crew/schedule/ScheduleRegisterView.vue"),
-            },
+            
             // {
             //   path: "crewmember",
             //   name: "crewmember",
@@ -218,7 +209,18 @@ const router = createRouter({
           ],
         },
         {
-          path: "user",
+          path: "article/detail/:crew_article_pk",
+          name: "articledetail",
+          component: () => import("@/components/crew/article/ArticleDetail.vue"),
+        },
+        {
+          path: "regist/:crew_pk",
+          name: "articleregist",
+          component: () => import("@/components/crew/article/ArticleRegist.vue"),
+        },
+
+        {
+          path: "user/:crew_pk",
           name: "crewmemberlist",
           component: () => import("@/components/crew/member/CrewMemberList.vue"),
         },
@@ -347,6 +349,16 @@ const router = createRouter({
       path: "/notifications",
       name: "notifications",
       component: Notification,
+    },
+    {
+      path: "/crew/schedule/:crew_pk",
+      name: "schedule",
+      component: () => import("@/components/crew/schedule/ScheduleView.vue"),
+    },
+    {
+      path: "/crew/scheduleregister/:crew_pk",
+      name: "scheduleregister",
+      component: () => import("@/components/crew/schedule/ScheduleRegisterView.vue"),
     },
   ],
 });

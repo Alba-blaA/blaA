@@ -56,6 +56,14 @@ const accountStore = {
       state.userInfo = userInfo;
       console.log("state.userInfo : ", state.userInfo);
     },
+    ADD_MY_CREW: (state, crewList) => {
+      state.userInfo.crew = crewList;
+      console.log("크루 추가 후 userInfo : ", state.userInfo);
+    },
+    ADD_NEW_CREW: (state, crew) => {
+      state.userInfo.crew.push(crew);
+      console.log(state.userInfo.crew);
+    },
     SET_KAKAO_USER_INFO: (state, kakaoUserInfo) => {
       state.kakaoUserInfo.email = kakaoUserInfo.email;
       state.kakaoUserInfo.name = kakaoUserInfo.name;
@@ -109,25 +117,6 @@ const accountStore = {
     SET_LOGIN_TOKEN: (state, token) => {
       state.loginToken = token;
     },
-    SAVE_STATE_TO_STORAGE: (state) => {
-      console.log("state.userInfo : ", state.userInfo);
-      sessionStorage.setItem("login-userInfo", JSON.stringify(state.userInfo));
-      sessionStorage.setItem("login-token", state.loginToken);
-    },
-    READ_STATE_FROM_STORAGE: (state) => {
-      if (JSON.parse(sessionStorage.getItem("login-userInfo")) != null) {
-        state.userInfo = JSON.parse(sessionStorage.getItem("login-userInfo"));
-      }
-      if (sessionStorage.getItem("login-token") != null) {
-        state.loginToken = sessionStorage.getItem("login-token");
-      }
-    },
-    RESET_STORAGE: (state) => {
-      state.userInfo = null;
-      state.loginToken = "";
-      sessionStorage.removeItem("login-userInfo");
-      sessionStorage.removeItem("login-token");
-    },
   },
   actions: {
     async userConfirm({ commit }, user) {
@@ -151,16 +140,18 @@ const accountStore = {
         (error) => {
           console.log("error request status : ", error.request.status);
           if (error.response.status === 401) {
-            alert("아이디 또는 비밀번호가 틀립니다.");
+            if (user.email && user.password) {
+              alert("아이디 또는 비밀번호가 틀립니다.");
+            }
           }
           console.log(error);
         }
       );
     },
-    getUserInfo({ commit }, token) {
+    async getUserInfo({ commit }, token) {
       // let decode_token = jwt_decode(token);
       console.log("token : ", token);
-      findByToken(
+      await findByToken(
         token,
         (response) => {
           if (response.status === 200) {
@@ -170,7 +161,6 @@ const accountStore = {
             console.log("변경된 userInfo", userInfo);
             commit("USER_INFO", userInfo);
             console.log("userInfo : ", userInfo);
-            commit("SAVE_STATE_TO_STORAGE");
           } else {
             console.log("유저 정보 없음");
           }
@@ -180,9 +170,6 @@ const accountStore = {
           console.log("getUserInfo 에러", error);
         }
       );
-    },
-    doReadStateFromStorage({ commit }) {
-      commit("READ_STATE_FROM_STORAGE");
     },
     getCategoryList(context) {
       axios.get(api.categorys.job()).then(({ data }) => {
@@ -207,6 +194,19 @@ const accountStore = {
         .get(api.categorys.region() + sido_substr + "/" + gugun_substr + "/")
         .then(({ data }) => {
           context.commit("GET_DONG_LIST", data);
+        });
+    },
+    async getMyCrewList(context, user_pk) {
+      console.log("user_pk : ", user_pk);
+      await axios
+        .get(api.profile.myCrew(user_pk))
+        .then((response) => {
+          console.log("crew list : ", response.data);
+          const crew = response.data;
+          context.commit("ADD_MY_CREW", crew);
+        })
+        .catch((err) => {
+          console.log(err);
         });
     },
   },

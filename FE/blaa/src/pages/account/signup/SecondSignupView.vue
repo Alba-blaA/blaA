@@ -31,26 +31,28 @@
       <small>{{ emailMessage }}</small>
       <br />
 
-      <label for="signup-password"> 비밀번호 </label>
-      <input
-        id="signup-password"
-        type="password"
-        v-model="user.password"
-        placeholder="Password"
-        autocomplete="off"
-      />
-      <small>{{ passwordMessage }}</small>
-      <br /><br />
+      <b id="password-form">
+        <label v-if="!kakaoLogin" for="signup-password"> 비밀번호 </label>
+        <input
+          id="signup-password"
+          type="password"
+          v-model="user.password"
+          placeholder="Password"
+          autocomplete="off"
+        />
+        <small>{{ passwordMessage }}</small>
+        <br /><br />
 
-      <label for="signup-checkpassword"> 비밀번호 확인 </label>
-      <input
-        id="signup-checkpassword"
-        type="password"
-        placeholder="Password"
-        autocomplete="off"
-      />
-      <small>{{ checkPasswordMessage }}</small>
-      <br /><br />
+        <label for="signup-checkpassword"> 비밀번호 확인 </label>
+        <input
+          id="signup-checkpassword"
+          type="password"
+          placeholder="Password"
+          autocomplete="off"
+        />
+        <small>{{ checkPasswordMessage }}</small>
+        <br /><br />
+      </b>
 
       <label for="signup-name"> 이름 </label>
       <input
@@ -65,26 +67,19 @@
       <label for="signup-tel"> 휴대폰 </label> <br />
 
       <div id="input-tel">
-        <input id="signup-tel1" type="number" v-model="user.tel1" />
+        <input id="signup-tel1" type="text" v-model="user.tel1" />
         <b class="tel-text"> - </b>
-        <input id="signup-tel2" type="number" v-model="user.tel2" />
+        <input id="signup-tel2" type="text" v-model="user.tel2" />
         <b class="tel-text"> - </b>
-        <input id="signup-tel3" type="number" v-model="user.tel3" />
+        <input id="signup-tel3" type="text" v-model="user.tel3" />
       </div>
       <small>{{ telMessage }}</small>
       <br /><br />
       <div>
-        <button id="btn-before" @click.prevent="before">이전</button> &nbsp;
-        <button id="btn-next" @click.prevent="next">다음</button>
+        <button class="btn-before" @click.prevent="before">이전</button> &nbsp;
+        <button class="btn-next" @click.prevent="next">다음</button>
       </div>
     </form>
-
-    <!-- 
-
-      <b id="password-form">
-        
-      </b>
- -->
   </div>
 </template>
 
@@ -93,7 +88,7 @@ import { ref, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useCookies } from "vue3-cookies";
 import router from "@/router/index.js";
-import axios from "axios";
+import axios from "@/api/axios.js";
 import api from "@/api/api.js";
 
 export default {
@@ -121,13 +116,14 @@ export default {
       console.log("kakaoLogin : ", kakaoLogin);
       if (kakaoLogin) {
         user.value.email = store.state.account.kakaoUserInfo.email;
+        console.log(user.value.email);
         document.getElementById("signup-email").disabled = true;
         document.getElementById("btnEmailCheck");
 
         user.value.password = cookies.get("access-token");
         document.getElementById("signup-password").style.display = "none";
         document.getElementById("signup-checkpassword").style.display = "none";
-        document.getElementById("password-form").innerHTML = "";
+        document.getElementById("password-form").textContent = "";
 
         user.value.name = store.state.account.kakaoUserInfo.name;
         document.getElementById("signup-name").disabled = true;
@@ -174,7 +170,6 @@ export default {
 
     const next = () => {
       let err = true;
-      let msg = "";
 
       if (!user.value.email) {
         err = true;
@@ -289,14 +284,46 @@ export default {
   text-align: center;
   width: 100%;
   height: 100%;
-  padding-top: 70px;
+  padding-top: 20px;
+
+  /* -webkit-animation: slide-in-right 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    both;
+  animation: slide-in-right 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; */
 }
+/* 
+@-webkit-keyframes slide-in-right {
+  0% {
+    -webkit-transform: translateX(1000px);
+    transform: translateX(1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes slide-in-right {
+  0% {
+    -webkit-transform: translateX(1000px);
+    transform: translateX(1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    opacity: 1;
+  }
+} */
 
 #signup-top {
   margin-top: 40px;
   width: 100%;
   text-align: center;
   margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .signup-text {
@@ -311,9 +338,11 @@ export default {
 
 .signup-step {
   text-align: center;
-  display: inline-block;
+  display: flex;
   height: 50px;
   line-height: 50px;
+  align-items: center;
+  justify-content: center;
 }
 
 .yellow-circle {
@@ -393,6 +422,69 @@ small {
   font-family: Inter;
   font-style: normal;
   font-size: 15px;
+  color: red;
+
+  -webkit-animation: shake-horizontal 1s cubic-bezier(0.455, 0.03, 0.515, 0.955)
+    infinite both;
+  animation: shake-horizontal 1s cubic-bezier(0.455, 0.03, 0.515, 0.955)
+    infinite both;
+}
+
+@-webkit-keyframes shake-horizontal {
+  0%,
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70% {
+    -webkit-transform: translateX(-10px);
+    transform: translateX(-10px);
+  }
+  20%,
+  40%,
+  60% {
+    -webkit-transform: translateX(10px);
+    transform: translateX(10px);
+  }
+  80% {
+    -webkit-transform: translateX(8px);
+    transform: translateX(8px);
+  }
+  90% {
+    -webkit-transform: translateX(-8px);
+    transform: translateX(-8px);
+  }
+}
+@keyframes shake-horizontal {
+  0%,
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70% {
+    -webkit-transform: translateX(-10px);
+    transform: translateX(-10px);
+  }
+  20%,
+  40%,
+  60% {
+    -webkit-transform: translateX(10px);
+    transform: translateX(10px);
+  }
+  80% {
+    -webkit-transform: translateX(8px);
+    transform: translateX(8px);
+  }
+  90% {
+    -webkit-transform: translateX(-8px);
+    transform: translateX(-8px);
+  }
 }
 
 input::placeholder {
@@ -426,7 +518,7 @@ input:focus {
   color: #d9d9d9;
 }
 
-#btn-before {
+.btn-before {
   width: 100px;
   height: 40px;
   border: 2px solid #eec95c;
@@ -438,7 +530,7 @@ input:focus {
   font-weight: 500;
 }
 
-#btn-next {
+.btn-next {
   width: 100px;
   height: 40px;
   background: #eec95c;

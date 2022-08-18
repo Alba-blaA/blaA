@@ -16,14 +16,24 @@ export default {
   },
   mutations: {
     GET_IMAGES(state, payload) {
+      const {
+        howNow
+      } = dataChange()
+
       state.totalCount = payload.count[0]['count']
       if (state.isState == payload.isState.value && payload.page != 1) {
         for (let i=0; i < payload.data.length; i++) {
+          payload.data[i].created_at = howNow(payload.data[i].created_at)
           state.images.push(payload.data[i])
         }
+        console.log(state.images)
       } else {
         state.isState = payload.isState.value
-        state.images = payload.data;
+        state.images = []
+        for (let i=0; i < payload.data.length; i++) {
+          payload.data[i].created_at = howNow(payload.data[i].created_at)
+          state.images.push(payload.data[i])
+        }
       }
     },
     GET_CURRENT_STORY(state, payload) {
@@ -144,6 +154,7 @@ export default {
           isState: data.isState,
           page: data.page
         }
+
         commit("GET_IMAGES", send);
       } catch (error) {
         // 에러 발생시
@@ -158,16 +169,32 @@ export default {
             id: page.hashtag_content,
           }
         })
-        const data = []
-        console.log(res.data)
-        for (const story in res.data) {
-          data.push(res.data[story].story_pk)
+        const res2 = await axios.get(api.story.hashtag(), {
+          params: {
+            page: page.page,
+            id: page.hashtag_content,
+          }
+        })
+
+        let result = []
+
+        if (res.data[-1] == Number) {
+          result = res.data
+        } else {
+          result = res2.data
         }
+        const count = result.splice(-1,1)
+        
+        const array = []
+        result.forEach(ele => {
+          array.push(ele['story_pk'])
+        })
+
         const send = {
-          count: res.data.splice(-1,1),
-          data: res.data,
-          isState: data.isState,
-          page: data.page
+          count: count,
+          data: array,
+          isState: page.isState,
+          page: page.page
         }
 
         commit('GET_IMAGES', send)

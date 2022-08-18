@@ -15,25 +15,27 @@ export default {
     const store = useStore();
 
     var result = confirm("정말로 탈퇴하시겠습니까?");
-    if (result) {
-      console.log(api.profile.myInfo(route.params.user_pk));
-      axios
-        .delete(api.profile.myInfo(route.params.user_pk))
-        .then((response) => {
-          console.log("response : ", response);
-          alert("탈퇴가 완료되었습니다.");
-          store.commit("account/LOGIN", false);
-          store.commit("account/USER_INFO", null);
-          sessionStorage.removeItem("token");
-          store.commit("account/RESET_STORATGE");
-          router.replace("/");
-        })
-        .catch((err) => {
-          alert("회원 탈퇴 에러");
-          console.log(err);
-        });
-    } else {
-      router.go(-1);
+
+    async() => {
+      if (result) {
+        console.log(api.profile.myInfo(route.params.user_pk));
+        await axios
+          .delete(api.profile.myInfo(route.params.user_pk))
+          .then((response) => {
+            console.log("response : ", response);
+            alert("탈퇴가 완료되었습니다.");
+            store.commit("account/LOGIN", false);
+            store.commit("account/USER_INFO", null);
+            sessionStorage.removeItem("token");
+            router.replace("/");
+          })
+          .catch((err) => {
+            alert("회원 탈퇴 에러");
+            console.log(err);
+          });
+      } else {
+        router.go(-1);
+      }
     }
 
     return {};

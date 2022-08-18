@@ -5,6 +5,8 @@
     <div class="category2" v-show="check" @click="moveToFriends">친목용</div>
   </div>
   <!-- <router-view></router-view> -->
+
+  <ReviewMap v-if="isModalOpen" @close-modal="isModalOpen=false" @select-store="selectStore"/>
   <div v-show="!check">
     <button @click="back">뒤로가기</button>
   </div>
@@ -23,6 +25,16 @@
 
       <label for="crew_explain">크루 설명</label><br />
       <textarea id="crew_explain" name="crew_explain" v-model="crew_explain" cols="35" rows="5"></textarea><br />
+      <div class="row"> 
+        <div class="col-8">
+          <label for="crew_region">크루 지역</label><br />
+          <input type="text" id="crew_region" name="crew_region" v-model="crew_region" disabled />
+        </div>
+        <div class="col-4" style="display:flex; align-items: end;">
+          <div class="submit_button3" @click="isModalOpen=true" >검색</div>
+        </div>
+
+      </div>
       <label for="crew_region">크루 지역</label><br />
       <input type="text" id="crew_region" name="crew_region" v-model="crew_region" />
       <div class="row" style="text-align: center; padding-top: 20px">
@@ -51,8 +63,10 @@
 
       <label for="crew_explain">크루 설명</label><br />
       <textarea id="crew_explain" name="crew_explain" v-model="crew_explain" cols="35" rows="5"></textarea><br />
-      <label for="crew_region">크루 지역</label><br />
+
+      <label for="crew_region">크루 활동 지역</label><br />
       <input type="text" id="crew_region" name="crew_region" v-model="crew_region" />
+
       <div class="row" style="text-align: center; padding-top: 20px">
         <div class="col">
           <button class="submit_button2" @click="moveList">목록</button>
@@ -65,11 +79,18 @@
   </div>
 </template>
 
+
 <script>
+import ReviewMap from '@/components/review/ReviewMap.vue'
+import PopUp from '@/components/story/PopUp.vue'
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 export default {
+  emits: ['select-store'], 
+  components: {
+    ReviewMap,
+  },
   setup() {
     const router = useRouter();
     const store = useStore();
@@ -80,6 +101,24 @@ export default {
     const crew_region = ref("");
     const crew_img = ref(null);
     const is_business = ref(false);
+
+    const isModalOpen = ref(false);
+    const isStore = ref(false)
+    const store_pk = ref(0)
+    const storeName = ref('')
+    const storeAddress = ref('')
+
+    const selectStore = (data) => {
+      store_pk.value = data.store_pk
+      isStore.value = data.isStore
+      console.log(isStore.value)
+      storeName.value = data.name
+      storeAddress.value = data.region
+
+      isModalOpen.value = false
+    }
+
+
     const moveToBusiness = () => {
       check.value = false;
       is_business.value = true;
@@ -110,6 +149,7 @@ export default {
       }
     };
     const crewRegist = async () => {
+
       const crewData = new FormData();
       crewData.append("crew_name", crew_name.value);
       crewData.append("crew_explain", crew_explain.value);
@@ -119,12 +159,13 @@ export default {
       try {
         console.log(crewData);
         await store.dispatch("crew/registcrew", crewData);
+        store.commit("account/ADD_NEW_CREW", crewData);
       } catch (error) {
         console.log(error);
       }
     };
     const moveList = () => {
-      router.push({ name: "allcrewlist" });
+      router.push({ name: "crewlist" });
     };
     return {
       moveToBusiness,
@@ -140,6 +181,11 @@ export default {
       is_business,
       previewFile,
       moveList,
+
+      isModalOpen,
+      selectStore,
+      storeName,
+      storeAddress,
     };
   },
 };
@@ -287,4 +333,22 @@ export default {
   border-radius: 100px;
   border: 0px;
 }
+
+.submit_button3 {
+  display: inline-block;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 10px 24px;
+  margin: auto;
+  /* gap: 10px; */
+
+  width: 80px;
+  background: #498d6d;
+  color: #ffcd38;
+  border-radius: 100px;
+  border: 0px;
+}
+
+
 </style>

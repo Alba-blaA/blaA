@@ -1,10 +1,11 @@
 <template>
   <!-- 가게 주소 -->
-  <div class="d-flex justify-content-center">
+  <div class="wrapper">
+    <div class="d-flex justify-content-center" style="padding-top:24px;">
     <ReviewMap v-if="isModalOpen" @close-modal="isModalOpen=false" @select-store="selectStore"/>
     <div style="width:90%">
       <div div class="d-flex justify-content-between align-items-center" style="padding:4px;">
-        <router-link :to="{name: 'review'}" style="text-decoration:none; color:black; font-size:16px; font-weight:bold; width:60px;">X</router-link>
+        <router-link :to="{name: 'review'}" style="text-decoration:none; color:black; font-size:24px; font-weight:bold; width:60px;">X</router-link>
         <h2 style="font-weight:bold; margin:0;">리뷰 작성 폼</h2>
         <button class="submit-btn" @click="sumbitReview">제출</button>
       </div>
@@ -13,11 +14,11 @@
       <div class="store-info" :class="{isStoreInfo: isStore, isNotStoreInfo: !isStore}">
         <div v-if="isStore" class="store-picture">
           <input class="store_picture" id="store_picture" type="file" @change="previewFile" style="display:none"/>
-          <img class="img_test" src="" height="60" width="60" @click="fileUpload"/>
+          <img class="img_test" src="https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg" height="60" width="60" style="border-radius:50%" @click="fileUpload"/>
         </div>
         <div>
-          <p class="form-input">가게명 : {{storeName}}</p>
-          <p class="form-input">가게주소 : {{storeAddress}}</p>
+          <div style="font-weight: 600;">가게명 : {{storeName}}</div>
+          <div style="font-weight: 600; margin-top: 3px;">가게주소 : {{storeAddress}}</div>
           <p v-if="storeError" class="error">가게를 검색해주세요</p>
         </div>
         <button @click="isModalOpen=true">검색</button>
@@ -52,11 +53,12 @@
       <!-- 한줄평 -->
       <div class="d-flex justify-content-center">
         <div class="oneReview">
-          <p>한줄평</p>
+          <p style="font-weight:600;">한줄평</p>
           <textarea v-model="oneReview" cols="30" rows="10"></textarea>
         </div>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
@@ -262,6 +264,14 @@ export default {
 </script>
 
 <style scoped>
+
+.wrapper {
+  position:fixed;
+  width:100%;
+  height: 100%;
+  overflow:hidden;
+}
+
 #myform {
   margin: 0;
   display: flex;
@@ -306,6 +316,12 @@ input[type=checkbox]{
   height: 35px;
 }
 
+.img-test {
+  border: 0;
+  border-radius: 50%;
+  background-color: black;
+}
+
 .isSubmit {
   opacity: 1;
 }
@@ -344,7 +360,6 @@ input[type=checkbox]{
 }
 
 .store-picture {
-  margin: 0 12px;
   border-radius: 20px;
 }
 
