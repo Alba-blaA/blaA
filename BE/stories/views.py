@@ -104,7 +104,8 @@ def comment_list_or_create(request, story_pk):
         story_user = story.user_pk
         if serializer.is_valid(raise_exception=True):
             serializer.save(user_pk = request.user, story_pk = story)
-            Notification.objects.create(type='story',user=story_user,content=f'{request.user.nickname}님이 {story_user.nickname}의 게시글에 댓글을 남겼습니다.',redirect_pk=story_pk)
+            if request.user != story_user :
+                Notification.objects.create(type='story',user=story_user,content=f'{request.user.nickname}님이 {story_user.nickname}의 게시글에 댓글을 남겼습니다.',redirect_pk=story_pk)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     if request.method == 'GET':
