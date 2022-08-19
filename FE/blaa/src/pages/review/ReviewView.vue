@@ -73,7 +73,9 @@
   <div id="review" class="d-flex justify-content-center">
     <div style="width: 90%">
       <div class="d-flex justify-content-between align-items-center">
-        <div></div>
+        <div style="display: flex; align-items: center; padding-right: 0; font-weight: 600; font-size: 16px; padding-bottom: 10px">
+          다양한 지점의 리뷰를 확인해보세요!
+        </div>
         <div class="buttons">
           <!-- 클릭하거나 엔터를 치면 -->
           <span class="search-end material-symbols-outlined" v-if="isSearch" @click="searchEnd">cancel</span>
@@ -84,9 +86,7 @@
           <div v-if="isSearch"></div>
         </div>
       </div>
-      <div style="margin-left: 10px">
-        <div id="title_text" style="display: flex; align-items: center; padding-right: 0">다양한 지점의 리뷰를 확인해보세요!</div>
-      </div>
+      <hr />
       <div v-if="reviews.value">
         <ReviewList v-for="review in reviews.value" :key="review" :review="review" />
         <div class="end-list"></div>
