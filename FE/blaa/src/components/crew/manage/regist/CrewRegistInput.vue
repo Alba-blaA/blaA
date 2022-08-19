@@ -43,7 +43,7 @@
       <form id="crewForm" @submit.prevent="submitForm" enctype="multipart/form-data">
         <div style="text-align: center">
           <label class="input_file_button" for="crew_img">
-            <img style="width: 50px" src="@/assets/crew_default1.png" />
+            <img class="profileImg" id="preview-image" src="@/assets/crew_default1.png" />
             <p style="padding-top: 5px; color: #498d6d">크루 이미지</p>
           </label>
           <input type="file" id="crew_img" name="crew_img" @change="previewFile" style="display: none" />

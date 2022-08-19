@@ -77,6 +77,9 @@ export default {
 .oneline {
   display: grid;
   grid-template-columns: 50% 20% 30%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .card_text2 {
