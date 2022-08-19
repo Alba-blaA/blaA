@@ -161,15 +161,20 @@ export default {
   position: absolute;
   width: 54px;
   height: 32px;
-  left: 320px;
-  top: 13px;
+  left: 290px;
+  top: 11px;
 
-  border-radius: 20px;
-  border: 0px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-  text-decoration: none;
+  font-family: "Pretendard-Regular";
   font-weight: 600;
-  transition: 0.25s;
+  /* transition: 0.25s; */
+
+  width: 60px;
+  height: 36px;
+
+  background: #e58d1f;
+  color: white;
+  border-radius: 20px;
+  border: 0;
 }
 
 #crew_private,

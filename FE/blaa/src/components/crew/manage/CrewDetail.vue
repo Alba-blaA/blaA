@@ -2,7 +2,7 @@
   <div>
     <div>{{ crewInfo.crew_name }}의 CREW DETAIL</div>
     <div>
-      <img :src="crewInfo.crew_img" />
+      <img class="crew_img" :src="crewInfo.crew_img" />
       <li>크루 생성일 : {{ crewInfo.created_at }}</li>
       <li>크루 소개 : {{ crewInfo.crew_explain }}</li>
       <li>크루 인원수 : {{ crewInfo.crew_member_count }}</li>
@@ -79,4 +79,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.crew_img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+</style>

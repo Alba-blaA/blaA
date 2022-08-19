@@ -136,7 +136,7 @@ export default {
         console.log(instance);
         if (instance.status == 201 || instance.status == 200) {
           alert("크루 생성이 완료되었습니다.");
-          router.push({ name: "crewboard", params: { crew_pk: instance.data.crew_pk } });
+          router.push({ name: "crewboardmember", params: { crew_pk: instance.data.crew_pk } });
         }
       } catch (error) {
         console.log(error);
