@@ -1,4 +1,6 @@
-![블라_아이콘.jpg](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/85209c20-b2d8-4f70-9d5e-20d696444799/%EB%B8%94%EB%9D%BC_%EC%95%84%EC%9D%B4%EC%BD%98.jpg)
+<img src="README.assets/KakaoTalk_Photo_2022-07-31-18-25-42 002.jpeg" alt="KakaoTalk_Photo_2022-07-31-18-25-42 002" style="zoom:3%;" />
+
+
 
 ## blaA 링크 : https://i7b209.p.ssafy.io/
 
@@ -51,13 +53,15 @@ blaA는 alba를 뒤집고(abla) 앞에 a를 뒤에다 두어 알바생(alba)들�
 
 ### BackEnd
 
-- **Django** 3.2.12
+- Python 3.9.13
 
-- **DjangoRestFramework** 3.13.1
+- Django 3.2.12
 
-  - Django 패키지 모음 2022-08-02
+- DjangoRestFramework 3.13.1
 
-  [requirements.txt](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b85e2765-b9ef-40d5-95f7-4a824807dee6/requirements.txt)
+- Django 패키지 모음 2022-08-02
+
+[requirements.txt](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b85e2765-b9ef-40d5-95f7-4a824807dee6/requirements.txt)
 
 ### 데이터베이스
 
@@ -76,13 +80,31 @@ blaA는 alba를 뒤집고(abla) 앞에 a를 뒤에다 두어 알바생(alba)들�
 - **node.js** 16.14.2
 - **v-calender** 3.0.0-alpha.8
 - **mathjs** 11.0.1
+- HTML5, CSS3, JavaScript(ES6)
 
-### CI/CD
+### CI/CD 및 개발환경
 
-- **Ubuntu** 20.0.4
-- **Docker** 20.10.17
-- **Jenkins** 2.319.3
-- **Nginx** 1.19.5
+- OS: Window 10
+- IDE
+-  Visual Studio 1.70.0 
+-  DataBase
+
+   가) MySQL Workbench 8.0
+
+   나) MySQL 8.0.27
+
+   다) MariaDB 10.5
+
+   라) SQLite 3.0
+
+   마) firebase 8.10.1
+- Server : AWS EC2
+
+   가) Ubuntu 20.0.4
+
+   나) Docker 20.10.17
+
+   다) Nginx 1.19.5
 
 ## 프로젝트 파일구조
 
