@@ -7,6 +7,7 @@ import axios from "@/api/axios.js";
 import api from "@/api/api";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { deleteKakaoAccount } from "@/hooks/kakaologin.js";
 
 export default {
   setup() {
@@ -16,13 +17,14 @@ export default {
 
     var result = confirm("정말로 탈퇴하시겠습니까?");
 
-    async() => {
+    async () => {
       if (result) {
         console.log(api.profile.myInfo(route.params.user_pk));
         await axios
           .delete(api.profile.myInfo(route.params.user_pk))
           .then((response) => {
             console.log("response : ", response);
+            deleteKakaoAccount();
             alert("탈퇴가 완료되었습니다.");
             store.commit("account/LOGIN", false);
             store.commit("account/USER_INFO", null);
@@ -36,7 +38,7 @@ export default {
       } else {
         router.go(-1);
       }
-    }
+    };
 
     return {};
   },
