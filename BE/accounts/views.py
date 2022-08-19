@@ -2,7 +2,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render,get_object_or_404
 from django.views import View
 from rest_framework.generics import GenericAPIView,UpdateAPIView,CreateAPIView,ListAPIView
-from accounts.pagination import CustomPageNumberPagination
+from accounts.pagination import CustomPageNumberPagination, CustomPagehundredNumberPagination
 from notifications.models import Notification
 from accounts.models import User
 from rest_framework.decorators import api_view,permission_classes
@@ -251,7 +251,7 @@ class FollowAPIView(ListAPIView) :
     serializer_class = UserListSerializer
     lookup_field = 'user_pk'
     queryset = User.objects.all()
-    pagination_class = CustomPageNumberPagination
+    pagination_class = CustomPagehundredNumberPagination
     
     def list(self, request, *args, **kwargs):
         user = self.get_object()

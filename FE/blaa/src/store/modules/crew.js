@@ -66,7 +66,7 @@ export default {
         console.log(error);
       }
     },
-    async getArtileDetail({ commit, state }, crew_article_pk) {
+    async getArticleDetail({ commit, state }, crew_article_pk) {
       try {
         const instance = await axios.get(api.crew.article(crew_article_pk));
         commit("GET_ARTICLE_DETAIL", instance.data);
@@ -136,7 +136,7 @@ export default {
         console.log(instance);
         if (instance.status == 201 || instance.status == 200) {
           alert("크루 생성이 완료되었습니다.");
-          router.push({ name: "crewboard", params: { crew_pk: instance.data.crew_pk } });
+          router.push({ name: "crewboardmember", params: { crew_pk: instance.data.crew_pk } });
         }
       } catch (error) {
         console.log(error);

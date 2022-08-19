@@ -60,6 +60,10 @@ const accountStore = {
       state.userInfo.crew = crewList;
       console.log("크루 추가 후 userInfo : ", state.userInfo);
     },
+    ADD_NEW_CREW: (state, crew) => {
+      state.userInfo.crew.push(crew);
+      console.log(state.userInfo.crew);
+    },
     SET_KAKAO_USER_INFO: (state, kakaoUserInfo) => {
       state.kakaoUserInfo.email = kakaoUserInfo.email;
       state.kakaoUserInfo.name = kakaoUserInfo.name;
@@ -136,7 +140,9 @@ const accountStore = {
         (error) => {
           console.log("error request status : ", error.request.status);
           if (error.response.status === 401) {
-            alert("아이디 또는 비밀번호가 틀립니다.");
+            if (user.email && user.password) {
+              alert("아이디 또는 비밀번호가 틀립니다.");
+            }
           }
           console.log(error);
         }
@@ -188,6 +194,19 @@ const accountStore = {
         .get(api.categorys.region() + sido_substr + "/" + gugun_substr + "/")
         .then(({ data }) => {
           context.commit("GET_DONG_LIST", data);
+        });
+    },
+    async getMyCrewList(context, user_pk) {
+      console.log("user_pk : ", user_pk);
+      await axios
+        .get(api.profile.myCrew(user_pk))
+        .then((response) => {
+          console.log("crew list : ", response.data);
+          const crew = response.data;
+          context.commit("ADD_MY_CREW", crew);
+        })
+        .catch((err) => {
+          console.log(err);
         });
     },
   },

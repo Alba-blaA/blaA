@@ -34,8 +34,13 @@ class Review(TrackingModel,models.Model) :
     class Meta:
         ordering = ['-created_at']
 
+    def __str__(self):
+        return self.oneline_review
 
 class StoreButtonReview(models.Model) :
     store = models.ForeignKey(Store,on_delete=models.CASCADE)
     button = models.ForeignKey(ButtonReview,on_delete=models.CASCADE)
     review = models.ForeignKey(Review,on_delete=models.CASCADE)
+
+    def __str__(self) :
+        return self.store.name

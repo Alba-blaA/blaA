@@ -23,10 +23,11 @@ export default {
     position: fixed;
     top: 0px;
     left: 0px;
+    z-index: 5;
   }
   /* 모달이 떳을 떄 뒤에 배경화면을 안보이게 */
   .overlay {
-    background-color:rgba(255,255,255,0.5);
+    background-color:rgba(61, 58, 58, 0.5);
   }
 
   .modal-card {

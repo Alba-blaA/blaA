@@ -4,16 +4,16 @@
       <!-- <br /> -->
       <h1 id="login-text">로그인</h1>
       <br />
-      <form>
+      <!-- <form>
         <label for="login-id"></label>
         <input
           id="login-id"
           type="email"
           v-model="user.email"
           placeholder="EMAIL"
-        />
-        <!-- <b>{{ message }}</b> -->
-        <small>아이디를 입력해주세요</small>
+        /> -->
+      <!-- <b>{{ message }}</b> -->
+      <!-- <small>{{ emailMessage }}</small> <br /><br />
 
         <label for="login-password"></label>
         <input
@@ -22,12 +22,13 @@
           v-model="user.password"
           placeholder="PASSWORD"
           autocomplete="off"
+          @keyup.enter="confirm"
         />
-        <small>비밀번호를 입력해주세요</small>
-        <br /><br />
-        <!-- <b>{{ message }}</b> -->
+        <small>{{ passwordMessage }}</small>
+        <br /><br /> -->
+      <!-- <b>{{ message }}</b> -->
 
-        <div class="row">
+      <!-- <div class="row">
           <b-button
             class="col-sm-12"
             pill
@@ -40,12 +41,12 @@
             ><b>회원가입</b></b-button
           >
         </div>
-      </form>
+      </form> -->
 
-      <div class="find-account">
+      <!-- <div class="find-account">
         <b class="find">아이디 찾기</b> &nbsp;
         <b class="find">비밀번호 찾기</b>
-      </div>
+      </div> -->
 
       <br />
       <br />
@@ -81,6 +82,9 @@ export default {
       password: null,
     });
 
+    const emailMessage = ref(null);
+    const passwordMessage = ref(null);
+
     const isLogin = computed(() => {
       return store.state.account.isLogin;
     });
@@ -92,20 +96,46 @@ export default {
     // store.dispatch("account/userConfirm");
 
     const confirm = async () => {
-      await store.dispatch("account/userConfirm", user.value);
+      let err = true;
 
-      let token = sessionStorage.getItem("token");
-      console.log("Login Token : ", token);
-      if (isLogin.value) {
-        await store.dispatch("account/getUserInfo", token);
-        // await store.commit("account/USER_INFO")
-        console.log("로그인 성공!!!!!");
-        await getMyCrewList();
-        router.push("/story");
+      if (!user.value.email) {
+        err = true;
+        emailMessage.value = "이메일을 입력해주세요";
+        setTimeout(() => {
+          emailMessage.value = "";
+          err = false;
+        }, 3000);
+      }
+
+      if (!user.value.password) {
+        err = true;
+        passwordMessage.value = "비밀번호를 입력해주세요.";
+        setTimeout(() => {
+          passwordMessage.value = "";
+          err = false;
+        }, 3000);
+      }
+
+      if (!err) {
+        return;
       } else {
-        console.log("isLogin : ", store.state.account.isLogin);
-        console.log("isLoginError : ", store.state.account.isLoginError);
-        console.log("로그인 안됨??????");
+        await store.dispatch("account/userConfirm", user.value);
+
+        let token = sessionStorage.getItem("token");
+        console.log("Login Token : ", token);
+        if (isLogin.value) {
+          await store.dispatch("account/getUserInfo", token);
+          console.log("로그인 성공!!!!!");
+          await store.dispatch(
+            "account/getMyCrewList",
+            store.state.account.userInfo.user_pk
+          );
+          router.push("/story");
+        } else {
+          console.log("isLogin : ", store.state.account.isLogin);
+          console.log("isLoginError : ", store.state.account.isLoginError);
+          console.log("로그인 안됨??????");
+        }
       }
     };
 
@@ -117,30 +147,19 @@ export default {
       const params = {
         redirectUri: "https://i7b209.p.ssafy.io/kakao",
         // redirectUri: "http://localhost:3000/kakao",
-        // redirectUri: "http://127.0.0.1:8000/account/sign-in/kakao/callback",
       };
       window.Kakao.Auth.authorize(params);
     };
 
-    const getMyCrewList = async() => {
-      console.log("user_pk : ", store.state.account.userInfo.user_pk)
-      await axios.get(api.profile.myCrew(store.state.account.userInfo.user_pk)).then((response) => {
-        console.log("crew list : ",response.data);
-        const crew = response.data;
-        store.commit("account/ADD_MY_CREW", crew);
-      }).catch((err) => {
-        console.log(err);
-      })
-    }
-
     return {
       user,
+      emailMessage,
+      passwordMessage,
       isLoginError,
       isLogin,
       confirm,
       register,
       kakaoLogin,
-      getMyCrewList,
     };
   },
 };
@@ -159,7 +178,28 @@ export default {
   display: table;
   width: 100%;
   height: 100%;
+
+  -webkit-animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
 }
+
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 #login-text {
   font-family: "Inter";
   font-style: normal;
@@ -190,6 +230,7 @@ small {
   font-family: Inter;
   font-style: normal;
   font-size: 15px;
+  color: red;
 }
 
 input::placeholder {

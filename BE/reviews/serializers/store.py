@@ -40,13 +40,13 @@ class StoreNoneImageCreateSerializer(serializers.ModelSerializer) :
         instance = Store.objects.create(**validated_data)
         if '맥주' in instance.name :
             if '역전할머니맥주' in instance.name : 
-                instance.image = 'store/logo/맥주.png'
-            else : 
                 instance.image = 'store/logo/역전할머니맥주.jpg'
+            else : 
+                instance.image = 'store/logo/맥주.png'
         elif '스타벅스' in instance.name : 
             instance.image = 'store/logo/스타벅스.jpeg'
         elif '메가커피' in instance.name : 
-            instance.image = 'store/logo/메가커피.jpg'
+            instance.image = 'store/logo/메가커피.png'
         elif '버거킹' in instance.name : 
             instance.image = 'store/logo/버거킹.jpg'
         elif '빽다방' in instance.name : 

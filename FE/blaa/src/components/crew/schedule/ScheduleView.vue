@@ -1,5 +1,9 @@
 <template>
-  <br>
+  <div class="row" id="top_box">
+    <div class="col-2" id="top_box_text" @click="moveToPrevious"><img src="@/assets/icons/arrow-left.png" /></div>
+    <h5 class="col-8" id="top_box_text">스케줄</h5>
+    <div class="col-2" id="top_box_text"></div>
+  </div>
   <div class="calendarbox" >
     <DatePicker :attributes='state.schedules' v-model ="date" is-expanded />   
   </div>
@@ -12,28 +16,58 @@
     <div id="schedulebuttons" class="d-flex justify-content-center">
    
     <div v-if="state.isworkbuttonon">      
-        <button @click="workon(date.getFullYear(),date.getMonth(),date.getDate())" class="scheduleworkbuttonon"><b >근무 보기</b></button>
-        <button @click="breakon()" class="schedulebreakbuttonoff"><b>휴무 보기</b></button>            
+        <button @click="workon(date.getFullYear(),date.getMonth(),date.getDate())" class="scheduleworkbuttonon "><b >근무 보기</b></button>
+        <button @click="breakon(date.getFullYear(),date.getMonth(),date.getDate())" class="schedulebreakbuttonoff "><b>휴무 보기</b></button>            
     </div>
     <div v-else>
-      <button @click="workon(date.getFullYear(),date.getMonth(),date.getDate())" class="scheduleworkbuttonoff"><b >근무 보기</b></button>
-      <button @click="breakon()" class="schedulebreakbuttonon"><b>휴무 보기</b></button>
+      <button @click="workon(date.getFullYear(),date.getMonth(),date.getDate())" class="scheduleworkbuttonoff "><b >근무 보기</b></button>
+      <button @click="breakon(date.getFullYear(),date.getMonth(),date.getDate())" class="schedulebreakbuttonon "><b>휴무 보기</b></button>
     </div>
     </div>
      <br>  
     <div v-if="state.isworkbuttonon">      
       <div v-for="(worker, i) in state.workers" :key="i">
-        <div class="workbreakbox d-flex justify-content-center align-items-center">
-          <div>
-            <b>              
-              근무   | <img id = "chatprofile" class="imgProfile" :src="HOST + worker.image" alt="">{{ worker.nickname }} | {{worker.crew_starthour.substr(0,5)}}~{{worker.crew_endhour.substr(0,5)}}
+        <div class="workbreakbox d-flex  align-items-center">
+          <div style="padding-left: 20px">
+            <b>                            
+              근무  &nbsp;&nbsp; |  &nbsp;&nbsp;&nbsp;&nbsp;               
             </b>            
+          </div >
+          <div>
+            <img id = "chatprofile" class="imgProfile" :src="HOST + worker.image" alt="">           
+          </div>
+          <div>
+            <b>
+              {{ longnicknametoshort(worker.nickname) }} &nbsp;&nbsp;:  &nbsp;&nbsp;   
+            </b>
+          </div>
+          <div>
+            <b>
+              {{worker.crew_starthour.substr(0,5)}}~{{worker.crew_endhour.substr(0,5)}}
+            </b>
           </div>
         </div>
         <br>
       </div>
     </div>
-    <div v-else></div> 
+    <div v-else>
+      <div v-for="(worker, i) in state.workers" :key="i">
+        <div class="breakworkbox d-flex  align-items-center">
+          <div style="padding-left: 20px">
+            <b>              
+              휴무  &nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;  
+            </b>            
+          </div>
+          <div>
+            <b>
+              <img id = "chatprofile" class="imgProfile" :src="HOST + worker.image" alt="">{{ longnicknametoshort(worker.nickname) }}
+            </b>
+          </div>
+        </div>
+        <br>
+      </div>     
+
+    </div> 
 
    
   
@@ -106,6 +140,14 @@ export default {
       
     })
 
+    const longnicknametoshort= ((nickname) => {
+      if (nickname.length > 8) {
+        return nickname.substr(0,5) + "..."        
+      }
+      return nickname
+
+    })
+
     const workon = (async (workyear,workmonth,workdate) => {
       state.isworkbuttonon = true
       const finddate = workyear +"-"+ onedigittotwodigitmonth(workmonth) +"-"+ onedigittotwodigitday(workdate)       
@@ -118,9 +160,22 @@ export default {
 
     })
 
-    const breakon = (() => {
+    const breakon = (async (workyear,workmonth,workdate) => {
       state.isworkbuttonon = false
+      const finddate = workyear +"-"+ onedigittotwodigitmonth(workmonth) +"-"+ onedigittotwodigitday(workdate)
+      await axios.get(api.crew.getworklist(crew_pk, finddate),  {
+        params : {
+        work : 0
+      }}).then((response)=>{
+        console.log(response.data);
+        state.workers = response.data
+      } )
+         
     })
+
+    const moveToPrevious = () => {
+      router.go(-1)
+    }
 
     return {
      moveToRegisterSchedule,
@@ -132,7 +187,9 @@ export default {
      workon,
      onedigittotwodigitmonth,
      onedigittotwodigitday,
-     HOST
+     HOST,
+     longnicknametoshort,
+     moveToPrevious
  
     }  
 }
@@ -140,11 +197,26 @@ export default {
 </script>
 
 <style>
+#top_box_text {
+  /* display: flex; */
+  text-align: center;
+  line-height: 55px;
+} 
+
+#top_box {
+  height: 55px;
+  margin: auto;
+
+  color: white;
+  background-color: #498d6d;
+}
+
 .calendarbox{
   display : flex;
   justify-content: center;
   margin-left : 20px;
   margin-right: 20px;
+  margin-top: 20px;
   border : solid seagreen;
   border-radius: 10px;
 }
@@ -192,7 +264,28 @@ margin-left : 13px;
   border-radius: 20px;
   margin-left: 10px;
   margin-right: 10px;
+  box-shadow: 0px 4px 80px rgba(0, 0, 0, 0.07), 0px 0.893452px 17.869px rgba(0, 0, 0, 0.0417275), 0px 0.266004px 5.32008px rgba(0, 0, 0, 0.0282725);
 }
 
+.breakworkbox {
+  height: 100px ; 
+  background-color: #D9D9D9;
+  border-radius: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  box-shadow: 0px 4px 80px rgba(0, 0, 0, 0.07), 0px 0.893452px 17.869px rgba(0, 0, 0, 0.0417275), 0px 0.266004px 5.32008px rgba(0, 0, 0, 0.0282725);
+}
 
+#chatprofile{
+  width: 35px;
+  height: 35px;
+  border-radius: 70%;
+  overflow: hidden;
+  margin-right : 13px
+
+}
+
+.boxshawdow{
+  box-shadow: 0px 4px 80px rgba(0, 0, 0, 0.07), 0px 0.893452px 17.869px rgba(0, 0, 0, 0.0417275), 0px 0.266004px 5.32008px rgba(0, 0, 0, 0.0282725);
+}
 </style>

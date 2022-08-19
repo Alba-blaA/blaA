@@ -23,8 +23,9 @@
         "
         @click="btnFollow"
       >
-        <p v-show="!isFollow" class="mt-1" style="color: white">Follow</p>
-        <p v-show="isFollow" class="mt-1" style="color: white">Unfollow</p>
+        <p class="mt-1" style="color: white">
+          {{ userProfile.isFollow }}
+        </p>
       </button>
     </div>
   </div>
@@ -55,12 +56,16 @@
       </tr>
     </table>
   </div>
-  <hr>
+  <hr />
   <div>
-      <button
-        class="profile_list"
-       style="border:0; outline:0; background-color: white; font-size: 1.2rem; "
-       type="button" @click="startChat(userProfile.user_pk, userProfile.nickname)">{{ userProfile.nickname }}와 채팅하기</button>
+    <button
+      class="profile_list"
+      style="border: 0; outline: 0; background-color: white; font-size: 1.2rem"
+      type="button"
+      @click="startChat(userProfile.user_pk, userProfile.nickname)"
+    >
+      {{ userProfile.nickname }}와 채팅하기
+    </button>
   </div>
   <hr />
   <div @click="userReview">
@@ -112,19 +117,17 @@ export default {
       region: null,
       tel: null,
       user_pk: null,
+      isFollow: null,
     });
-
-    const myFollowingList = computed(() => {
-      return store.state.profile.followingList.results;
-    });
-    var followMessage = ref("");
 
     const setProfile = async () => {
       console.log("route.params.user_pk : ", route.params.user_pk);
       console.log("URL : ", api.profile.myInfo(route.params.user_pk));
+
+      console.log("내 정보 추가");
       await axios
         .get(api.profile.myInfo(route.params.user_pk))
-        .then((response) => {
+        .then(async (response) => {
           console.log("response : ", response);
           userProfile.value = response.data;
           console.log("userProfile : ", userProfile.value);
@@ -134,84 +137,98 @@ export default {
           console.log("err", err);
         });
 
-      for (var i = 0; i < myFollowingList.value.length; i++) {
-        console.log("myfollowingList user_pk", myFollowingList.value[i].user_pk);
-        console.log("userProfile user_pk", userProfile.value.user_pk);
-        if (myFollowingList.value[i].user_pk == userProfile.value.user_pk) {
-          followMessage.value = "Unfollow";
-
-          return;
-        } else {
-          followMessage.value = "Follow";
-        }
-      }
+      console.log("팔로우 텍스트 등록");
+      await axios
+        .post(api.profile.follow(route.params.user_pk))
+        .then(async (response) => {
+          const result = response.data.result;
+          const arr = result.split(" ");
+          console.log("초기 resonse : ", response);
+          if (arr.length === 3) {
+            await axios
+              .post(api.profile.follow(route.params.user_pk))
+              .then((response) => {
+                console.log("follow response : ", response);
+                userProfile.value.isFollow = "Follow";
+                console.log("isFollow : ", userProfile.value.isFollow);
+              })
+              .catch((err) => {
+                console.log("err", err);
+              });
+          } else {
+            await axios
+              .post(api.profile.follow(route.params.user_pk))
+              .then((response) => {
+                userProfile.value.isFollow = "Unfollow";
+                console.log("isFollow : ", userProfile.value.isFollow);
+                console.log("Unfollow response : ", response);
+              })
+              .catch((err) => {
+                console.log("err", err);
+              });
+          }
+        })
+        .catch((err) => {
+          console.log("follow start err : ", err);
+        });
     };
 
-    onBeforeMount(() => {
-      setProfile();
-      console.log("followMessage : ", followMessage);
-    });
+    setProfile();
 
-    if(route.params.user_pk == store.state.account.userInfo.user_pk) {
-      router.push({name: 'Profile'});
+    if (route.params.user_pk == store.state.account.userInfo.user_pk) {
+      router.push({ name: "Profile" });
     }
-
-    const follow = true;
-
-    const isFollow = computed(() => {
-      var check = !follow;
-      return check;
-    });
 
     const startChat = (from_userpk, from_usernickname) => {
       console.log("채팅 시작하기");
-      router.push({ name: 'chat',
-      params: {
-        from_userpk: from_userpk,
-        from_usernickname : from_usernickname
-      }}
-      )
+      router.push({
+        name: "chat",
+        params: {
+          from_userpk: from_userpk,
+          from_usernickname: from_usernickname,
+        },
+      });
     };
 
     const btnFollow = async () => {
       console.log("팔로우 버튼");
-      // followMessage.value = "Unfollow";
       await axios
         .post(api.profile.follow(route.params.user_pk))
-        .then(async(response) => {
+        .then(async (response) => {
           console.log("follow start response : ", response);
           const result = response.data.result;
           const arr = result.split(" ");
-          if (arr.length === 3) {
-            alert(userProfile.value.nickname + "님을 팔로우합니다.");
-            followMessage.value = "Unfollow";
+          if (arr[arr.length - 1] == "Follow") {
+            console.log("팔로우 버튼 클릭 후 : ", userProfile.value.isFollow);
             await axios
               .get(api.profile.myInfo(route.params.user_pk))
               .then((response) => {
                 console.log("response : ", response);
                 userProfile.value = response.data;
-                console.log("userProfile : ", userProfile.value);
+                userProfile.value.isFollow = "Unfollow";
+                console.log("userProfile : ", userProfile.value.isFollow);
                 console.log("userProfile image : ", userProfile.value.image);
               })
               .catch((err) => {
                 console.log("err", err);
               });
-            // router.go();
           } else {
-            alert(userProfile.value.nickname + "님을 팔로우 취소합니다.");
-            followMessage.value = "Follow";
+            console.log(
+              "팔로우 취소 버튼 클릭 후 : ",
+              userProfile.value.isFollow
+            );
             await axios
               .get(api.profile.myInfo(route.params.user_pk))
               .then((response) => {
                 console.log("response : ", response);
                 userProfile.value = response.data;
-                console.log("userProfile : ", userProfile.value);
+                userProfile.value.isFollow = "Follow";
+                console.log("userProfile : ", userProfile.value.isFollow);
                 console.log("userProfile image : ", userProfile.value.image);
               })
               .catch((err) => {
                 console.log("err", err);
               });
-            // router.go();
           }
         })
         .catch((err) => {
@@ -220,10 +237,7 @@ export default {
     };
 
     const follower = async () => {
-      await store.dispatch(
-        "profile/getFollowerList",
-        userProfile.value.user_pk
-      );
+      await store.dispatch("profile/getFollowerList", route.params.user_pk);
       console.log(
         "userProfileView에서 값 확인",
         store.state.profile.myFollower
@@ -231,39 +245,36 @@ export default {
       router.push({
         name: "followList",
         params: {
-          user_pk: userProfile.value.user_pk,
+          user_pk: route.params.user_pk,
           followType: "follower",
         },
       });
     };
 
     const following = async () => {
-      await store.dispatch(
-        "profile/getFollowingList",
-        userProfile.value.user_pk
-      );
+      await store.dispatch("profile/getFollowingList", route.params.user_pk);
       router.push({
         name: "followList",
-        params: { user_pk: userProfile.value.user_pk, followType: "following" },
+        params: { user_pk: route.params.user_pk, followType: "following" },
       });
     };
 
     const userReview = async () => {
-      await store.dispatch("profile/getReviewList", userProfile.value.user_pk);
+      await store.dispatch("profile/getReviewList", route.params.user_pk);
       router.push({
         name: "reviewList",
         params: {
-          user_pk: userProfile.value.user_pk,
+          user_pk: route.params.user_pk,
         },
       });
     };
 
     const userCrew = async () => {
-      await store.dispatch("profile/getCrewList", userProfile.value.user_pk);
+      await store.dispatch("profile/getCrewList", route.params.user_pk);
       router.push({
         name: "crewList",
         params: {
-          user_pk: userProfile.value.user_pk,
+          user_pk: route.params.user_pk,
         },
       });
     };
@@ -272,7 +283,7 @@ export default {
       router.push({
         name: "setBlackList",
         params: {
-          user_pk: userProfile.value.user_pk,
+          user_pk: route.params.user_pk,
         },
       });
     };
@@ -280,8 +291,6 @@ export default {
     return {
       HOST,
       userProfile,
-      myFollowingList,
-      followMessage,
       setProfile,
       startChat,
       btnFollow,
@@ -290,8 +299,6 @@ export default {
       userReview,
       userCrew,
       setBlackList,
-      follow,
-      isFollow,
     };
   },
 };

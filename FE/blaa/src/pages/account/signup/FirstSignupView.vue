@@ -67,11 +67,30 @@ export default {
 .back {
   margin-left: 10px;
   margin-top: 10px;
+  -webkit-animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+}
+
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 #signup {
   position: fixed;
-  top: 0;
+  top: 70px;
   left: 0;
   bottom: 0;
   right: 0;
@@ -79,14 +98,39 @@ export default {
   text-align: center;
   width: 100%;
   height: 100%;
-  padding-top: 70px;
+  padding-top: 20px;
+  /* border: 2px solid red; */
+  /* margin-top: 10px; */
 }
 
 #signup-top {
-  margin-top: 40px;
+  /* margin-top: 50px; */
   width: 100%;
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+  -webkit-animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+}
+
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .signup-text {
@@ -101,9 +145,11 @@ export default {
 
 .signup-step {
   text-align: center;
-  display: inline-block;
+  display: flex;
   height: 50px;
   line-height: 50px;
+  align-items: center;
+  justify-content: center;
 }
 
 .yellow-circle {
@@ -139,16 +185,17 @@ export default {
 }
 
 .arrow {
-  float: left;
+  float: center;
   max-height: 100%;
   vertical-align: middle;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 #signup1-form {
   vertical-align: middle;
   width: 100%;
+  /* margin-top: 20px; */
 }
 
 .is-alba-true {

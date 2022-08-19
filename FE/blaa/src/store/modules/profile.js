@@ -4,33 +4,15 @@ import api from "@/api/api.js";
 const profileStore = {
   namespaced: true,
   state: {
-    updateMyInfo: [],
-    followerList: [],
-    totalFollowers: 0,
-    followingList: [],
+    followerList: null,
+    followingList: null,
     myStory: [],
     reviewList: [],
     crewList: [],
-    myInfo: [],
   },
   mutations: {
-    UPDATE_MY_INFO: (state, myInfo) => {
-      state.myInfo = myInfo;
-    },
     GET_FOLLOWER_LIST: (state, followerList) => {
       state.followerList = followerList;
-      // if (state.followerList.next != followerList.next) {
-      //   state.followerList.next = followerList.data.next;
-      //   state.followerList.previous = followerList.data.previous;
-      //   console.log("followerList result : ", followerList.data.results);
-      //   console.log("list length : ", followerList.data.results.length);
-      //   for (let i = 0; i < followerList.data.results.length; i++) {
-      //     state.followerList.push(followerList.data[i]);
-      //   }
-      // }
-    },
-    UPDATE_TOTAL_FOLLOWERS: (state, followers) => {
-      state.totalFollowers = followers;
     },
     GET_FOLLOWING_LIST: (state, followingList) => {
       state.followingList = followingList;
@@ -44,19 +26,8 @@ const profileStore = {
     GET_CREW_LIST: (state, crewList) => {
       state.crewList = crewList;
     },
-    GET_MY_INFO: (state, myInfo) => {
-      state.myInfo = myInfo;
-    },
   },
   actions: {
-    async updateMyInfo(context, user_pk) {
-      axios
-        .put(api.profile.updateMyInfo(user_pk))
-        .then((response) => {
-          context.commit("");
-        })
-        .catch((err) => {});
-    },
     async getFollowerList(context, user_pk) {
       await axios
         .get(api.profile.myFollow(user_pk), {
@@ -65,19 +36,7 @@ const profileStore = {
           },
         })
         .then((response) => {
-          const followerData = {
-            count: null,
-            next: null,
-            previous: null,
-            results: [],
-          };
-          console.log(response.data.count);
-          followerData.count = response.data.count;
-          followerData.next = response.data.next;
-          followerData.previous = response.data.previous;
-          followerData.results = response.data.results;
-
-          context.commit("GET_FOLLOWER_LIST", followerData);
+          context.commit("GET_FOLLOWER_LIST", response.data);
           console.log(response);
         })
         .catch((err) => {
@@ -93,21 +52,7 @@ const profileStore = {
         })
         .then((response) => {
           console.log("팔로잉 response", response);
-          console.log("response data : ", response.data);
-          const followingData = {
-            count: null,
-            next: null,
-            previous: null,
-            results: [],
-          };
-          console.log(response.data.count);
-          followingData.count = response.data.count;
-          followingData.next = response.data.next;
-          followingData.previous = response.data.previous;
-          followingData.results = response.data.results;
-
-          context.commit("GET_FOLLOWING_LIST", followingData);
-          console.log(response);
+          context.commit("GET_FOLLOWING_LIST", response.data);
         })
         .catch((err) => {
           console.log(err);
@@ -143,9 +88,6 @@ const profileStore = {
         .catch((err) => {
           console.log("crew error : ", err);
         });
-    },
-    getMyInfo(context, user_pk) {
-      axios.get(api.profile.myInfo());
     },
   },
 };

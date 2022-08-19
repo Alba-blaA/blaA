@@ -1,6 +1,10 @@
 <template>
-  <input type="text" v-model="comment" placeholder="댓글을 입력해주세요" />
-  <button @click="CommentCreate">등록</button>
+<div id="contain">
+  <div class="comment-form">
+    <input type="text" v-model="comment" placeholder="댓글을 입력해주세요" />
+    <button @click="CommentCreate">등록</button>
+  </div>
+</div>
 </template>
 
 <script>
@@ -30,4 +34,44 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+#contain {
+  position:fixed;
+  padding-bottom: 6px;
+  width: 100%;
+  background-color: white;
+  height: 3.3rem;
+  bottom: 65px;
+  left: 0;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+input {
+  margin-top: 0.75rem;
+  border:none;
+  margin-left: 2rem;
+}
+
+.comment-form {
+  /* background-color: white; */
+  position:fixed;
+  left: 5%;
+  width: 87%;
+  margin: 0 12px;
+  bottom: 68px;
+  height: 3rem;
+}
+
+button {
+  position: fixed;
+  bottom: 73px;
+  right: 8%;
+  width: 4rem;
+  height: 2.4rem;
+  border-radius: 10px;
+  background-color: #D9D9D9;
+  border-color: #D9D9D9;
+}
+
+</style>

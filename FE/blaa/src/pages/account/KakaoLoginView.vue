@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h2>카카오 로그인 페이지</h2>
+  <div class="layerPopup">
+    <!-- <div class="spinner"></div> -->
   </div>
 </template>
 
@@ -11,7 +11,7 @@ import { useCookies } from "vue3-cookies";
 import { useStore } from "vuex";
 import { computed } from "vue";
 import router from "@/router/index.js";
-import axios from "axios";
+import axios from "@/api/axios.js";
 import api from "@/api/api.js";
 
 export default {
@@ -39,31 +39,36 @@ export default {
         .post(api.accounts.emailCheck(), emailCheck)
         .then(() => {
           alert("회원가입 페이지로 이동");
-          store.commit("account/KAKAO_LOGIN", false);
+          // store.commit("account/KAKAO_LOGIN", false);
           router.push({ name: "choice" });
         })
-        .catch(async() => {
+        .catch(async () => {
           console.log("email : ", store.state.account.kakaoUserInfo.email);
           await axios
             .post(api.accounts.kakaoLogin(), emailCheck)
-            .then(async(response) => {
+            .then(async (response) => {
               if (response.status === 200) {
                 console.log("accounts/kakao 성공 : ", response);
-
+                console.log("accounts/kakao data : ", response);
                 const token = response.data.token;
                 console.log("kakao token : ", token);
                 store.commit("account/LOGIN", true);
                 store.commit("account/LOGIN_ERROR", false);
                 sessionStorage.setItem("token", token);
                 store.commit("account/SET_LOGIN_TOKEN", token);
+
                 await store.dispatch("account/getUserInfo", token);
-              
+                console.log("user_info : ", store.state.account.userInfo);
+
                 console.log("로그인 성공");
-                
-                await getMyCrewList();
-                alert("카카오 로그인 완료!");
-                
-                // router.push("/story");
+
+                await store.dispatch(
+                  "account/getMyCrewList",
+                  store.state.account.userInfo.user_pk
+                );
+                // alert("카카오 로그인 완료!");
+
+                router.push("/story");
               } else {
                 store.commit("account/LOGIN", false);
                 store.commit("account/LOGIN_ERROR", true);
@@ -76,10 +81,6 @@ export default {
                 alert("아이디 또는 비밀번호가 틀립니다.");
               }
             });
-
-            
-
-          // router.replace("/story");
         });
     };
 
@@ -107,26 +108,47 @@ export default {
       setKakaoToken();
     }
 
-    const getMyCrewList = async() => {
-      console.log("user_pk : ", store.state.account.userInfo.user_pk)
-      await axios.get(api.profile.myCrew(store.state.account.userInfo.user_pk)).then((response) => {
-        console.log("crew list : ",response.data);
-        const crew = response.data;
-        store.commit("account/ADD_MY_CREW", crew);
-      }).catch((err) => {
-        console.log(err);
-      })
-    }
-
     return {
       setKakaoToken,
       setUserInfo,
       isLogin,
       isLoginError,
-      getMyCrewList
     };
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+/* .layerPopup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  margin: -30px 0 0 -30px;
+}
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 8px solid #f3f3f3; /* Light grey */
+/* border-top: 8px solid #3498db; Blue */
+/* border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spinner 2s linear infinite;
+}
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} */
+</style>

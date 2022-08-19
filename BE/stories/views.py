@@ -14,12 +14,20 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 # Create your views here.
 from .serializers.hashtag import HashtagSerializer,HashtagFilterSerializer
-
+from datetime import date,datetime,timezone,timedelta
 @api_view(['GET', 'POST'])
 def story_list_or_create(request):
     
     def story_list():
-        story = Story.objects.all().order_by('-created_at')
+        # print(type(datetime.today().year))
+        # year=datetime.today().year
+        # month=datetime.today().month
+        # day=datetime.today().day
+        # print(type(date(year,month,day)))
+        # now = datetime.now()
+        # print(type(now))
+        # print(datetime.now() - timedelta(hours=24))
+        story = Story.objects.filter(created_at__gte = datetime.now() - timedelta(hours=24)).order_by('-created_at')
         cnt = {'count':story.count()}
         paginator = Paginator(story, 10) # Show 25 contacts per page.
 
@@ -96,7 +104,8 @@ def comment_list_or_create(request, story_pk):
         story_user = story.user_pk
         if serializer.is_valid(raise_exception=True):
             serializer.save(user_pk = request.user, story_pk = story)
-            Notification.objects.create(type='story',user=story_user,content=f'{request.user.nickname}님이 {story_user.nickname}의 게시글에 댓글을 남겼습니다.',redirect_pk=story_pk)
+            if request.user != story_user :
+                Notification.objects.create(type='story',user=story_user,content=f'{request.user.nickname}님이 {story_user.nickname}의 게시글에 댓글을 남겼습니다.',redirect_pk=story_pk)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     if request.method == 'GET':
