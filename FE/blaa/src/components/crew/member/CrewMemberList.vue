@@ -1,6 +1,10 @@
 <template>
   <div>
-    <div>크루 멤버 입니다.</div>
+    <div class="row" id="top_box">
+      <div class="col-3" id="top_box_text" style="padding-right: 30px; margin-bottom: 8px" @click="back"><img src="@/assets/icons/arrow-left.png" /></div>
+      <h5 class="col-6" id="top_box_text">크루 멤버</h5>
+      <div class="col-3" id="top_box_text" style="display: flex; justify-content: center; align-items: center; margin-bottom: 8px"></div>
+    </div>
     <table>
       <thead>
         <th>번호</th>

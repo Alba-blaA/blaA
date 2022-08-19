@@ -18,7 +18,7 @@
     <div class="row" style="margin: auto; text-align: center">
       <div class="col-5" style="padding-left: 40px">
         <!-- <p>{{ crewInfo.created_at }}</p> -->
-        <h4>30일</h4>
+        <h4>약 {{ diffTime }}일</h4>
         <p>활동기간</p>
       </div>
       <div class="col-2" style="display: flex; justify-content: center">
@@ -56,18 +56,17 @@
         <p id="semi_title_text">우리 크루를 소개합니다!</p>
         <p>
           안녕하세요, {{ crewInfo.crew_name }} 입니다.<br />
-          크루 설명: {{ crewInfo.crew_explain }}
+          <span>
+            {{ crewInfo.crew_explain }}
+          </span>
         </p>
       </div>
       <hr />
       <div class="detail">
-        <p id="semi_title_text">위치</p>
-        <p>박찬 지도 띄워줘</p>
-      </div>
-      <hr />
-      <div class="detail">
-        <p id="semi_title_text">크루장</p>
-        <p>{{ crewInfo.crew_leader }}</p>
+        <div class="row">
+          <p id="semi_title_text">크루장</p>
+          <p>{{ crewInfo.crew_leader }}</p>
+        </div>
       </div>
     </div>
 
@@ -103,6 +102,7 @@ export default {
     let isInfo = ref(true);
     let isFeed = ref(false);
     let isMember = ref(false);
+    var diffTime = ref(null);
 
     // const getCrewInfo = async () => {
     //   await store.dispatch("crew/getCrewInfo", route.params.crew_pk);
@@ -123,6 +123,11 @@ export default {
           }
         }
       }
+
+      /* 활동 기간 구하기 */
+      const start = new Date();
+      const end = new Date(crewInfo.created_at);
+      diffTime.value = Math.round((start.getTime() - end.getTime()) / (1000 * 60 * 60 * 24));
     });
 
     const crewJoin = async (crew_pk) => {
@@ -166,6 +171,7 @@ export default {
       isInfo,
       isFeed,
       isMember,
+      diffTime,
     };
   },
 };
