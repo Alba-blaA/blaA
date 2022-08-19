@@ -293,9 +293,10 @@ export default {
       console.log("수정완료 전 updateInfo : ", updateInfo.value);
       axios
         .put(api.profile.myInfo(route.params.user_pk), updateInfo.value)
-        .then((response) => {
+        .then(async (response) => {
           alert("회원 정보 수정 완료!");
           store.commit("account/USER_INFO", response.data);
+          await store.dispatch("account/getMyCrewList", userInfo.value.user_pk);
           router.push({
             name: "myinfo",
             params: { user_pk: route.params.user_pk },

@@ -7159,6 +7159,11 @@
     "picocolors" "^1.0.0"
     "stable" "^0.1.8"
 
+"sweetalert2@^11.4.28":
+  "integrity" "sha512-leCf8Kc/o+R0LNWmLjWXI7l0roMchEHg6X+XibmfTYaOMvOoHXmoxmegHl0it+8vvvZlPIjzyfM6bYBOKTFnRg=="
+  "resolved" "https://registry.npmjs.org/sweetalert2/-/sweetalert2-11.4.28.tgz"
+  "version" "11.4.28"
+
 "table@^6.0.9":
   "integrity" "sha512-s/fitrbVeEyHKFa7mFdkuQMWlH1Wgw/yEXMt5xACT4ZpzWFluehAxRtUUQKPuWhaLAWhFcVx6w3oC8VKaUfPGA=="
   "resolved" "https://registry.npmjs.org/table/-/table-6.8.0.tgz"

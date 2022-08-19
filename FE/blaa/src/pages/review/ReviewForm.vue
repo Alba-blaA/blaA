@@ -4,7 +4,7 @@
     <div class="col-3" id="top_box_text" style="padding-right: 30px; margin-bottom: 8px" @click="back"><img src="@/assets/icons/arrow-left.png" /></div>
     <h5 class="col-6" id="top_box_text">리뷰 작성</h5>
     <div class="col-3" id="top_box_text" style="display: flex; justify-content: center; align-items: center; margin-bottom: 8px">
-      <button class="submit-btn" @click="sumbitReview">제출</button>
+      <button class="submit-btn" @click="sumbitReview">등록</button>
     </div>
   </div>
 

@@ -4,16 +4,16 @@
       <!-- <br /> -->
       <h1 id="login-text">로그인</h1>
       <br />
-      <form>
+      <!-- <form>
         <label for="login-id"></label>
         <input
           id="login-id"
           type="email"
           v-model="user.email"
           placeholder="EMAIL"
-        />
-        <!-- <b>{{ message }}</b> -->
-        <small>{{ emailMessage }}</small> <br /><br />
+        /> -->
+      <!-- <b>{{ message }}</b> -->
+      <!-- <small>{{ emailMessage }}</small> <br /><br />
 
         <label for="login-password"></label>
         <input
@@ -22,12 +22,13 @@
           v-model="user.password"
           placeholder="PASSWORD"
           autocomplete="off"
+          @keyup.enter="confirm"
         />
         <small>{{ passwordMessage }}</small>
-        <br /><br />
-        <!-- <b>{{ message }}</b> -->
+        <br /><br /> -->
+      <!-- <b>{{ message }}</b> -->
 
-        <div class="row">
+      <!-- <div class="row">
           <b-button
             class="col-sm-12"
             pill
@@ -40,12 +41,12 @@
             ><b>회원가입</b></b-button
           >
         </div>
-      </form>
+      </form> -->
 
-      <div class="find-account">
+      <!-- <div class="find-account">
         <b class="find">아이디 찾기</b> &nbsp;
         <b class="find">비밀번호 찾기</b>
-      </div>
+      </div> -->
 
       <br />
       <br />
@@ -177,7 +178,28 @@ export default {
   display: table;
   width: 100%;
   height: 100%;
+
+  -webkit-animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
 }
+
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 #login-text {
   font-family: "Inter";
   font-style: normal;

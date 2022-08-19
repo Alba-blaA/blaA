@@ -79,6 +79,7 @@
         <button class="btn-before" @click.prevent="before">이전</button> &nbsp;
         <button class="btn-next" @click.prevent="next">다음</button>
       </div>
+      <br /><br />
     </form>
   </div>
 </template>
@@ -98,7 +99,7 @@ export default {
 
     const user = ref({
       email: null,
-      password: null,
+      password: "",
       name: null,
       tel1: null,
       tel2: null,
@@ -131,7 +132,7 @@ export default {
     });
 
     const emailCheck = () => {
-      if (user.value.email == null) {
+      if (!user.value.email) {
         // alert("먼저 이메일을 입력해주세요.");
         emailMessage.value = "먼저 이메일을 입력해주세요";
         setTimeout(() => {
@@ -171,75 +172,66 @@ export default {
     const next = () => {
       let err = true;
 
-      if (!user.value.email) {
-        err = true;
-        emailMessage.value = "이메일을 입력해주세요.";
+      err &&
+        !user.value.email &&
+        ((emailMessage.value = "이메일을 입력해주세요."),
+        console.log("email"),
         setTimeout(() => {
           emailMessage.value = "";
-          err = false;
-        }, 3000);
-      }
+        }, 3000),
+        (err = false));
 
       if (!store.state.account.kakaoLogin) {
-        if (!user.value.password) {
-          err = true;
-          passwordMessage.value = "비밀번호를 입력해주세요.";
+        err &&
+          !user.value.password &&
+          ((passwordMessage.value = "비밀번호를 입력해주세요."),
           setTimeout(() => {
             passwordMessage.value = "";
-            err = false;
-          }, 3000);
-        }
+          }, 3000),
+          (err = false));
 
-        if (user.value.password.length < 6) {
-          err = true;
-          passwordMessage.value = "비밀번호는 6자리 이상이어야 합니다.";
+        console.log("length : ", user.value.password.length);
+        err &&
+          user.value.password.length < 6 &&
+          ((passwordMessage.value = "비밀번호는 6자리 이상이어야 합니다."),
           setTimeout(() => {
             passwordMessage.value = "";
-            err = false;
-          }, 3000);
-        }
+          }, 3000),
+          (err = false));
 
-        console.log(document.getElementById("signup-checkpassword").value);
-
-        if (!document.getElementById("signup-checkpassword").value) {
-          err = true;
-          checkPasswordMessage.value = "비밀번호를 다시 한 번 입력해주세요.";
+        err &&
+          !document.getElementById("signup-checkpassword").value &&
+          ((checkPasswordMessage.value = "비밀번호를 다시 한 번 입력해주세요."),
           setTimeout(() => {
             checkPasswordMessage.value = "";
-            err = false;
-          }, 3000);
-        }
+          }, 3000),
+          (err = false));
 
-        if (
+        err &&
           user.value.password !=
-          document.getElementById("signup-checkpassword").value
-        ) {
-          err = true;
-          checkPasswordMessage.value = "비밀번호가 일치하지 않습니다.";
+            document.getElementById("signup-checkpassword").value &&
+          ((checkPasswordMessage.value = "비밀번호가 일치하지 않습니다."),
           setTimeout(() => {
             checkPasswordMessage.value = "";
-            err = false;
-          }, 3000);
-        }
+          }, 3000),
+          (err = false));
       }
 
-      if (!user.value.name) {
-        err = true;
-        nameMessage.value = "이름을 입력해주세요.";
+      err &&
+        !user.value.name &&
+        ((nameMessage.value = "이름을 입력해주세요."),
         setTimeout(() => {
           nameMessage.value = "";
-          err = false;
-        }, 3000);
-      }
+        }, 3000),
+        (err = false));
 
-      if (!user.value.tel1 || !user.value.tel2 || !user.value.tel3) {
-        err = true;
-        telMessage.value = "휴대폰 번호를 입력해주세요.";
+      err &&
+        (!user.value.tel1 || !user.value.tel2 || !user.value.tel3) &&
+        ((telMessage.value = "휴대폰 번호를 입력해주세요."),
         setTimeout(() => {
           telMessage.value = "";
-          err = false;
-        }, 3000);
-      }
+        }, 3000),
+        (err = false));
 
       if (!err) {
         return;
@@ -286,35 +278,26 @@ export default {
   height: 100%;
   padding-top: 20px;
 
-  /* -webkit-animation: slide-in-right 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)
-    both;
-  animation: slide-in-right 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; */
+  -webkit-animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
 }
-/* 
-@-webkit-keyframes slide-in-right {
+
+@-webkit-keyframes fade-in {
   0% {
-    -webkit-transform: translateX(1000px);
-    transform: translateX(1000px);
     opacity: 0;
   }
   100% {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
     opacity: 1;
   }
 }
-@keyframes slide-in-right {
+@keyframes fade-in {
   0% {
-    -webkit-transform: translateX(1000px);
-    transform: translateX(1000px);
     opacity: 0;
   }
   100% {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
     opacity: 1;
   }
-} */
+}
 
 #signup-top {
   margin-top: 40px;
@@ -423,68 +406,6 @@ small {
   font-style: normal;
   font-size: 15px;
   color: red;
-
-  -webkit-animation: shake-horizontal 1s cubic-bezier(0.455, 0.03, 0.515, 0.955)
-    infinite both;
-  animation: shake-horizontal 1s cubic-bezier(0.455, 0.03, 0.515, 0.955)
-    infinite both;
-}
-
-@-webkit-keyframes shake-horizontal {
-  0%,
-  100% {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
-  }
-  10%,
-  30%,
-  50%,
-  70% {
-    -webkit-transform: translateX(-10px);
-    transform: translateX(-10px);
-  }
-  20%,
-  40%,
-  60% {
-    -webkit-transform: translateX(10px);
-    transform: translateX(10px);
-  }
-  80% {
-    -webkit-transform: translateX(8px);
-    transform: translateX(8px);
-  }
-  90% {
-    -webkit-transform: translateX(-8px);
-    transform: translateX(-8px);
-  }
-}
-@keyframes shake-horizontal {
-  0%,
-  100% {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
-  }
-  10%,
-  30%,
-  50%,
-  70% {
-    -webkit-transform: translateX(-10px);
-    transform: translateX(-10px);
-  }
-  20%,
-  40%,
-  60% {
-    -webkit-transform: translateX(10px);
-    transform: translateX(10px);
-  }
-  80% {
-    -webkit-transform: translateX(8px);
-    transform: translateX(8px);
-  }
-  90% {
-    -webkit-transform: translateX(-8px);
-    transform: translateX(-8px);
-  }
 }
 
 input::placeholder {
@@ -502,13 +423,13 @@ input:focus {
 }
 
 #signup-tel1 {
-  width: 24%;
+  width: 20%;
   display: inline;
 }
 
 #signup-tel2,
 #signup-tel3 {
-  width: 32%;
+  width: 30%;
   display: inline;
 }
 

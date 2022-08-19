@@ -11,17 +11,15 @@
         <br />
         <div v-for="user in filteredUsers" :key="user.user_pk">
           <b-card>
-            <b-card-text>
-              <div class="d-flex justify-content-center">
-                <img  id = "searchprofile" class="imgProfile" :src="HOST + user.image" alt="" />           
-                  <b class="chodaeorchatname d-flex align-items-center">
-                    {{ user.nickname }}
-                  </b>          
+            <b-card-text class="d-flex justify-content-between align-items-center">
+              <div @click="moveToProfile(user.user_pk)" >                
+                <img style="margin-left: 20px" id = "searchprofile" class="imgProfile" :src="HOST + user.image" alt="" />           
+                  <b>
+                    {{ user.nickname }}               
+                  </b>                                                                     
               </div>
+              <button class="w-btn w-btn-green" @click="gochat(user.user_pk, user.nickname)">채팅하기</button>              
               <br>
-              <div class="d-flex justify-content-end align-items-center " style="padding-right : 90px">                          
-                <button class="w-btn w-btn-green" @click="gochat(user.user_pk, user.nickname)">채팅하기</button>
-              </div>
             </b-card-text>
           </b-card>
         </div>
@@ -94,6 +92,15 @@ export default {
       }
     };
 
+    const moveToProfile = (user_pk) => {
+      router.push({
+        name: "userProfile",
+        params: {
+          user_pk: user_pk,
+        },
+      });
+    };
+
     return {
       state,
       searchText,
@@ -102,6 +109,7 @@ export default {
       userInfo,
       crew_pk,
       inviteuser,
+      moveToProfile,
       HOST
     };
   },

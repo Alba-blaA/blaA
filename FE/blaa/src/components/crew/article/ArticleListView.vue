@@ -6,9 +6,8 @@
       <div class="col-2" id="top_box_text"><img src="@/assets/icons/search.png" /></div>
     </div>
     <article-list></article-list>
-    <div @click="moveRegist">
-      <div class="rectangle"></div>
-      <img class="regist_btn" src="@/assets/icons/edit-2_w.png" />
+    <div class="plusbutton" @click="moveRegist">
+      <img src="@/assets/icons/edit_btn_w.png" />
     </div>
   </div>
 </template>
@@ -63,11 +62,16 @@ export default {
   background: #498d6d;
   border-radius: 50%;
 }
-.regist_btn {
+
+.plusbutton {
   position: fixed;
-  top: 710px; /* 윗쪽 끝에서부터의 거리 */
-  right: 50%;
-  margin-right: -160px; /* 가운데를 기준으로 오른쪽 거리 */
-  z-index: 99;
+  z-index: 10;
+  bottom: 80px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  color: black;
+  border-radius: 50%;
+  margin: 10px;
 }
 </style>

@@ -4,22 +4,12 @@
   <!-- <div id="profile">
     <img class="imgProfile" :src="HOST + userInfo.image" />
   </div> -->
-  <div
-    class="image-upload"
-    style="border: 3px solid; text-align: center; margin: auto"
-    id="profile"
-  >
+  <div class="image-upload" style="border: 3px solid; text-align: center; margin: auto" id="profile">
     <label for="update-profileImg">
       <img class="imgProfile" :src="HOST + userInfo.image" />
     </label>
 
-    <input
-      id="update-profileImg"
-      class="update-profileImg"
-      @change="updateProfileImg"
-      type="file"
-      style="display: none"
-    />
+    <input id="update-profileImg" class="update-profileImg" @change="updateProfileImg" type="file" style="display: none" />
   </div>
   <h4 class="mt-3 mb-2" style="text-align: center; font-weight: bold">
     {{ userInfo.nickname }}
@@ -53,36 +43,38 @@
 
   <!-- <button @click.prevent="gochatroom">채팅하러가기</button> -->
   <!-- <button @click="showinvitedcrewlist">나를초대한크루리스트</button> -->
-  <hr style="margin-top: 0rem" />
-  <div>
-    <div @click.prevent="gochatroom">
-      <h5 class="profile_list"><b>채팅하러가기</b></h5>
-    </div>
-    <hr />
-    <div @click="myStory">
-      <h5 class="profile_list"><b>내 스토리</b></h5>
-    </div>
+  <div class="container">
+    <hr style="margin-top: 0rem" />
+    <div>
+      <div @click.prevent="gochatroom">
+        <h5 id="title_text" class="profile_list"><b>내 채팅창</b></h5>
+      </div>
+      <hr />
+      <div @click="myStory">
+        <h5 id="title_text" class="profile_list"><b>내 스토리</b></h5>
+      </div>
 
-    <hr />
-    <div @click="myReview">
-      <h5 class="profile_list"><b>내 리뷰</b></h5>
-    </div>
+      <hr />
+      <div @click="myReview">
+        <h5 id="title_text" class="profile_list"><b>내 리뷰</b></h5>
+      </div>
 
-    <hr />
-    <div @click="myCrew">
-      <h5 class="profile_list"><b>내 크루</b></h5>
-    </div>
+      <hr />
+      <div @click="myCrew">
+        <h5 id="title_text" class="profile_list"><b>내 크루</b></h5>
+      </div>
 
-    <hr />
-    <div @click="showinvitedcrewlist">
-      <h5 class="profile_list"><b>초대받은 크루</b></h5>
-    </div>
+      <hr />
+      <div @click="showinvitedcrewlist">
+        <h5 id="title_text" class="profile_list"><b>초대받은 크루</b></h5>
+      </div>
 
-    <hr />
-    <div @click="myInfo">
-      <h5 class="profile_list"><b>회원정보</b></h5>
+      <hr />
+      <div @click="myInfo">
+        <h5 id="title_text" class="profile_list"><b>회원정보</b></h5>
+      </div>
+      <hr />
     </div>
-    <hr />
   </div>
 </template>
 
@@ -139,14 +131,12 @@ export default {
         const reader = new FileReader();
 
         // 파일명을 가져와서 소문자로 변환
-        let fileName = profileImg.value.name.substring(
-          profileImg.value.name.lastIndexOf(".") + 1
-        );
+        let fileName = profileImg.value.name.substring(profileImg.value.name.lastIndexOf(".") + 1);
         fileName = fileName.toLowerCase();
 
         // 파일 형식과 3MB의 파일크기 확인
         if (
-          ["jpeg", "png", "gif", "bmp"].includes(fileName) &&
+          ["jpeg", "png", "gif", "bmp", "jpg"].includes(fileName) &&
           profileImg.value.size <= 25165824
         ) {
           reader.onload = (e) => {
@@ -173,11 +163,15 @@ export default {
                   "Content-type": "multipart/form-data",
                 },
               })
-              .then((response) => {
+              .then(async (response) => {
                 console.log("변경 후 data ", response.data);
                 store.commit("account/USER_INFO", response.data);
-                const res = sessionStorage.getItem("vuex");
-                console.log("sessionStorage : ", res);
+                await store.dispatch(
+                  "account/getMyCrewList",
+                  userInfo.value.user_pk
+                );
+                // const res = sessionStorage.getItem("vuex");
+                // console.log("sessionStorage : ", res);
                 alert("사진 변경 완료");
               });
           } catch (err) {
@@ -201,12 +195,7 @@ export default {
 
     const follower = async () => {
       console.log("팔로워 조회");
-
-      // const data = {
-      //   user_pk: userInfo.value.user_pk,
-      //   page: 1,
-      // };
-      // await store.dispatch("profile/getFollowerList", data);
+      await store.dispatch("profile/getFollowerList", userInfo.value.user_pk);
       router.push({
         name: "followList",
         params: {
@@ -218,11 +207,7 @@ export default {
 
     const following = async () => {
       console.log("팔로잉 조회");
-      // const data = {
-      //   user_pk: userInfo.value.user_pk,
-      //   page: 1,
-      // };
-      // await store.dispatch("profile/getFollowingList", data);
+      await store.dispatch("profile/getFollowingList", userInfo.value.user_pk);
       router.push({
         name: "followList",
         params: { user_pk: userInfo.value.user_pk, followType: "following" },

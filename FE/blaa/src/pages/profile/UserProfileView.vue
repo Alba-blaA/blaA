@@ -149,7 +149,7 @@ export default {
               .post(api.profile.follow(route.params.user_pk))
               .then((response) => {
                 console.log("follow response : ", response);
-                userProfile.value.isFollow = "Unfollow";
+                userProfile.value.isFollow = "Follow";
                 console.log("isFollow : ", userProfile.value.isFollow);
               })
               .catch((err) => {
@@ -159,7 +159,7 @@ export default {
             await axios
               .post(api.profile.follow(route.params.user_pk))
               .then((response) => {
-                userProfile.value.isFollow = "Follow";
+                userProfile.value.isFollow = "Unfollow";
                 console.log("isFollow : ", userProfile.value.isFollow);
                 console.log("Unfollow response : ", response);
               })
@@ -198,7 +198,7 @@ export default {
           console.log("follow start response : ", response);
           const result = response.data.result;
           const arr = result.split(" ");
-          if (arr.length === 3) {
+          if (arr[arr.length - 1] == "Follow") {
             console.log("팔로우 버튼 클릭 후 : ", userProfile.value.isFollow);
             await axios
               .get(api.profile.myInfo(route.params.user_pk))
@@ -206,7 +206,7 @@ export default {
                 console.log("response : ", response);
                 userProfile.value = response.data;
                 userProfile.value.isFollow = "Unfollow";
-                console.log("userProfile : ", userProfile.value);
+                console.log("userProfile : ", userProfile.value.isFollow);
                 console.log("userProfile image : ", userProfile.value.image);
               })
               .catch((err) => {
@@ -222,8 +222,8 @@ export default {
               .then((response) => {
                 console.log("response : ", response);
                 userProfile.value = response.data;
-                userProfile.value.isFollow = "Unfollow";
-                console.log("userProfile : ", userProfile.value);
+                userProfile.value.isFollow = "Follow";
+                console.log("userProfile : ", userProfile.value.isFollow);
                 console.log("userProfile image : ", userProfile.value.image);
               })
               .catch((err) => {
@@ -237,10 +237,7 @@ export default {
     };
 
     const follower = async () => {
-      await store.dispatch(
-        "profile/getFollowerList",
-        userProfile.value.user_pk
-      );
+      await store.dispatch("profile/getFollowerList", route.params.user_pk);
       console.log(
         "userProfileView에서 값 확인",
         store.state.profile.myFollower
@@ -248,39 +245,36 @@ export default {
       router.push({
         name: "followList",
         params: {
-          user_pk: userProfile.value.user_pk,
+          user_pk: route.params.user_pk,
           followType: "follower",
         },
       });
     };
 
     const following = async () => {
-      await store.dispatch(
-        "profile/getFollowingList",
-        userProfile.value.user_pk
-      );
+      await store.dispatch("profile/getFollowingList", route.params.user_pk);
       router.push({
         name: "followList",
-        params: { user_pk: userProfile.value.user_pk, followType: "following" },
+        params: { user_pk: route.params.user_pk, followType: "following" },
       });
     };
 
     const userReview = async () => {
-      await store.dispatch("profile/getReviewList", userProfile.value.user_pk);
+      await store.dispatch("profile/getReviewList", route.params.user_pk);
       router.push({
         name: "reviewList",
         params: {
-          user_pk: userProfile.value.user_pk,
+          user_pk: route.params.user_pk,
         },
       });
     };
 
     const userCrew = async () => {
-      await store.dispatch("profile/getCrewList", userProfile.value.user_pk);
+      await store.dispatch("profile/getCrewList", route.params.user_pk);
       router.push({
         name: "crewList",
         params: {
-          user_pk: userProfile.value.user_pk,
+          user_pk: route.params.user_pk,
         },
       });
     };
@@ -289,7 +283,7 @@ export default {
       router.push({
         name: "setBlackList",
         params: {
-          user_pk: userProfile.value.user_pk,
+          user_pk: route.params.user_pk,
         },
       });
     };
