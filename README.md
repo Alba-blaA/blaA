@@ -16,7 +16,7 @@ SSAFY 7기 2학기 공통프로젝트 - blaA
 
 그래서 blaA는 알바 리뷰를 통해 자신이 원하는 매장의 정보를 찾고 한줄평 뿐만아니라 버튼식 평가로 한 눈에 확인되는 리뷰를 만들었습니다.
 
-## 📜 ****blaA **- 개요**
+## 📜 blaA 개요
 
 - ***내 알바, 내 알 바!***
 
@@ -54,19 +54,16 @@ blaA는 alba를 뒤집고(abla) 앞에 a를 뒤에다 두어 알바생(alba)들�
 ### BackEnd
 
 - Python 3.9.13
-
 - Django 3.2.12
-
 - DjangoRestFramework 3.13.1
-
-- Django 패키지 모음 2022-08-02
-
-[requirements.txt](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b85e2765-b9ef-40d5-95f7-4a824807dee6/requirements.txt)
 
 ### 데이터베이스
 
+- MySQL Workbench 8.0
 - MySQL 8.0.27
 - MariaDB 10.5
+- SQLite 3.0
+- firebase 8.10.1
 
 ### FrontEnd
 
@@ -86,25 +83,15 @@ blaA는 alba를 뒤집고(abla) 앞에 a를 뒤에다 두어 알바생(alba)들�
 
 - OS: Window 10
 - IDE
--  Visual Studio 1.70.0 
--  DataBase
+- Visual Studio 1.70.0 
 
-   가) MySQL Workbench 8.0
+### Server : AWS EC2
 
-   나) MySQL 8.0.27
+- Ubuntu 20.0.4
 
-   다) MariaDB 10.5
+- Docker 20.10.17
 
-   라) SQLite 3.0
-
-   마) firebase 8.10.1
-- Server : AWS EC2
-
-   가) Ubuntu 20.0.4
-
-   나) Docker 20.10.17
-
-   다) Nginx 1.19.5
+- Nginx 1.19.5
 
 ## 프로젝트 파일구조
 
@@ -135,13 +122,13 @@ BE
   │   └── serializers
   ├── static
   └── stories
-			 └── serializers
+  └── serializers
 ```
 
 **FrontEnd**
 
 ```
-tupli-front
+FE
   ├── node_modules
   ├── public
   └── src
@@ -167,7 +154,7 @@ tupli-front
       │   ├── review
       │   └──story
       └── store
-					└── modules
+      └── modules
 ```
 
 ## 프로젝트 결과물

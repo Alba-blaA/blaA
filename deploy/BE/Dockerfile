@@ -6,7 +6,7 @@ RUN echo "testing_image0.3"
 
 #gitlab access token
 #https://lab.ssafy.com/s07-webmobile2-sub2/S07P12B209/-/settings/access_tokens
-RUN git clone -b develop https://asdf134652:<access_tokens>@lab.ssafy.com/s07-webmobile2-sub2/S07P12B209.git
+RUN git clone -b master https://<gitlab_id>:<access_tokens>@lab.ssafy.com/s07-webmobile2-sub2/S07P12B209.git
 
 # RUN echo $(pwd /home/)
 
